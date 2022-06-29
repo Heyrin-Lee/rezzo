@@ -11,7 +11,7 @@
 + 통합개발환경(IDE) : Eclipse
 + JDK 버전 : JDK 11
 + 데이터 베이스 : Oracle Database 11g
-+ Framework: Spring
++ Framework : Spring
 + 빌드 툴 : Maven
 + 관리 툴 : Git, GitHub
 
