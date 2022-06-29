@@ -15,6 +15,6 @@ IT산업의 발달로 소비자들은 건강하고 윤리적으로 생산된 안
 + 빌드 툴 : Maven
 + 관리 툴 : Git, GitHub
 
-## [🎈노션보러가기] https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29
+## [🎈노션보러가기](https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29)
 ## ⏱schedule
 #### 2022/06/
