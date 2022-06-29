@@ -15,5 +15,5 @@
 + 관리 툴 : Git, GitHub
 
 ## [🚩노션](https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29)
-> [🚘로드맵](https://www.notion.so/dc92a6176f44441196558c8dd4169bc3?v=6a3daae7828e4ec38c039bfab744c67d)<br>
-> [💬회의록](https://www.notion.so/250d931996d84066bacca2ade8a9a425?v=b0bea1b9ac7a421fab4b96a62dd1c7e3)
++ [🚘로드맵](https://www.notion.so/dc92a6176f44441196558c8dd4169bc3?v=6a3daae7828e4ec38c039bfab744c67d)<br>
++ [💬회의록](https://www.notion.so/250d931996d84066bacca2ade8a9a425?v=b0bea1b9ac7a421fab4b96a62dd1c7e3)
