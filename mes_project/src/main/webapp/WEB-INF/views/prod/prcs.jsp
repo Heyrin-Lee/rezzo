@@ -87,8 +87,7 @@ width:200px}
                   </div>
                </div>
                <div class="card-body">
-            <br>
-                  <div id="grid" style="width: 600px;"></div>
+                   <div id="grid" style="width: 600px;"></div>
                </div>
             </div>
          </section>
