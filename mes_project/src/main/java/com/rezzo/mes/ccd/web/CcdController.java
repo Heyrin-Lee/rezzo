@@ -16,4 +16,8 @@ public class CcdController {
 		return "ccd/ccds";
 	}
 
+	@RequestMapping("/rsc.do")
+	public String rsc() {
+		return "ccd/rsc";
+	}
 }
