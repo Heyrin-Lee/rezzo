@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,27 +10,6 @@
 body {
 	background: #eee
 }
-
-/* #cont {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	padding: 3%;
-	margin: 0, -5%, 0, -5%
-}
-#l_section {
-	float: left;
-	margin-right: 4%;
-}
-
-#r_section {
-	float: right;
-	margin-bottom: 18%;
-	margin-right: 4%;
-} */
-
-
 .c_btn {
 	color: #fff;
 	font-size: 13px;
@@ -44,27 +24,16 @@ body {
 }
 
 .linelist {
+	display: inline-block;
 	float: right;
 	margin-top: 0px;
+	float: right;
 }
 
 label {
 	width: 100px;
 	float: left;
 }
-/* 
-.l_input {
-	/* float: left; */
-	margin: 0px 10px;
-	width: 300px;
-	display: inline-block;
-}
-
-.r_input {
-	float: right;
-	width: 300px;
-	display: inline-block;
-} */
 </style>
 <link rel="stylesheet"
 	href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
@@ -88,7 +57,7 @@ label {
 	<!-- 헤더부분 -->
 	<div class="container-fluid px-4">
 		<div class="row">
-			<div class="col-8 ">
+			<div class="col-7 ">
 
 				<!-- <section id="l_section"> -->
 				<div class="card mr-4">
@@ -107,30 +76,27 @@ label {
 							<button class="c_btn" form="">조회</button>
 						</div>
 
-						<!-- 	
-				<div id="search_box" class="dataTable-search">
-				</div>
-					<input class="dataTable-input" placeholder="Search..." type="text"> -->
 						<br>
-						<div id="grid" ></div>
+						<div id="grid"></div>
 					</div>
 				</div>
 				<!-- 			</section> -->
 
 
 				<!-- 		<section id="r_section"> -->
-				</div>
-				<div class="col">
-					<div class="card mb-4">
-						<div class="card-header">
-							<i class="fas fa-tachometer-alt"></i> 설비등록
-						</div>
+			</div>
+			<div class="col">
+				<div class="card mb-4">
+					<div class="card-header">
+						<i class="fas fa-tachometer-alt"></i> 설비등록
+					</div>
 
-						<div class="card-body">
+					<div class="card-body">
 
-							<form>
-								<input type="file" id="myFile" name="filename">
-								<div class="l_input">
+						<form>
+							<input type="file" id="myFile" name="filename">
+							<div class="row">
+								<div class="col-6">
 									<div class="mb-3">
 										<label for="no" class="form-label">설비명</label> <input
 											type="text" class="form-control" id="no" name="no"
@@ -156,43 +122,57 @@ label {
 											type="text" class="form-control" id="check"
 											style="width: 180px">
 									</div>
-									<div class="r_input">
+								</div>
+								<br>
+								<div class="col-6">
+
+									<div class="mb-4">
+										<label for="email" class="form-label">온도</label>
+										<div class="row">
+											<input type="text" class="form-control" id="check"
+												style="width: 50px">&nbsp; - &nbsp; <input
+												type="text" class="form-control" id="check"
+												style="width: 50px"> &nbsp;°C
+										</div>
+										<br> <label>사용여부</label>
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="useYN"
+												id="Y" value="Y"> <label class="form-check-label"
+												for="Y">Y</label> <input class="form-check-input"
+												type="radio" name="useYN" id="N" value="N"> <label
+												class="form-check-label" for="N">N</label>
+										</div>
+										<br>
 										<div class="mb-4">
-											<label for="email" class="form-label">설비입고날짜</label> <input
+											<label for="email" class="form-label">점검주기</label> <input
 												type="text" class="form-control" id="check"
 												style="width: 180px">
 										</div>
 										<div class="mb-4">
-											<label for="email" class="form-label">설비입고날짜</label> <input
-												type="text" class="form-control" id="check"
+											<label for="form-select" class="form-label">라인코드</label> <select
+												class="form-select" aria-label="Default select example"
 												style="width: 180px">
-										</div>
-										<div class="mb-4">
-											<label for="email" class="form-label">설비입고날짜</label> <input
-												type="text" class="form-control" id="check"
-												style="width: 180px">
-										</div>
-										<div class="mb-4">
-											<label for="email" class="form-label">설비입고날짜</label> <input
-												type="text" class="form-control" id="check"
-												style="width: 180px">
+												<option>${eqms. }</option>
+												<option>2</option>
+												<option>3</option>
+											</select>
 										</div>
 									</div>
 								</div>
-							</form>
-							<br>
-							<div class="linelist">
-								<button class="c_btn" form="">등록</button>
-								<button class="c_btn" form="">수정</button>
-								<button class="c_btn" form="">삭제</button>
-								<button type="reset" class="c_btn">취소</button>
 							</div>
-						</div>
+						</form>
+					</div>
+					<div class="linelist">
+						<button class="c_btn" form="">등록</button>
+						<button class="c_btn" form="">수정</button>
+						<button class="c_btn" form="">삭제</button>
+						<button type="reset" class="c_btn">취소</button>
 					</div>
 				</div>
-				<!-- 			</section> -->
 			</div>
 		</div>
+		<!-- 			</section> -->
+	</div>
 
 
 	<br>
@@ -210,6 +190,7 @@ label {
 					c6 : ((i + 3) % 7) * 60,
 					c7 : ((i + 3) % 7) * 60,
 					c8 : ((i + 3) % 7) * 60,
+					c9 : ((i + 3) % 7) * 60
 
 				});
 			}
@@ -242,16 +223,20 @@ label {
 				name : 'c5',
 				align : 'center'
 			}, {
-				header : '온도',
+				header : '최소온도',
 				name : 'c6',
 				align : 'center'
 			}, {
-				header : '점검주기',
+				header : '최대온도',
 				name : 'c7',
 				align : 'center'
 			}, {
-				header : '라인코드',
+				header : '점검주기',
 				name : 'c8',
+				align : 'center'
+			}, {
+				header : '라인코드',
+				name : 'c9',
 				align : 'center'
 			} ]
 		});
