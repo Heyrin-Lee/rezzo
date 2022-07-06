@@ -9,7 +9,6 @@
 body {
    background: #eee
 }
-
 #cont {
    display: flex;
    justify-content: center;
@@ -18,22 +17,18 @@ body {
    padding: 3%;
    margin: 0, -5%, 0, -5%
 }
-
 #l_section {
    float: left;
    margin-right: 8%;
 }
-
 #r_section {
    float: right;
    margin-bottom: 4%;
    margin-right: 4%;
 }
-
 .col {
    width: 100%
 }
-
 .c_btn {
    color: #fff;
    font-size: 13px;
@@ -42,16 +37,13 @@ body {
    padding: 6px;
    border-radius: 4px
 }
-
 .c_btn:hover {
    background: #555;
 }
-
 .linelist {
    float: right;
    margin-top: 0px;
 }
-
 #search_box{
 width:200px}
 </style>
