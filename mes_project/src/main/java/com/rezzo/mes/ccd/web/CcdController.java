@@ -10,5 +10,10 @@ public class CcdController {
 	public String ccd() {
 		return "ccd/ccd";
 	}
+	
+	@RequestMapping("/ccds.do")
+	public String ccds() {
+		return "ccd/ccds";
+	}
 
 }
