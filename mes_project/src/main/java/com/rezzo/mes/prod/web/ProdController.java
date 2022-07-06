@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ProdController {
 	
-	@RequestMapping("/prod.do")
-	public String prod() {
+	@RequestMapping("/prcs.do")
+	public String prcs() {
 		return "prod/prcs";
 	}
 	
@@ -15,4 +15,30 @@ public class ProdController {
 	public String plan() {
 		return "prod/plan";
 	}
+	
+	@RequestMapping("/planSearch.do")
+	public String planSearch() {
+		return "prod/planSearch";
+	}
+	
+	@RequestMapping("/indica.do")
+	public String indica() {
+		return "prod/indica";
+	}
+	
+	@RequestMapping("/newfile.do")
+	public String newfile() {
+		return "prod/NewFile";
+	}
+	
+	@RequestMapping("/indicaSearch.do")
+	public String indicaSearch() {
+		return "prod/indicaSearch";
+	}
+	
+	@RequestMapping("/prodMng.do")
+	public String prodMng() {
+		return "prod/prodMng";
+	}
+	
 }
