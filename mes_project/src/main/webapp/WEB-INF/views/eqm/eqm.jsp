@@ -152,7 +152,7 @@ label {
 											<label for="form-select" class="form-label">라인코드</label> <select
 												class="form-select" aria-label="Default select example"
 												style="width: 180px">
-												<option>${eqms. }</option>
+												<option>1</option>
 												<option>2</option>
 												<option>3</option>
 											</select>
@@ -171,13 +171,25 @@ label {
 				</div>
 			</div>
 		</div>
-		<!-- 			</section> -->
 	</div>
 
 
 	<br>
 
 	<script>
+	
+		
+	
+	const dataSource = {
+			contentType : 'application/josn',
+			api:{
+				readData :{
+					url : '',
+					method:'GET'
+				}
+			}
+	};
+	
 		const gridData = [];
 		(function() {
 			for (let i = 0; i < 120; i += 1) {
