@@ -75,19 +75,25 @@ width:200px}
       </ol>
    </div>
    <!-- 헤더부분 -->
-
-   <div class="card mb-4">
-      <div id="cont">
-
-         <section id="l_section">
-            <div class="card mb-4">
+   <div>
+      <div>
+         <section>
+            <div>
                <div class="card-header">
                   <div class="sb-nav-link-icon">
                      <i class="fas fa-table me-1"></i> 공정목록
                   </div>
                </div>
-               <div class="card-body">
-                   <div id="grid" style="width: 600px;"></div>
+               <br>
+               <div>
+               		 <div class="linelist">
+               		 	<button id="addBtn" class="c_btn" form="">추가</button>
+               		 	<button class="c_btn" form="">저장</button>
+                        <button class="c_btn" form="">삭제</button>
+                     </div>
+                     <br>
+                     <br>
+                   <div id="grid"></div>
                </div>
             </div>
          </section>
@@ -99,47 +105,55 @@ width:200px}
    <br>
 
    <script>
-      const gridData = [];
-      (function() {
-         for (let i = 0; i < 120; i += 1) {
-            gridData.push({
-               c1 : 'User' + (i + 1),
-               c2 : ((i + 5) % 8) * 100 + i,
-               c3 : ((i + 3) % 7) * 60,
-               c4 : ((i + 3) % 7) * 60
-            });
-         }
-      })();
+   const gridData = [
+	      {
+	        name: 'Beautiful Lies',
+	        artist: 'Birdy',
+	        release: '2016.03.26',
+	        type: 'Deluxe',
+	        genre: 'Pop'
+	      }
+	      ]
 
       const grid = new tui.Grid({
-         el : document.getElementById('grid'),
-         data : gridData,
-         scrollX : false,
-         bodyHeight : 500,
-         columns : [ {
-            header : '공정코드',
-            name : 'c1',
-            align : 'center',
-            editor: 'text'
-         }, {
-            header : '공정명',
-            name : 'c2',
-            align : 'center',
-            editor: 'text'
-         }, {
-            header : '공정구분',
-            name : 'c3',
-            align : 'center',
-            editor: 'text'
-
-         }, {
-            header : '공정설명',
-            name : 'c4',
-            align : 'center',
-            editor: 'text'
-
-         } ]
-      });
+          el: document.getElementById('grid'),
+          data: gridData,
+          scrollX: false,
+          scrollY: false,
+          rowHeaders: ['checkbox'],
+          columns: [
+            {
+              header: '공정코드',
+              name: 'name',
+              editor: 'text'
+            },
+            {
+              header: '공정명',
+              name: 'artist',
+              editor: 'text'
+            },
+            {
+              header: '공정구분',
+              name: 'type',
+              editor: 'text'
+            },
+            {
+              header: '공정설명',
+              name: 'release',
+              editor: 'text'
+            }
+          ]
+        });
+   var rowData = [{cntCd: "", cntNm: "", cntKorNm: "",  cntetKorNm: "", useYn : "" , dispSeq: ""}]
+   let addBtn = document.getElementById('addBtn')
+   addBtn.addEventListener('click', function(e){
+	   grid.appendRow(rowData,{
+		   at : grid.getRowCount(),
+		   focus : true
+		   });
+		   grid.enable()
+   })
+   
    </script>
 </body>
 

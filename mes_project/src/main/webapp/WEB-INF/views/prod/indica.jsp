@@ -5,11 +5,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.6.0.js"
+  <script src="https://code.jquery.com/jquery-3.6.0.js"
    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
    crossorigin="anonymous"></script>
- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  
 <style>
 body {
    background: #eee
@@ -72,42 +73,33 @@ width:200px}
 
 
 
-
 </head>
 <body>
 
    <!-- 헤더부분 -->
    <div class="container-fluid px-4">
-      <h1 class="mt-4">생산계획</h1>
+      <h1 class="mt-4">생산지시</h1>
       <ol class="breadcrumb mb-4">
          <li class="breadcrumb-item active">생산</li>
       </ol>
    </div>
    <!-- 헤더부분 -->
    <div>
- 	 <div id="pDate">
- 	 	<label>생산계획일자</label>
- 	 	<input type="date">
- 	 </div>  
+ 	
      <div class="linelist">
-       <button id="btnModal" class="c_btn" form="">주문서조회</button>
-       <button class="c_btn" form="">계획등록</button>
+       <button class="c_btn" form="">초기화</button>
+       <button id="btnModal" class="c_btn" form="">생산계획조회</button>
        <button class="c_btn" form="">저장</button>
      </div>
      
 	 <div id="grid"></div>
 	 <br>
 	  <div class="d-flex flex-row justify-content-between">
-	     <div id="grid2" style="width: 1000px;">제품</div>
-	     <div id="grid3" style="width: 500px;">제품공정확인</div>
+	     <div id="grid2" style="width: 1000px;">공정자재</div>
+	     <div id="grid3" style="width: 500px;">자재지시</div>
 	  </div>
-	  <br>
-	  <div class="d-flex flex-row justify-content-between">
-	  	 <div id="grid4" style="width: 1000px;">사용가능자재</div>
-	     <div id="grid5" style="width: 500px;">자재확인</div>
-      </div>
-      
-      <div id="dialog" title="주문서조회"></div>
+	  
+	  <div id="dialog" title="생산계획조회"></div>
    <br>
  </div>	
    <script>
@@ -129,19 +121,43 @@ width:200px}
 	      scrollY: false,
 	      columns: [
 	        {
-	          header: '계획코드',
+	          header: '제품코드',
 	          name: 'name'
 	        },
 	        {
-	          header: '주문코드',
+	          header: '제품명',
 	          name: 'artist'
 	        },
 	        {
-	          header: '주문량',
+	          header: '계획번호',
 	          name: 'type'
 	        },
 	        {
-	          header: '납기일자',
+		      header: '납기일자',
+		      name: 'release'
+		    },
+	        {
+	          header: '라인코드',
+	          name: 'release'
+	        },
+	        {
+	          header: '공정코드',
+	          name: 'release'
+	        },
+	        {
+	          header: '담당자',
+	          name: 'release'
+	        },
+	        {
+	          header: '필요수량',
+	          name: 'release'
+	        },
+	        {
+	          header: '지시수량',
+	          name: 'release'
+	        },
+	        {
+	          header: '작업지시일',
 	          name: 'release'
 	        }
 	      ]
@@ -166,38 +182,28 @@ width:200px}
 	      scrollY: false,
 	      columns: [
 	        {
-	          header: '제품코드',
+	          header: '공정코드',
 	          name: 'c1'
 	        },
 	        {
-	          header: '제품명',
+	          header: '자재코드',
 	          name: 'c2'
 	        },
 	        {
-	          header: '라인번호',
+	          header: 'LOT번호',
 	          name: 'c3'
 	        },
 	        {
-	          header: '시작일자',
+	          header: '사용수량',
 	          name: 'c4',
-	          editor: 'datePicker'
 	        },
 	        {
-	          header: '종료일자',
+	          header: '재고수량',
 	          name: 'c5',
-	          editor: 'datePicker'
 	        },
 	        {
-	          header: '생산수량',
+	          header: '사용량',
 	          name: 'c6'
-	        },
-	        {
-		      header: '작업우선순위',
-		      name: 'c7'
-		    },
-	        {
-	          header: '계획코드',
-	          name: 'c8'
 	        }
 	      ]
 	    });
@@ -216,101 +222,21 @@ width:200px}
    
    const grid3 = new tui.Grid({
 	      el: document.getElementById('grid3'),
-	      data: gridData3,
+	      data: gridData2,
 	      scrollX: false,
 	      scrollY: false,
 	      columns: [
-	        {
-	          header: '제품코드',
-	          name: 'name'
-	        },
-	        {
-	          header: '라인번호',
-	          name: 'artist'
-	        },
 	        {
 	          header: '공정코드',
-	          name: 'type'
+	          name: 'c1'
 	        },
 	        {
-	          header: '계획코드',
-	          name: 'release'
-	        }
-	      ]
-	    });
-   
-   const gridData4 = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData4.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
-   const grid4 = new tui.Grid({
-	      el: document.getElementById('grid4'),
-	      data: gridData,
-	      scrollX: false,
-	      scrollY: false,
-	      columns: [
-	        {
-	          header: '자재코드',
-	          name: 'name'
+	          header: 'LOT번호',
+	          name: 'c3'
 	        },
 	        {
-	          header: '자재LOT',
-	          name: 'artist'
-	        },
-	        {
-	          header: '사용가능수량',
-	          name: 'type'
-	        },
-	        {
-	          header: '출고수량',
-	          name: 'release'
-	        },
-	        {
-	          header: '사용량',
-	          name: 'release'
-		    }
-	      ]
-	    });
-   
-   const gridData5 = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData5.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
-   const grid5 = new tui.Grid({
-	      el: document.getElementById('grid5'),
-	      data: gridData,
-	      scrollX: false,
-	      scrollY: false,
-	      columns: [
-	        {
-	          header: '자재코드',
-	          name: 'name'
-	        },
-	        {
-	          header: '공정코드',
-	          name: 'artist'
-	        },
-	        {
-	          header: '출고수량',
-	          name: 'type'
-	        },
-	        {
-	          header: '계획코드',
-	          name: 'release'
+	          header: '사용수량',
+	          name: 'c4'
 	        }
 	      ]
 	    });
@@ -333,6 +259,7 @@ width:200px}
          dialog.dialog("open");
        })
      })
+   
    	
    </script>
 </body>
