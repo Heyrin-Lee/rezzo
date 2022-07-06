@@ -10,4 +10,20 @@ public class OrderController {
 	public String order() {
 		return "order/order";
 	}
+	
+	@RequestMapping("/companyList.do")
+	public String companyList() {
+		return "order/companyList";
+	}
+	
+	@RequestMapping("/productList.do")
+	public String productList() {
+		return "order/productList";
+	}
+	
+	@RequestMapping("/orderRegister.do")
+	public String orderRegister() {
+		return "order/orderRegister";
+	}
 }
+
