@@ -9,23 +9,12 @@
 body {
    background: #eee
 }
-#cont {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   width: 100%;
-   padding: 3%;
-   margin: 0, -5%, 0, -5%
+
+#container {
+   width : 98%;
+   margin : 0 auto;
 }
-#l_section {
-   float: left;
-   margin-right: 8%;
-}
-#r_section {
-   float: right;
-   margin-bottom: 4%;
-   margin-right: 4%;
-}
+
 .col {
    width: 100%
 }
@@ -44,8 +33,9 @@ body {
    float: right;
    margin-top: 0px;
 }
-#search_box{
-width:200px}
+
+
+
 </style>
 <link rel="stylesheet"
    href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
@@ -67,6 +57,7 @@ width:200px}
       </ol>
    </div>
    <!-- 헤더부분 -->
+   <div id="container">
      <section>
             <div class="col">
                <div class="card mb-4">
@@ -88,7 +79,7 @@ width:200px}
                         </div>
                         <div class="mb-3">
                            <label for="name">제품명</label> <input
-                              type="text" id="nmae" name="name">
+                              type="text" id="name" name="name">
                         </div>
      					<div class="linelist">
                         <button class="c_btn" form="">조회</button>
@@ -99,8 +90,8 @@ width:200px}
                </div>
             </div>
          </section>
-   
-   <div id='grid'></div> 
+   		<div id='grid'></div> 
+   	</div>
    <script>
    const gridData = [];
    (function() {

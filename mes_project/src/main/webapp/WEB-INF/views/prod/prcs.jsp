@@ -10,28 +10,13 @@ body {
    background: #eee
 }
 
-#cont {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   width: 100%;
-   padding: 3%;
-   margin: 0, -5%, 0, -5%
-}
-
-#l_section {
-   float: left;
-   margin-right: 8%;
-}
-
-#r_section {
-   float: right;
-   margin-bottom: 4%;
-   margin-right: 4%;
+#container {
+   width : 98%;
+   margin : 0 auto;
 }
 
 .col {
-   width: 700px
+   width: 100%
 }
 
 .c_btn {
@@ -51,9 +36,6 @@ body {
    float: right;
    margin-top: 0px;
 }
-
-#search_box{
-width:200px}
 </style>
 <link rel="stylesheet"
    href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
@@ -61,12 +43,9 @@ width:200px}
 <script src="https://code.jquery.com/jquery-3.6.0.js"
    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
    crossorigin="anonymous"></script>
-
-
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-
    <!-- 헤더부분 -->
    <div class="container-fluid px-4">
       <h1 class="mt-4">공정관리</h1>
@@ -75,45 +54,48 @@ width:200px}
       </ol>
    </div>
    <!-- 헤더부분 -->
-   <div>
-      <div>
-         <section>
-            <div>
-               <div class="card-header">
-                  <div class="sb-nav-link-icon">
-                     <i class="fas fa-table me-1"></i> 공정목록
+      <div id="container">
+              <section>
+            <div class="col">
+               <div class="card mb-4">
+                  <div class="card-header">
+                     <i class="fas fa-table me-1"></i> 조건설정
                   </div>
-               </div>
-               <br>
-               <div>
-               		 <div class="linelist">
-               		 	<button id="addBtn" class="c_btn" form="">추가</button>
-               		 	<button class="c_btn" form="">저장</button>
-                        <button class="c_btn" form="">삭제</button>
+                  <div class="card-body">
+                     
+                     <form>
+                        <div class="mb-3">
+                           <label for="name">공정구분</label> 
+               				<select>
+               					<option>가열</option>
+               					<option>금속검출</option>
+               				</select>
+                        </div>
+     					<div class="linelist">
+                        <button class="c_btn" form="">검색</button>
+                        <button class="c_btn" form="">초기화</button>
                      </div>
-                     <br>
-                     <br>
-                   <div id="grid"></div>
+              	
+                     </form>
+                  </div>
                </div>
             </div>
          </section>
+          <div id='grid'></div>
       </div>
-   </div>
-
-
-
    <br>
 
    <script>
-   const gridData = [
+   
+	const gridData = [
 	      {
 	        name: 'Beautiful Lies',
 	        artist: 'Birdy',
-	        release: '2016.03.26',
+	        date: '2016.03.26',
 	        type: 'Deluxe',
 	        genre: 'Pop'
 	      }
-	      ]
+	      ] 
 
       const grid = new tui.Grid({
           el: document.getElementById('grid'),
@@ -124,17 +106,17 @@ width:200px}
           columns: [
             {
               header: '공정코드',
-              name: 'name',
+              name: 'prcsCd',
               editor: 'text'
             },
             {
               header: '공정명',
-              name: 'artist',
+              name: 'prcsNm',
               editor: 'text'
             },
             {
               header: '공정구분',
-              name: 'type',
+              name: 'prcsFg',
               editor: 'text'
             },
             {
@@ -144,7 +126,7 @@ width:200px}
             }
           ]
         });
-   var rowData = [{cntCd: "", cntNm: "", cntKorNm: "",  cntetKorNm: "", useYn : "" , dispSeq: ""}]
+   /* var rowData = [{cntCd: "", cntNm: "", cntKorNm: "",  cntetKorNm: "", useYn : "" , dispSeq: ""}]
    let addBtn = document.getElementById('addBtn')
    addBtn.addEventListener('click', function(e){
 	   grid.appendRow(rowData,{
@@ -152,8 +134,17 @@ width:200px}
 		   focus : true
 		   });
 		   grid.enable()
-   })
+   }) */
    
+   $(function(){
+	   $.ajax({
+		   url:'prcsList'
+	   }).done(function(result){
+		   grid.resetData(result);
+	   })
+	   
+   })
+
    </script>
 </body>
 
