@@ -13,30 +13,32 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 
-    <!-- bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <title>자재수입검사</title>
+    <style>
+        .tui-datepicker {
+            z-index: 100;
+        }
+    </style>
+
+    <title>자재입고관리</title>
 
 
 </head>
 
 <body>
+    <h3>자재입고관리</h3>
+    <hr>
+
     <input type="button" value="저장">
     <input type="button" value="다시작성">
     <input type="button" value="삭제">
     <hr>
-    <!-- date range picker for temporary order instore -->
     <label for="inspDt"><b>검사자료</b></label>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input id="startpicker-input" type="text" aria-label="Date">
         <span class="tui-ico-date"></span>
         <div id="startpicker-container" style="margin-left: -1px;"></div>
     </div>
-    <span>~</span>
+    <span></span>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input id="endpicker-input" type="text" aria-label="Date">
         <span class="tui-ico-date"></span>
@@ -45,7 +47,6 @@
     <input type="button" value="가져오기">
     <hr>
 
-    <!-- datepicker -->
     <label for="inspDt"><b>입고일자</b></label>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input type="text" name="inspDt" id="tui-date-picker-target" aria-label="Date-Time" />
@@ -54,29 +55,10 @@
     <div id="tui-date-picker-container" style="margin-top: -1px;"></div>
     <hr>
 
-    <!-- search vendor -->
     <label for="vend"><b>업체명</b></label>
     <input id="vend" type="text">
     <input id="vendSch" type="button" value="검색">
     <hr>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">검사내역</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div id="modGrid" class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary">가져오기</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div id="grid"></div>
 
@@ -100,11 +82,6 @@
         }
     });
 
-    let vend = document.getElementById('vend');
-    vend.addEventListener('click', function () {
-        // 업체검색핸들러
-    })
-
     let today = new Date();
     let picker = tui.DatePicker.createRangePicker({
         startpicker: {
@@ -122,34 +99,7 @@
         ]
     });
 
-    class CustomCheckboxRender {
-        constructor(props) {
-            const { grid, rowKey, columnInfo, value } = props;
-
-            const label = document.createElement('label');
-            label.className = 'checkbox';
-            label.setAttribute('for', String(rowKey));
-
-            const hiddenInput = document.createElement('input');
-            hiddenInput.className = 'hidden-input';
-            hiddenInput.id = String(rowKey);
-
-            const customInput = document.createElement('span');
-            customInput.className = 'custom-input';
-
-            label.appendChild(hiddenInput);
-            label.appendChild(customInput);
-
-            hiddenInput.type = 'checkbox';
-
-            this.el = label;
-        }
-
-        getElement() {
-            return this.el;
-        }
-    }
-
+    // grid section
     class CustomTextEditor {
         constructor(props) {
             const el = document.createElement('input');
@@ -175,7 +125,6 @@
         }
     }
 
-    // grid section
     const grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
@@ -183,127 +132,46 @@
         rowHeaders: ['checkbox'],
         columns: [
             {
-                header: '코드',
-                name: 'code'
+                header: '자재코드',
+                name: 'matCd'
             },
             {
                 header: '품명',
-                name: 'name'
+                name: 'matName'
             },
             {
                 header: '규격',
-                name: 'si'
+                name: 'matSt'
+            },
+            {
+                header: '단위',
+                name: 'matSi'
             },
             {
                 header: '발주번호',
-                name: 'ordr_code'
+                name: 'ordrCd'
             },
             {
-                header: '발주량',
-                name: 'ordr_cnt'
-            },
-            {
-                header: '입고량',
-                name: 'ordr_inst_cnt',
-                editor: {
-                    type: CustomTextEditor,
-                    options: {
-                        maxLength: 10
-                    }
-                }
-            },
-            {
-                header: '검사량',
-                name: 'insp_cnt',
-                editor: {
-                    type: CustomTextEditor,
-                    options: {
-                        maxLength: 10
-                    }
-                }
-            },
-            {
-                header: '검사',
-                name: 'insp'
-            },
-            {
-                header: '합격량',
-                name: 'insp_pass',
-                editor: {
-                    type: CustomTextEditor,
-                    options: {
-                        maxLength: 10
-                    }
-                }
-            },
-            {
-                header: '불량량',
-                name: 'insp_fail',
-                editor: {
-                    type: CustomTextEditor,
-                    options: {
-                        maxLength: 10
-                    }
-                }
-            },
-            {
-                header: '검사완료',
-                name: 'insp_done',
-                renderer: { type: CustomCheckboxRender },
-                align: "center",
-                width: 60
+                header: '입고수량',
+                name: 'instCnt'
             }
-        ],
-        data: [
+            ,
             {
-                code: '12312',
-                name: '감귤',
-                si: 'ea',
-                ordr_code: '12312',
-                ordr_cnt: '2',
-                ordr_inst_cnt: '3',
-                insp_cnt: '3',
-                insp: 'yes',
-                insp_pass: '123',
-                insp_fail: '123'
+                header: 'LOT번호',
+                name: 'matLot'
             }
-        ]
-    });
 
-    // modal grid
-    const modGrid = new tui.Grid({
-        el: document.getElementById('modGrid'),
-        scrollX: false,
-        scrollY: false,
-        rowHeaders: ['checkbox'],
-        columns: [
-            {
-                header: '검사번호',
-                name: 'inspCd',
-                width: 100
-            },
-            {
-                header: '검사일자',
-                name: 'inspDt',
-                width: 100
-            },
-            {
-                header: '업체명',
-                name: 'vend',
-                width: 100
-            },
-            {
-                header: '수량',
-                name: 'cnt',
-                width: 100
-            }
         ],
         data: [
             {
-                inspCd: '12-33',
-                inspDt: '13-23',
-                vend: '13-23',
-                cnt: '15-23'
+                matCd: '12312',
+                matName: '감귤',
+                matSt: 'ea',
+                matSi: '12312',
+                matSi: '2',
+                ordrCd: '3',
+                instCnt: '3',
+                matLot: '3'
             }
         ]
     });

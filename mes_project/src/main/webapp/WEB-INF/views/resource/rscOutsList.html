@@ -13,19 +13,30 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 
+    <link rel="stylesheet" href="https://uicdn.toast.com/select-box/latest/toastui-select-box.css">
+    <script src="https://uicdn.toast.com/select-box/latest/toastui-select-box.js"></script>
+
     <style>
         .tui-datepicker {
             z-index: 100;
         }
+
+        .tui-select-box-dropdown {
+            z-index: 100;
+        }
+
+        #select-box {
+            display: inline-block;
+        }
     </style>
 
-    <title>자재입고조회</title>
+    <title>자재출고조회</title>
 
 
 </head>
 
 <body>
-    <h3>자재입고조회</h3>
+    <h3>자재출고조회</h3>
     <hr>
 
     <input type="button" value="조회">
@@ -35,7 +46,7 @@
     <hr>
 
     <!-- 입고기간 -->
-    <label for="inspDt"><b>입고기간</b></label>
+    <label for="inspDt"><b>출고기간</b></label>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input id="startpicker-input" type="text" aria-label="Date">
         <span class="tui-ico-date"></span>
@@ -50,9 +61,8 @@
     <input type="button" value="가져오기">
     <hr>
 
-    <label for="vend"><b>공급업체</b></label>
-    <input id="vend" type="text">
-    <input id="vendSch" type="button" value="검색">
+    <label for="select-box"><b>출고구분</b></label>
+    <div id="select-box" style="width: 200px"></div>
     <hr>
 
     <label for="mat"><b>자재코드</b></label>
@@ -85,6 +95,17 @@
         selectableRanges: [
             [today, new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())]
         ]
+    });
+
+    // outstore route
+    var selectBox = new tui.SelectBox('#select-box', {
+        placeholder: '선택하세요',
+        data: [
+            { label: '공정', value: 'value1' },
+            { label: '부서', value: 'value2' },
+            { label: '협력사', value: 'value3' }
+        ],
+        autofocus: false
     });
 
     // grid section
@@ -120,12 +141,16 @@
         rowHeaders: ['checkbox'],
         columns: [
             {
-                header: '입고일자',
-                name: 'instDt'
+                header: '출고일자',
+                name: 'oustDt'
             },
             {
-                header: '입고번호',
-                name: 'instCd'
+                header: '출고번호',
+                name: 'oustCd'
+            },
+            {
+                header: '출고창고',
+                name: 'oustWh'
             },
             {
                 header: '자재코드',
@@ -136,30 +161,18 @@
                 name: 'matName'
             },
             {
-                header: '공급업체',
-                name: 'matSup'
-            },
-            {
-                header: '입고수량',
-                name: 'instCnt'
+                header: '출고수량',
+                name: 'oustCnt'
             }
-            ,
-            {
-                header: 'LOT번호',
-                name: 'matLot'
-            }
-
         ],
         data: [
             {
+                oustDt: '12312',
+                oustCd: '감귤',
+                oustWh: 'ea',
                 matCd: '12312',
-                matName: '감귤',
-                matSt: 'ea',
-                matSi: '12312',
-                matSi: '2',
-                ordrCd: '3',
-                instCnt: '3',
-                matLot: '3'
+                matName: '2',
+                oustCnt: '3'
             }
         ]
     });
