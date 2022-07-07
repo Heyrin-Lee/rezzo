@@ -6,18 +6,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class CcdController {
 	
-	@RequestMapping("/ccd.do")
+	@RequestMapping("/ccd")
 	public String ccd() {
-		return "ccd/ccd";
+		return "common/ccd";
 	}
 	
-	@RequestMapping("/ccds.do")
+	@RequestMapping("/ccds")
 	public String ccds() {
-		return "ccd/ccds";
+		return "common/ccds";
 	}
 
-	@RequestMapping("/rsc.do")
+	@RequestMapping("/rsc")
 	public String rsc() {
-		return "ccd/rsc";
+		return "common/rsc";
+	}
+	
+	@RequestMapping("/vend")
+	public String vend() {
+		return "common/vend";
 	}
 }

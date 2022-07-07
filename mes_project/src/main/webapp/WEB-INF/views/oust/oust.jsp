@@ -338,7 +338,7 @@ body {
 	            name: 'artist'
 	          },
 	          {
-	            header: '춮고일자',
+	            header: '출고일자',
 	            name: 'type'
 	          },
 	          {

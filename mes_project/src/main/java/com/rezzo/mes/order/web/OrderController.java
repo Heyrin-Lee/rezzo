@@ -6,22 +6,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class OrderController {
 
-	@RequestMapping("/order.do")
+	@RequestMapping("/order")
 	public String order() {
 		return "order/order";
 	}
 	
-	@RequestMapping("/companyList.do")
+	@RequestMapping("/companyList")
 	public String companyList() {
 		return "order/companyList";
 	}
 	
-	@RequestMapping("/productList.do")
+	@RequestMapping("/productList")
 	public String productList() {
 		return "order/productList";
 	}
 	
-	@RequestMapping("/orderRegister.do")
+	@RequestMapping("/orderRegister")
 	public String orderRegister() {
 		return "order/orderRegister";
 	}

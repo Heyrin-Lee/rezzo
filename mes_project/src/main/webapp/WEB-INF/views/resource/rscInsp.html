@@ -13,38 +13,40 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 
-    <!-- bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    <style>
+        .tui-datepicker {
+            z-index: 100;
+        }
+    </style>
+
     <title>자재수입검사</title>
 </head>
 
 <body>
-    <input type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" value="검사내역"></input>
+    <h3>자재수입검사</h3>
+    <hr>
+
+
     <input type="button" value="저장">
     <input type="button" value="다시작성">
     <input type="button" value="삭제">
     <hr>
-    <!-- date range picker for temporary order instore -->
-    <label for="inspDt"><b>임시입고일자</b></label>
+
+    <label for="inspDt"><b>검사입고일자</b></label>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input id="startpicker-input" type="text" aria-label="Date">
         <span class="tui-ico-date"></span>
         <div id="startpicker-container" style="margin-left: -1px;"></div>
     </div>
-    <span>~</span>
+    <span></span>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input id="endpicker-input" type="text" aria-label="Date">
         <span class="tui-ico-date"></span>
         <div id="endpicker-container" style="margin-left: -1px;"></div>
     </div>
-
+    <input type="button" value="가져오기"></input>
     <hr>
 
-    <!-- datepicker -->
     <label for="inspDt"><b>검사일자</b></label>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input type="text" name="inspDt" id="tui-date-picker-target" aria-label="Date-Time" />
@@ -53,58 +55,24 @@
     <div id="tui-date-picker-container" style="margin-top: -1px;"></div>
     <hr>
 
-    <!-- search vendor -->
     <label for="vend"><b>업체명</b></label>
     <input id="vend" type="text">
     <input id="vendSch" type="button" value="검색">
     <hr>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">검사내역</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div id="modGrid" class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary">가져오기</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    <!-- grid section -->
     <div id="grid"></div>
 
 </body>
 
 <script>
-
     window.addEventListener('onload', function () {
 
     })
 
-
-    const DatePicker = tui.DatePicker;
-
-    const container = document.getElementById('tui-date-picker-container');
-    const target = document.getElementById('tui-date-picker-target');
-
-    const instance = new DatePicker(container, {
-        input: {
-            element: target
-        }
-    });
-
-    let vend = document.getElementById('vend');
-    vend.addEventListener('click', function () {
-        // 업체검색핸들러
-    })
-
+    // temp in-stored
     let today = new Date();
+
     let picker = tui.DatePicker.createRangePicker({
         startpicker: {
             date: today,
@@ -121,38 +89,22 @@
         ]
     });
 
-    class CustomCheckboxRender {
-        constructor(props) {
-            const { grid, rowKey, columnInfo, value } = props;
+    // set a inspection date
+    let DatePicker = tui.DatePicker;
+    let container = document.getElementById('tui-date-picker-container');
+    let target = document.getElementById('tui-date-picker-target');
 
-            const label = document.createElement('label');
-            label.className = 'checkbox';
-            label.setAttribute('for', String(rowKey));
-
-            const hiddenInput = document.createElement('input');
-            hiddenInput.className = 'hidden-input';
-            hiddenInput.id = String(rowKey);
-
-            const customInput = document.createElement('span');
-            customInput.className = 'custom-input';
-
-            label.appendChild(hiddenInput);
-            label.appendChild(customInput);
-
-            hiddenInput.type = 'checkbox';
-
-            this.el = label;
+    let instance = new DatePicker(container, {
+        input: {
+            element: target
         }
+    });
 
-        getElement() {
-            return this.el;
-        }
-    }
-
+    // grid section
     class CustomTextEditor {
         constructor(props) {
-            const el = document.createElement('input');
-            const { maxLength } = props.columnInfo.editor.options;
+            let el = document.createElement('input');
+            let { maxLength } = props.columnInfo.editor.options;
 
             el.type = 'text';
             el.maxLength = maxLength;
@@ -175,7 +127,40 @@
     }
 
     // grid section
-    const grid = new tui.Grid({
+    let topGrid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: false,
+        rowHeaders: ['checkbox'],
+        columns: [
+            {
+                header: '발주번호',
+                name: 'ordrCd'
+            },
+            {
+                header: '공급업체',
+                name: 'matSup'
+            },
+            {
+                header: '발주일',
+                name: 'ordrDt'
+            },
+            {
+                header: '납기예정일',
+                name: 'ordrExpcDt'
+            }
+        ],
+        data: [
+            {
+                ordrCd: '12312',
+                matSup: '감귤',
+                ordrDt: 'ea',
+                ordrExpcDt: '12312'
+            }
+        ]
+    });
+
+    let grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
         scrollY: false,
@@ -248,8 +233,6 @@
             {
                 header: '검사완료',
                 name: 'insp_done',
-                renderer: { type: CustomCheckboxRender },
-                align: "center",
                 width: 60
             }
         ],
@@ -265,44 +248,6 @@
                 insp: 'yes',
                 insp_pass: '123',
                 insp_fail: '123'
-            }
-        ]
-    });
-
-    // modal grid
-    const modGrid = new tui.Grid({
-        el: document.getElementById('modGrid'),
-        scrollX: false,
-        scrollY: false,
-        rowHeaders: ['checkbox'],
-        columns: [
-            {
-                header: '검사번호',
-                name: 'inspCd',
-                width: 100
-            },
-            {
-                header: '검사일자',
-                name: 'inspDt',
-                width: 100
-            },
-            {
-                header: '업체명',
-                name: 'vend',
-                width: 100
-            },
-            {
-                header: '수량',
-                name: 'cnt',
-                width: 100
-            }
-        ],
-        data: [
-            {
-                inspCd: '12-33',
-                inspDt: '13-23',
-                vend: '13-23',
-                cnt: '15-23'
             }
         ]
     });
