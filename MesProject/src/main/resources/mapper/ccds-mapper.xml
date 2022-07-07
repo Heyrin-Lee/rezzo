@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.common.ccds.mapper.CcdsMapper">
+	<select id="getCcdsList" resultType="com.rezzo.mes.common.ccds.service.CcdsVO">
+		SELECT rownum id, e.*
+		FROM ccds e
+	</select>
+</mapper>

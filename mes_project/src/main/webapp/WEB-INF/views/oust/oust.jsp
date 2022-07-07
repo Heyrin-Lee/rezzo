@@ -27,6 +27,7 @@ body {
    border: none;
    padding: 6px;
    border-radius: 4px;
+   float : right;
 }
 .linelist {
    float: right;
@@ -46,15 +47,8 @@ body {
    </div>
    <!-- 헤더부분 -->
 <div id="cont">
-	
-
 	<div class="container-fluid px-4">
-		
-		<div class="card mb-4">
-			
-				 
-				<button class="c_btn" sytle="width:150px;">등록</button>
-				 
+		<div class="card mb-4">	 
 		</div>
 		<div class="row">
 			<div class="col-lg-6">
@@ -68,9 +62,11 @@ body {
 				</div>
 			</div>
 			<div class="col-lg-6">
-				<div class="card mb-4" style="margin-top:28px;">
+				<div class="card mb-4">
 					<div class="card-header">
 						<i class="fas fa-chart-pie me-1"></i> 출고 등록 현황
+					<button class="c_btn">확인</button>
+						
 					</div>
 					<div class="card-body">
 						<div id="grid2"></div>
@@ -80,6 +76,23 @@ body {
 		</div>
 	</div>
 	</div>
+	
+	<!-- modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">검사내역</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="modGrid" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary">가져오기</button>
+                </div>
+            </div>
+        </div>
+    </div>
 	
 	<script>
 	//진행중 주문서 현황 데이터
@@ -325,7 +338,7 @@ body {
 	            name: 'artist'
 	          },
 	          {
-	            header: '춮고일자',
+	            header: '출고일자',
 	            name: 'type'
 	          },
 	          {
@@ -334,7 +347,44 @@ body {
 	          }
 	        ]
 	      });
-
+	
+	 // 완제품 재고 모달 그리드
+	    const modGrid = new tui.Grid({
+	        el: document.getElementById('modGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	            {
+	                header: '검사번호',
+	                name: 'inspCd',
+	                width: 100
+	            },
+	            {
+	                header: '검사일자',
+	                name: 'inspDt',
+	                width: 100
+	            },
+	            {
+	                header: '업체명',
+	                name: 'vend',
+	                width: 100
+	            },
+	            {
+	                header: '수량',
+	                name: 'cnt',
+	                width: 100
+	            }
+	        ],
+	        data: [
+	            {
+	                inspCd: '12-33',
+	                inspDt: '13-23',
+	                vend: '13-23',
+	                cnt: '15-23'
+	            }
+	        ]
+	    });
 	</script>
 </body>
 </html>

@@ -10,6 +10,7 @@
    crossorigin="anonymous"></script>
  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
 <style>
 body {
    background: #eee
@@ -66,10 +67,11 @@ body {
 width:200px}
 
 </style>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <link rel="stylesheet"
    href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-
 
 
 
@@ -87,7 +89,11 @@ width:200px}
    <div>
  	 <div id="pDate">
  	 	<label>생산계획일자</label>
- 	 	<input type="date">
+ 	 	<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+  		<input type="text" id="tui-date-picker-target" aria-label="Date-Time" />
+    		<span class="tui-ico-date"></span>
+	  	</div>
+	  	<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>
  	 </div>  
      <div class="linelist">
        <button id="btnModal" class="c_btn" form="">주문서조회</button>
@@ -107,6 +113,8 @@ width:200px}
 	     <div id="grid5" style="width: 500px;">자재확인</div>
       </div>
       
+
+	  <div id="tui-date-picker-container" style="margin-top: -1px;"></div>
       <div id="dialog" title="주문서조회"></div>
    <br>
  </div>	
@@ -149,7 +157,7 @@ width:200px}
    
    const gridData2 = [];
    (function() {
-      for (let i = 0; i < 0; i += 1) {
+      for (let i = 0; i < 1; i += 1) {
          gridData2.push({
             c1 : 'User' + (i + 1),
             c2 : ((i + 5) % 8) * 100 + i,
@@ -167,7 +175,18 @@ width:200px}
 	      columns: [
 	        {
 	          header: '제품코드',
-	          name: 'c1'
+	          name: 'c1',
+	          editor: {
+	              type: 'select',
+	              options: {
+	                listItems: [
+	                  { text: 'Deluxe', value: '1' },
+	                  { text: 'EP', value: '2' },
+	                  { text: 'Single', value: '3' }
+	                ]
+	              }
+	            }
+	          
 	        },
 	        {
 	          header: '제품명',
@@ -175,7 +194,17 @@ width:200px}
 	        },
 	        {
 	          header: '라인번호',
-	          name: 'c3'
+	          name: 'c3',
+	          editor: {
+	              type: 'select',
+	              options: {
+	                listItems: [
+	                  { text: 'Deluxe', value: '1' },
+	                  { text: 'EP', value: '2' },
+	                  { text: 'Single', value: '3' }
+	                ]
+	              }
+	            }
 	        },
 	        {
 	          header: '시작일자',
@@ -234,7 +263,8 @@ width:200px}
 	        },
 	        {
 	          header: '계획코드',
-	          name: 'release'
+	          name: 'release',
+	          editor: 'text'
 	        }
 	      ]
 	    });
@@ -270,7 +300,8 @@ width:200px}
 	        },
 	        {
 	          header: '출고수량',
-	          name: 'release'
+	          name: 'release',
+	          
 	        },
 	        {
 	          header: '사용량',
@@ -333,6 +364,18 @@ width:200px}
          dialog.dialog("open");
        })
      })
+     
+     var datepicker = new tui.DatePicker('#tui-date-picker-container1',
+                {
+                language: 'ko',
+                date: new Date(),
+                input: {
+                    element: '#tui-date-picker-target',
+                    format: 'yyyy-MM-dd'
+                }
+            });
+     
+
    	
    </script>
 </body>
