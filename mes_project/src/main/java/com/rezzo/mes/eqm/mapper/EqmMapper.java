@@ -2,20 +2,18 @@ package com.rezzo.mes.eqm.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-
-import com.rezzo.mes.eqm.vo.EqmVO;
+import com.rezzo.mes.eqm.service.EqmVO;
 
 public interface EqmMapper {
-	
-	List<EqmVO> eqmList();
 
-	EqmVO eqmSelect(EqmVO vo);
+	public List<EqmVO> eqmList(EqmVO vo);
 
-	int eqmInsert(EqmVO vo);
+	public List<EqmVO> eqmSelect(EqmVO vo);
 
-	int eqmUpdate(EqmVO vo);
+	public void eqmInsert(EqmVO vo);
 
-	int eqmDelete(EqmVO vo);
+	public void eqmUpdate(EqmVO vo);
+
+	public void eqmDelete(EqmVO vo);
 
 }

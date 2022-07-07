@@ -55,12 +55,11 @@ label {
 		</ol>
 	</div>
 	<!-- 헤더부분 -->
-	<div class="container-fluid px-4">
+	<div class="container-fluid px-4 d-flex flex-row bd-highlight mb-3">
 		<div class="row">
-			<div class="col-7" style="margin-right: 5px">
-
+			<div class="col-6 mr-3"  >
 				<!-- <section id="l_section"> -->
-				<div class="card mr-4">
+				<div class="card mr-4 ">
 
 					<div class="card-header">
 						<div class="sb-nav-link-icon">
@@ -77,34 +76,25 @@ label {
 							</select>
 							<button class="c_btn" form="">조회</button>
 						</div>
-
-						<!-- 	
-				<div id="search_box" class="dataTable-search">
-				</div>
-					<input class="dataTable-input" placeholder="Search..." type="text"> -->
 						<br>
 						<div id="grid"></div>
 					</div>
 				</div>
-				<!-- 			</section> -->
-
-
-				<!-- 		<section id="r_section"> -->
 			</div>
-			<div class="col">
-				<div class="card mb-4">
+			<div class="col-5 ms-auto">
+				<div class="card mb-4 ">
 					<div class="card-header">
 						<i class="fas fa-tachometer-alt"></i> 설비목록검색
 					</div>
 
 					<div class="card-body">
 						<div class="row">
-							<div class="col" style="margin-bottom: 3px">
+							<div class="col-12" style="margin-bottom: 3px">
 								<label for="">해당일자</label> <input type="date" id="" name="">&nbsp;
 								- &nbsp;<input type="date" id="" name="">
 							</div>
 						</div>
-						<div class="row" style="margin-bottom: 3px">
+						<div class="row me-3">
 							<div class="col-5">
 								<label for="">설비코드</label> <input type="text"
 									readonly="readonly" id="" name="" style="width: 150px">
@@ -115,15 +105,13 @@ label {
 								<button class="c_btn" form="">검색</button>
 								<button class="c_btn" form="">조회</button>
 							</div>
+							<div id="grid2"></div>
 						</div>
 
-						<div id="grid2" style="width: 630px"></div>
 					</div>
 				</div>
-
 			</div>
 		</div>
-		<!-- 			</section> -->
 	</div>
 
 
@@ -204,6 +192,8 @@ label {
 				align : 'center'
 			} ]
 		});
+		grid.refreshLayout();
+		grid2.refreshLayout();
 	</script>
 </body>
 
