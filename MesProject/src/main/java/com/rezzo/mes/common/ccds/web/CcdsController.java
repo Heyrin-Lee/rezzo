@@ -5,16 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.rezzo.mes.common.ccds.service.CcdsService;
+import com.rezzo.mes.common.ccds.mapper.CcdsMapper;
 
 @Controller
 public class CcdsController {
 
-	@Autowired CcdsService ccdsDao;
+	@Autowired CcdsMapper mapper;
 	
 	@RequestMapping("ccdsList")
 	public String ccdsList(Model model) {
-		model.addAttribute("ccdsList", ccdsDao.getCcdsList(null));
+		model.addAttribute("ccdsList", mapper.getCcdsList(null));
 		return "common/ccdsList";
 	}
 }
