@@ -52,13 +52,13 @@ body {
 
    <!-- 헤더부분 -->
    <div class="container-fluid px-4">
-      <h1 class="mt-4">생산지시조회</h1>
+      <h1 class="mt-4">공정실적조회</h1>
       <ol class="breadcrumb mb-4">
          <li class="breadcrumb-item active">생산</li>
       </ol>
    </div>
    <!-- 헤더부분 -->
-   <div id="container">
+  <div id="container">
      <section>
             <div class="col">
                <div class="card mb-4">
@@ -69,21 +69,24 @@ body {
                      
                      <form>
                         <div class="mb-3">
-                           <label for="frDate">지시일자</label> 
+                           <label for="name">생산지시코드</label> 
+               				<input type="text" id="name" name="name">
+                        </div>
+                        <div class="mb-3">
+                           <label for="prcsName">공정명</label> 
+                           <input type="text" id="prcsName" name="prcsName">
+                        </div>
+                        <div class="mb-3">
+                           <label for="prcs">공정분류</label> 
+                           <input type="text" id="prcs" name="prcs">
+                        </div>
+                        <div class="mb-3">
+                           <label for="prcs">계획일자</label> 
                            <input type="date" id="frDate" name="frDate" style="width: 200px">~<input type="date" id="toDate" name="toDate" style="width: 200px">
                         </div>
-                        <div class="mb-3">
-                           <label for="all">지시상태</label> 
-                            <label><input type="radio" name="all" value="all">전체</label>
-                            <label><input type="radio" name="progY" value="progY">미진행</label>
-                            <label><input type="radio" name="progN" value="progN">진행</label>
-                        </div>
-                        <div class="mb-3">
-                           <label for="name">제품명</label> <input
-                              type="text" id="nmae" name="name">
-                        </div>
      					<div class="linelist">
-                        <button class="c_btn" form="">조회</button>
+                        <button class="c_btn" form="">검색</button>
+                        <button class="c_btn" form="">초기화</button>
                      </div>
               	
                      </form>
@@ -112,27 +115,60 @@ body {
 	      scrollY: false,
 	      columns: [
 	        {
-	          header: '라인코드',
+	          header: '생산지시일자',
 	          name: 'name'
 	        },
 	        {
-	          header: '제품코드',
+	          header: '생산계획코드',
 	          name: 'artist'
 	        },
 	        {
-	          header: '지시수량',
+	          header: '공정명',
 	          name: 'type'
 	        },
 	        {
-	          header: '생산수량',
+	          header: '설비코드',
 	          name: 'release'
 	        },
 	        {
-	          header: '작업시작일',
+	          header: '설비명',
 	          name: 'IndicaCnt'
+	        },
+	        {
+	          header: '투입량',
+	          name: 'frWkDt'
+	        },
+	        {
+	          header: '생산량',
+	          name: 'frWkDt'
+	        },
+	        {
+	          header: '불량량',
+	          name: 'frWkDt'
+	        },
+	        {
+	          header: '불량코드',
+	          name: 'frWkDt'
+	        },
+	        {
+	          header: '불량상세',
+	          name: 'frWkDt'
+	        },
+	        {
+	          header: '시작시간',
+	          name: 'frWkDt'
+	        },
+	        {
+	          header: '종료시간',
+	          name: 'frWkDt'
+	        },
+	        {
+	          header: '담당자',
+	          name: 'frWkDt'
 	        }
 	      ]
 	    });
+    
    
    
    </script>

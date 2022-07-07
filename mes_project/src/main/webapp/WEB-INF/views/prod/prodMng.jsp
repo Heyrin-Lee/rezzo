@@ -16,24 +16,9 @@ body {
    background: #eee
 }
 
-#cont {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   width: 100%;
-   padding: 3%;
-   margin: 0, -5%, 0, -5%
-}
-
-#l_section {
-   float: left;
-   margin-right: 8%;
-}
-
-#r_section {
-   float: right;
-   margin-bottom: 4%;
-   margin-right: 4%;
+#container {
+   width : 98%;
+   margin : 0 auto;
 }
 
 .col {
@@ -57,8 +42,6 @@ body {
    float: left;
 }
 
-#search_box{
-width:200px}
 
 #lbtn{
 float:left;
@@ -70,11 +53,11 @@ float:right;
 display:inline-block;
 }
 
-
 #grid3{
  float: right;
    margin-top: 0px;
 }
+
 
 </style>
 <link rel="stylesheet"
@@ -92,6 +75,7 @@ display:inline-block;
       </ol>
    </div>
    <!-- 헤더부분 -->
+<div id="container">   
    <button id="lbtn" name="lbtn" class="c_btn" form="">생산지시조회</button>
    <button id="rbtn" name="rbtn" class="c_btn" form="">공정이동표</button>
    <br>
@@ -110,7 +94,7 @@ display:inline-block;
 	   </div>
 	</div>	  
 	<div id="dialog" title="생산지시조회"></div> 
-
+</div>
    <script>
    const gridData = [];
    (function() {

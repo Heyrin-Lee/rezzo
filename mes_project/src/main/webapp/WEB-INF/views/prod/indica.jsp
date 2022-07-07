@@ -16,24 +16,9 @@ body {
    background: #eee
 }
 
-#cont {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   width: 100%;
-   padding: 3%;
-   margin: 0, -5%, 0, -5%
-}
-
-#l_section {
-   float: left;
-   margin-right: 8%;
-}
-
-#r_section {
-   float: right;
-   margin-bottom: 4%;
-   margin-right: 4%;
+#container {
+   width : 98%;
+   margin : 0 auto;
 }
 
 .col {
@@ -59,12 +44,7 @@ body {
    
 }
 
-#pDate {
-   float: left;
-}
 
-#search_box{
-width:200px}
 
 </style>
 <link rel="stylesheet"
@@ -84,7 +64,7 @@ width:200px}
       </ol>
    </div>
    <!-- 헤더부분 -->
-   <div>
+   <div id="container">
  	
      <div class="linelist">
        <button class="c_btn" form="">초기화</button>

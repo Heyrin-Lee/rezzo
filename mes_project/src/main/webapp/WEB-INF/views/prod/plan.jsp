@@ -16,28 +16,13 @@ body {
    background: #eee
 }
 
-#cont {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   width: 100%;
-   padding: 3%;
-   margin: 0, -5%, 0, -5%
-}
-
-#l_section {
-   float: left;
-   margin-right: 8%;
-}
-
-#r_section {
-   float: right;
-   margin-bottom: 4%;
-   margin-right: 4%;
+#container {
+   width : 98%;
+   margin : 0 auto;
 }
 
 .col {
-   width: 700px
+   width: 100%
 }
 
 .c_btn {
@@ -63,8 +48,10 @@ body {
    float: left;
 }
 
-#search_box{
-width:200px}
+
+.tui-datepicker {
+    z-index: 99;
+}
 
 </style>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
@@ -86,7 +73,7 @@ width:200px}
       </ol>
    </div>
    <!-- 헤더부분 -->
-   <div>
+   <div id="container">
  	 <div id="pDate">
  	 	<label>생산계획일자</label>
  	 	<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
