@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +10,7 @@
 body {
 	background: #eee
 }
+
 .c_btn {
 	color: #fff;
 	font-size: 13px;
@@ -30,6 +31,10 @@ body {
 	float: right;
 }
 
+#grid {
+	width: 100%
+}
+
 label {
 	width: 100px;
 	float: left;
@@ -46,7 +51,6 @@ label {
 
 </head>
 <body>
-
 	<!-- 헤더부분 -->
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">설비관리</h1>
@@ -59,7 +63,6 @@ label {
 		<div class="row">
 			<div class="col-7 ">
 
-				<!-- <section id="l_section"> -->
 				<div class="card mr-4">
 
 					<div class="card-header">
@@ -70,9 +73,9 @@ label {
 					<div class="card-body">
 						<div>
 							<label for="" autofocus="autofocus">설비명</label> <input
-								type="text" readonly="readonly" id="" name=""
-								style="width: 150px">
-							<button class="c_btn" form="">검색</button>
+								type="text" id="" name="" style="width: 150px"> <input
+								type="button" data-bs-toggle="modal" id="modalBtn"
+								data-bs-target="#exampleModal" value="검색"></input>
 							<button class="c_btn" form="">조회</button>
 						</div>
 
@@ -80,12 +83,10 @@ label {
 						<div id="grid"></div>
 					</div>
 				</div>
-				<!-- 			</section> -->
 
 
-				<!-- 		<section id="r_section"> -->
 			</div>
-			<div class="col">
+			<div class="col-5 ms-auto">
 				<div class="card mb-4">
 					<div class="card-header">
 						<i class="fas fa-tachometer-alt"></i> 설비등록
@@ -124,7 +125,7 @@ label {
 									</div>
 								</div>
 								<br>
-								<div class="col-6">
+								<div class="col-5">
 
 									<div class="mb-4">
 										<label for="email" class="form-label">온도</label>
@@ -135,18 +136,19 @@ label {
 												style="width: 50px"> &nbsp;°C
 										</div>
 										<br> <label>사용여부</label>
-										<div class="form-check form-check-inline">
+										<div class="form-check form-check-inline"
+											style="margin-bottom: 3px">
 											<input class="form-check-input" type="radio" name="useYN"
 												id="Y" value="Y"> <label class="form-check-label"
-												for="Y">Y</label> <input class="form-check-input"
+												for="Y">사용</label> <input class="form-check-input"
 												type="radio" name="useYN" id="N" value="N"> <label
-												class="form-check-label" for="N">N</label>
+												class="form-check-label" for="N">미사용</label>
 										</div>
-										<br>
+										<br> <br>
 										<div class="mb-4">
-											<label for="email" class="form-label">점검주기</label> <input
+											<label for="email" class="form-label">점검주기(일)</label> <input
 												type="text" class="form-control" id="check"
-												style="width: 180px">
+												style="width: 150px">
 										</div>
 										<div class="mb-4">
 											<label for="form-select" class="form-label">라인코드</label> <select
@@ -173,84 +175,136 @@ label {
 		</div>
 	</div>
 
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">설비명 검색</h5>
+					<br> <br>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+
+				</div><br>
+				<div class="ms-3">
+					<label style="width:60px" for="">설비명</label><input type="text"></input>
+					<button class="c_btn btn-dark btn-primary btn-sm">검색</button>
+					
+				</div>
+				<div id="modGrid" class="modal-body"></div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">닫기</button>
+					<button type="button" class="btn btn-primary">가져오기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 
 	<br>
 
 	<script>
-	
-		
-	
-	const dataSource = {
-			contentType : 'application/josn',
-			api:{
-				readData :{
-					url : '',
-					method:'GET'
-				}
+		$.ajax({
+			url : "/mes/eqmList",
+			method : "GET",
+			dataType : "JSON",
+			success : function(result) {
+				grid.resetData(result);
+				console.log(result);
 			}
-	};
-	
-		const gridData = [];
-		(function() {
-			for (let i = 0; i < 120; i += 1) {
-				gridData.push({
-					c1 : 'User' + (i + 1),
-					c2 : ((i + 5) % 8) * 100 + i,
-					c3 : ((i + 3) % 7) * 60,
-					c4 : ((i + 3) % 7) * 60,
-					c5 : ((i + 3) % 7) * 60,
-					c6 : ((i + 3) % 7) * 60,
-					c7 : ((i + 3) % 7) * 60,
-					c8 : ((i + 3) % 7) * 60,
-					c9 : ((i + 3) % 7) * 60
-
-				});
-			}
-		})();
+		});
 
 		const grid = new tui.Grid({
 			el : document.getElementById('grid'),
-			data : gridData,
 			scrollX : false,
 			bodyHeight : 500,
 			rowHeaders : [ 'rowNum' ],
 			columns : [ {
 				header : '설비명',
-				name : 'c1',
+				name : 'eqmNm',
 				align : 'center',
 			}, {
 				header : '설비코드',
-				name : 'c2',
+				name : 'eqmCd',
 				align : 'center'
 			}, {
 				header : '공정코드',
-				name : 'c3',
+				name : 'prcsCd',
 				align : 'center'
 			}, {
 				header : '공정명',
-				name : 'c4',
+				name : 'prcsNm',
 				align : 'center'
 			}, {
 				header : '사용여부',
-				name : 'c5',
+				name : 'useYn',
 				align : 'center'
 			}, {
 				header : '최소온도',
-				name : 'c6',
+				name : 'minTemp',
 				align : 'center'
 			}, {
 				header : '최대온도',
-				name : 'c7',
+				name : 'maxTemp',
 				align : 'center'
 			}, {
 				header : '점검주기',
-				name : 'c8',
+				name : 'chckPred',
 				align : 'center'
 			}, {
 				header : '라인코드',
-				name : 'c9',
+				name : 'lineCd',
 				align : 'center'
 			} ]
+		});
+
+		const modalAjax = $.ajax({
+			url : "/mes/eqmList",
+			method : "GET",
+			dataType : "JSON",
+			success : function(result) {
+				grid.resetData(result);
+				console.log(result);
+			}
+		});
+
+		const modGrid = new tui.Grid({
+			el : document.getElementById('modGrid'),
+			readData : modalAjax,
+			scrollX : false,
+			rowHeaders : [ 'rowNum' ],
+			columns : [ {
+				header : '설비명',
+				name : 'eqmNm',
+				align : 'center',
+			}, {
+				header : '설비코드',
+				name : 'eqmCd',
+				align : 'center'
+			}, {
+				header : '공정코드',
+				name : 'prcsCd',
+				align : 'center',
+			}, {
+				header : '공정명',
+				name : 'prcsNm',
+				align : 'center',
+			}, {
+				header : '사용여부',
+				name : 'useYn',
+				align : 'center',
+			} ]
+		})
+
+		modalBtn.addEventListener('click', function() {
+			setTimeout(function() {
+				modGrid.refreshLayout()
+			}, 300);
 		});
 	</script>
 </body>

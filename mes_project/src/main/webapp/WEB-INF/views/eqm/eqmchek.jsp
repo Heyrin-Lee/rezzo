@@ -6,6 +6,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
+
+#grid {width:100%}
 body {
 	background: #eee
 }
