@@ -13,19 +13,30 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 
+    <link rel="stylesheet" href="https://uicdn.toast.com/select-box/latest/toastui-select-box.css">
+    <script src="https://uicdn.toast.com/select-box/latest/toastui-select-box.js"></script>
+
     <style>
         .tui-datepicker {
             z-index: 100;
         }
+
+        .tui-select-box-dropdown {
+            z-index: 100;
+        }
+
+        #select-box {
+            display: inline-block;
+        }
     </style>
 
-    <title>자재입고조회</title>
+    <title>자재입/출고조회</title>
 
 
 </head>
 
 <body>
-    <h3>자재입고조회</h3>
+    <h3>자재입/출고조회</h3>
     <hr>
 
     <input type="button" value="조회">
@@ -35,7 +46,7 @@
     <hr>
 
     <!-- 입고기간 -->
-    <label for="inspDt"><b>입고기간</b></label>
+    <label for="inspDt"><b>수불기간</b></label>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input id="startpicker-input" type="text" aria-label="Date">
         <span class="tui-ico-date"></span>
@@ -48,6 +59,10 @@
         <div id="endpicker-container" style="margin-left: -1px;"></div>
     </div>
     <input type="button" value="가져오기">
+    <hr>
+
+    <label for="select-box"><b>구분</b></label>
+    <div id="select-box" style="width: 200px"></div>
     <hr>
 
     <label for="vend"><b>공급업체</b></label>
@@ -87,6 +102,17 @@
         ]
     });
 
+    // outstore route
+    var selectBox = new tui.SelectBox('#select-box', {
+        placeholder: '선택하세요',
+        data: [
+            { label: '전체', value: 'value1' },
+            { label: '입고', value: 'value2' },
+            { label: '출고', value: 'value3' }
+        ],
+        autofocus: false
+    });
+
     // grid section
     class CustomTextEditor {
         constructor(props) {
@@ -120,12 +146,8 @@
         rowHeaders: ['checkbox'],
         columns: [
             {
-                header: '입고일자',
-                name: 'instDt'
-            },
-            {
-                header: '입고번호',
-                name: 'instCd'
+                header: '수불일자',
+                name: 'ioDt'
             },
             {
                 header: '자재코드',
@@ -136,30 +158,26 @@
                 name: 'matName'
             },
             {
-                header: '공급업체',
-                name: 'matSup'
-            },
-            {
                 header: '입고수량',
                 name: 'instCnt'
-            }
-            ,
+            },
             {
-                header: 'LOT번호',
-                name: 'matLot'
+                header: '출고수량',
+                name: 'oustCnt'
+            },
+            {
+                header: '수불유형',
+                name: 'ioRoute'
             }
-
         ],
         data: [
             {
-                matCd: '12312',
-                matName: '감귤',
-                matSt: 'ea',
-                matSi: '12312',
-                matSi: '2',
-                ordrCd: '3',
-                instCnt: '3',
-                matLot: '3'
+                ioDt: '12312',
+                matCd: '감귤',
+                matName: 'ea',
+                instCnt: '12312',
+                oustCnt: '2',
+                ioRoute: '3'
             }
         ]
     });

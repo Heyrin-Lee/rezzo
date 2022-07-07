@@ -23,14 +23,16 @@
 </head>
 
 <body>
+    <h3>자재수입검사</h3>
+    <hr>
 
-    <input type="button" value="검사내역"></input>
+
     <input type="button" value="저장">
     <input type="button" value="다시작성">
     <input type="button" value="삭제">
     <hr>
 
-    <label for="inspDt"><b>입고일자</b></label>
+    <label for="inspDt"><b>검사입고일자</b></label>
     <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
         <input id="startpicker-input" type="text" aria-label="Date">
         <span class="tui-ico-date"></span>
@@ -42,6 +44,7 @@
         <span class="tui-ico-date"></span>
         <div id="endpicker-container" style="margin-left: -1px;"></div>
     </div>
+    <input type="button" value="가져오기"></input>
     <hr>
 
     <label for="inspDt"><b>검사일자</b></label>
@@ -124,6 +127,39 @@
     }
 
     // grid section
+    let topGrid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: false,
+        rowHeaders: ['checkbox'],
+        columns: [
+            {
+                header: '발주번호',
+                name: 'ordrCd'
+            },
+            {
+                header: '공급업체',
+                name: 'matSup'
+            },
+            {
+                header: '발주일',
+                name: 'ordrDt'
+            },
+            {
+                header: '납기예정일',
+                name: 'ordrExpcDt'
+            }
+        ],
+        data: [
+            {
+                ordrCd: '12312',
+                matSup: '감귤',
+                ordrDt: 'ea',
+                ordrExpcDt: '12312'
+            }
+        ]
+    });
+
     let grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
