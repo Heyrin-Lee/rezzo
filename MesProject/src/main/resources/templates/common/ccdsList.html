@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <style>
 a {
 	text-decoration: none;
@@ -47,6 +46,8 @@ li {
 </style>
 </head>
 <body>
+<!-- 본문내용 -->
+<th:block layout:fragment="main">  
 <table>
  <tr>
  <th>ccd</th>
@@ -56,7 +57,6 @@ li {
  <td th:text="${ccd.ccdNm}"></td>
  </tr>
 </table>
-
 
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">공통코드관리</h1>
@@ -231,6 +231,6 @@ li {
 			</div>
 		</div>
 	</div>
-
+</th:block>
 </body>
 </html>
