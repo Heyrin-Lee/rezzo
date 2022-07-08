@@ -39,12 +39,34 @@ public class PrcsController {
 		return "prod/prcs";
 	}
 	
+	@GetMapping("/indica")
+	public String indica() {
+		return "prod/indica";
+	}
+	
+	@GetMapping("/indicaSearch")
+	public String indicaSearch() {
+		return "prod/indicaSearch";
+	}
+	
+	@GetMapping("/plan")
+	public String plan() {
+		return "prod/plan";
+	}
+	
 	@GetMapping("/planSearch")
 	public String planSearch() {
 		return "prod/planSearch";
 	}
-
 	
+	@GetMapping("/prcsSearch")
+	public String prcsSearch() {
+		return "prod/prcsSearch";
+	}
 	
+	@GetMapping("/prodMng")
+	public String prodMng() {
+		return "prod/prodMng";
+	}
 	
 }
