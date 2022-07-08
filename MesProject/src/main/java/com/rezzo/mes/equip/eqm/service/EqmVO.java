@@ -1,4 +1,4 @@
-package com.rezzo.mes.eqm.eqm.service;
+package com.rezzo.mes.equip.eqm.service;
 
 import lombok.Data;
 

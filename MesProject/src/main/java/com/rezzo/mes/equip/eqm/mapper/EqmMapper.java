@@ -1,8 +1,9 @@
-package com.rezzo.mes.eqm.eqm.mapper;
+package com.rezzo.mes.equip.eqm.mapper;
 
 import java.util.List;
 
-import com.rezzo.mes.eqm.eqm.service.EqmVO;
+import com.rezzo.mes.equip.eqm.service.EqmVO;
+
 
 public interface EqmMapper {
 

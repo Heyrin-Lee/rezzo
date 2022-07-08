@@ -98,22 +98,22 @@ body {
 									<button class="c_btn" form="">취소</button>
 								</div>
 								<br> <br>
-								<form>
+								<form action="lineInsert">
 									<div class="mb-3">
 										<label for="no" class="form-label">라인코드</label> <input
-											type="text" class="form-control" id="no" name="no">
+											type="text" class="form-control" id="lineCd" name="lineCd">
 									</div>
 									<div class="mb-3">
 										<label for="id" class="form-label">UPH생산량</label> <input
-											type="text" class="form-control" id="id" name="id">
+											type="text" class="form-control" id="uphCnt" name="uphCnt">
 									</div>
 									<div class="mb-3">
 										<label for="email" class="form-label">담당자</label> <input
-											type="text" class="form-control" id="email" name="email">
+											type="text" class="form-control" id="eqmPsch" name="eqmPsch">
 									</div>
 									<div class="mb-4">
 										<label for="email" class="form-label">사용여부</label> <input
-											type="checkbox" id="check">
+											type="checkbox" id="useYn" name="useYn" value="Y">
 									</div>
 								</form>
 							</div>
@@ -128,41 +128,55 @@ body {
 		<br>
 
 		<script>
-			const gridData = [];
-			(function() {
-				for (let i = 0; i < 120; i += 1) {
-					gridData.push({
-						c1 : 'User' + (i + 1),
-						c2 : ((i + 5) % 8) * 100 + i,
-						c3 : ((i + 3) % 7) * 60,
-						c4 : ((i + 3) % 7) * 60
-					});
+		
+		$.ajax({
+				url: "eqmLineList",
+				method: "GET",
+				dataType: "JSON",
+				success: function (result) {
+					grid.resetData(result);
 				}
-			})();
-
+			});
+			
 			const grid = new tui.Grid({
 				el : document.getElementById('grid'),
-				data : gridData,
 				scrollX : false,
 				bodyHeight : 500,
 				columns : [ {
 					header : '라인코드',
-					name : 'c1',
+					name : 'lineCd',
 					align : 'center',
 				}, {
 					header : 'UPH생산량',
-					name : 'c2',
+					name : 'uphCnt',
 					align : 'center'
 				}, {
 					header : '담당자',
-					name : 'c3',
+					name : 'eqmPsch',
 					align : 'center'
 				}, {
 					header : '사용여부',
-					name : 'c4',
+					name : 'useYn',
 					align : 'center'
 				} ]
 			});
+			
+			
+			$('tbody').on('click','tr',function(){
+				let line=$(this).find('td').eq(0).text()
+				let uph =$(this).find('td').eq(1).text()
+				let psch =$(this).find('td').eq(2).text()
+				let yn =$(this).find('td').eq(3).text()
+				
+				$('#lineCd').val(line)
+				$('#uphCnt').val(uph)
+				$('#eqmPsch').val(psch)
+				$('#useYn').val([yn])
+				
+				
+			})
+			
+			
 		</script>
 </th:block>
 </body>

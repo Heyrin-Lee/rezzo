@@ -1,13 +1,14 @@
-package com.rezzo.mes.eqm.eqm.service.impl;
+package com.rezzo.mes.equip.eqm.service.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rezzo.mes.eqm.eqm.mapper.EqmMapper;
-import com.rezzo.mes.eqm.eqm.service.EqmService;
-import com.rezzo.mes.eqm.eqm.service.EqmVO;
+import com.rezzo.mes.equip.eqm.mapper.EqmMapper;
+import com.rezzo.mes.equip.eqm.service.EqmService;
+import com.rezzo.mes.equip.eqm.service.EqmVO;
+
 
 @Service
 public class EqmServiceImpl implements EqmService {
@@ -37,8 +38,7 @@ public class EqmServiceImpl implements EqmService {
 
 	@Override
 	public List<EqmVO> eqmSelect(String keyword) {
-		List<EqmVO> list = map.eqmSelect(keyword);
-		return list;
+		return map.eqmSelect(keyword);
 	}
 
 }
