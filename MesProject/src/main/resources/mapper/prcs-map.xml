@@ -9,9 +9,14 @@
 </select>
 
 <!-- 공정검색 -->
-<select id="prcsFind" resultType="com.rezzo.mes.prod.prcs.service.PrcsVO">
+<select id="prcsFind" resultType="com.rezzo.mes.prod.prcs.service.PrcsVO" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">
 	SELECT * 
 	FROM PRCS 
-	WHERE PRCS_FG=;
+	<where>
+		<if test="prcs_fg != null">
+			and prcs_fg = #{prcsFg}
+		</if>
+	</where>
 </select>	
+
 </mapper>
