@@ -1,4 +1,4 @@
-package com.rezzo.mes.common.ccds.service;
+package com.rezzo.mes.comm.ccds.service;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

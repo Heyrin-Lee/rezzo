@@ -1,11 +1,11 @@
-package com.rezzo.mes.common.ccds.web;
+package com.rezzo.mes.comm.ccds.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.rezzo.mes.common.ccds.mapper.CcdsMapper;
+import com.rezzo.mes.comm.ccds.mapper.CcdsMapper;
 
 @Controller
 public class CcdsController {

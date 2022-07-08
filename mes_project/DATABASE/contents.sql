@@ -1,4 +1,0 @@
-
---ccds
-INSERT INTO CCDS (CCD, CCD_NM) VALUES ('100', '테스트코드')
-INSERT INTO CCDS (CCD, CCD_NM) VALUES ('101', '테스트코드2')
