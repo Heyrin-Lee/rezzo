@@ -1,3 +1,5 @@
+-- 프로그래밍시에 테이블 drop이 빈번해서 FK제약조건 제외했습니다
+
 DROP TABLE IF EXISTS EQM_LINE;
 
 CREATE TABLE EQM_LINE (
