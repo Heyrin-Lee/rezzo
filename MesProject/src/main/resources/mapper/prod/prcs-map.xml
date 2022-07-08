@@ -13,10 +13,22 @@
 	SELECT * 
 	FROM PRCS 
 	<where>
-		<if test="prcs_fg != null">
-			and prcs_fg = #{prcsFg}
+		<if test="prcsFg != null">
+			AND PRCS_FG = #{prcsFg}
 		</if>
 	</where>
-</select>	
+</select>
+
+<!-- 공정등록 -->
+<insert id="prcsInsert" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">
+	INSERT INTO PRCS  (prcs_cd, 
+						prcs_nm, 
+						prcs_fg, 
+						prcs_ctnt)
+	VALUES (#{prcsCd}, 
+			#{prcsNm}, 
+			#{prcsFg}, 
+			#{prcsCtnt})
+</insert>	
 
 </mapper>

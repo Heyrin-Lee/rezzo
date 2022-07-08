@@ -20,7 +20,12 @@ public class PrcsServiceImpl implements PrcsService {
 	}
 
 	@Override
-	public List<Map> prcsSelectList(PrcsVO vo) {
-		return mapper.prcsSelectList(vo);
+	public List<Map> prcsFind(PrcsVO vo) {
+		return mapper.prcsFind(vo);
+	}
+
+	@Override
+	public void prcsInsert(PrcsVO vo) {
+		mapper.prcsInsert(vo);
 	}
 }

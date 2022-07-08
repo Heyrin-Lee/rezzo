@@ -62,9 +62,9 @@ body {
                      <form>
                         <div class="mb-3">
                            <label for="name">공정구분</label> 
-               				<select>
-               					<option>가열</option>
-               					<option>금속검출</option>
+               				<select id="prcs">
+               					<option value='test1'>TEST1</option>
+               					<option value='test2'>TEST2</option>
                				</select>
                         </div>
      					<div class="linelist">
@@ -80,8 +80,8 @@ body {
           <div>
 	          <div class="linelist">
 	             <button id="addBtn" class="c_btn" form="">추가</button>
-	             <button id="addBtn" class="c_btn" form="">삭제</button>
-	             <button id="addBtn" class="c_btn" form="">저장</button>
+	             <button id="" class="c_btn" form="">삭제</button>
+	             <button id="saveBtn" class="c_btn" form="">저장</button>
 	          </div>
 	          <br>
 	          <br>
@@ -132,18 +132,33 @@ body {
 		   grid.resetData(result);
 	   })
 	   
-	   var rowData = [{prcsCd: "", prcsNm: "", prcsFg: "",  prcsCtnt: ""}]
+	  
 	   $("#addBtn").on("click", function(e){
-		   grid.appendRow(rowData,{
+		   grid.appendRow(
+		   	{
 			   at : grid.getRowCount(),
 			   focus : true
 			   });
 			   grid.enable()
+	  		})
+	   
+	   $("#saveBtn").on("click", function(e){
+	   		$.ajax({
+	   			url:'prcsInsert',
+	   			data : {prcsCd : grid.getModifiedRows().createdRows[0].prcsCd,
+	   			 		prcsNm : grid.getModifiedRows().createdRows[0].prcsNm,
+	   			 		prcsFg : grid.getModifiedRows().createdRows[0].prcsFg,
+	   			 		prcsCtnt : grid.getModifiedRows().createdRows[0].prcsCtnt}
+	   		}).done(function(result){
+	   			grid.resetData(result);
+	   		})
 	   })
 	   
 	   $("#sBtn").on("click", function(e){
+	   var option = $("#prcs option:selected").text() // sql문 where 조건으로 들어가야 하는 값
 		   $.ajax({
-			   url:''
+			   url: 'prcsList/' + option,
+			   data : {prcsCtnt : option}
 		   }).done(function(result) {
 			   grid.resetData(result);
 		   })

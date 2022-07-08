@@ -7,5 +7,6 @@ import com.rezzo.mes.prod.prcs.service.PrcsVO;
 
 public interface PrcsMapper {
 	public List<PrcsVO> prcsList(PrcsVO vo);
-	public List<Map> prcsSelectList(PrcsVO vo);
+	public List<Map> prcsFind(PrcsVO vo);
+	public void prcsInsert(PrcsVO vo);
 }
