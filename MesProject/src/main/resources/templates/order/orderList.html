@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+a {
+	text-decoration: none;
+}
+
+body {
+	font-size: 14px;
+	color: #333;
+}
+
+li {
+	list-style: none;
+}
+
+.card-header .tab {
+	display: flex;
+	justify-content: space-between;
+}
+
+.card-header .tab li a {
+	font-size: 15px;
+	color: #333;
+	font-weight: 500;
+}
+
+/* 탭버튼 눌렀을시 글자 색상변경 */
+.card-header .tab li.on a {
+	font-weight: bold;
+	color: crimson;
+}
+/* 탭박스 영역 기본 옵션은 디스플레이 숨김 */
+.card-body .tabBox {
+	display: none;
+}
+/* 탭버튼이 눌러졌을시 관련된 탭박스 활성화 */
+.card-body .tabBox.on {
+	display: block;
+}
+</style>
+</head>
+<body>
+<!-- 본문내용 -->
+<th:block layout:fragment="main">  
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">공통코드관리</h1>
+		<ol class="breadcrumb mb-4">
+			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+			<li class="breadcrumb-item">> 기준정보관리</li>
+			<li class="breadcrumb-item active">> 공통코드관리</li>
+		</ol>
+		
+		<div class="card mb-4">
+      <div id="cont" style="padding-bottom:0px">
+         <section id="r_section">
+            <div class="col">
+               <div class="card mb-4">
+                  <div class="card-header">
+                     <i class="fas fa-tachometer-alt"></i> 주문서 조회
+                  </div>
+	<div class="card-body">
+                     <form>
+                      <div class="r_input">
+                        <div class="mb-3">
+                           <label for="no" class="form-label">진행상황</label>&nbsp;
+                           <input type="radio" id="ing" name="ing">진행
+                           <input type="radio" id="complete" name="complete">완료
+                           <input type="radio" id="every" name="every">전체
+                        </div>
+                        <div class="mb-3">
+                           <label for="inputPassword2" class="form-label">거래처명</label>
+    						<input type="password" class="form-control" id="inputPassword2">
+                            <button class="btn btn-primary" id="openCompany" form="">검색</button>
+                        </div>
+                        <div class="mb-3">
+                           <label for="email" class="form-label">제품명</label> 
+                           <input type="text" class="form-control" id="product" name="product">
+                           <button class="btn btn-primary" id="openProduct" form="">검색</button>
+                        </div>
+                        <div class="mb-4">
+                           <label for="email" class="form-label">주문일자</label> 
+                           <input type="date" id=""> - <input type="date" id="">
+                        </div>
+                       </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </section>
+      </div>
+       <div class="linelist">
+   		<button class="btn btn-primary" id="orderRegister">주문서 등록</button>
+   		<button class="btn btn-primary">주문서 조회</button>
+   </div>
+   </div>
+   <div id="grid"></div>
+   
+   <script>
+   /* 그리드 */
+   const gridData = [];
+
+	    const grid = new tui.Grid({
+	      el: document.getElementById('grid'),
+	      scrollX: false,
+	      bodyHeight: 300,
+	      rowHeight: 35,
+	      rowHeaders: ['rowNum'],
+	      header: {
+	        height: 40
+	      },
+	      columns: [
+	        {
+	          header: '주문코드',
+	          name: 'c1'
+	        },
+	        {
+	          header: '거래처',
+	          defaultValue: 2,
+	          name: 'c2'
+	        },
+	        {
+	          header: '주문일자',
+	          name: 'c3'
+	        },
+	        {
+		       header: '납기일자',
+		       name: 'c3'
+		        },
+		    {
+			    header: '진행상황',
+			    name: 'c3'
+			     },
+		    {
+				 header: '완제품코드',
+				 name: 'c3'
+				  },
+			{
+				  header: '제품명',
+				  name: 'c3'
+				   },
+			{
+				   header: '주문수량',
+				   name: 'c3'
+				    }	   
+			        
+	      ],
+	      data: gridData
+	    });
+	   </script>
+</th:block>
+
+   
+</body>
+</html>

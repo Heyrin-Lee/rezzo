@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rezzo.mes.prod.prcs.mapper.PrcsMapper">
+
 <!-- 공정조회 -->
 <select id="prcsList" resultType="com.rezzo.mes.prod.prcs.service.PrcsVO">
-	SELECT PRCS_CD, PRCS_NM, PRCS_FG 
+	SELECT * 
 	FROM PRCS
+</select>
+
+<!-- 공정검색 -->
+<select id="prcsFind" resultType="com.rezzo.mes.prod.prcs.service.PrcsVO">
+	SELECT * 
+	FROM PRCS 
+	WHERE PRCS_FG=;
 </select>	
 </mapper>

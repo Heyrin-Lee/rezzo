@@ -72,8 +72,8 @@ label {
 					</div>
 					<div class="card-body">
 						<div>
-							<label for="" autofocus="autofocus">설비명</label> <input
-								type="text" id="" name="" style="width: 150px"> <input
+							<label for=""  autofocus="autofocus">설비명</label> <input
+								type="text" id="" name="" style="width: 150px" readonly="readonly"  > <input
 								type="button" data-bs-toggle="modal" id="modalBtn"
 								data-bs-target="#exampleModal" value="검색"></input>
 							<button class="c_btn" form="">조회</button>
@@ -188,7 +188,7 @@ label {
 
 				</div><br>
 				<div class="ms-3">
-					<label style="width:60px" for="">설비명</label><input type="text"></input>
+					<label style="width:60px" for="">설비명</label><input type="text" ></input>
 					<button class="c_btn btn-dark btn-primary btn-sm">검색</button>
 					
 				</div>
@@ -209,73 +209,75 @@ label {
 	<br>
 
 	<script>
-		$.ajax({
-			url : "/mes/eqmList",
-			method : "GET",
-			dataType : "JSON",
-			success : function(result) {
-				grid.resetData(result);
-				console.log(result);
-			}
-		});
+	
+	// 메인화면 그리드
+	$.ajax({
+		url : "/mes/eqmList",
+		method : "GET",
+		dataType : "JSON",
+		success : function(result) {
+			grid.resetData(result);
+			console.log(result);
+		}
+	});
+	const grid = new tui.Grid({
+		el : document.getElementById('grid'),
+		scrollX : false,
+		bodyHeight : 500,
+		rowHeaders : [ 'rowNum' ],
+		columns : [ {
+			header : '설비명',
+			name : 'eqmNm',
+			align : 'center',
+		}, {
+			header : '설비코드',
+			name : 'eqmCd',
+			align : 'center'
+		}, {
+			header : '공정코드',
+			name : 'prcsCd',
+			align : 'center'
+		}, {
+			header : '공정명',
+			name : 'prcsNm',
+			align : 'center'
+		}, {
+			header : '사용여부',
+			name : 'useYn',
+			align : 'center'
+		}, {
+			header : '최소온도',
+			name : 'minTemp',
+			align : 'center'
+		}, {
+			header : '최대온도',
+			name : 'maxTemp',
+			align : 'center'
+		}, {
+			header : '점검주기',
+			name : 'chckPred',
+			align : 'center'
+		}, {
+			header : '라인코드',
+			name : 'lineCd',
+			align : 'center'
+		} ]
+	});
 
-		const grid = new tui.Grid({
-			el : document.getElementById('grid'),
-			scrollX : false,
-			bodyHeight : 500,
-			rowHeaders : [ 'rowNum' ],
-			columns : [ {
-				header : '설비명',
-				name : 'eqmNm',
-				align : 'center',
-			}, {
-				header : '설비코드',
-				name : 'eqmCd',
-				align : 'center'
-			}, {
-				header : '공정코드',
-				name : 'prcsCd',
-				align : 'center'
-			}, {
-				header : '공정명',
-				name : 'prcsNm',
-				align : 'center'
-			}, {
-				header : '사용여부',
-				name : 'useYn',
-				align : 'center'
-			}, {
-				header : '최소온도',
-				name : 'minTemp',
-				align : 'center'
-			}, {
-				header : '최대온도',
-				name : 'maxTemp',
-				align : 'center'
-			}, {
-				header : '점검주기',
-				name : 'chckPred',
-				align : 'center'
-			}, {
-				header : '라인코드',
-				name : 'lineCd',
-				align : 'center'
-			} ]
-		});
-
-		const modalAjax = $.ajax({
-			url : "/mes/eqmList",
-			method : "GET",
-			dataType : "JSON",
-			success : function(result) {
-				grid.resetData(result);
-				console.log(result);
-			}
-		});
+	
+	//모달 그리드
+$.ajax({
+				url : "/mes/eqmList",
+				method : "GET",
+				dataType : "JSON",
+				success : function(result) {
+					modGrid.resetData(result);
+					console.log(result);
+				}
+			});
 
 		const modGrid = new tui.Grid({
 			el : document.getElementById('modGrid'),
-			readData : modalAjax,
 			scrollX : false,
 			rowHeaders : [ 'rowNum' ],
 			columns : [ {
@@ -300,12 +302,13 @@ label {
 				align : 'center',
 			} ]
 		})
-
-		modalBtn.addEventListener('click', function() {
+		
+	modalBtn.addEventListener('click', function() {
 			setTimeout(function() {
 				modGrid.refreshLayout()
 			}, 300);
 		});
+		
 	</script>
 </body>
 

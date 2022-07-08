@@ -37,8 +37,7 @@ body {
    margin-top: 0px;
 }
 </style>
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"
    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
@@ -72,7 +71,7 @@ body {
                				</select>
                         </div>
      					<div class="linelist">
-                        <button class="c_btn" form="">검색</button>
+                        <button id="sBtn" class="c_btn" form="">검색</button>
                         <button class="c_btn" form="">초기화</button>
                      </div>
               	
@@ -81,21 +80,17 @@ body {
                </div>
             </div>
          </section>
-          <div id='grid'></div>
+          <div id='grid'>
+	          <div class="linelist">
+	             <button id="addBtn" class="c_btn" form="">추가</button>
+	          </div>
+          </div>
       </div>
    <br>
 
    <script>
    
-	const gridData = [
-	      {
-	        name: 'Beautiful Lies',
-	        artist: 'Birdy',
-	        date: '2016.03.26',
-	        type: 'Deluxe',
-	        genre: 'Pop'
-	      }
-	      ] 
+	const gridData = [{}] 
 
       const grid = new tui.Grid({
           el: document.getElementById('grid'),
@@ -121,26 +116,35 @@ body {
             },
             {
               header: '공정설명',
-              name: 'release',
+              name: 'prcsCtnt',
               editor: 'text'
             }
           ]
         });
-   /* var rowData = [{cntCd: "", cntNm: "", cntKorNm: "",  cntetKorNm: "", useYn : "" , dispSeq: ""}]
-   let addBtn = document.getElementById('addBtn')
-   addBtn.addEventListener('click', function(e){
-	   grid.appendRow(rowData,{
-		   at : grid.getRowCount(),
-		   focus : true
-		   });
-		   grid.enable()
-   }) */
+
    
    $(function(){
 	   $.ajax({
 		   url:'prcsList'
 	   }).done(function(result){
 		   grid.resetData(result);
+	   })
+	   
+	   var rowData = [{prcsCd: "", prcsNm: "", prcsFg: "",  prcsCtnt: ""}]
+	   $("#addBtn").on("click", function(e){
+		   grid.appendRow(rowData,{
+			   at : grid.getRowCount(),
+			   focus : true
+			   });
+			   grid.enable()
+	   })
+	   
+	   $("#sBtn").on("click", function(e){
+		   $.ajax({
+			   url:''
+		   }).done(function(result) {
+			   grid.resetData(result);
+		   })
 	   })
 	   
    })
