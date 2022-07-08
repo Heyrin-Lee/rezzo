@@ -17,7 +17,7 @@ public class EqmController {
 	@Autowired
 	EqmMapper map;
 
-	@RequestMapping("/eqm.do")
+	@RequestMapping("/eqm")
 	public String eqm() {
 		return "eqm/eqm";
 	}
@@ -28,33 +28,29 @@ public class EqmController {
 		List<EqmVO> eqmList = map.eqmList(vo);
 		return eqmList;
 	}
-
+	
 	@GetMapping("/eqmSelect")
 	@ResponseBody
 	public List<EqmVO> EqmSelect(EqmVO vo) {
 		List<EqmVO> eqmSelect = map.eqmSelect(vo);
 		return eqmSelect;
 	}
-
-	/*
-	 * @GetMapping("/eqm.do") public EqmVO
-	 */
-	@RequestMapping("/line.do")
+	@RequestMapping("/line")
 	public String line() {
 		return "eqm/line";
 	}
 
-	@RequestMapping("/eqmopr.do")
+	@RequestMapping("/eqmopr")
 	public String eqmopr() {
 		return "eqm/eqmopr";
 	}
 
-	@RequestMapping("/eqmchek.do")
+	@RequestMapping("/eqmchek")
 	public String eqmchek() {
 		return "eqm/eqmchek";
 	}
 
-	@RequestMapping("/rltmeqm.do")
+	@RequestMapping("/rltmeqm")
 	public String rltmeqm() {
 		return "eqm/rltmeqm";
 	}

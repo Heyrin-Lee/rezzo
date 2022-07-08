@@ -1,22 +1,19 @@
-package com.rezzo.mes.eqm.service.impl;
+package com.rezzo.mes.eqm.eqm.service.impl;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rezzo.mes.eqm.mapper.EqmMapper;
-import com.rezzo.mes.eqm.service.EqmService;
-import com.rezzo.mes.eqm.service.EqmVO;
+import com.rezzo.mes.eqm.eqm.mapper.EqmMapper;
+import com.rezzo.mes.eqm.eqm.service.EqmService;
+import com.rezzo.mes.eqm.eqm.service.EqmVO;
 
 @Service
 public class EqmServiceImpl implements EqmService {
 
 	@Autowired
 	private EqmMapper map;
-
-	org.slf4j.Logger logger = LoggerFactory.getLogger(EqmServiceImpl.class);
 
 	@Override
 	public List<EqmVO> eqmList(EqmVO vo) {
@@ -39,8 +36,9 @@ public class EqmServiceImpl implements EqmService {
 	}
 
 	@Override
-	public List<EqmVO> eqmSelect(EqmVO vo) {
-		return map.eqmSelect(vo);
+	public List<EqmVO> eqmSelect(String keyword) {
+		List<EqmVO> list = map.eqmSelect(keyword);
+		return list;
 	}
 
 }
