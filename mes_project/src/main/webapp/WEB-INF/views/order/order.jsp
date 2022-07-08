@@ -171,15 +171,6 @@ label {
    <script>
    /* 그리드 */
    const gridData = [];
-   (function() {
-	      for (let i = 0; i < 120; i += 1) {
-	        gridData.push({
-	          c1: 'User' + (i + 1),
-	          c2: ((i + 5) % 8) * 100 + i,
-	          c3: ((i + 3) % 7) * 60
-	        });
-	      }
-	    })();
 
 	    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
