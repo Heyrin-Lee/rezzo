@@ -15,6 +15,16 @@ public class CcdsController {
 	@RequestMapping("ccdsList")
 	public String ccdsList(Model model) {
 		model.addAttribute("ccdsList", mapper.getCcdsList(null));
-		return "common/ccdsList";
+		return "common/ccds";
+	}
+	
+	@RequestMapping("vend")
+	public String vend() {
+		return "common/vend";
+	}
+	
+	@RequestMapping("rsc")
+	public String rsc() {
+		return "common/rsc";
 	}
 }
