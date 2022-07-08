@@ -1,6 +1,7 @@
 package com.rezzo.mes.prod.prcs.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,11 +27,19 @@ public class PrcsController {
 		return mapper.prcsList(vo); 
 	}
 	
-	/* 공정구분으로 단건조회 */
-	@GetMapping("/prcsList/{prcsFg}")
+	/* 공정구분으로 조회 */
+	@GetMapping("/prcsList/{option}")
 	@ResponseBody
-	public PrcsVO prcsSelectList(@PathVariable String prcsCtnt, PrcsVO vo) {
-		vo.setPrcsCtnt(prcsCtnt);
+	public List<Map> prcsSelectList(@PathVariable String option, PrcsVO vo) {
+		vo.setPrcsFg(option);
+		return mapper.prcsFind(vo);
+	}
+	
+	/* 새로운 공정등록 */
+	@GetMapping("/prcsInsert")
+	@ResponseBody
+	public PrcsVO prcsInsert(PrcsVO vo) {
+		mapper.prcsInsert(vo); 
 		return vo;
 	}
 	

@@ -5,6 +5,6 @@ import java.util.Map;
 
 public interface PrcsService {
 	public List<PrcsVO> prcsList(PrcsVO vo);
-	public List<Map> prcsSelectList(PrcsVO vo);
-
+	public List<Map> prcsFind(PrcsVO vo);
+	public void prcsInsert(PrcsVO vo);
 }
