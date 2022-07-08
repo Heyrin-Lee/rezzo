@@ -1,4 +1,4 @@
-package com.rezzo.mes.order.service;
+package com.rezzo.mes.sales.order.service;
 
 import java.sql.Date;
 
@@ -12,6 +12,7 @@ public class OrderVO {
 	private int orderNo;
 	private String edctsCd;
 	private String vendCd;
+	private String vendNm;
 	private Date orderDt;
 	private String progAppe;
 	private Date paprdDt;

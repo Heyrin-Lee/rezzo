@@ -49,11 +49,11 @@ li {
 <!-- 본문내용 -->
 <th:block layout:fragment="main">  
 	<div class="container-fluid px-4">
-		<h1 class="mt-4">공통코드관리</h1>
+		<h1 class="mt-4">영업관리</h1>
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 기준정보관리</li>
-			<li class="breadcrumb-item active">> 공통코드관리</li>
+			<li class="breadcrumb-item">> 주문서관리</li>
+			<li class="breadcrumb-item active">> 주문서 조회/등록</li>
 		</ol>
 		
 		<div class="card mb-4">
@@ -103,8 +103,17 @@ li {
    
    <script>
    /* 그리드 */
-   const gridData = [];
-
+	
+		$.ajax({
+			url : "order",
+			method : "get",
+			datatype : "json",
+			success : function(list) {
+				grid.resetData(list);
+				console.log(list);
+			}
+		})
+		
 	    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      scrollX: false,
@@ -116,42 +125,55 @@ li {
 	      },
 	      columns: [
 	        {
-	          header: '주문코드',
-	          name: 'c1'
+	          header: '주문번호',
+	          name: 'orderNo'
 	        },
 	        {
 	          header: '거래처',
-	          defaultValue: 2,
-	          name: 'c2'
+	          name: 'vendNm'
 	        },
 	        {
 	          header: '주문일자',
-	          name: 'c3'
+	          name: 'orderDt'
 	        },
 	        {
 		       header: '납기일자',
-		       name: 'c3'
+		       name: 'paprdDt'
 		        },
 		    {
 			    header: '진행상황',
-			    name: 'c3'
+			    name: 'progAppe'
 			     },
 		    {
 				 header: '완제품코드',
-				 name: 'c3'
+				 name: 'edctsCd'
 				  },
 			{
 				  header: '제품명',
-				  name: 'c3'
+				  name: 'prdtNm'
 				   },
 			{
 				   header: '주문수량',
-				   name: 'c3'
+				   name: 'orderCnt'
 				    }	   
 			        
 	      ],
-	      data: gridData
 	    });
+	    
+	    //
+	    $(function() {
+	    	orderSelect();
+	    })
+	    
+	    //orderSelect()
+	    function orderSelect() {
+	    	$.ajax({
+	    		url:"orderSelect",
+	    		dataType:"json"
+	    	}).done(function(list){
+	    		console.log()
+	    	})
+	    }
 	   </script>
 </th:block>
 

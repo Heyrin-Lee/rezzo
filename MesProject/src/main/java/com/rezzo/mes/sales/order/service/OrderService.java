@@ -1,4 +1,4 @@
-package com.rezzo.mes.order.service;
+package com.rezzo.mes.sales.order.service;
 
 import java.util.List;
 
