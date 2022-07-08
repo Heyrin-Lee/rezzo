@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.rezzo.mes.order.mapper.OrderMapper">
+<mapper namespace="com.rezzo.mes.sales.order.mapper.OrderMapper">
 
 	<!-- 주문서 전체조회 -->
-	<select id="searchOrdr" resultType="com.rezzo.mes.order.service.OrderVO">
+	<select id="searchOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
 		SELECT * FROM ORDER_SHEET
 	</select>
 </mapper>

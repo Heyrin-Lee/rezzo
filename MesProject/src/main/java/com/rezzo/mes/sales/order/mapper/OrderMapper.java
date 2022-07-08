@@ -1,8 +1,8 @@
-package com.rezzo.mes.order.mapper;
+package com.rezzo.mes.sales.order.mapper;
 
 import java.util.List;
 
-import com.rezzo.mes.order.service.OrderVO;
+import com.rezzo.mes.sales.order.service.OrderVO;
 
 public interface OrderMapper {
 	
