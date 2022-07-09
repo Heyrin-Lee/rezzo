@@ -6,5 +6,10 @@
     <select id="getOrdrList" resultType="OrdrVO">
         select ORDR_NO, VEND_NM, PAPRD_CMND_DT, ORDR_REQ_DT
         from RSC_ORDR
+        <![CDATA[
+        where PAPRD_CMND_DT >= #{startDt}
+          and PAPRD_CMND_DT <= #{endDt}
+        ]]>
+        order by PAPRD_CMND_DT
     </select>
 </mapper>
