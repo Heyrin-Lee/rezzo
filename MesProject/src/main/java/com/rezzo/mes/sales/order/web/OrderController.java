@@ -26,7 +26,7 @@ public class OrderController {
 		return mapper.searchOrdr(null);
 	}
 	
-	//주문서 조회/등록 페이지 확인
+	//주문서 조회/등록 페이지 불러오기
 	@RequestMapping("orderList")
 	public String orderList() {
 		return "sales/orderList";

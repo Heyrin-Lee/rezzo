@@ -13,6 +13,8 @@ import com.rezzo.mes.sales.oust.service.OustVO;
 public class OustServiceImpl implements OustService{
 
 	@Autowired OustMapper mapper;
+	
+	@Override
 	public List<OustVO> searchOust(OustVO vo) {
 		return mapper.searchOust(vo);
 	}

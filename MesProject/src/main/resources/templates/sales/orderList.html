@@ -69,19 +69,19 @@ li {
                       <div class="r_input">
                         <div class="mb-3">
                            <label for="no" class="form-label">진행상황</label>&nbsp;
-                           <input type="radio" id="ing" name="ing">진행
-                           <input type="radio" id="complete" name="complete">완료
-                           <input type="radio" id="every" name="every">전체
+                           <input type="radio" id="ing" name="ing"/>진행
+                           <input type="radio" id="complete" name="complete"/>완료
+                           <input type="radio" id="every" name="every"/>전체
                         </div>
                         <div class="mb-3">
                            <label for="inputPassword2" class="form-label">거래처명</label>
     						<input type="password" class="form-control" id="inputPassword2">
-                            <button class="btn btn-primary" id="openCompany" form="">검색</button>
+                            <button class="btn btn-primary" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal" form="">검색</button>
                         </div>
                         <div class="mb-3">
                            <label for="email" class="form-label">제품명</label> 
                            <input type="text" class="form-control" id="product" name="product">
-                           <button class="btn btn-primary" id="openProduct" form="">검색</button>
+                           <button class="btn btn-primary" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal" form="">검색</button>
                         </div>
                         <div class="mb-4">
                            <label for="email" class="form-label">주문일자</label> 
@@ -95,15 +95,67 @@ li {
          </section>
       </div>
        <div class="linelist">
-   		<button class="btn btn-primary" id="orderRegister">주문서 등록</button>
+   		<button class="btn btn-primary" id="orderRegister" data-bs-toggle="modal" data-bs-target="#addModal">주문서 등록</button>
    		<button class="btn btn-primary">주문서 조회</button>
    </div>
    </div>
    <div id="grid"></div>
    
+   <!-- 제품명 모달 -->
+	    <div class="modal fade" id="proModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">제품 목록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="proGrid" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary">가져오기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 	
+  <!-- 거래처 모달 -->
+  <div class="modal fade" id="comModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">거래처 목록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="comGrid" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary">가져오기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 거래처 모달 -->
+  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">주문서 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="comGrid" class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary">가져오기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
    <script>
    /* 그리드 */
-	
+		
+   		/*초기페이지 - 주문서 전체 목록 보여주기*/
 		$.ajax({
 			url : "order",
 			method : "get",
@@ -159,21 +211,83 @@ li {
 			        
 	      ],
 	    });
-	    
-	    //
-	    $(function() {
-	    	orderSelect();
-	    })
-	    
-	    //orderSelect()
-	    function orderSelect() {
-	    	$.ajax({
-	    		url:"orderSelect",
-	    		dataType:"json"
-	    	}).done(function(list){
-	    		console.log()
-	    	})
-	    }
+   		
+		 // 제품명 모달 그리드    
+	    const proGrid = new tui.Grid({
+	        el: document.getElementById('proGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	            {
+	                header: '검사번호',
+	                name: 'inspCd',
+	                width: 100
+	            },
+	            {
+	                header: '검사일자',
+	                name: 'inspDt',
+	                width: 100
+	            },
+	            {
+	                header: '업체명',
+	                name: 'vend',
+	                width: 100
+	            },
+	            {
+	                header: '수량',
+	                name: 'cnt',
+	                width: 100
+	            }
+	        ],
+	        data: [
+	            {
+	                inspCd: '12-33',
+	                inspDt: '13-23',
+	                vend: '13-23',
+	                cnt: '15-23'
+	            }
+	        ]
+	    });
+		 
+	 // 거래처 모달 그리드    
+	    const comGrid = new tui.Grid({
+	        el: document.getElementById('comGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	            {
+	                header: '검사번호',
+	                name: 'inspCd',
+	                width: 100
+	            },
+	            {
+	                header: '검사일자',
+	                name: 'inspDt',
+	                width: 100
+	            },
+	            {
+	                header: '업체명',
+	                name: 'vend',
+	                width: 100
+	            },
+	            {
+	                header: '수량',
+	                name: 'cnt',
+	                width: 100
+	            }
+	        ],
+	        data: [
+	            {
+	                inspCd: '12-33',
+	                inspDt: '13-23',
+	                vend: '13-23',
+	                cnt: '15-23'
+	            }
+	        ]
+	    });
+   
 	   </script>
 </th:block>
 
