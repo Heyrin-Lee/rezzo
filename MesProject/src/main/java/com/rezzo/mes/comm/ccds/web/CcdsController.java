@@ -12,9 +12,35 @@ public class CcdsController {
 
 	@Autowired CcdsMapper mapper;
 	
-	@RequestMapping("ccdsList")
+	@RequestMapping("ccds")
 	public String ccdsList(Model model) {
 		model.addAttribute("ccdsList", mapper.getCcdsList(null));
-		return "common/ccdsList";
+		return "comm/ccds";
 	}
+	
+	@RequestMapping("bom")
+	public String bom() {
+		return "comm/bom";
+	}
+	
+	@RequestMapping("edcts")
+	public String edcts() {
+		return "comm/edcts";
+	}
+	
+	@RequestMapping("rsc")
+	public String rsc() {
+		return "comm/rsc";
+	}
+	
+	@RequestMapping("vend")
+	public String vend() {
+		return "comm/vend";
+	}
+	
+	@RequestMapping("wrhous")
+	public String wrhous() {
+		return "comm/wrhous";
+	}
+	
 }

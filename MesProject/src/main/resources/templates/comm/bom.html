@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>bom.html</title>
+</head>
+<body>
+	<!-- 본문내용 -->
+	<th:block layout:fragment="main">
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">BOM관리</h1>
+			<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+				<li class="breadcrumb-item">> 기준정보관리</li>
+				<li class="breadcrumb-item active">> BOM관리</li>
+			</ol>
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="linelist">
+						<button class="c_btn" form="">등록</button>
+						<button class="c_btn" form="">수정</button>
+						<button class="c_btn" form="">삭제</button>
+						<button class="c_btn" form="">취소</button>
+					</div>
+					<br> <br>
+					<form id="dataForm" name="dataForm" method="post" onSubmit="return false;" autocomplete="off">
+						<!-- //search area-->
+						<div class="view-modify-board">
+							<table class="table table-bbs table-write" summary=""
+								style="height: 55px; border-bottom: 1px solid #8e8e8e;">
+								<tbody>
+									<tr>
+										<th scope="row" width="100px">제품코드 <strong class="blue">*</strong></th>
+										<td data-prduct-cd="" width="380px"><input type="text"
+											id="prductCd" name="prductCd"
+											maxlength="20" />
+											<button type="button" id="prductCdPopBtn">찾아보기</button></td>
+										<th scope="row" width="90px">제품명</th>
+										<td width="380px"><input readonly="readonly" type="text" id="prductNm" name="prductNm"
+											style="width: 330px" maxlength="50" /></td>
+										<th scope="row" width="100px">사용유무</th>
+										<td><input type="checkbox" id="useYn" name="useYn" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</form>
+
+				</div>
+			</div>
+			<div class="card mb-4">
+				<div class="card-header"></div>
+				<div class="card-body">
+					<div id="grid"></div>
+					<script>
+    var Grid = tui.Grid;
+     const data = [{
+         id: '10012',
+         city: 'Seoul',
+         country: 'South Korea'
+       },
+       {
+         id: '10013',
+         city: 'Tokyo',
+         country: 'Japan'
+       }
+     ]
+    // case 1 : 인스턴스 생성시 data 옵션으로 데이터 입력
+    const grid = new Grid({
+      el: document.getElementById('grid'),
+      data : data ,
+      //data만 적어도 가능(축약형)
+      columns: [{
+          header: '자재코드',
+          name: '자재코드',
+        	sortable: true,
+          sortingType: 'desc'
+        },
+        {
+          header: '자재명',
+          name: '자재명',
+          editor: 'text',
+        	sortable: true,
+          sortingType: 'desc'
+        },
+        {
+            header: '사용량',
+            name: '사용량',
+            editor: 'text',
+          	sortable: true,
+            sortingType: 'desc'
+        },
+        {
+            header: '단위',
+            name: '단위',
+            editor: 'text',
+          	sortable: true,
+            sortingType: 'desc'
+        },
+        {
+            header: '사용공정명',
+            name: '사용공정명',
+            editor: 'text',
+          	sortable: true,
+            sortingType: 'desc'
+        },
+        {
+            header: '비고',
+            name: '비고',
+            editor: 'text',
+          	sortable: true,
+            sortingType: 'desc'
+        },
+        {
+            header: '사용여부',
+            name: '사용여부',
+            editor: 'text',
+          	sortable: true,
+            sortingType: 'desc'
+        }
+      ]
+    });
+    //ajax조회하고 grid
+    //$.ajax({
+    //  url: 'data.json'
+    //}).done(result => grid.resetData(result) ) //람다식표현
+    // }).done(function (result) {
+    //   // case 2 : resetData() 메서드로 입력
+    //   grid.resetData(result);
+    // })
+    grid.on('click', ev => {
+      console.log(ev.rowKey)
+      console.log(ev.columnName)
+      var value = grid.getValue(ev.rowKey,ev.columnName);
+      console.log(value);
+    })
+  </script>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</body>
+</html>
