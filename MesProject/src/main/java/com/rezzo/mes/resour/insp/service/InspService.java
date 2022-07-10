@@ -1,13 +1,11 @@
-package com.rezzo.mes.resour.insp.mapper;
+package com.rezzo.mes.resour.insp.service;
 
 import com.rezzo.mes.resour.insp.vo.OrdrVO;
 import com.rezzo.mes.resour.insp.vo.VendVO;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
-public interface InspMapper {
+public interface InspService {
 
     List<VendVO> getVendList();
     List<VendVO> getVendListByKw(VendVO vendVO);

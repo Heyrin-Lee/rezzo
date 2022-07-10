@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 
 <head>
     <meta charset="UTF-8">
@@ -13,9 +13,20 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"/>
     <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+
     <style>
         .tui-datepicker {
             z-index: 100;
+        }
+
+        #modalTbody tr:hover {
+            background-color: coral;
         }
     </style>
 
@@ -43,32 +54,71 @@
     <span class="tui-ico-date"></span>
     <div id="endpicker-container" style="margin-left: -1px;"></div>
 </div>
-<input id="btnGetList" type="button" value="가져오기"></input>
+<input id="getOrdrList" type="button" value="가져오기"/>
+<hr>
+
+<label for="vendNm"><b>업체명</b></label>
+<input id="vendNm" type="text" readonly>
+<input id="vendCd" type="hidden">
+<button id="schVend" type="button" data-bs-toggle="modal" data-bs-target="#vendModal">
+    검색
+</button>
 <hr>
 
 <b>검사일자</b>
 <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-    <input type="text" name="inspDt" id="tui-date-picker-target" aria-label="Date-Time"/>
+    <input type="text" id="datepicker-input" aria-label="Date-Time">
     <span class="tui-ico-date"></span>
 </div>
-<div id="tui-date-picker-container" style="margin-top: -1px;"></div>
+<div id="wrapper" style="margin-top: -1px;"></div>
 <hr>
 
-<label for="vend"><b>업체명</b></label>
-<input id="vend" type="text">
-<input id="vendSch" type="button" value="검색">
-<hr>
+<!-- Modal -->
+<div class="modal fade" id="vendModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h9 class="modal-title" id="exampleModalLabel">업체검색</h9>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="vendSchForm">
+                    <label>업체명
+                        <input type="text" name="vendNm" style="width:100px;">
+                    </label>
+                    <label>업체코드
+                        <input type="text" name="vendCd" style="width:100px;">
+                    </label>
+                    <input id="vendSch" type="button" value="검색">
+                </form>
+                <div id="modalGrid">
+                    <table>
+                        <thead>
+                        <th>업체코드</th>
+                        <th>업체명</th>
+                        <th>사업자번호</th>
+                        <th>전화번호</th>
+                        </thead>
+                        <tbody id="modalTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- grid section -->
-<div id="topGrid"></div>
 <div id="grid"></div>
 
 </body>
 
 <script>
+    window.addEventListener('load', function () {
+        getVendListInit();
+    })
+
     // range date picker
-    let today = new Date();
-    let picker = tui.DatePicker.createRangePicker({
+    let rangepicker = tui.DatePicker.createRangePicker({
         startpicker: {
             input: '#startpicker-input',
             container: '#startpicker-container'
@@ -80,13 +130,11 @@
     });
 
     // set a inspection date
-    let DatePicker = tui.DatePicker;
-    let container = document.getElementById('tui-date-picker-container');
-    let target = document.getElementById('tui-date-picker-target');
-
-    let instance = new DatePicker(container, {
+    let datepicker = new tui.DatePicker('#wrapper', {
+        date: new Date(),
         input: {
-            element: target
+            element: '#datepicker-input',
+            format: 'yyyy-MM-dd'
         }
     });
 
@@ -114,32 +162,7 @@
         }
     }
 
-    // grid section
-    let topGrid = new tui.Grid({
-        el: document.getElementById('topGrid'),
-        scrollX: false,
-        scrollY: false,
-        rowHeaders: ['checkbox'],
-        columns: [
-            {
-                header: '발주번호',
-                name: 'ordrNo'
-            },
-            {
-                header: '공급업체',
-                name: 'vendNm'
-            },
-            {
-                header: '발주일',
-                name: 'paprdCmndDt'
-            },
-            {
-                header: '납기예정일',
-                name: 'ordrReqDt'
-            }
-        ]
-    });
-
+    // main grid section
     let grid = new tui.Grid({
         el: document.getElementById('grid'),
         scrollX: false,
@@ -148,23 +171,19 @@
         columns: [
             {
                 header: '코드',
-                name: 'code'
+                name: 'rscCd'
             },
             {
                 header: '품명',
-                name: 'name'
-            },
-            {
-                header: '규격',
-                name: 'si'
+                name: 'rscNm'
             },
             {
                 header: '발주번호',
-                name: 'ordr_code'
+                name: 'ordrNo'
             },
             {
                 header: '발주량',
-                name: 'ordr_cnt'
+                name: 'ordrCnt'
             },
             {
                 header: '입고량',
@@ -218,55 +237,61 @@
         ]
     });
 
-    // <input id="vend" type="text">
-    //     <input id="vendSch" type="button" value="검색">
+    let modalTbody = document.getElementById('modalTbody');
+
+    function getVendList(res) {
+        res.forEach(element => {
+            let tr = document.createElement('tr');
+            for (let key in element) {
+                let td = document.createElement('td');
+                td.innerText = element[key];
+                tr.appendChild(td);
+            }
+            tr.addEventListener('click', function () {
+                vendNm.value = element.vendNm;
+                vendCd.value = element.vendCd;
+            })
+            modalTbody.appendChild(tr);
+        });
+    }
+
+    function getVendListInit() {
+        let url = 'getVendList'
+        fetch(url).then(res => res.json()).then(res => getVendList(res))
+    }
 
     let vendSch = document.getElementById('vendSch');
     vendSch.addEventListener('click', function () {
+        let data = new FormData(vendSchForm);
+        let url = 'getVendListByKw'
 
-    })
+        fetch(url, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json()).then(res => {
+            modalTbody.innerHTML = '';
+            getVendList(res);
+        })
+    });
 
-    let btnGetList = document.getElementById('btnGetList');
-    btnGetList.addEventListener('click', function () {
-
+    let getOrdrList = document.getElementById('getOrdrList');
+    getOrdrList.addEventListener('click', function () {
         let startDt = document.getElementById('startpicker-input');
         let endDt = document.getElementById('endpicker-input');
-        let data = {startDt: startDt.value, endDt: endDt.value}
+        let vendCd = document.getElementById('vendCd');
+        let obj = {startDt: startDt.value, endDt: endDt.value, vendCd: vendCd.value};
 
-        let url = 'getOrderList'
+        let url = 'getOrdrList';
         fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
+            headers:{'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify(obj)
         })
             .then(res => res.json())
             .then(res => {
-                topGrid.resetData(res);
-            })
-            .then(res => {
-                getCheckedRows();
+                grid.resetData(res);
             })
     })
 
-    function getCheckedRows() {
-        let cb = document.querySelectorAll(".tui-grid-row-header-checkbox")
-        console.log(cb);
-        cb.forEach(element => {
-            element.firstChild.addEventListener('change', function () {
-                if (this.checked) {
-                    console.log(element.parentElement.dataset.rowKey)
-                    let rowKey = element.parentElement.dataset.rowKey;
-                    return rowKey;
-                } else {
-                    console.log("Checkbox is not checked..");
-                }
-            });
-        })
-    }
-
-
 </script>
-
 </html>
