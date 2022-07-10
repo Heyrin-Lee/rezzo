@@ -1,4 +1,4 @@
-package com.rezzo.mes.eqm.eqm.web;
+package com.rezzo.mes.equip.eqm.web;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rezzo.mes.eqm.eqm.mapper.EqmMapper;
-import com.rezzo.mes.eqm.eqm.service.EqmVO;
+import com.rezzo.mes.equip.eqm.mapper.EqmMapper;
+import com.rezzo.mes.equip.eqm.service.EqmVO;
 
 @Controller
 public class EqmController {
