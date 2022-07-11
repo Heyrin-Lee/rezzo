@@ -136,9 +136,10 @@
 													id="check" style="width: 150px">
 											</div>
 											<div class="mb-4">
-												<label for="form-select" class="form-label">라인코드</label> <select class="form-select"
+												<label for="form-select" class="form-label">라인코드</label> 
+												<select class="form-select" 
 													aria-label="Default select example" style="width: 180px">
-													<!-- <th:block th:each="option : ${}"> -->
+													<option th:each="value : ${opList}" th:value="${value.lineCd}" th:text="${value.lineCd}"></option>
 												</select>
 											</div>
 										</div>
@@ -146,11 +147,11 @@
 								</div>
 							</form>
 						</div>
-						<div class="linelist">
-							<button class="c_btn" form="">등록</button>
-							<button class="c_btn" form="">수정</button>
-							<button class="c_btn" form="">삭제</button>
-							<button type="reset" class="c_btn">취소</button>
+								<div class="linelist">
+									<button type = "button"id="insertBtn" class="c_btn" >등록</button>
+									<button type="button" id="modBtn" class="c_btn">수정</button>
+									<button type="button" id="delBtn" class="c_btn">삭제</button>
+									<button type="reset" id="initBtn" class="c_btn">취소</button>
 						</div>
 					</div>
 				</div>
@@ -189,39 +190,7 @@
 		<br>
 
 		<script>
-			// 메인화면 그리드 검색
-			function eqmSelect() {
-				let keyword = $("#keyword").val();
 
-				$.ajax({
-					url: "eqmSelect",
-					type: "post",
-					data: {
-						"keyword": keyword
-					},
-					dataType: "JSON",
-					success: function (result) {
-						grid.resetData(result);
-					}
-				})
-			}
-
-			// 모달 그리드 검색
-			function eqmSelect2() {
-				let keyword = $("#keyword2").val();
-
-				$.ajax({
-					url: "eqmSelect",
-					type: "post",
-					data: {
-						"keyword": keyword
-					},
-					dataType: "JSON",
-					success: function (result) {
-						modGrid.resetData(result);	
-					}
-				})
-			}
 
 
 			// 메인화면 그리드
@@ -237,7 +206,6 @@
 			const grid = new tui.Grid({
 				el: document.getElementById('grid'),
 				scrollX: false,
-				bodyHeight: 500,
 				rowHeaders: ['rowNum'],
 				columns: [{
 					header: '설비명',
@@ -290,6 +258,8 @@
 				}
 			});
 
+
+
 			const modGrid = new tui.Grid({
 				el: document.getElementById('modGrid'),
 				scrollX: false,
@@ -322,6 +292,42 @@
 					modGrid.refreshLayout()
 				}, 300);
 			});
+			
+			
+			// 메인화면 그리드 검색
+			function eqmSelect() {
+				let keyword = $("#keyword").val();
+
+				$.ajax({
+					url: "eqmSelect",
+					type: "post",
+					data: {
+						"keyword": keyword
+					},
+					dataType: "JSON",
+					success: function (result) {
+						grid.resetData(result);
+					}
+				})
+			}
+
+			// 모달 그리드 검색
+			function eqmSelect2() {
+				let keyword = $("#keyword2").val();
+
+				$.ajax({
+					url: "eqmSelect",
+					type: "post",
+					data: {
+						"keyword": keyword
+					},
+					dataType: "JSON",
+					success: function (result) {
+						modGrid.resetData(result);
+					}
+				})
+			}
+
 		</script>
 	</th:block>
 </body>
