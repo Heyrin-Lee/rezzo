@@ -48,15 +48,6 @@ li {
 <body>
 <!-- 본문내용 -->
 <th:block layout:fragment="main">  
-<table>
- <tr>
- <th>ccd</th>
- <th>ccd_nm</th>
- </tr> <tr th:each="ccd : ${ccdsList}">
- <td th:text="${ccd.ccd}"></td>
- <td th:text="${ccd.ccdNm}"></td>
- </tr>
-</table>
 
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">공통코드관리</h1>
@@ -67,72 +58,24 @@ li {
 		</ol>
 		<div class="card mb-4">
 			<div class="card-body">
-				<label for="" autofocus="autofocus">코드명</label> <input type="text"
-					readonly="readonly" id="" name="" style="width: 150px">
-				<button class="c_btn" >검색</button>
+				<label for="" autofocus="autofocus">코드명</label> <input type="text" id="selCcd" name="sleCcd" style="width: 150px">
+				<button class="c_btn">검색</button>
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="col-lg-6">
+			<div class="col-lg-6" style="width:35%">
 				<div class="card mb-4">
 					<div class="card-header">
 					</div>
 					<div class="card-body">
 						<div id="grid"></div>
-						<script>
-    var Grid = tui.Grid;
-     const data = [{
-         id: '10012',
-         city: 'Seoul',
-         country: 'South Korea'
-       },
-       {
-         id: '10013',
-         city: 'Tokyo',
-         country: 'Japan'
-       }
-     ]
-    // case 1 : 인스턴스 생성시 data 옵션으로 데이터 입력
-    const grid = new Grid({
-      el: document.getElementById('grid'),
-      data : data ,
-      //data만 적어도 가능(축약형)
-      columns: [{
-          header: 'ID',
-          name: 'id',
-        	sortable: true,
-          sortingType: 'desc'
-        },
-        {
-          header: 'CITY',
-          name: 'city',
-          editor: 'text',
-        	sortable: true,
-          sortingType: 'desc'
-        }
-      ]
-    });
-    //ajax조회하고 grid
-    //$.ajax({
-    //  url: 'data.json'
-    //}).done(result => grid.resetData(result) ) //람다식표현
-    // }).done(function (result) {
-    //   // case 2 : resetData() 메서드로 입력
-    //   grid.resetData(result);
-    // })
-    grid.on('click', ev => {
-      console.log(ev.rowKey)
-      console.log(ev.columnName)
-      var value = grid.getValue(ev.rowKey,ev.columnName);
-      console.log(value);
-    })
-  </script>
 					</div>
 					<div class="card-footer small text-muted"></div>
 				</div>
 			</div>
-			<div class="col-lg-6">
+			<div class="col-lg-6" style="width:1%"></div>
+			<div class="col-lg-6" style="width:64%">
 				<div class="card mb-4">
 					<div class="card-header">
 						<ul class="tab">
@@ -141,45 +84,13 @@ li {
 						</ul>
 					</div>
 					<div class="card-body">
+						<!-- 상세코드 탭 -->
 						<div class="tabBox on">
 							<div class="ccd">
 								<div id="grid2"></div>
-								<script>
-    var Grid = tui.Grid;
-  
-    // case 1 : 인스턴스 생성시 data 옵션으로 데이터 입력
-    const grid2 = new Grid({
-      el: document.getElementById('grid2'),
-      data : data ,
-      //data만 적어도 가능(축약형)
-      columns: [{
-          header: 'ID',
-          name: 'id'
-        },
-        {
-          header: 'CITY',
-          name: 'city',
-          editor: 'text'
-        }
-      ]
-    });
-    //ajax조회하고 grid
-    //$.ajax({
-    //  url: 'data.json'
-    //}).done(result => grid.resetData(result) ) //람다식표현
-    // }).done(function (result) {
-    //   // case 2 : resetData() 메서드로 입력
-    //   grid.resetData(result);
-    // })
-    grid2.on('click', ev => {
-      console.log(ev.rowKey)
-      console.log(ev.columnName)
-      var value = grid2.getValue(ev.rowKey,ev.columnName);
-      console.log(value);
-    })
-  </script>
 							</div>
 						</div>
+						<!-- 코드정도 탭 -->
 						<div class="tabBox">
 							<div class="linelist">
 								<button class="c_btn" form="">등록</button>
@@ -188,49 +99,175 @@ li {
 								<button class="c_btn" form="">취소</button>
 							</div>
 							<br> <br>
-							<form>
-								<div class="mb-3">
-									<label for="no" class="form-label">공통코드</label> <input
-										type="text" class="form-control" id="no" name="no">
-								</div>
-								<div class="mb-3">
-									<label for="name" class="form-label">공통코드명</label> <input
-										type="text" class="form-control" id="name" name="name">
-								</div>
-								<div class="mb-3">
-									<label for="cdInfo" class="form-label">공통코드상세</label> <input
-										type="text" class="form-control" id="cdInfo" name="cdInfo">
-								</div>
-								<div class="mb-4">
-									<label for="cdInfo" class="form-label">사용여부</label> <input
-										type="checkbox" id="check">
-								</div>
-							</form>
+							 <form id="dataForm" name="dataForm" action="/comDta/cmmCodeUpdateAjax.do" method="post" autocomplete = "off">
+                  <input type="hidden" id="clCode" name="clCode" value=""/>
+                  <table class="table table-bbs table-write" summary="내용.....">
+					          <colgroup>
+					           <col style="width:200x">
+					           <col>
+					          </colgroup>
+					        <tbody>
+					         <tr>
+					          <th>공통코드<strong class="blue">*</strong></th>
+					          <td data-code-id=""><input type="text" id="codeId" name="codeId" class="form-control w150"  maxlength="10" /></td> 
+					         </tr>
+					         <tr>
+					          <th>공통코드명<strong class="blue">*</strong></th>
+					          <td ><input type="text" id="codeIdNm" name="codeIdNm" class="form-control" style="width:300px; background-color:#FFFFCC" maxlength="60"/></td> 
+					         </tr>
+					         <tr>
+					          <th>코드설명</th>
+					          <td><textarea id="codeIdDc" name="codeIdDc" rows="5" cols="100" class="form-control" maxlength="50"></textarea> 
+					          <span class="letter-limit">
+					          <strong id='limit'>0</strong>/50 byte
+					          </span></td>
+					         </tr>
+					         <tr>
+					          <th>사용여부</th>
+					          <td>
+					          	<select id="useAt" name="useAt" style="width:120px;height:24px">
+						            <option value="Y" selected="selected">Yes</option>
+						            <option value="N">No</option>
+						          </select>
+					          </td>
+					         </tr>
+					        </tbody>
+                </table>
+              </form>
 						</div>
 					</div>
 					<div class="card-footer small text-muted"></div>
-					<div id="wrap"></div>
-					<script type="text/javascript">
-					$(document).ready(function(){
-						  $(".card-header .tab li a").on("click", function(){
-						    // 해당 요소를 클릭하는 내 자신의 index 번호를 가져온다. [0], [1]
-						    const num = $(".card-header .tab li a").index($(this));
-						    // 기존에 적용되어 있는 on class 삭제
-						    $(".card-header .tab li").removeClass("on");
-						    $(".card-body .tabBox").removeClass("on");
-
-						    // 다음 요소 클릭시 on class 추가
-						    $('.card-header .tab li:eq(' + num + ')').addClass("on");
-						    $('.card-body .tabBox:eq(' + num + ')').addClass("on");
-
-						  });
-						});
-					
-					</script>
 				</div>
 			</div>
 		</div>
 	</div>
+<script>
+			//byte수 출력
+			$(function(){
+				$('#codeIdDc').keyup(function(){
+					bytesHandler(this);
+				});
+			});
+
+		function getTextLength(str) {
+			var len = 0;
+
+			for (var i = 0; i < str.length; i++) {
+				if (escape(str.charAt(i)).length == 6) {
+					len++;
+				}
+				len++;
+			}
+			return len;
+		}
+
+		function bytesHandler(obj){
+			var text = $(obj).val();
+			$('#limit').text(getTextLength(text));
+		}
+			
+			
+			// 코드화면(왼쪽) 그리드
+			$.ajax({
+				url: "ccdsList",
+				method: "GET",
+				dataType: "JSON",
+				success: function (result) {
+					grid.resetData(result);
+					console.log(result);
+				}
+			});
+			const grid = new tui.Grid({
+				el: document.getElementById('grid'),
+				scrollX: false,
+				bodyHeight: 500,
+				rowHeaders: ['rowNum'],
+				columns: [{
+					header: '공통코드',
+					name: 'ccd',
+					align: 'center',
+					sortable: true,
+          sortingType: 'desc'
+				}, {
+					header: '공통코드명',
+					name: 'ccdNm',
+					align: 'center',
+					sortable: true,
+          sortingType: 'desc'
+				}]
+			});
+			
+			//상세코드 그리드
+			const grid2 = new tui.Grid({
+				el: document.getElementById('grid2'),
+				scrollX: false,
+				bodyHeight: 500,
+				rowHeaders: ['checkbox'],
+				columns: [{
+					header: '코드',
+					name: 'ccdDtl',
+					align: 'center',
+					sortable: true,
+          sortingType: 'desc'
+				}, {
+					header: '코드명',
+					name: 'ccdDtlNm',
+					align: 'center',
+					sortable: true,
+          sortingType: 'desc'
+				}, {
+					header: '코드설명',
+					name: 'ccdDtlDesct',
+					align: 'center',
+					sortable: true,
+          sortingType: 'desc'
+				}, {
+					header: '사용여부',
+					name: 'useYn',
+      		type: 'checkbox',
+					align: 'center',
+					sortable: true,
+          sortingType: 'desc'
+				}]
+			})
+			
+			// 공통코드 클릭시 상세코드 리스트
+			grid.on('click', ev => {
+      var value = grid.getValue(ev.rowKey,'ccdNm');
+      var keyword = grid.getValue(ev.rowKey,'ccd');
+      $('#selCcd').val(value);
+      
+      //list 호출
+      $.ajax({
+				url: "ccdsSelect",
+				method: "POST",
+				data: {
+					"keyword": keyword
+				},
+				success: function (result) {
+					grid2.resetData(result);
+				}
+			});			
+
+    });
+			
+			
+			//탭
+			$(document).ready(function(){
+				$(".card-header .tab li a").on("click", function(){
+					// 해당 요소를 클릭하는 내 자신의 index 번호를 가져온다. [0], [1]
+					const num = $(".card-header .tab li a").index($(this));
+					// 기존에 적용되어 있는 on class 삭제
+					$(".card-header .tab li").removeClass("on");
+					$(".card-body .tabBox").removeClass("on");
+
+					// 다음 요소 클릭시 on class 추가
+					$('.card-header .tab li:eq(' + num + ')').addClass("on");
+					$('.card-body .tabBox:eq(' + num + ')').addClass("on");
+
+				});
+			});
+</script>
 </th:block>
 </body>
 </html>

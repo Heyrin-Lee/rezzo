@@ -8,5 +8,10 @@ import lombok.NoArgsConstructor;
 public class CcdsVO {
 	
 	String ccd;
-	String ccdNm;	
+	String ccdNm;
+	String ccdDtl;
+	String ccdDtlNm;
+	String ccdDtlDesct;
+	String useYn;
+	
 }
