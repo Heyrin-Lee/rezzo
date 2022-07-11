@@ -18,4 +18,11 @@ public class OrderVO {
 	private Date paprdDt;
 	private String prdtNm;
 	private int orderCnt;
+	
+	//거래처관리 테이블-사업자등록번호,거래처유형,전화번호 컬럼
+	private String bizNo;
+	private String vendTyp;
+	private String telNo;
+
+	
 }
