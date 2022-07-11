@@ -24,9 +24,11 @@
         .tui-datepicker {
             z-index: 100;
         }
+
         #modalTbody tr:hover {
             background-color: coral;
         }
+
         .insp-btn {
             background-color: rgb(255, 255, 255);
             border-width: 1px;
@@ -97,6 +99,21 @@
     </div>
 </div>
 
+<!--inspection detail modal-->
+<div class="modal fade" id="inspModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title">업체검색</b>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- grid section -->
 <div id="grid"/>
 
@@ -139,27 +156,36 @@
             el.value = String(props.value);
             this.el = el;
         }
+
         getElement() {
             return this.el;
         }
+
         getValue() {
             return this.el.value;
         }
+
         mounted() {
             this.el.select();
         }
     }
 
+    let iModal;
     class CustomBtnRenderer {
         constructor(props) {
-            let { grid, rowKey,columnInfo, value } = props;
+            let {grid, rowKey, columnInfo, value} = props;
             let btn = document.createElement('button');
-            let text = document.createTextNode( value );
+            let text = document.createTextNode(value);
             btn.appendChild(text);
             btn.innerHTML = '검사'
             btn.className = 'insp-btn';
+            btn.addEventListener('click', function () {
+                iModal = new bootstrap.Modal(document.getElementById('inspModal'), {})
+                iModal.show('inspModal');
+            })
             this.el = btn;
         }
+
         getElement() {
             return this.el;
         }
@@ -168,7 +194,7 @@
     // grid theme
     let gridOption = {
         row: {
-            hover: { background : 'coral'}
+            hover: {background: 'coral'}
         }
     }
     tui.Grid.applyTheme('default', gridOption);
@@ -204,10 +230,10 @@
                     required: true,
                     validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])
                 },
-                relations:[
+                relations: [
                     {
                         targetNames: ['inspCnt'],
-                        editable({ value }) {
+                        editable({value}) {
                             return value !== null;
                         }
                     }
@@ -238,7 +264,7 @@
                 header: '검사',
                 name: 'insp',
                 align: 'center',
-                renderer: { type: CustomBtnRenderer},
+                renderer: {type: CustomBtnRenderer},
                 width: 50
             },
             {
@@ -302,18 +328,18 @@
         ]
     })
 
-    // modal action
+    // vend modal action
     modalGrid.on('dblclick', e => {
         let rowInfo = modalGrid.getRow(e.rowKey)
         vendNm.value = rowInfo.vendNm;
         vendCd.value = rowInfo.vendCd;
-        myModal.hide(vendModal);
+        vModal.hide(vendModal);
     })
 
-    let myModal;
+    let vModal;
     modalBtn.addEventListener('click', function () {
-        myModal = new bootstrap.Modal(document.getElementById('vendModal'),{})
-        myModal.show('vendModal');
+        vModal = new bootstrap.Modal(document.getElementById('vendModal'), {})
+        vModal.show('vendModal');
     })
 
     // get vendor list in modal
@@ -321,7 +347,6 @@
         let url = 'getVendList'
         fetch(url).then(res => res.json())
             .then(res => modalGrid.resetData(res))
-            // .then(res => getVendList(res))
     }
 
     let vendModal = document.getElementById('vendModal');
