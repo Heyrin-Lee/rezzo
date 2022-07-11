@@ -73,7 +73,8 @@ body {
 	  	<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>
  	 </div>  
      <div class="linelist">
-       <button id="btnModal" class="c_btn" form="">주문서조회</button>
+       <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn"
+										data-bs-target="#exampleModal" value="주문서조회"></input>
        <button class="c_btn" form="">계획등록</button>
        <button class="c_btn" form="">저장</button>
      </div>
@@ -92,24 +93,45 @@ body {
       
 
 	  <div id="tui-date-picker-container" style="margin-top: -1px;"></div>
-      <div id="dialog" title="주문서조회"></div>
-   <br>
+  	<br>
  </div>	
  
+ <!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">주문서 조회</h5>
+						<br> <br>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div><br>
+					<div id="modGrid" class="modal-body"></div>
+					<div class="modal-footer">
+						<button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+ 
+ 
    <script>
-   
+
    const gridData = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
-   const grid = new tui.Grid({
+	    // 주문서 조회했을 때 뜨는 주문서목록 모달	
+			 $.ajax({
+				url: "orderListModal",
+				method: "GET",
+				dataType: "JSON",
+				success: function (result) {
+					modGrid.resetData(result);
+					console.log(result);
+				}
+			});			
+			
+			 const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      data: gridData,
 	      scrollX: false,
@@ -117,23 +139,23 @@ body {
 	      columns: [
 	        {
 	          header: '계획코드',
-	          name: 'name'
+	          name: 'planCd'
 	        },
 	        {
-	          header: '주문코드',
-	          name: 'artist'
+	          header: '주문번호',
+	          name: 'orderNo'
 	        },
 	        {
 	          header: '주문량',
-	          name: 'type'
+	          name: 'orderCnt'
 	        },
 	        {
 	          header: '납기일자',
-	          name: 'release'
+	          name: 'paprdDt'
 	        }
 	      ]
 	    });
-   
+			
    const gridData2 = [];
    (function() {
       for (let i = 0; i < 1; i += 1) {
@@ -325,24 +347,7 @@ body {
 	      ]
 	    });
    
-   function makeModal() {
-       //모달
-       var dialog = $("#dialog").dialog({
-         autoOpen: false,
-         height: 400,
-         width: 350,
-         modal: true
-       });
-       return dialog;
-     }
-
-    //버튼 클릭
-     $("#btnModal").on("click", function () {
-       $("#dialog").load("newfile.do", function() {  // load 앞에 선택자가 와야 함 그 선택자에 ajax로 가져온 결과를 넣음 load(컨트롤러) 도 가능함
-         var dialog = makeModal();
-         dialog.dialog("open");
-       })
-     }) 
+  
      
      var datepicker = new tui.DatePicker('#tui-date-picker-container1',
                 {
@@ -353,6 +358,34 @@ body {
                     format: 'yyyy-MM-dd'
                 }
             });
+
+
+			const modGrid = new tui.Grid({
+				el: document.getElementById('modGrid'),
+				scrollX: false,
+				scrollY: false,
+				rowHeaders: ['checkbox'],
+				columns: [{
+					header: '주문번호',
+					name: 'orderNo',
+					align: 'center',
+				}, {
+					header: '거래처명',
+					name: 'vendNm',
+					align: 'center'
+				}, {
+					header: '제품명',
+					name: 'prdtNm',
+					align: 'center',
+				}
+				]
+			})
+			
+			modalBtn.addEventListener('click', function () {
+				setTimeout(function () {
+					modGrid.refreshLayout()
+				}, 300);
+			});
    </script>
 </th:block>
 </body>

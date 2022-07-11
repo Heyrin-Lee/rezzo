@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.prod.plan.mapper.PlanMapper">
+
+
+<select id="orderListModal" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
+	SELECT *
+	FROM ORDER_SHEET
+</select>
+</mapper>
