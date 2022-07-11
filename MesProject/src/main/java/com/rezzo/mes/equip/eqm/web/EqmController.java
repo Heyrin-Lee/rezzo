@@ -1,4 +1,4 @@
-package com.rezzo.mes.eqm.eqm.web;
+package com.rezzo.mes.equip.eqm.web;
 
 import java.util.List;
 
@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rezzo.mes.eqm.eqm.mapper.EqmMapper;
-import com.rezzo.mes.eqm.eqm.service.EqmVO;
+import com.rezzo.mes.equip.eqm.mapper.EqmMapper;
+import com.rezzo.mes.equip.eqm.service.EqmVO;
 
 @Controller
 public class EqmController {
@@ -31,7 +32,7 @@ public class EqmController {
 	}
 
 
-	 @GetMapping("eqmSelect")
+	 @PostMapping("eqmSelect")
 	 public String eqmSelect(@RequestParam(value="keyword") String keyword, Model model) {
 		 model.addAttribute("selectList", map.eqmSelect(keyword));
 		 return "eqmSelect";
