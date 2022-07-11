@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rezzo.mes.resour.insp.mapper.InspMapper">
+    <select id="getOrdrList" parameterType="OrdrVO" resultType="OrdrVO">
+        select RSC_CD, RSC_NM, rod.ORDR_NO, ORDR_CNT
+        from RSC_ORDR ro,
+             RSC_ORDR_DTL rod
+        where ro.ORDR_NO = rod.ORDR_NO
+          and ro.VEND_CD = #{vendCd}
+          and
+        <![CDATA[
+        PAPRD_CMND_DT >= #{startDt}
+          and PAPRD_CMND_DT <= #{endDt}
+        ]]>
+        order by PAPRD_CMND_DT
+    </select>
+
+    <select id="getVendList" resultType="VendVO">
+        select VEND_CD, VEND_NM, BIZNO, TELNO
+        from VEND
+    </select>
+
+    <select id="getVendListByKw" parameterType="VendVO" resultType="VendVO">
+        select VEND_CD, VEND_NM, BIZNO, TELNO
+        from VEND
+        where VEND_NM like '%${vendNm}%'
+           or VEND_CD like '%${vendCd]%'
+    </select>
+
+</mapper>

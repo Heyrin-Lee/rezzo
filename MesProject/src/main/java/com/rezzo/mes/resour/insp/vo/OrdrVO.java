@@ -10,8 +10,13 @@ import java.util.Date;
 public class OrdrVO {
 
     String ordrNo;
-    String vendNm;
+    String vendCd;
     Date paprdCmndDt;
     Date ordrReqDt;
+    String rscCd;
+    String rscNm;
+    String ordrCnt;
+    Date startDt;
+    Date endDt;
 
 }
