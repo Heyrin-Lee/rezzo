@@ -9,9 +9,15 @@ public class CcdsVO {
 	
 	String ccd;
 	String ccdNm;
+	String ccdDesct;
+	String useYn;
+	
 	String ccdDtl;
 	String ccdDtlNm;
 	String ccdDtlDesct;
-	String useYn;
+	String dtlUseYn;
 	
+	public CcdsVO(String ccd) {
+		this.ccd = ccd;
+	}
 }

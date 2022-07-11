@@ -30,6 +30,13 @@ public class CcdsController {
 		return ccdsList;
 	}
 	
+	@PostMapping("ccdsDtlList")
+	@ResponseBody
+	 public List<CcdsVO> ccdsDtlList(@RequestParam(value="keyword") String keyword) {
+		List<CcdsVO> ccdsDtlList = mapper.ccdsDtlList(keyword);
+		 return ccdsDtlList;
+	 }
+	
 	@PostMapping("ccdsSelect")
 	@ResponseBody
 	 public List<CcdsVO> ccdsSelect(@RequestParam(value="keyword") String keyword) {
@@ -52,11 +59,6 @@ public class CcdsController {
 	@RequestMapping("rsc")
 	public String rsc() {
 		return "comm/rsc";
-	}
-	
-	@RequestMapping("vend")
-	public String vend() {
-		return "comm/vend";
 	}
 	
 	@RequestMapping("wrhous")

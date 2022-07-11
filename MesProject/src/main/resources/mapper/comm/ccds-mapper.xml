@@ -6,9 +6,15 @@
 		FROM CCDS e
 	</select>
 	
-	<select id="ccdsSelect" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
+	<select id="ccdsDtlList" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
 		SELECT rownum id, e.*
 		FROM CCDS_DTL e
+		WHERE CCD LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="ccdsSelect" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
+		SELECT rownum id, e.*
+		FROM CCDS e
 		WHERE CCD LIKE '%'||#{keyword}||'%'
 	</select>
 	

@@ -1,6 +1,8 @@
 package com.rezzo.mes.comm.ccds.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,29 +20,36 @@ public class CcdsServiceImpl implements CcdsService{
 	public List<CcdsVO> ccdsList(CcdsVO ccdsVO) {
 		return mapper.ccdsList(ccdsVO);
 	}
+	
+	@Override
+	public List<CcdsVO> ccdsDtlList(String keyword) {
+		return mapper.ccdsDtlList(keyword);
+	}
 
 	@Override
 	public List<CcdsVO> ccdsSelect(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		return mapper.ccdsSelect(keyword);
 	}
 
 	@Override
 	public void ccdsInsert(CcdsVO ccdsVO) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void ccdsUpdate(CcdsVO ccdsVO) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void ccdsDelete(CcdsVO ccdsVO) {
-		// TODO Auto-generated method stub
-		
 	}
 
+	@Override
+	public Map<String, List<CcdsVO>> getCcds(String... ccdList) {
+		Map<String, List<CcdsVO>> map = new HashMap<String, List<CcdsVO>>();
+		for(String ccd : ccdList) {
+			map.put(ccd, mapper.ccdsList(new CcdsVO(ccd)));
+		}
+		return map;
+	}
 }

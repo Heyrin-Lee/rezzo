@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -46,102 +46,132 @@ li {
 </style>
 </head>
 <body>
-<!-- 본문내용 -->
-<th:block layout:fragment="main">  
+	<!-- 본문내용 -->
+	<th:block layout:fragment="main">
 
-	<div class="container-fluid px-4">
-		<h1 class="mt-4">공통코드관리</h1>
-		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 기준정보관리</li>
-			<li class="breadcrumb-item active">> 공통코드관리</li>
-		</ol>
-		<div class="card mb-4">
-			<div class="card-body">
-				<label for="" autofocus="autofocus">코드명</label> <input type="text" id="selCcd" name="sleCcd" style="width: 150px">
-				<button class="c_btn">검색</button>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-lg-6" style="width:35%">
-				<div class="card mb-4">
-					<div class="card-header">
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">공통코드관리</h1>
+			<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+				<li class="breadcrumb-item">> 기준정보관리</li>
+				<li class="breadcrumb-item active">> 공통코드관리</li>
+			</ol>
+			<div class="card mb-4">
+				<div class="card-body">
+					<label for="" autofocus="autofocus">코드명</label> <input type="text"
+						id="selCcd" name="sleCcd" style="width: 150px">
+					<button class="c_btn">검색</button>
+					<div class="linelist" style="text-align: right;">
+						<button class="c_btn" form="">추가</button>
+						<button class="c_btn" form="">저장</button>
+						<button class="c_btn" form="">삭제</button>
+						<button class="c_btn" form="">취소</button>
 					</div>
-					<div class="card-body">
-						<div id="grid"></div>
-					</div>
-					<div class="card-footer small text-muted"></div>
 				</div>
 			</div>
-			<div class="col-lg-6" style="width:1%"></div>
-			<div class="col-lg-6" style="width:64%">
-				<div class="card mb-4">
-					<div class="card-header">
-						<ul class="tab">
-							<li class="on"><a href="#!"><span>상세코드</span></a></li>
-							<li><a href="#!"><span>코드정보</span></a></li>
-						</ul>
+
+			<div class="row">
+				<div class="col-lg-6" style="width: 35%">
+					<div class="card mb-4">
+						<div class="card-header"></div>
+						<div class="card-body">
+							<div id="grid"></div>
+						</div>
+						<div class="card-footer small text-muted"></div>
 					</div>
-					<div class="card-body">
-						<!-- 상세코드 탭 -->
-						<div class="tabBox on">
-							<div class="ccd">
-								<div id="grid2"></div>
+				</div>
+				<div class="col-lg-6" style="width: 1%"></div>
+				<div class="col-lg-6" style="width: 64%">
+					<div class="card mb-4">
+						<div class="card-header">
+							<ul class="tab">
+								<li class="on"><a href="#!"><span>상세코드</span></a></li>
+								<li><a href="#!"><span>코드정보</span></a></li>
+							</ul>
+						</div>
+						<div class="card-body">
+							<!-- 상세코드 탭 -->
+							<div class="tabBox on">
+								<div class="ccd">
+									<div id="grid2"></div>
+								</div>
+							</div>
+							<!-- 코드정도 탭 -->
+							<div class="tabBox">
+								<form id="dataForm" name="dataForm"
+									action="/comDta/cmmCodeUpdateAjax.do" method="post"
+									autocomplete="off">
+									<input type="hidden" id="clCode" name="clCode" value="" />
+									<table class="table table-bbs table-write" summary="내용.....">
+										<colgroup>
+											<col style="width: 200x">
+											<col>
+										</colgroup>
+										<tbody>
+											<tr>
+												<th>공통코드<strong class="blue">*</strong></th>
+												<td data-code-id=""><input type="text" id="ccd"
+													name="ccd" class="form-control w150" maxlength="10" /></td>
+											</tr>
+											<tr>
+												<th>공통코드명<strong class="blue">*</strong></th>
+												<td><input type="text" id="ccdNm" name="ccdNm"
+													class="form-control"
+													style="width: 300px; background-color: #FFFFCC"
+													maxlength="60" /></td>
+											</tr>
+											<tr>
+												<th>코드설명</th>
+												<td><textarea id="ccdDesct" name="ccdDesct" rows="5"
+														cols="100" class="form-control" maxlength="50"></textarea>
+													<span class="letter-limit"> <strong id='limit'>0</strong>/50
+														byte
+												</span></td>
+											</tr>
+											<tr>
+												<th>사용여부</th>
+												<td><select id="useYn" name="useYn"
+													style="width: 120px; height: 24px">
+														<option value="Y" selected="selected">Yes</option>
+														<option value="N">No</option>
+												</select></td>
+											</tr>
+										</tbody>
+									</table>
+								</form>
 							</div>
 						</div>
-						<!-- 코드정도 탭 -->
-						<div class="tabBox">
-							<div class="linelist">
-								<button class="c_btn" form="">등록</button>
-								<button class="c_btn" form="">수정</button>
-								<button class="c_btn" form="">삭제</button>
-								<button class="c_btn" form="">취소</button>
-							</div>
-							<br> <br>
-							 <form id="dataForm" name="dataForm" action="/comDta/cmmCodeUpdateAjax.do" method="post" autocomplete = "off">
-                  <input type="hidden" id="clCode" name="clCode" value=""/>
-                  <table class="table table-bbs table-write" summary="내용.....">
-					          <colgroup>
-					           <col style="width:200x">
-					           <col>
-					          </colgroup>
-					        <tbody>
-					         <tr>
-					          <th>공통코드<strong class="blue">*</strong></th>
-					          <td data-code-id=""><input type="text" id="codeId" name="codeId" class="form-control w150"  maxlength="10" /></td> 
-					         </tr>
-					         <tr>
-					          <th>공통코드명<strong class="blue">*</strong></th>
-					          <td ><input type="text" id="codeIdNm" name="codeIdNm" class="form-control" style="width:300px; background-color:#FFFFCC" maxlength="60"/></td> 
-					         </tr>
-					         <tr>
-					          <th>코드설명</th>
-					          <td><textarea id="codeIdDc" name="codeIdDc" rows="5" cols="100" class="form-control" maxlength="50"></textarea> 
-					          <span class="letter-limit">
-					          <strong id='limit'>0</strong>/50 byte
-					          </span></td>
-					         </tr>
-					         <tr>
-					          <th>사용여부</th>
-					          <td>
-					          	<select id="useAt" name="useAt" style="width:120px;height:24px">
-						            <option value="Y" selected="selected">Yes</option>
-						            <option value="N">No</option>
-						          </select>
-					          </td>
-					         </tr>
-					        </tbody>
-                </table>
-              </form>
-						</div>
 					</div>
-					<div class="card-footer small text-muted"></div>
 				</div>
 			</div>
 		</div>
-	</div>
-<script>
+		<script>
+	function userUpdate() {
+		//수정 버튼 클릭
+		$('#btnUpdate').on('click',function(){
+			var id = $('input:text[name="id"]').val();
+			var name = $('input:text[name="name"]').val();
+			var password = $('input:text[name="password"]').val();
+			var role = $('select[name="role"]').val();		
+			$.ajax({ 
+		    	url: conPath + '/users', 
+		    	type: 'PUT',
+		    	//type: 'POST', 
+		    	dataType: 'json',  //응답결과가 json
+		    	//data: JSON.stringify({ id: id, name:name,password: password, role: role }),
+		    	data: JSON.stringify( { id, name,password, role } ),
+					//필드명과 값의 이름이 같다면 알아서 처리 = json축약형
+		    	contentType: 'application/json' //요청파라미터 json (MIME 타입)
+					//data: $('#form1').serialize()
+					//serialize : 제이쿼리 함수 폼태그가 있으면 알아서 문자열로 만들어줌(질의문자열 즉, 쿼리스트링) 'id=ddd&name=aaa&password=aaa&role=Admin'
+			}).done( function(data) { 
+		        userList();
+			}).fail( function(xhr, status, message) { 
+		        alert(" status: "+status+" er:"+message);
+			});
+		});//수정 버튼 클릭
+	}//userUpdate
+			
 			//byte수 출력
 			$(function(){
 				$('#codeIdDc').keyup(function(){
@@ -165,7 +195,6 @@ li {
 			var text = $(obj).val();
 			$('#limit').text(getTextLength(text));
 		}
-			
 			
 			// 코드화면(왼쪽) 그리드
 			$.ajax({
@@ -223,7 +252,7 @@ li {
           sortingType: 'desc'
 				}, {
 					header: '사용여부',
-					name: 'useYn',
+					name: 'dtlUseYn',
       		type: 'checkbox',
 					align: 'center',
 					sortable: true,
@@ -239,7 +268,7 @@ li {
       
       //list 호출
       $.ajax({
-				url: "ccdsSelect",
+				url: "ccdsDtlList",
 				method: "POST",
 				data: {
 					"keyword": keyword
@@ -247,7 +276,22 @@ li {
 				success: function (result) {
 					grid2.resetData(result);
 				}
-			});			
+			});
+      
+      //코드정보 form
+      $.ajax({
+			url: "ccdsSelect",
+			method: "POST",
+			data: {
+				"keyword": keyword
+			},
+			success: function (result) {
+				$('#ccd').val(result[0].ccd);
+				$('#ccdNm').val(result[0].ccdNm);
+				$('#ccdDesct').val(result[0].ccdDesct);
+				$('#useYn').val(result[0].useYn);
+			}
+		});
 
     });
 			
@@ -268,6 +312,6 @@ li {
 				});
 			});
 </script>
-</th:block>
+	</th:block>
 </body>
 </html>
