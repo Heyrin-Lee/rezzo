@@ -28,4 +28,9 @@ public class PrcsServiceImpl implements PrcsService {
 	public void prcsInsert(PrcsVO vo) {
 		mapper.prcsInsert(vo);
 	}
+
+	@Override
+	public void prcsDelete(PrcsVO vo) {
+		mapper.prcsDelete(vo);
+	}
 }

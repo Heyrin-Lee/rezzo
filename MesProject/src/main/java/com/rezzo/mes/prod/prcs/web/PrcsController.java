@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.prod.prcs.mapper.PrcsMapper;
 import com.rezzo.mes.prod.prcs.service.PrcsService;
 import com.rezzo.mes.prod.prcs.service.PrcsVO;
@@ -42,6 +43,22 @@ public class PrcsController {
 		mapper.prcsInsert(vo); 
 		return vo;
 	}
+	
+	/* 공정삭제 */
+	@GetMapping("/prcsDelete/{prcsCd}")
+	@ResponseBody
+	public PrcsVO prcsDelete(@PathVariable String prcsCd, PrcsVO vo) {
+		vo.setPrcsCd(prcsCd);
+		mapper.prcsDelete(vo);
+		return vo;
+	}
+	
+	/* 셀렉트리스트 */
+	@RequestMapping("/selectList")
+	@ResponseBody
+	/*
+	 * public List<CcdsVO> selectList(CcdsVO vo) { return ""; }
+	 */
 	
 	@GetMapping("/prcs")
 	public String prcs() {

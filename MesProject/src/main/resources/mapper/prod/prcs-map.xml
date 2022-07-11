@@ -31,4 +31,10 @@
 			#{prcsCtnt})
 </insert>	
 
+<!-- 공정삭제 -->
+<delete id="prcsDelete" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">
+	DELETE FROM PRCS
+	WHERE PRCS_CD = #{prcsCd}
+
+</delete>
 </mapper>
