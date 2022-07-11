@@ -14,4 +14,6 @@ public class EqmVO {
 	private int chckPred;
 	private String useYn;
 	private String prcsNm;
+	private String imgPath;
+	private String eqmImg;
 }
