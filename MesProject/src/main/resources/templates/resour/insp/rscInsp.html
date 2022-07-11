@@ -27,8 +27,10 @@
         #modalTbody tr:hover {
             background-color: coral;
         }
-        .btn insp-btn{
-            color: ;
+        .insp-btn {
+            background-color: rgb(255, 255, 255);
+            border-width: 1px;
+            border-radius: 4px;
         }
     </style>
 
@@ -155,13 +157,13 @@
             let text = document.createTextNode( value );
             btn.appendChild(text);
             btn.innerHTML = '검사'
-            btn.className = 'btn insp-btn';
+            btn.className = 'insp-btn';
             this.el = btn;
         }
         getElement() {
             return this.el;
         }
-    };
+    }
 
     // grid theme
     let gridOption = {
@@ -235,7 +237,9 @@
             {
                 header: '검사',
                 name: 'insp',
-                renderer: { type: CustomBtnRenderer}
+                align: 'center',
+                renderer: { type: CustomBtnRenderer},
+                width: 50
             },
             {
                 header: '합격량',
@@ -303,7 +307,6 @@
         let rowInfo = modalGrid.getRow(e.rowKey)
         vendNm.value = rowInfo.vendNm;
         vendCd.value = rowInfo.vendCd;
-        // vendModal.dataset.bsDismiss = "modal";
         myModal.hide(vendModal);
     })
 
