@@ -24,9 +24,11 @@
         .tui-datepicker {
             z-index: 100;
         }
-
         #modalTbody tr:hover {
             background-color: coral;
+        }
+        .btn insp-btn{
+            color: ;
         }
     </style>
 
@@ -40,6 +42,12 @@
 <input type="button" value="저장">
 <input type="button" value="다시작성">
 <input type="button" value="삭제">
+<hr>
+
+<label for="vendNm"><b>업체명</b></label>
+<input id="vendNm" type="text" readonly>
+<input id="vendCd" type="hidden">
+<button id="modalBtn" type="button">검색</button>
 <hr>
 
 <b>납기예정일</b>
@@ -57,14 +65,6 @@
 <input id="getOrdrList" type="button" value="가져오기"/>
 <hr>
 
-<label for="vendNm"><b>업체명</b></label>
-<input id="vendNm" type="text" readonly>
-<input id="vendCd" type="hidden">
-<button id="schVend" type="button" data-bs-toggle="modal" data-bs-target="#vendModal">
-    검색
-</button>
-<hr>
-
 <b>검사일자</b>
 <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
     <input type="text" id="datepicker-input" aria-label="Date-Time">
@@ -73,42 +73,31 @@
 <div id="wrapper" style="margin-top: -1px;"></div>
 <hr>
 
-<!-- Modal -->
+<!-- Modal for vend search -->
 <div class="modal fade" id="vendModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h9 class="modal-title" id="exampleModalLabel">업체검색</h9>
+                <b class="modal-title">업체검색</b>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="vendSchForm">
-                    <label>업체명
-                        <input type="text" name="vendNm" style="width:100px;">
-                    </label>
-                    <label>업체코드
-                        <input type="text" name="vendCd" style="width:100px;">
-                    </label>
+                    <label>업체명<input type="text" name="vendNm" style="width:100px;"></label>
+                    <label>업체코드<input type="text" name="vendCd" style="width:100px;"></label>
                     <input id="vendSch" type="button" value="검색">
                 </form>
-                <div id="modalGrid">
-                    <table>
-                        <thead>
-                        <th>업체코드</th>
-                        <th>업체명</th>
-                        <th>사업자번호</th>
-                        <th>전화번호</th>
-                        </thead>
-                        <tbody id="modalTbody"></tbody>
-                    </table>
-                </div>
+                <hr>
+                <div id="modalGrid"></div>
+                <p>선택 : 더블클릭</p>
             </div>
         </div>
     </div>
 </div>
 
 <!-- grid section -->
-<div id="grid"></div>
+<div id="grid"/>
+
 
 </body>
 
@@ -148,19 +137,39 @@
             el.value = String(props.value);
             this.el = el;
         }
-
         getElement() {
             return this.el;
         }
-
         getValue() {
             return this.el.value;
         }
-
         mounted() {
             this.el.select();
         }
     }
+
+    class CustomBtnRenderer {
+        constructor(props) {
+            let { grid, rowKey,columnInfo, value } = props;
+            let btn = document.createElement('button');
+            let text = document.createTextNode( value );
+            btn.appendChild(text);
+            btn.innerHTML = '검사'
+            btn.className = 'btn insp-btn';
+            this.el = btn;
+        }
+        getElement() {
+            return this.el;
+        }
+    };
+
+    // grid theme
+    let gridOption = {
+        row: {
+            hover: { background : 'coral'}
+        }
+    }
+    tui.Grid.applyTheme('default', gridOption);
 
     // main grid section
     let grid = new tui.Grid({
@@ -187,7 +196,20 @@
             },
             {
                 header: '입고량',
-                name: 'ordr_inst_cnt',
+                name: 'ordrInstCnt',
+                validation: {
+                    dataType: 'number',
+                    required: true,
+                    validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])
+                },
+                relations:[
+                    {
+                        targetNames: ['inspCnt'],
+                        editable({ value }) {
+                            return value !== null;
+                        }
+                    }
+                ],
                 editor: {
                     type: CustomTextEditor,
                     options: {
@@ -197,7 +219,12 @@
             },
             {
                 header: '검사량',
-                name: 'insp_cnt',
+                name: 'inspCnt',
+                validation: {
+                    dataType: 'number',
+                    required: true,
+                    validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])
+                },
                 editor: {
                     type: CustomTextEditor,
                     options: {
@@ -207,11 +234,16 @@
             },
             {
                 header: '검사',
-                name: 'insp'
+                name: 'insp',
+                renderer: { type: CustomBtnRenderer}
             },
             {
                 header: '합격량',
-                name: 'insp_pass',
+                name: 'inspPassCnt',
+                validation: {
+                    dataType: 'number',
+                    required: true
+                },
                 editor: {
                     type: CustomTextEditor,
                     options: {
@@ -221,7 +253,11 @@
             },
             {
                 header: '불량량',
-                name: 'insp_fail',
+                name: 'inspFailCnt',
+                validation: {
+                    dataType: 'number',
+                    required: true
+                },
                 editor: {
                     type: CustomTextEditor,
                     options: {
@@ -231,34 +267,64 @@
             },
             {
                 header: '검사완료',
-                name: 'insp_done',
+                name: 'inspDone',
                 width: 60
             }
         ]
     });
 
-    let modalTbody = document.getElementById('modalTbody');
-
-    function getVendList(res) {
-        res.forEach(element => {
-            let tr = document.createElement('tr');
-            for (let key in element) {
-                let td = document.createElement('td');
-                td.innerText = element[key];
-                tr.appendChild(td);
+    // modal grid section
+    let modalGrid = new tui.Grid({
+        el: document.getElementById('modalGrid'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '업체코드',
+                name: 'vendCd'
+            },
+            {
+                header: '업체이름',
+                name: 'vendNm'
+            },
+            {
+                header: '사업자번호',
+                name: 'bizno'
+            },
+            {
+                header: '전화번호',
+                name: 'telno'
             }
-            tr.addEventListener('click', function () {
-                vendNm.value = element.vendNm;
-                vendCd.value = element.vendCd;
-            })
-            modalTbody.appendChild(tr);
-        });
-    }
+        ]
+    })
 
+    // modal action
+    modalGrid.on('dblclick', e => {
+        let rowInfo = modalGrid.getRow(e.rowKey)
+        vendNm.value = rowInfo.vendNm;
+        vendCd.value = rowInfo.vendCd;
+        // vendModal.dataset.bsDismiss = "modal";
+        myModal.hide(vendModal);
+    })
+
+    let myModal;
+    modalBtn.addEventListener('click', function () {
+        myModal = new bootstrap.Modal(document.getElementById('vendModal'),{})
+        myModal.show('vendModal');
+    })
+
+    // get vendor list in modal
     function getVendListInit() {
         let url = 'getVendList'
-        fetch(url).then(res => res.json()).then(res => getVendList(res))
+        fetch(url).then(res => res.json())
+            .then(res => modalGrid.resetData(res))
+            // .then(res => getVendList(res))
     }
+
+    let vendModal = document.getElementById('vendModal');
+    vendModal.addEventListener('shown.bs.modal', e => {
+        modalGrid.refreshLayout();
+    })
 
     let vendSch = document.getElementById('vendSch');
     vendSch.addEventListener('click', function () {
@@ -269,29 +335,39 @@
             method: 'POST',
             body: data
         }).then(res => res.json()).then(res => {
-            modalTbody.innerHTML = '';
-            getVendList(res);
+            modalGrid.innerHTML = '';
+            modalGrid.resetData(res);
         })
     });
 
+    // get order list
     let getOrdrList = document.getElementById('getOrdrList');
     getOrdrList.addEventListener('click', function () {
         let startDt = document.getElementById('startpicker-input');
         let endDt = document.getElementById('endpicker-input');
         let vendCd = document.getElementById('vendCd');
-        let obj = {startDt: startDt.value, endDt: endDt.value, vendCd: vendCd.value};
 
-        let url = 'getOrdrList';
-        fetch(url, {
-            headers:{'Content-Type': 'application/json'},
-            method: 'POST',
-            body: JSON.stringify(obj)
-        })
-            .then(res => res.json())
-            .then(res => {
-                grid.resetData(res);
+        if (startDt.value == '' || endDt.value == '') {
+            alert('기간을 입력하세요')
+        } else if (vendCd.value == '') {
+            alert('공급업체를 입력하세요')
+        } else {
+            let obj = {startDt: startDt.value, endDt: endDt.value, vendCd: vendCd.value};
+            let url = 'getOrdrList';
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(obj)
             })
+                .then(res => res.json())
+                .then(res => {
+                    grid.resetData(res);
+                })
+        }
     })
-
 </script>
 </html>
+
+
+
+

@@ -26,7 +26,7 @@
         select VEND_CD, VEND_NM, BIZNO, TELNO
         from VEND
         where VEND_NM like '%${vendNm}%'
-           or VEND_CD like '%${vendCd]%'
+           or VEND_CD = '${vendCd}'
     </select>
 
 </mapper>

@@ -5,7 +5,6 @@ import com.rezzo.mes.resour.insp.vo.OrdrVO;
 import com.rezzo.mes.resour.insp.vo.VendVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ public class InspController {
 
     @RequestMapping("/rscInsp")
     public String rscInsp() {
-        return "resour/rscInsp";
+        return "resour/insp/rscInsp";
     }
 
     @RequestMapping("/getVendList")
@@ -41,7 +40,4 @@ public class InspController {
     public List<OrdrVO> getOrdrList(@RequestBody OrdrVO ordrVO) {
         return sv.getOrdrList(ordrVO);
     }
-
-
-
 }
