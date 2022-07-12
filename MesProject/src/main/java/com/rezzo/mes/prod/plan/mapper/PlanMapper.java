@@ -6,4 +6,5 @@ import com.rezzo.mes.prod.plan.service.PlanVO;
 
 public interface PlanMapper {
 	public List<PlanVO> orderListModal(PlanVO vo);
+	public int getIndex(PlanVO vo);
 }
