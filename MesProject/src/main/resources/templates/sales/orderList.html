@@ -72,7 +72,7 @@ li {
                   <div class="card-header">
                      <i class="fas fa-tachometer-alt"></i> 주문서 조회
                   </div>
-	<div class="card-body">
+	<div class="card-body" id="vendModal">
                      <form>
                       <div class="r_input">
                         <div class="mb-3">
@@ -82,13 +82,13 @@ li {
                            <input type="radio" id="every" name="every"/>전체
                         </div>
                         <div class="mb-3">
-                           <label for="inputPassword2" class="form-label">거래처명</label>
-    						<input type="password" class="form-control" id="inputPassword2">
+                           <label for="vendNm" class="form-label">거래처명</label>
+    						<input type="text" class="form-control" id="vendNm">
                             <button class="c_btn" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal" form="">검색</button>
                         </div>
                         <div class="mb-3">
                            <label for="email" class="form-label">제품명</label> 
-                           <input type="text" class="form-control" id="product" name="product">
+                           <input type="text" class="form-control" id="prdtNm" name="product">
                            <button class="c_btn" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal" form="">검색</button>
                         </div>
                         <div class="mb-4">
@@ -121,7 +121,6 @@ li {
                 <div id="proGrid" class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="c_btn" id="ok">확인</button>
                 </div>
             </div>
         </div>
@@ -138,7 +137,6 @@ li {
                 <div id="comGrid" class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="c_btn" id="ok">확인</button>
                 </div>
             </div>
         </div>
@@ -204,7 +202,7 @@ li {
 	      scrollX: false,
 	      bodyHeight: 300,
 	      rowHeight: 35,
-	      rowHeaders: ['rowNum'],
+	      rowHeaders: ['checkbox'],
 	      header: {
 	        height: 40
 	      },
@@ -215,6 +213,16 @@ li {
 	          editor: 'text'
 	        },
 	        {
+	          header: '제품코드',
+	          name: 'edctsCd',
+	          editor: 'text'
+	        },
+	        {
+	          header: '거래처코드',
+	          name: 'vendCd',
+	          editor: 'text'
+	        },
+	        {
 	          header: '거래처',
 	          name: 'vendNm',
 	          editor: 'text'
@@ -222,28 +230,28 @@ li {
 	        {
 	          header: '주문일자',
 	          name: 'orderDt',
-	          editor: 'text'
+	          editor: 'datePicker'
 	        },
+	        {
+			    header: '진행상황',
+			    name: 'progAppe',
+			    editor: 'select'
+			},
 	        {
 		       header: '납기일자',
 		       name: 'paprdDt',
+		       editor: 'datePicker'
+		        },
+		        {
+		       header: '제품명',
+		       name: 'prdtNm',
 		       editor: 'text'
 		        },
-		    {
-			    header: '진행상황',
-			    name: 'progAppe',
-			    editor: 'text'
-			     },
 			{
-				  header: '제품명',
-				  name: 'prdtNm',
-				  editor: 'text'
-				   },
-			{
-				   header: '주문수량',
-				   name: 'orderCnt',
-				   editor: 'text'
-				    }	   
+			   header: '주문수량',
+			   name: 'orderCnt',
+			   editor: 'text'
+			}	   
 			        
 	      ],
 	    });
@@ -273,7 +281,7 @@ li {
 	        el: document.getElementById('comGrid'),
 	        scrollX: false,
 	        scrollY: false,
-	        rowHeaders: ['checkbox'],
+	       	rowHeaders: ['checkbox'],
 	        columns: [
 	            {
 	                header: '거래처코드',
@@ -298,16 +306,62 @@ li {
 	        ]
 	    });
    
-   		//행추가 버튼, 주문번호 자동 생성
-		   let addBtn = document.getElementById('addBtn')
+   		//행추가 버튼
+		   let addBtn = document.getElementById('addBtn');
 		   addBtn.addEventListener('click', function(e){
-		   
-			var rowData = {orderNo:'ouy2022061044' }
-		      grid.appendRow(rowData,{
-		         at : grid.getRowCount(),
-		         focus : true
-		         });
+		   		grid.appendRow(
+		   		 {
+		   			at : grid.getRowCount(),
+		   			focus : true,
+		   			_attributes : {
+		   				checked : true
+		   			}
+		   		 } 
+		   		)
 		   })
+		   
+		 //저장버튼 주문서 등록
+		  let okBtn = document.getElementById('okBtn');
+		  okBtn.addEventListener('click', function(e) {
+		  	var result = grid.getCheckedRows();
+		  	console.log(result);
+		  	$.ajax({
+		  		url:"addOrdr",
+		  		method:"post",
+		  		dataType:"json",
+		  		data:JSON.stringify(result),
+		  		contentType:"application/json",
+		  		success:document.location.reload()
+		  	})
+		  })
+		   
+		   //JSON.stringify(grid.getCheckedRows())
+		
+		   
+		//체크박스 선택시 거래처명 가져오기
+		//function printCom() {
+		//	var checked = $("comGrid").closest("td").data("column-name");
+		//	if(checked == checked) {
+		//		console.log('a');
+		//	}
+		//}
+		//function printCom() {
+		//var Nm = $("comGrid").closest("td").data("column-name");
+		//comGrid.on('check',function() {
+		//	console.log(Nm);
+		//})		
+		//}
+		comGrid.on('click', e => {
+			let rowInfo = comGrid.getCheckedRows(e)
+			console.log(rowInfo);
+			vendNm.value =  rowInfo[0].vendNm;
+		})
+		
+		//체크박스 선택시 제품명 가져오기
+		proGrid.on('click', e => {
+			let rowInfo = proGrid.getCheckedRows(e)
+			prdtNm.value = rowInfo[0].prdtNm;
+		})
 
 	   </script>
 </th:block>

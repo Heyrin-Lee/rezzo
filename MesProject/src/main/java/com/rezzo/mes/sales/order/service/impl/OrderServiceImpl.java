@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rezzo.mes.prod.prcs.service.PrcsVO;
 import com.rezzo.mes.sales.order.mapper.OrderMapper;
 import com.rezzo.mes.sales.order.service.OrderService;
 import com.rezzo.mes.sales.order.service.OrderVO;
@@ -22,9 +23,10 @@ public class OrderServiceImpl implements OrderService{
 
 	//주문서 등록
 	@Override
-	public void addOrdr(OrderVO vo) {
-		mapper.addOrdr(vo);
-		
+	public void addOrdr(List<OrderVO> list) {
+		for(OrderVO vo : list) {			
+			mapper.addOrdr(vo);
+		}	
 	}
 	
 	//거래처 목록 조회 모달창

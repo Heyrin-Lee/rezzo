@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rezzo.mes.sales.order.mapper.OrderMapper;
+import com.rezzo.mes.sales.order.service.OrderService;
 import com.rezzo.mes.sales.order.service.OrderVO;
 
 
@@ -17,7 +19,7 @@ import com.rezzo.mes.sales.order.service.OrderVO;
 @Controller
 public class OrderController {
 	
-	@Autowired OrderMapper mapper;
+	@Autowired OrderService mapper;
 	
 	//데이터 넘어오는지 확인
 	@RequestMapping("order")
@@ -40,10 +42,11 @@ public class OrderController {
 	}
 	
 	//주문서 등록
-	@RequestMapping("addOrdr")
-	public OrderVO addOrdr(OrderVO vo) {
+	@PostMapping("addOrdr")
+	public String addOrdr(@RequestBody List<OrderVO> vo) {
+		System.out.println(vo);
 		mapper.addOrdr(vo);
-		return vo;
+		return "sales/orderList";
 	}
 	
 	//거래처 목록 조회 모달창
