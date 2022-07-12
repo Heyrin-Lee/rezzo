@@ -63,7 +63,10 @@ body {
                         <div class="mb-3">
                            <label for="name">공정구분</label> 
                				<select id="prcs">
-               					<option value=''>--선택--</option>
+               					<option selected value="">--선택--</option>
+               					<!--<option th:each="code : ${codes.SBJT}"
+               							th:value="${code.cd}" th:text="${code.nm}"
+               							th:selected="${code.cd}==${quizVO.subtCd}"></option>-->
                				</select>
                         </div>
      					<div class="linelist">
@@ -176,10 +179,12 @@ body {
 	   })
 	   
 	   $("#deleteBtn").on("click", function(e){
-		   var prcsCd = grid.getCheckedRows()[0].prcsCd
+		   var prcsCd = grid.getCheckedRows()
 		   $.ajax({
-			   url:'prcsDelete/' + prcsCd,
-			   data : {prcsCd : prcsCd}
+			   url:'prcsDelete',
+			   method:'POST',
+			   contentType:'application/json',
+			   data : JSON.stringify(prcsCd)
 		   }).done(function(result){
 			   $.ajax({
 				   url:'prcsList'
@@ -188,15 +193,7 @@ body {
 			   })
 		   })
 	   })
-	   
-	   
-	   $.ajax({
-		   url:'selectList'
-	   }).done(function(result){
-		   $.each(result, function (index, value) {
-		   	$('#prcs').append('<option value="' + value.ID + '">' + value.Name + '</option>');
-		   })
-	   })
+
    })
 
    </script>

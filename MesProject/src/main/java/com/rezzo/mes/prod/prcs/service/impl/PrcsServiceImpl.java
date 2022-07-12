@@ -30,7 +30,11 @@ public class PrcsServiceImpl implements PrcsService {
 	}
 
 	@Override
-	public void prcsDelete(PrcsVO vo) {
-		mapper.prcsDelete(vo);
+	public void prcsDelete(List<PrcsVO> list) {
+		for(PrcsVO vo : list) {
+			mapper.prcsDelete(vo);
+		}
 	}
+
+	
 }

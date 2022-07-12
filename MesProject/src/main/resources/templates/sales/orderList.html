@@ -29,6 +29,14 @@ li {
 	color: #333;
 	font-weight: 500;
 }
+.c_btn {
+   color: #fff;
+   font-size: 13px;
+   background: #333;
+   border: none;
+   padding: 6px;
+   border-radius: 4px
+}
 
 /* 탭버튼 눌렀을시 글자 색상변경 */
 .card-header .tab li.on a {
@@ -76,12 +84,12 @@ li {
                         <div class="mb-3">
                            <label for="inputPassword2" class="form-label">거래처명</label>
     						<input type="password" class="form-control" id="inputPassword2">
-                            <button class="btn btn-primary" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal" form="">검색</button>
+                            <button class="c_btn" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal" form="">검색</button>
                         </div>
                         <div class="mb-3">
                            <label for="email" class="form-label">제품명</label> 
                            <input type="text" class="form-control" id="product" name="product">
-                           <button class="btn btn-primary" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal" form="">검색</button>
+                           <button class="c_btn" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal" form="">검색</button>
                         </div>
                         <div class="mb-4">
                            <label for="email" class="form-label">주문일자</label> 
@@ -95,8 +103,9 @@ li {
          </section>
       </div>
        <div class="linelist">
-   		<button class="btn btn-primary" id="orderRegister" data-bs-toggle="modal" data-bs-target="#addModal">주문서 등록</button>
-   		<button class="btn btn-primary">주문서 조회</button>
+   		<button class="c_btn" id="addBtn" form="">추가</button>
+   		<button class="c_btn" id="okBtn" form="">저장</button>
+   		<button class="c_btn">주문서 조회</button>
    </div>
    </div>
    <div id="grid"></div>
@@ -111,8 +120,8 @@ li {
                 </div>
                 <div id="proGrid" class="modal-body"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary">가져오기</button>
+                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="c_btn" id="ok">확인</button>
                 </div>
             </div>
         </div>
@@ -128,25 +137,8 @@ li {
                 </div>
                 <div id="comGrid" class="modal-body"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary">가져오기</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 거래처 모달 -->
-  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">주문서 등록</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div id="comGrid" class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary">가져오기</button>
+                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="c_btn" id="ok">확인</button>
                 </div>
             </div>
         </div>
@@ -154,8 +146,7 @@ li {
    
    <script>
    /* 그리드 */
-		
-   		/*초기페이지 - 주문서 전체 목록 보여주기*/
+		/*초기페이지 - 주문서 전체 목록 보여주기*/
 		$.ajax({
 			url : "order",
 			method : "get",
@@ -165,6 +156,48 @@ li {
 				console.log(list);
 			}
 		})
+
+		$(function() {
+			comList();
+			proList();
+		})
+		
+		//거래처 목록 모달창으로 가져오기
+		function comList() {
+			$("#openCompany").on("click",function(comlist) {
+				 setTimeout(function () {
+					comGrid.refreshLayout()
+				}, 300);
+				$.ajax({
+					url:"comSearch",
+					method:"get",
+					datatype:"json",
+					success:function(comlist) {
+						comGrid.resetData(comlist);
+					}
+				})
+			})
+		}
+		
+		//제품명 목록 모달창으로 가져오기
+		function proList() {
+			$("#openProduct").on("click",function(prolist) {
+			setTimeout(function () {
+					proGrid.refreshLayout()
+				}, 300);
+				$.ajax({
+					url:"proSearch",
+					method:"get",
+					datatype:"json",
+					success:function(prolist) {
+						proGrid.resetData(prolist);
+					}
+				})
+			})
+		}
+		
+		
+		
 		
 	    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
@@ -178,35 +211,38 @@ li {
 	      columns: [
 	        {
 	          header: '주문번호',
-	          name: 'orderNo'
+	          name: 'orderNo',
+	          editor: 'text'
 	        },
 	        {
 	          header: '거래처',
-	          name: 'vendNm'
+	          name: 'vendNm',
+	          editor: 'text'
 	        },
 	        {
 	          header: '주문일자',
-	          name: 'orderDt'
+	          name: 'orderDt',
+	          editor: 'text'
 	        },
 	        {
 		       header: '납기일자',
-		       name: 'paprdDt'
+		       name: 'paprdDt',
+		       editor: 'text'
 		        },
 		    {
 			    header: '진행상황',
-			    name: 'progAppe'
+			    name: 'progAppe',
+			    editor: 'text'
 			     },
-		    {
-				 header: '완제품코드',
-				 name: 'edctsCd'
-				  },
 			{
 				  header: '제품명',
-				  name: 'prdtNm'
+				  name: 'prdtNm',
+				  editor: 'text'
 				   },
 			{
 				   header: '주문수량',
-				   name: 'orderCnt'
+				   name: 'orderCnt',
+				   editor: 'text'
 				    }	   
 			        
 	      ],
@@ -220,32 +256,14 @@ li {
 	        rowHeaders: ['checkbox'],
 	        columns: [
 	            {
-	                header: '검사번호',
-	                name: 'inspCd',
-	                width: 100
+	                header: '완제품코드',
+	                name: 'edctsCd',
+	                width: 200
 	            },
 	            {
-	                header: '검사일자',
-	                name: 'inspDt',
-	                width: 100
-	            },
-	            {
-	                header: '업체명',
-	                name: 'vend',
-	                width: 100
-	            },
-	            {
-	                header: '수량',
-	                name: 'cnt',
-	                width: 100
-	            }
-	        ],
-	        data: [
-	            {
-	                inspCd: '12-33',
-	                inspDt: '13-23',
-	                vend: '13-23',
-	                cnt: '15-23'
+	                header: '제품명',
+	                name: 'prdtNm',
+	                width: 200
 	            }
 	        ]
 	    });
@@ -258,36 +276,39 @@ li {
 	        rowHeaders: ['checkbox'],
 	        columns: [
 	            {
-	                header: '검사번호',
-	                name: 'inspCd',
+	                header: '거래처코드',
+	                name: 'vendCd',
 	                width: 100
 	            },
 	            {
-	                header: '검사일자',
-	                name: 'inspDt',
+	                header: '거래처명',
+	                name: 'vendNm',
 	                width: 100
 	            },
 	            {
-	                header: '업체명',
-	                name: 'vend',
-	                width: 100
+	                header: '사업자등록번호',
+	                name: 'bizNo',
+	                width: 110
 	            },
 	            {
-	                header: '수량',
-	                name: 'cnt',
+	                header: '전화번호',
+	                name: 'telNo',
 	                width: 100
-	            }
-	        ],
-	        data: [
-	            {
-	                inspCd: '12-33',
-	                inspDt: '13-23',
-	                vend: '13-23',
-	                cnt: '15-23'
 	            }
 	        ]
 	    });
    
+   		//행추가 버튼, 주문번호 자동 생성
+		   let addBtn = document.getElementById('addBtn')
+		   addBtn.addEventListener('click', function(e){
+		   
+			var rowData = {orderNo:'ouy2022061044' }
+		      grid.appendRow(rowData,{
+		         at : grid.getRowCount(),
+		         focus : true
+		         });
+		   })
+
 	   </script>
 </th:block>
 

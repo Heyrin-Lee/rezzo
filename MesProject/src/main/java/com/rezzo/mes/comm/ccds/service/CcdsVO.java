@@ -8,5 +8,16 @@ import lombok.NoArgsConstructor;
 public class CcdsVO {
 	
 	String ccd;
-	String ccdNm;	
+	String ccdNm;
+	String ccdDesct;
+	String useYn;
+	
+	String ccdDtl;
+	String ccdDtlNm;
+	String ccdDtlDesct;
+	String dtlUseYn;
+	
+	public CcdsVO(String ccd) {
+		this.ccd = ccd;
+	}
 }

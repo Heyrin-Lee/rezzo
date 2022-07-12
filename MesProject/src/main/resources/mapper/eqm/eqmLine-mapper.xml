@@ -5,5 +5,26 @@
 	<select id="eqmLineList" resultType="com.rezzo.mes.equip.line.service.EqmLineVO">
 		select * from eqm_line
 	</select>
+	
+	<delete id="eqmLineDelete" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
+		delete from eqm_line
+		where line_cd = #{lineCd} 
+	</delete>
+
+ 	<insert id="eqmLineInsert" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
+		insert into eqm_line
+		values (#{lineCd}, #{uphCnt}, #{eqmPsch}, #{useYn})
+		
+	</insert>
+	
+	<update id="eqmLineUpdate" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
+		update eqm_line set
+		line_cd = #{lineCd},
+		uph_cnt = #{uphCnt},
+		eqm_psch = #{eqmPsch},
+		use_Yn = #{useYn}
+		where line_cd = #{lineCd} 
+	</update>
+	
 
 </mapper>

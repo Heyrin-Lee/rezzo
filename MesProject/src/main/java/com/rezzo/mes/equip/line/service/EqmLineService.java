@@ -9,5 +9,6 @@ public interface EqmLineService {
 
 	public void eqmLineUpdate(EqmLineVO vo);
 
-	public void eqmLineDelete(EqmLineVO vo);
+	public void eqmLineDelete(String lineCd);
+
 }

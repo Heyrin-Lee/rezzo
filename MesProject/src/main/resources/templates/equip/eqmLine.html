@@ -68,7 +68,6 @@ body {
 		
 		<div class="card mb-4">
 			<div id="cont">
-
 				<section id="l_section">
 					<div class="card mb-4">
 						<div class="card-header">
@@ -92,13 +91,13 @@ body {
 
 							<div class="card-body">
 								<div class="linelist">
-									<button class="c_btn" form="">등록</button>
-									<button class="c_btn" form="">수정</button>
-									<button class="c_btn" form="">삭제</button>
-									<button class="c_btn" form="">취소</button>
+									<button type = "button"id="insertBtn" class="c_btn" >등록</button>
+									<button type="button" id="modBtn" class="c_btn">수정</button>
+									<button type="button" id="delBtn" class="c_btn">삭제</button>
+									<button type="reset" id="initBtn" class="c_btn">취소</button>
 								</div>
 								<br> <br>
-								<form action="lineInsert">
+								<form id="form1" action="lineInsert">
 									<div class="mb-3">
 										<label for="no" class="form-label">라인코드</label> <input
 											type="text" class="form-control" id="lineCd" name="lineCd">
@@ -112,7 +111,8 @@ body {
 											type="text" class="form-control" id="eqmPsch" name="eqmPsch">
 									</div>
 									<div class="mb-4">
-										<label for="email" class="form-label">사용여부</label> <input
+										<label for="email" class="form-label">사용여부</label>
+										 <input
 											type="checkbox" id="useYn" name="useYn" value="Y">
 									</div>
 								</form>
@@ -129,18 +129,23 @@ body {
 
 		<script>
 		
-		$.ajax({
-				url: "eqmLineList",
-				method: "GET",
-				dataType: "JSON",
-				success: function (result) {
-					grid.resetData(result);
+		//취소
+		$('#initBtn').on('click',function(){
+			$('#form1').each(function(){
+			this.reset()})
+		})
+		
+		
+		// 라인 리스트 확인
+		$.ajax({		url: "eqmLineList",
+						method: "GET",
+						dataType: "JSON",
+						success: function (result) {
+							grid.resetData(result);
 				}
-			});
-			
+			})
 			const grid = new tui.Grid({
 				el : document.getElementById('grid'),
-				scrollX : false,
 				bodyHeight : 500,
 				columns : [ {
 					header : '라인코드',
@@ -161,6 +166,7 @@ body {
 				} ]
 			});
 			
+			//라인 리스트 이동
 			
 			$('tbody').on('click','tr',function(){
 				let line=$(this).find('td').eq(0).text()
@@ -174,6 +180,92 @@ body {
 				$('#useYn').val([yn])
 				
 				
+			})
+			// 삭제
+			
+			$('#delBtn').on('click',function(){
+				var result = confirm("라인코드를 정말 삭제할까요?")
+				var lineCd = $('#lineCd').val()
+				
+			
+				if(! result)
+				return;
+				
+				$.ajax({
+				url : "eqmLineDelete/"+lineCd,
+				type : 'POST',
+				dataType:'json'
+				}).done(function(xhr){
+					$.ajax({
+						url: "eqmLineList",
+						method: "GET",
+						dataType: "JSON",
+						success: function (result) {
+							grid.resetData(result);
+				}
+			});
+				})
+			})
+			
+			// 추가
+			
+			
+			$('#insertBtn').on('click', function(){
+			
+			var lineCd = $('#lineCd').val();
+			var uphCnt = $('#uphCnt').val();
+			var eqmPsch = $('#eqmPsch').val();
+				if ($('#useYn').is(':checked')){
+				$('#useYn').val("Y");}
+				else{
+				$('#useYn').val("N");}
+
+			var useYn = $('#useYn').val();
+
+			$.ajax({
+				url:'eqmLineInsert',
+				type : 'POST',
+				data : {lineCd, uphCnt, eqmPsch, useYn},
+				dataType : 'json'
+				}).done(function(xhr){
+					$.ajax({
+						url: "eqmLineList",
+						method: "GET",
+						dataType: "JSON",
+						success: function (result) {
+							grid.resetData(result);
+				}
+			});
+				})
+			})
+			
+			//수정
+			$('#modBtn').on('click',function(){
+			var lineCd = $('#lineCd').val();
+			var uphCnt = $('#uphCnt').val();
+			var eqmPsch = $('#eqmPsch').val();
+				if ($('#useYn').is(':checked')){
+				$('#useYn').val("Y");}
+				else{
+				$('#useYn').val("N");}
+
+			var useYn = $('#useYn').val();
+
+			$.ajax({
+				url:'eqmLineUpdate',
+				type : 'POST',
+				data : {lineCd, uphCnt, eqmPsch, useYn},
+				dataType : 'json'
+				}).done(function(xhr){
+					$.ajax({
+						url: "eqmLineList",
+						method: "GET",
+						dataType: "JSON",
+						success: function (result) {
+							grid.resetData(result);
+				}
+			});
+				})
 			})
 			
 			

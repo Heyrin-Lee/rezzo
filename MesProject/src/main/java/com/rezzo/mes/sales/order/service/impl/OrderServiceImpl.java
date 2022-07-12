@@ -14,9 +14,29 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired OrderMapper mapper;
 
+	//주문서 전체 조회
 	@Override
 	public List<OrderVO> searchOrdr(OrderVO vo) {
 		return mapper.searchOrdr(vo);
+	}
+
+	//주문서 등록
+	@Override
+	public void addOrdr(OrderVO vo) {
+		mapper.addOrdr(vo);
+		
+	}
+	
+	//거래처 목록 조회 모달창
+	@Override
+	public List<OrderVO> comSearch(OrderVO vo) {
+		return mapper.comSearch(vo);
+	}
+	
+	//제품명 목록 조회 모달창
+	@Override
+	public List<OrderVO> proSearch(OrderVO vo) {
+		return mapper.proSearch(vo);
 	}
 
 

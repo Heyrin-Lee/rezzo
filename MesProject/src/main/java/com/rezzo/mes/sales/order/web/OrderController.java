@@ -33,9 +33,31 @@ public class OrderController {
 	}
 	
 	//주문서 전체 불러오기
-	@GetMapping("/orderSelect")
+	@GetMapping("orderSelect")
+	@ResponseBody
 	public List<OrderVO> orderSelect(OrderVO vo) {
 		return mapper.searchOrdr(vo);
+	}
+	
+	//주문서 등록
+	@RequestMapping("addOrdr")
+	public OrderVO addOrdr(OrderVO vo) {
+		mapper.addOrdr(vo);
+		return vo;
+	}
+	
+	//거래처 목록 조회 모달창
+	@RequestMapping("comSearch")
+	@ResponseBody
+	public List<OrderVO> comSearch(OrderVO vo) {
+		return mapper.comSearch(vo);
+	}
+	
+	//제품명 목록 조회 모달창
+	@RequestMapping("proSearch")
+	@ResponseBody
+	public List<OrderVO> proSearch(OrderVO vo) {
+		return mapper.proSearch(vo);
 	}
 	
 }

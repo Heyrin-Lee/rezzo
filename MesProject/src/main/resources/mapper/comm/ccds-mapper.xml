@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rezzo.mes.comm.ccds.mapper.CcdsMapper">
-	<select id="getCcdsList" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
+	<select id="ccdsList" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
 		SELECT rownum id, e.*
-		FROM ccds e
+		FROM CCDS e
 	</select>
+	
+	<select id="ccdsDtlList" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
+		SELECT rownum id, e.*
+		FROM CCDS_DTL e
+		WHERE CCD LIKE '%'||#{keyword}||'%'
+	</select>
+	
+	<select id="ccdsSelect" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
+		SELECT rownum id, e.*
+		FROM CCDS e
+		WHERE CCD LIKE '%'||#{keyword}||'%'
+	</select>
+	
 </mapper>
