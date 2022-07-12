@@ -116,44 +116,44 @@
         </div>
      
         <script>
-        	
-        	
-        	//생산계획코드 만들기
-        	$(function(){
-        		//계획일자 인풋박스에 출력된 값 = String 
-       			let planDt = $("#tui-date-picker-target").val();
-       			console.log(planDt)
-       			//순번 받아오기 (계획일자 planDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행이 몇 개 있는지 count해서 값 받아옴)
-	        	$.ajax({
-	        		url: 'getIndex',
-	        		method: 'GET',
-	        		contentType:'application/text',
-	        		data : planDt,
-	        		success: function (result) {
-	        			console.log(result)
-	        			let index = result+1;
-	        			function makeCd() {
-		       				return "PLN"+planDt+index
-	       				}
-            			let code = makeCd()
-            			// 주문서 테이블에 있는 정보들 모달창에 띄우기
-			        	$.ajax({
-			                url: "orderListModal",
-			                method: "GET",
-			                dataType: "JSON",
-			                success: function (result) {
-			                    modGrid.resetData(result); 
-			                    modGrid.on('click', e => {
-									let result = modGrid.getCheckedRows(e);
-									modGrid.setValue(e.rowKey, 'planCd', code)
-								})
-			                }
-			            });
-	        		}
-	        	})
+       	$("#modalBtn").on("click", function(e) {
+       		//계획일자 인풋박스에 출력된 값의 타입= String 
+   			let planDt = $("#tui-date-picker-target").val();
+   			console.log(planDt)
+   			//순번 받아오기 (계획일자 planDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
+        	$.ajax({
+        		url: 'getIndex',
+        		method: 'GET',
+        		dataType: 'text',
+        		contentType:'application/json',
+        		data : planDt,
+        		success: function (result) {
+        			console.log(result)
+        			let index = result+1;
+        			function makeCd() {
+	       				return "PLN"+planDt+index
+       				}
+        			let code = makeCd()
+        			// 주문서 테이블에 있는 정보들 모달창에 띄우기
+		        	$.ajax({
+		                url: "orderListModal",
+		                method: "GET",
+		                dataType: "JSON",
+		                success: function (result) {
+		                    modGrid.resetData(result); 
+		                    modGrid.on('click', e => {
+								let result = modGrid.getCheckedRows(e);
+								modGrid.setValue(e.rowKey, 'planCd', code)
+							})
+		                }
+		            });
+        		}
+        	})
 
-       		
-            	})
+   		
+       	})
+        	
+            	
 			// 주문서 내용과 계획코드 메인 grid에 띄우기        
        		const gridData = [];
        		 $("#confirmBtn").on("click", function(e){
