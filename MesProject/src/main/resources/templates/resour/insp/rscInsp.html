@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- TUI -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css"/>
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"/>
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <style>
+        .tui-datepicker {
+            z-index: 100;
+        }
+
+        .insp-btn {
+            background-color: rgb(255, 255, 255);
+            border-width: 1px;
+            border-radius: 4px;
+        }
+    </style>
+
+    <title>자재수입검사</title>
+</head>
+
+<body>
+<h3>자재수입검사</h3>
+<hr>
+
+<input type="button" value="저장">
+<input type="button" value="다시작성">
+<input type="button" value="삭제">
+<hr>
+
+<label for="vendNm"><b>업체명</b></label>
+<input id="vendNm" type="text" placeholder="검색버튼을 이용하세요" required readonly>
+<input id="vendCd" type="hidden">
+<button id="modalBtn" type="button">검색</button>
+<hr>
+
+<b>납기예정일</b>
+<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+    <input id="startpicker-input" type="text" aria-label="Date" required>
+    <span class="tui-ico-date"></span>
+    <div id="startpicker-container" style="margin-left: -1px;"></div>
+</div>
+<span></span>
+<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+    <input id="endpicker-input" type="text" aria-label="Date" required>
+    <span class="tui-ico-date"></span>
+    <div id="endpicker-container" style="margin-left: -1px;"></div>
+</div>
+<input id="getOrdrList" type="button" value="가져오기"/>
+<hr>
+
+<b>검사일자</b>
+<div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+    <input type="text" id="datepicker-input" aria-label="Date-Time">
+    <span class="tui-ico-date"></span>
+</div>
+<div id="wrapper" style="margin-top: -1px;"></div>
+<hr>
+
+<!-- Modal for vend search -->
+<div class="modal fade" id="vendModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title">업체검색</b>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="vendSchForm">
+                    <label>업체명<input type="text" name="vendNm" style="width:100px;"></label>
+                    <label>업체코드<input type="text" name="vendCd" style="width:100px;"></label>
+                    <input id="vendSch" type="button" value="검색">
+                </form>
+                <hr>
+                <div id="vend-grid"></div>
+                <p>선택 : 더블클릭</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--inspection detail modal-->
+<div class="modal fade" id="inspModal" tabindex="-1" aria-labelledby="inspModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title">검사상세</b>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="insp-grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- grid section -->
+<div id="grid"/>
+
+
+</body>
+
+<script>
+    window.addEventListener('load', function () {
+        getVendListInit();
+        getDefList();
+    })
+
+    // range date picker
+    let rangepicker = tui.DatePicker.createRangePicker({
+        startpicker: {
+            input: '#startpicker-input',
+            container: '#startpicker-container'
+        },
+        endpicker: {
+            input: '#endpicker-input',
+            container: '#endpicker-container'
+        }
+    });
+
+    // set a inspection date
+    let datepicker = new tui.DatePicker('#wrapper', {
+        date: new Date(),
+        input: {
+            element: '#datepicker-input',
+            format: 'yyyy-MM-dd'
+        }
+    });
+
+    // grid section
+
+    // custom input renderer
+    class inputOrdrInstCnt {
+        constructor(props) {
+            let el = document.createElement('input');
+            let {rowKey} = props;
+            this.rowKey = rowKey;
+            el.type = 'text';
+            el.value = String(props.value);
+            this.el = el;
+        }
+
+        getElement() {
+            grid.check(this.rowKey);
+            this.el.value = '';
+            return this.el;
+        }
+
+        getValue() {
+            if (parseInt(this.el.value) > parseInt(grid.getValue(this.rowKey, 'ordrCnt'))) {
+                alert('입고량이 발주량 보다 많습니다.');
+                grid.setValue(this.rowKey, 'inspCnt', '');
+                grid.setValue(this.rowKey, 'inspPassCnt', '');
+                grid.setValue(this.rowKey, 'inspFailCnt', '');
+                return '';
+            } else {
+                grid.setValue(this.rowKey, 'inspCnt', this.el.value);
+                grid.setValue(this.rowKey, 'inspPassCnt', this.el.value);
+                return this.el.value;
+            }
+        }
+
+        mounted() {
+            this.el.select();
+        }
+    }
+
+    class inputInspCnt {
+        constructor(props) {
+            let el = document.createElement('input');
+            let {rowKey} = props;
+            this.rowKey = rowKey;
+            el.type = 'text';
+            el.value = String(props.value);
+            this.el = el;
+        }
+
+        getElement() {
+            grid.check(this.rowKey);
+            this.el.value = ''
+            return this.el;
+        }
+
+        getValue() {
+            if (parseInt(this.el.value) > parseInt(grid.getValue(this.rowKey, 'ordrInstCnt'))) {
+                alert('검사량이 입고량 보다 많습니다.');
+                grid.setValue(this.rowKey, 'inspPassCnt', '');
+                grid.setValue(this.rowKey, 'inspFailCnt', '');
+                return '';
+            } else {
+                grid.setValue(this.rowKey, 'inspPassCnt', this.el.value);
+                return this.el.value;
+            }
+        }
+        mounted() {
+            this.el.select();
+        }
+    }
+
+    class inputInspPassCnt {
+        constructor(props) {
+            let el = document.createElement('input');
+            let {rowKey} = props;
+            this.rowKey = rowKey;
+            el.type = 'text';
+            el.value = String(props.value);
+            this.el = el;
+        }
+
+        getElement() {
+            grid.check(this.rowKey);
+            this.el.value = ''
+            return this.el;
+        }
+
+        getValue() {
+            if (parseInt(this.el.value) > parseInt(grid.getValue(this.rowKey, 'ordrCnt'))) {
+                alert('합격량이 검사량 보다 많습니다.');
+                grid.setValue(this.rowKey, 'inspPassCnt', '');
+                return '';
+            } else {
+                let res = parseInt(grid.getValue(this.rowKey, 'inspCnt'))-parseInt(this.el.value);
+                grid.setValue(this.rowKey, 'insFailCnt', res);
+                return this.el.value;
+            }
+        }
+        mounted() {
+            this.el.select();
+        }
+    }
+
+
+
+    //
+    let iModal;
+
+    class CustomBtnRenderer {
+        constructor(props) {
+            let {grid, rowKey, columnInfo, value} = props;
+            let btn = document.createElement('button');
+            let text = document.createTextNode(value);
+            btn.appendChild(text);
+            btn.innerHTML = '검사'
+            btn.className = 'insp-btn';
+            btn.addEventListener('click', function () {
+                iModal = new bootstrap.Modal(document.getElementById('inspModal'), {})
+                iModal.show('inspModal');
+            })
+            this.el = btn;
+        }
+
+        getElement() {
+            return this.el;
+        }
+    }
+
+    // grid theme
+    let gridOption = {
+        row: {
+            hover: {background: 'coral'}
+        }
+    }
+    tui.Grid.applyTheme('default', gridOption);
+
+    // main grid section
+    let grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: false,
+        rowHeaders: ['checkbox'],
+        columns: [
+            {
+                header: '코드',
+                name: 'rscCd'
+            },
+            {
+                header: '품명',
+                name: 'rscNm'
+            },
+            {
+                header: '발주번호',
+                name: 'ordrNo'
+            },
+            {
+                header: '발주량',
+                name: 'ordrCnt',
+                validation: {
+                    dataType: 'number'
+                }
+            },
+            {
+                header: '입고량',
+                name: 'ordrInstCnt',
+                validation: {
+                    dataType: 'number',
+                    required: true,
+                    validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])
+                },
+                relations: [
+                    {
+                        targetNames: ['inspCnt'],
+                        editable({value}) {
+                            return value !== null;
+                        }
+                    }
+                ],
+                editor: {
+                    type: inputOrdrInstCnt,
+                    options: {
+                        maxLength: 10
+                    }
+                }
+            },
+            {
+                header: '검사량',
+                name: 'inspCnt',
+                validation: {
+                    dataType: 'number',
+                    required: true,
+                    validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])
+                },
+                editor: {
+                    type: inputInspCnt,
+                    options: {
+                        maxLength: 10
+                    }
+                }
+            },
+            {
+                header: '검사',
+                name: 'insp',
+                align: 'center',
+                renderer: {type: CustomBtnRenderer},
+                width: 50
+            },
+            {
+                header: '합격량',
+                name: 'inspPassCnt',
+                validation: {
+                    dataType: 'number',
+                    required: true
+                }
+            },
+            {
+                header: '불량량',
+                name: 'inspFailCnt'
+            },
+            {
+                header: '검사완료',
+                name: 'inspDone',
+                width: 60
+            }
+        ]
+    });
+
+    // vendor modal grid section
+    let vendGrid = new tui.Grid({
+        el: document.getElementById('vend-grid'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '업체코드',
+                name: 'vendCd'
+            },
+            {
+                header: '업체이름',
+                name: 'vendNm'
+            },
+            {
+                header: '사업자번호',
+                name: 'bizno'
+            },
+            {
+                header: '전화번호',
+                name: 'telno'
+            }
+        ]
+    })
+
+    // inspection detail grid section
+    let inspGrid = new tui.Grid({
+        el: document.getElementById('insp-grid'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '불량코드',
+                name: 'infCd'
+            },
+            {
+                header: '불량유형',
+                name: 'infTyp'
+            },
+            {
+                header: '불량수량',
+                name: 'infCnt'
+            },
+            {
+                header: '비고',
+                name: 'infDesc'
+            }
+        ]
+    })
+
+    // vend modal action
+    vendGrid.on('dblclick', e => {
+        let rowInfo = vendGrid.getRow(e.rowKey)
+        vendNm.value = rowInfo.vendNm;
+        vendCd.value = rowInfo.vendCd;
+        vModal.hide(vendModal);
+    })
+
+    let vModal;
+    modalBtn.addEventListener('click', function () {
+        vModal = new bootstrap.Modal(document.getElementById('vendModal'), {})
+        vModal.show('vendModal');
+    })
+
+    // modal refresh section
+    let vendModal = document.getElementById('vendModal');
+    vendModal.addEventListener('shown.bs.modal', e => {
+        vendGrid.refreshLayout();
+    })
+
+    let inspModal = document.getElementById('inspModal');
+    inspModal.addEventListener('shown.bs.modal', e => {
+        inspGrid.refreshLayout();
+    })
+
+    // get vendor list in modal
+    function getVendListInit() {
+        let url = 'getVendList'
+        fetch(url).then(res => res.json())
+            .then(res => vendGrid.resetData(res))
+    }
+
+    let vendSch = document.getElementById('vendSch');
+    vendSch.addEventListener('click', function () {
+        let data = new FormData(vendSchForm);
+        let url = 'getVendListByKw'
+
+        fetch(url, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json()).then(res => {
+            vendGrid.innerHTML = '';
+            vendGrid.resetData(res);
+        })
+    });
+
+    // get order list
+    let getOrdrList = document.getElementById('getOrdrList');
+    getOrdrList.addEventListener('click', function () {
+        let startDt = document.getElementById('startpicker-input');
+        let endDt = document.getElementById('endpicker-input');
+        let vendCd = document.getElementById('vendCd');
+
+        if (startDt.value == '' || endDt.value == '') {
+            alert('기간을 입력하세요')
+        } else if (vendCd.value == '') {
+            alert('공급업체를 입력하세요')
+        } else {
+            let obj = {startDt: startDt.value, endDt: endDt.value, vendCd: vendCd.value};
+            let url = 'getOrdrList';
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(obj)
+            })
+                .then(res => res.json())
+                .then(res => {
+                    grid.resetData(res);
+                })
+        }
+    })
+
+    //
+    function getDefList() {
+        // let url = 'getDefList'
+        // fetch(url).then(res => res.json())
+        //     .then(res => inspGrid.resetData(res))
+
+    }
+</script>
+</html>
+
+
+
+
