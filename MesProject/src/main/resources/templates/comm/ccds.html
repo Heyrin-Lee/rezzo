@@ -4,51 +4,11 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<style>
-a {
-	text-decoration: none;
-}
-
-body {
-	font-size: 14px;
-	color: #333;
-}
-
-li {
-	list-style: none;
-}
-
-.card-header .tab {
-	display: flex;
-	justify-content: space-between;
-}
-
-.card-header .tab li a {
-	font-size: 15px;
-	color: #333;
-	font-weight: 500;
-}
-
-/* 탭버튼 눌렀을시 글자 색상변경 */
-.card-header .tab li.on a {
-	font-weight: bold;
-	color: crimson;
-}
-/* 탭박스 영역 기본 옵션은 디스플레이 숨김 */
-.card-body .tabBox {
-	display: none;
-}
-/* 탭버튼이 눌러졌을시 관련된 탭박스 활성화 */
-.card-body .tabBox.on {
-	display: block;
-}
-</style>
+<title>ccds.html</title>
 </head>
 <body>
 	<!-- 본문내용 -->
 	<th:block layout:fragment="main">
-
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">공통코드관리</h1>
 			<ol class="breadcrumb mb-4">
@@ -60,10 +20,10 @@ li {
 				<div class="card-body">
 					<label for="" autofocus="autofocus">코드명</label> <input type="text"
 						id="selCcd" name="sleCcd" style="width: 150px">
-					<button class="c_btn">검색</button>
+					<button class="c_btn" id="searchBtn">검색</button>
 					<div class="linelist" style="text-align: right;">
-						<button class="c_btn" id="newBtn" form="">새자료</button>
-						<button class="c_btn" id="saveBtn" form="">저장</button>
+						<button class="c_btn" id="newBtn">새자료</button>
+						<button class="c_btn" id="saveBtn">저장</button>
 					</div>
 				</div>
 			</div>
@@ -81,21 +41,29 @@ li {
 				<div class="col-lg-6" style="width: 64%">
 					<div class="card mb-4">
 						<div class="card-body">
-						<!-- 탭 메뉴 -->
-						<nav>
-  						<div class="nav nav-tabs" id="nav-tab" role="tablist">
-    						<button class="nav-link active" id="nav-codes-tab" data-bs-toggle="tab" data-bs-target="#nav-codes" type="button" role="tab" aria-controls="nav-codes" aria-selected="true">상세코드</button>
-						    <button class="nav-link" id="nav-cdInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-cdInfo" type="button" role="tab" aria-controls="nav-cdInfo" aria-selected="false">코드정보</button>
-  						</div>
-						</nav>
+							<!-- 탭 메뉴 -->
+							<nav>
+								<div class="nav nav-tabs" id="nav-tab" role="tablist">
+									<button class="nav-link active" id="nav-codes-tab"
+										data-bs-toggle="tab" data-bs-target="#nav-codes" type="button"
+										role="tab" aria-controls="nav-codes" aria-selected="true">상세코드</button>
+									<button class="nav-link" id="nav-cdInfo-tab"
+										data-bs-toggle="tab" data-bs-target="#nav-cdInfo"
+										type="button" role="tab" aria-controls="nav-cdInfo"
+										aria-selected="false">코드정보</button>
+								</div>
+							</nav>
 							<div class="tab-content" id="nav-tabContent">
 								<!-- 상세코드 탭 -->
-							  <div class="tab-pane fade show active" id="nav-codes" role="tabpanel" aria-labelledby="nav-codes-tab">
-							  	<div id="grid2"></div>
-							  </div>
-							  <!-- 코드정도 탭 -->
-							  <div class="tab-pane fade" id="nav-cdInfo" role="tabpanel" aria-labelledby="nav-cdInfo-tab">
-										<form id="dataForm" name="dataForm" action="#" method="post" autocomplete="off">
+								<div class="tab-pane fade show active" id="nav-codes"
+									role="tabpanel" aria-labelledby="nav-codes-tab">
+									<div id="grid2"></div>
+								</div>
+								<!-- 코드정도 탭 -->
+								<div class="tab-pane fade" id="nav-cdInfo" role="tabpanel"
+									aria-labelledby="nav-cdInfo-tab">
+									<form id="dataForm" name="dataForm" action="#" method="post"
+										autocomplete="off">
 										<input type="hidden" id="clCode" name="clCode" value="" />
 										<table class="table table-bbs table-write" summary="내용.....">
 											<colgroup>
@@ -142,169 +110,206 @@ li {
 			</div>
 		</div>
 		<script>
-			//저장버튼
-			$('#saveBtn').click(ev => {
-				for (var i=0; i< grid2.getModifiedRows().createdRows.length; i++) {
-					var rowKey = grid2.getModifiedRows().createdRows[i];
-					console.log(rowKey)
-				}
-			})
-			
-			//추가버튼
-			$('#newBtn').click(ev => {
-				if($('#selCcd').val() == '') {
-					alert('공통코드를 먼저 선택해주세요!')
-					
-				} else {
-				
-					if($('#nav-codes').hasClass("active")) {
-						//그리드 추가
-						grid2.appendRow();
-
-					} else if($('#nav-cdInfo').hasClass("active")) {
-						//form 초기화
-						$('#dataForm')[0].reset();
-					}
-				}
-			});
-			 
-			//byte수 출력
-			$(function(){
-				$('#codeIdDc').keyup(function(){
-					bytesHandler(this);
-				});
-			});
-
-		function getTextLength(str) {
-			var len = 0;
-
-			for (var i = 0; i < str.length; i++) {
-				if (escape(str.charAt(i)).length == 6) {
-					len++;
-				}
-				len++;
-			}
-			return len;
-		}
-
-		function bytesHandler(obj){
-			var text = $(obj).val();
-			$('#limit').text(getTextLength(text));
-		}
-			
-			// 코드화면(왼쪽) 그리드
-			$.ajax({
-				url: "ccdsList",
-				method: "GET",
-				dataType: "JSON",
-				success: function (result) {
-					grid.resetData(result);
-				}
-			});
-			const grid = new tui.Grid({
-				el: document.getElementById('grid'),
-				scrollX: false,
-				bodyHeight: 500,
-				rowHeaders: ['rowNum'],
-				columns: [{
-					header: '공통코드',
-					name: 'ccd',
-					align: 'center',
-					sortable: true,
-          sortingType: 'desc'
-				}, {
-					header: '공통코드명',
-					name: 'ccdNm',
-					align: 'center',
-					sortable: true,
-          sortingType: 'desc'
-				}]
-			});
-			
-			//상세코드 그리드
-			const grid2 = new tui.Grid({
-				el: document.getElementById('grid2'),
-				scrollX: false,
-				bodyHeight: 500,
-				rowHeaders: ['checkbox'],
-				columns: [{
-					header: '코드',
-					name: 'ccdDtl',
-					align: 'center',
-					editor: 'text',
-					sortable: true,
-          sortingType: 'desc'
-				}, {
-					header: '코드명',
-					name: 'ccdDtlNm',
-					align: 'center',
-					editor: 'text',
-					sortable: true,
-          sortingType: 'desc'
-				}, {
-					header: '코드설명',
-					name: 'ccdDtlDesct',
-					align: 'center',
-					editor: 'text',
-					sortable: true,
-          sortingType: 'desc'
-				}, {
-					header: '사용여부',
-					name: 'dtlUseYn',
-      		editor: {
-            type: 'radio',
-            options: {
-              listItems: [
-                { text: 'Y', value: 'Y' },
-                { text: 'N', value: 'N' }
-              ]
-            }
-          },
-					align: 'center',
-					sortable: true,
-          sortingType: 'desc'
-				}]
-			})
-			
-			// 공통코드 클릭시 상세코드 리스트
-			grid.on('click', ev => {
-      var value = grid.getValue(ev.rowKey,'ccdNm');
-      var keyword = grid.getValue(ev.rowKey,'ccd');
-      $('#selCcd').val(value);
-      
-      //list 호출
-      $.ajax({
-				url: "ccdsDtlList",
-				method: "POST",
-				data: {
-					"keyword": keyword
-				},
-				success: function (result) {
-					setTimeout(function () {
-					grid2.refreshLayout()
-				}, 300);
-					grid2.resetData(result);
-				}
-			});
-      
-      //코드정보 form
-      $.ajax({
-			url: "ccdsSelect",
-			method: "POST",
-			data: {
-				"keyword": keyword
-			},
-			success: function (result) {
-				$('#ccd').val(result[0].ccd);
-				$('#ccdNm').val(result[0].ccdNm);
-				$('#ccdDesct').val(result[0].ccdDesct);
-				$('#useYn').val(result[0].useYn);
-			}
+		
+		// 코드화면(왼쪽) 그리드
+		const grid = new tui.Grid({
+		    el: document.getElementById('grid'),
+		    scrollX: false,
+		    bodyHeight: 500,
+		    rowHeaders: ['rowNum'],
+		    columns: [{
+		        header: '공통코드',
+		        name: 'ccd',
+		        align: 'center',
+		        sortable: true,
+		        sortingType: 'desc'
+		    }, {
+		        header: '공통코드명',
+		        name: 'ccdNm',
+		        align: 'center',
+		        sortable: true,
+		        sortingType: 'desc'
+		    }]
 		});
 
-    });
-				
-</script>
+		$.ajax({
+		    url: "ccdsList",
+		    method: "GET",
+		    dataType: "JSON",
+		    success: function (result) {
+		        grid.resetData(result);
+		    }
+		});
+
+		//상세코드 그리드
+		const grid2 = new tui.Grid({
+		    el: document.getElementById('grid2'),
+		    scrollX: false,
+		    bodyHeight: 500,
+		    rowHeaders: ['checkbox'],
+		    columns: [{
+		        header: '코드',
+		        name: 'ccdDtl',
+		        align: 'center',
+		        editor: 'text',
+		        sortable: true,
+		        sortingType: 'desc'
+		    }, {
+		        header: '코드명',
+		        name: 'ccdDtlNm',
+		        align: 'center',
+		        editor: 'text',
+		        sortable: true,
+		        sortingType: 'desc'
+		    }, {
+		        header: '코드설명',
+		        name: 'ccdDtlDesct',
+		        align: 'center',
+		        editor: 'text',
+		        sortable: true,
+		        sortingType: 'desc'
+		    }, {
+		        header: '사용여부',
+		        name: 'dtlUseYn',
+		        editor: {
+		            type: 'radio',
+		            options: {
+		                listItems: [{
+		                        text: 'Y',
+		                        value: 'Y'
+		                    },
+		                    {
+		                        text: 'N',
+		                        value: 'N'
+		                    }
+		                ]
+		            }
+		        },
+		        align: 'center',
+		        sortable: true,
+		        sortingType: 'desc'
+		    }]
+		});
+
+		// 공통코드 클릭시 상세코드 리스트
+		grid.on('click', ev => {
+		    var keyword = grid.getValue(ev.rowKey, 'ccdNm');
+		    var ccd = grid.getValue(ev.rowKey, 'ccd');
+		    $('#selCcd').val(keyword);
+
+		    //list 호출
+		    $.ajax({
+		        url: "getCodeList",
+		        method: "POST",
+		        data: {
+		            "ccd": ccd
+		        },
+		        success: function (result) {
+		            setTimeout(function () {
+		                grid2.refreshLayout()
+		            }, 300);
+		            grid2.resetData(result);
+		        }
+		    });
+
+		    //코드정보 form
+		    $.ajax({
+		        url: "ccdInfo",
+		        method: "POST",
+		        data: {
+		            "ccd": ccd
+		        },
+		        success: function (result) {
+		            $('#ccd').val(result.ccd).attr("readonly",true);
+		            $('#ccdNm').val(result.ccdNm);
+		            $('#ccdDesct').val(result.ccdDesct);
+		            $('#useYn').val(result.useYn);
+		        }
+		    });
+
+		});
+
+		//검색버튼
+		$('#searchBtn').click(ev => {
+		    var keyword = $('#selCcd').val()
+		    $.ajax({
+		        url: "ccdsSelect",
+		        method: "POST",
+		        data: {
+		            "keyword": keyword
+		        },
+		        success: function (result) {
+		            grid.resetData(result);
+		        }
+		    });
+		})
+
+		//저장버튼
+		$('#saveBtn').click(ev => {
+				//상세코드탭
+		     if ($('#nav-codes').hasClass("active")) {
+		     //다건추가
+		        	
+				 //다건수정
+					
+		     } else if ($('#nav-cdInfo').hasClass("active")) {
+		     //코드정보탭
+		      $.ajax({ 
+			    	url: "ccdsInsert",  
+			    	type: "POST",  
+						data: $('#dataForm').serialize(),
+						dataType: 'json'
+		     })
+		        	
+		      //수정
+		           
+		      }
+		    });
+
+		//추가버튼
+		$('#newBtn').click(ev => {
+		    if ($('#selCcd').val() == '') {
+		        alert('공통코드를 먼저 선택해주세요!')
+		    } else {
+		    	//상세코드탭
+		        if ($('#nav-codes').hasClass("active")) {
+		            //그리드 추가
+		            grid2.appendRow();
+		            
+		        //코드정보탭
+		        } else if ($('#nav-cdInfo').hasClass("active")) {
+		            //form 초기화
+		            $('#dataForm')[0].reset();
+		            $('#ccd').attr("readonly",false);
+		        }
+		    }
+		});
+
+		//byte수 출력
+		$(function () {
+		    $('#codeIdDc').keyup(function () {
+		        bytesHandler(this);
+		    });
+		});
+
+		function getTextLength(str) {
+		    var len = 0;
+
+		    for (var i = 0; i < str.length; i++) {
+		        if (escape(str.charAt(i)).length == 6) {
+		            len++;
+		        }
+		        len++;
+		    }
+		    return len;
+		}
+
+		function bytesHandler(obj) {
+		    var text = $(obj).val();
+		    $('#limit').text(getTextLength(text));
+		}
+
+		</script>
 	</th:block>
 </body>
 </html>

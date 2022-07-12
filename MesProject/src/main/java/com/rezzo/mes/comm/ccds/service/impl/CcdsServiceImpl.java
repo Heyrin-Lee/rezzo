@@ -15,40 +15,44 @@ import com.rezzo.mes.comm.ccds.service.CcdsVO;
 public class CcdsServiceImpl implements CcdsService{
 	
 	@Autowired CcdsMapper mapper;
-
+	
+	//공통코드 전체리스트 조회
 	@Override
 	public List<CcdsVO> ccdsList(CcdsVO ccdsVO) {
 		return mapper.ccdsList(ccdsVO);
 	}
 	
+	//공통코드 정보 조회
 	@Override
-	public List<CcdsVO> ccdsDtlList(String keyword) {
-		return mapper.ccdsDtlList(keyword);
+	public CcdsVO ccdInfo(CcdsVO ccdsVO) {
+		return mapper.ccdInfo(ccdsVO);
 	}
-
+	
+	//공통코드 검색(코드이름)
 	@Override
 	public List<CcdsVO> ccdsSelect(String keyword) {
 		return mapper.ccdsSelect(keyword);
 	}
 
+	//공통코드 추가
 	@Override
 	public void ccdsInsert(CcdsVO ccdsVO) {
-
+		mapper.ccdsInsert(ccdsVO);
 	}
-
+	
+	//공통코드 수정
 	@Override
 	public void ccdsUpdate(CcdsVO ccdsVO) {
+		mapper.ccdsUpdate(ccdsVO);
 	}
-
-	@Override
-	public void ccdsDelete(CcdsVO ccdsVO) {
-	}
-
+	
+	//세부공통코드 리스트 조회(공통코드, 공용)
 	@Override
 	public List<CcdsVO> getCodeList(CcdsVO ccdsVO) {
 		return mapper.getCodeList(ccdsVO);
 	}
 	
+	//공통코드 검색(다중 파라미터)
 	@Override
 	public Map<String, List<CcdsVO>> getCodes(String... ccds) {
 		Map<String, List<CcdsVO>> map = new HashMap<String, List<CcdsVO>>();
