@@ -95,7 +95,7 @@
 </div>
 
 <!--inspection detail modal-->
-<div class="modal fade" id="inspModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
+<div class="modal fade" id="inspModal" tabindex="-1" aria-labelledby="inspModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -118,6 +118,7 @@
 <script>
     window.addEventListener('load', function () {
         getVendListInit();
+        getDefList();
     })
 
     // range date picker
@@ -353,12 +354,6 @@
                 validation: {
                     dataType: 'number',
                     required: true
-                },
-                editor: {
-                    type: inputInspPassCnt,
-                    options: {
-                        maxLength: 10
-                    }
                 }
             },
             {
@@ -494,6 +489,14 @@
                 })
         }
     })
+
+    //
+    function getDefList() {
+        // let url = 'getDefList'
+        // fetch(url).then(res => res.json())
+        //     .then(res => inspGrid.resetData(res))
+
+    }
 </script>
 </html>
 
