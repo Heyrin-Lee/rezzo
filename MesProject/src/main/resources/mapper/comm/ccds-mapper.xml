@@ -18,4 +18,11 @@
 		WHERE CCD LIKE '%'||#{keyword}||'%'
 	</select>
 	
+	<select id="getCodeList" resultType="com.rezzo.mes.comm.ccds.service.CcdsVO">
+		SELECT  *
+		  FROM CCDS_DTL
+		 WHERE CCD = #{ccd}
+		 ORDER BY CCD_DTL_NM
+	</select>
+	
 </mapper>

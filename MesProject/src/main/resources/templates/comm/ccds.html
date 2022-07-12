@@ -62,10 +62,8 @@ li {
 						id="selCcd" name="sleCcd" style="width: 150px">
 					<button class="c_btn">검색</button>
 					<div class="linelist" style="text-align: right;">
-						<button class="c_btn" form="">추가</button>
-						<button class="c_btn" form="">저장</button>
-						<button class="c_btn" form="">삭제</button>
-						<button class="c_btn" form="">취소</button>
+						<button class="c_btn" id="newBtn" form="">새자료</button>
+						<button class="c_btn" id="saveBtn" form="">저장</button>
 					</div>
 				</div>
 			</div>
@@ -73,7 +71,6 @@ li {
 			<div class="row">
 				<div class="col-lg-6" style="width: 35%">
 					<div class="card mb-4">
-						<div class="card-header"></div>
 						<div class="card-body">
 							<div id="grid"></div>
 						</div>
@@ -83,62 +80,61 @@ li {
 				<div class="col-lg-6" style="width: 1%"></div>
 				<div class="col-lg-6" style="width: 64%">
 					<div class="card mb-4">
-						<div class="card-header">
-							<ul class="tab">
-								<li class="on"><a href="#!"><span>상세코드</span></a></li>
-								<li><a href="#!"><span>코드정보</span></a></li>
-							</ul>
-						</div>
 						<div class="card-body">
-							<!-- 상세코드 탭 -->
-							<div class="tabBox on">
-								<div class="ccd">
-									<div id="grid2"></div>
+						<!-- 탭 메뉴 -->
+						<nav>
+  						<div class="nav nav-tabs" id="nav-tab" role="tablist">
+    						<button class="nav-link active" id="nav-codes-tab" data-bs-toggle="tab" data-bs-target="#nav-codes" type="button" role="tab" aria-controls="nav-codes" aria-selected="true">상세코드</button>
+						    <button class="nav-link" id="nav-cdInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-cdInfo" type="button" role="tab" aria-controls="nav-cdInfo" aria-selected="false">코드정보</button>
+  						</div>
+						</nav>
+							<div class="tab-content" id="nav-tabContent">
+								<!-- 상세코드 탭 -->
+							  <div class="tab-pane fade show active" id="nav-codes" role="tabpanel" aria-labelledby="nav-codes-tab">
+							  	<div id="grid2"></div>
+							  </div>
+							  <!-- 코드정도 탭 -->
+							  <div class="tab-pane fade" id="nav-cdInfo" role="tabpanel" aria-labelledby="nav-cdInfo-tab">
+										<form id="dataForm" name="dataForm" action="#" method="post" autocomplete="off">
+										<input type="hidden" id="clCode" name="clCode" value="" />
+										<table class="table table-bbs table-write" summary="내용.....">
+											<colgroup>
+												<col style="width: 200x">
+												<col>
+											</colgroup>
+											<tbody>
+												<tr>
+													<th>공통코드<strong class="blue">*</strong></th>
+													<td data-code-id=""><input type="text" id="ccd"
+														name="ccd" class="form-control w150" maxlength="10" /></td>
+												</tr>
+												<tr>
+													<th>공통코드명<strong class="blue">*</strong></th>
+													<td><input type="text" id="ccdNm" name="ccdNm"
+														class="form-control"
+														style="width: 300px; background-color: #FFFFCC"
+														maxlength="60" /></td>
+												</tr>
+												<tr>
+													<th>코드설명</th>
+													<td><textarea id="ccdDesct" name="ccdDesct" rows="5"
+															cols="100" class="form-control" maxlength="50"></textarea>
+														<span class="letter-limit"> <strong id='limit'>0</strong>/50
+															byte
+													</span></td>
+												</tr>
+												<tr>
+													<th>사용여부</th>
+													<td><select id="useYn" name="useYn"
+														style="width: 120px; height: 24px">
+															<option value="Y" selected="selected">Yes</option>
+															<option value="N">No</option>
+													</select></td>
+												</tr>
+											</tbody>
+										</table>
+									</form>
 								</div>
-							</div>
-							<!-- 코드정도 탭 -->
-							<div class="tabBox">
-								<form id="dataForm" name="dataForm"
-									action="/comDta/cmmCodeUpdateAjax.do" method="post"
-									autocomplete="off">
-									<input type="hidden" id="clCode" name="clCode" value="" />
-									<table class="table table-bbs table-write" summary="내용.....">
-										<colgroup>
-											<col style="width: 200x">
-											<col>
-										</colgroup>
-										<tbody>
-											<tr>
-												<th>공통코드<strong class="blue">*</strong></th>
-												<td data-code-id=""><input type="text" id="ccd"
-													name="ccd" class="form-control w150" maxlength="10" /></td>
-											</tr>
-											<tr>
-												<th>공통코드명<strong class="blue">*</strong></th>
-												<td><input type="text" id="ccdNm" name="ccdNm"
-													class="form-control"
-													style="width: 300px; background-color: #FFFFCC"
-													maxlength="60" /></td>
-											</tr>
-											<tr>
-												<th>코드설명</th>
-												<td><textarea id="ccdDesct" name="ccdDesct" rows="5"
-														cols="100" class="form-control" maxlength="50"></textarea>
-													<span class="letter-limit"> <strong id='limit'>0</strong>/50
-														byte
-												</span></td>
-											</tr>
-											<tr>
-												<th>사용여부</th>
-												<td><select id="useYn" name="useYn"
-													style="width: 120px; height: 24px">
-														<option value="Y" selected="selected">Yes</option>
-														<option value="N">No</option>
-												</select></td>
-											</tr>
-										</tbody>
-									</table>
-								</form>
 							</div>
 						</div>
 					</div>
@@ -146,32 +142,32 @@ li {
 			</div>
 		</div>
 		<script>
-	function userUpdate() {
-		//수정 버튼 클릭
-		$('#btnUpdate').on('click',function(){
-			var id = $('input:text[name="id"]').val();
-			var name = $('input:text[name="name"]').val();
-			var password = $('input:text[name="password"]').val();
-			var role = $('select[name="role"]').val();		
-			$.ajax({ 
-		    	url: conPath + '/users', 
-		    	type: 'PUT',
-		    	//type: 'POST', 
-		    	dataType: 'json',  //응답결과가 json
-		    	//data: JSON.stringify({ id: id, name:name,password: password, role: role }),
-		    	data: JSON.stringify( { id, name,password, role } ),
-					//필드명과 값의 이름이 같다면 알아서 처리 = json축약형
-		    	contentType: 'application/json' //요청파라미터 json (MIME 타입)
-					//data: $('#form1').serialize()
-					//serialize : 제이쿼리 함수 폼태그가 있으면 알아서 문자열로 만들어줌(질의문자열 즉, 쿼리스트링) 'id=ddd&name=aaa&password=aaa&role=Admin'
-			}).done( function(data) { 
-		        userList();
-			}).fail( function(xhr, status, message) { 
-		        alert(" status: "+status+" er:"+message);
-			});
-		});//수정 버튼 클릭
-	}//userUpdate
+			//저장버튼
+			$('#saveBtn').click(ev => {
+				for (var i=0; i< grid2.getModifiedRows().createdRows.length; i++) {
+					var rowKey = grid2.getModifiedRows().createdRows[i];
+					console.log(rowKey)
+				}
+			})
 			
+			//추가버튼
+			$('#newBtn').click(ev => {
+				if($('#selCcd').val() == '') {
+					alert('공통코드를 먼저 선택해주세요!')
+					
+				} else {
+				
+					if($('#nav-codes').hasClass("active")) {
+						//그리드 추가
+						grid2.appendRow();
+
+					} else if($('#nav-cdInfo').hasClass("active")) {
+						//form 초기화
+						$('#dataForm')[0].reset();
+					}
+				}
+			});
+			 
 			//byte수 출력
 			$(function(){
 				$('#codeIdDc').keyup(function(){
@@ -203,7 +199,6 @@ li {
 				dataType: "JSON",
 				success: function (result) {
 					grid.resetData(result);
-					console.log(result);
 				}
 			});
 			const grid = new tui.Grid({
@@ -236,24 +231,35 @@ li {
 					header: '코드',
 					name: 'ccdDtl',
 					align: 'center',
+					editor: 'text',
 					sortable: true,
           sortingType: 'desc'
 				}, {
 					header: '코드명',
 					name: 'ccdDtlNm',
 					align: 'center',
+					editor: 'text',
 					sortable: true,
           sortingType: 'desc'
 				}, {
 					header: '코드설명',
 					name: 'ccdDtlDesct',
 					align: 'center',
+					editor: 'text',
 					sortable: true,
           sortingType: 'desc'
 				}, {
 					header: '사용여부',
 					name: 'dtlUseYn',
-      		type: 'checkbox',
+      		editor: {
+            type: 'radio',
+            options: {
+              listItems: [
+                { text: 'Y', value: 'Y' },
+                { text: 'N', value: 'N' }
+              ]
+            }
+          },
 					align: 'center',
 					sortable: true,
           sortingType: 'desc'
@@ -274,6 +280,9 @@ li {
 					"keyword": keyword
 				},
 				success: function (result) {
+					setTimeout(function () {
+					grid2.refreshLayout()
+				}, 300);
 					grid2.resetData(result);
 				}
 			});
@@ -294,23 +303,7 @@ li {
 		});
 
     });
-			
-			
-			//탭
-			$(document).ready(function(){
-				$(".card-header .tab li a").on("click", function(){
-					// 해당 요소를 클릭하는 내 자신의 index 번호를 가져온다. [0], [1]
-					const num = $(".card-header .tab li a").index($(this));
-					// 기존에 적용되어 있는 on class 삭제
-					$(".card-header .tab li").removeClass("on");
-					$(".card-body .tabBox").removeClass("on");
-
-					// 다음 요소 클릭시 on class 추가
-					$('.card-header .tab li:eq(' + num + ')').addClass("on");
-					$('.card-body .tabBox:eq(' + num + ')').addClass("on");
-
-				});
-			});
+				
 </script>
 	</th:block>
 </body>

@@ -3,8 +3,11 @@ package com.rezzo.mes.comm.ccds.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 
+@Mapper
 public interface CcdsMapper {
 	
 	public List<CcdsVO> ccdsList(CcdsVO ccdsVO);
@@ -19,6 +22,6 @@ public interface CcdsMapper {
 
 	public void ccdsDelete(CcdsVO ccdsVO);
 
-	public Map<String, List<CcdsVO>> getCcds(String ... ccdDtlNmList);
-
+	public List<CcdsVO> getCodeList(CcdsVO ccdsVO);
+	public Map<String, List<CcdsVO>> getCodes(String ... ccds);
 }

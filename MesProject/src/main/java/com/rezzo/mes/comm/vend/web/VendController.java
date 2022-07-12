@@ -13,9 +13,9 @@ public class VendController {
 	
 	@Autowired CcdsService ccdsService;
 	
-	@RequestMapping("vend")
+	@GetMapping("vend")
 	public String vend(Model model) {
-		model.addAttribute("ccds", ccdsService.getCcds("100","101"));
+		model.addAttribute("ccds", ccdsService.getCodes("100","101"));
 		return "comm/vend";
 	}
 }

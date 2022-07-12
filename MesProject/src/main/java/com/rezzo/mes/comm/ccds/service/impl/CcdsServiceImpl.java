@@ -45,10 +45,15 @@ public class CcdsServiceImpl implements CcdsService{
 	}
 
 	@Override
-	public Map<String, List<CcdsVO>> getCcds(String... ccdList) {
+	public List<CcdsVO> getCodeList(CcdsVO ccdsVO) {
+		return mapper.getCodeList(ccdsVO);
+	}
+	
+	@Override
+	public Map<String, List<CcdsVO>> getCodes(String... ccds) {
 		Map<String, List<CcdsVO>> map = new HashMap<String, List<CcdsVO>>();
-		for(String ccd : ccdList) {
-			map.put(ccd, mapper.ccdsList(new CcdsVO(ccd)));
+		for(String ccd : ccds) {
+			map.put(ccd, mapper.getCodeList(new CcdsVO(ccd)));
 		}
 		return map;
 	}
