@@ -84,33 +84,43 @@
 				<div class="col-5 ms-auto">
 					<div class="card mb-4">
 						<div class="card-header">
+						
 							<i class="fas fa-tachometer-alt"></i> 설비등록
 						</div>
 
 						<div class="card-body">
 
-							<form id="frm" action="eqmInsert" method="post" enctype="multipart/form-data">
+							<form id="form" action="eqmInsert" method="post" enctype="multipart/form-data">
+													
 								<input type="file" id="eqmImg" name="eqmImg">
+						<br>
+						<br>
 								<div class="row">
+								<div class="mb-3">
+										<label for="form-select" class="form-label">설비구분</label> 
+										<select class="form-select"  
+													aria-label="Default select example" style="width: 180px" name="eqmSelect">
+													<option class="eqmFg" th:each="value : ${prcsList}" th:value="${value.prcsCd}" th:text="${value.prcsNm}"></option>
+												</select>
+										</div>
 									<div class="col-6">
 										<div class="mb-3">
 											<label class="form-label">설비명</label> <input type="text" class="form-control" id="eqmNm"
 												name="eqmNm" style="width: 180px">
 										</div>
+										
 										<div class="mb-3">
-											<label class="form-label">설비코드</label> <input type="text" class="form-control" id="eqmCd"
-												name="eqmCd" style="width: 180px">
-										</div>
-										<div class="mb-3">
-											<label class="form-label">공정코드</label> <input type="text" class="form-control" id="prcsCd"
-												name="prcsCd" style="width: 180px">
+										<label for="form-select" class="form-label">공정명</label> 
+										<select class="form-select" name="prcsNm" aria-label="Default select example" style="width: 180px" id='prcsNm'>
+													<option th:each="value : ${prcsList}" th:value="${value.prcsCd}" th:text="${value.prcsNm}"></option>
+												</select>
 										</div>
 										<div class="mb-4">
-											<label for="email" class="form-label">공정명</label> <input type="text" class="form-control"
-												id="prcsNm" name="prcsNm" style="width: 180px">
+											<label for="" class="form-label">공정코드</label> <input type="text" class="form-control"
+												id="prcsCd" name="prcsCd" style="width: 180px">
 										</div>
 										<div class="mb-4">
-											<label for="email" class="form-label">설비입고날짜</label> <input type="text" class="form-control"
+											<label for="" class="form-label">설비입고날짜</label> <input type="date" class="form-control"
 												id="eqmIstDt" name="eqmIstDt" style="width: 180px">
 										</div>
 									</div>
@@ -127,8 +137,7 @@
 											<br> <label>사용여부</label>
 											<div class="form-check form-check-inline" style="margin-bottom: 3px">
 												<input class="form-check-input" type="radio" name="useYN" value="Y"> <label
-													class="form-check-label">사용</label> <input class="form-check-input" type="radio" name="useYN"
-													value="N"> <label class="form-check-label">미사용</label>
+													class="form-check-label">사용</label> <input class="form-check-input" type="radio" value="N" name="useYN"> <label class="form-check-label">미사용</label>
 											</div>
 											<br> <br>
 											<div class="mb-4">
@@ -138,7 +147,7 @@
 											<div class="mb-4">
 												<label for="form-select" class="form-label">라인코드</label> 
 												<select class="form-select" 
-													aria-label="Default select example" style="width: 180px">
+													aria-label="Default select example" style="width: 180px" th:name="optionSelect">
 													<option th:each="value : ${opList}" th:value="${value.lineCd}" th:text="${value.lineCd}"></option>
 												</select>
 											</div>
@@ -146,12 +155,12 @@
 									</div>
 								</div>
 							</form>
-						</div>
 								<div class="linelist">
-									<button type = "button"id="insertBtn" class="c_btn" >등록</button>
+									<button type = "button" id="insertBtn" class="c_btn" >등록</button>
 									<button type="button" id="modBtn" class="c_btn">수정</button>
 									<button type="button" id="delBtn" class="c_btn">삭제</button>
 									<button type="reset" id="initBtn" class="c_btn">취소</button>
+						</div>
 						</div>
 					</div>
 				</div>
@@ -236,7 +245,7 @@
 					name: 'maxTemp',
 					align: 'center'
 				}, {
-					header: '점검주기',
+					header: '점검주기(일)',
 					name: 'chckPred',
 					align: 'center'
 				}, {
@@ -328,6 +337,124 @@
 				})
 			}
 
+
+		//취소버튼
+		$('#initBtn').on('click',function(){
+			$('#form').each(function(){
+			this.reset()})
+		})
+		
+		//등록버튼
+		$('#insertBtn').on('click', function(){
+			var eqmFg = $('#eqmFg').val(); 
+			var eqmNm = $('#eqmNm').val();
+			var prcsNm = $('prcsNm').val();
+			var prcsCd = $('#prcsCd').val();
+			var eqmIstDt = $('[name=eqmIstDt]').val();
+			var minTemp = $('#minTemp').val();
+			var maxTemp = $('#maxTemp').val();
+			var useYn = $('[name=useYn]').val();
+			var chckPerd = $('#check').val();
+			var lineCd = $('[name=optionSelect]').val();
+
+			$.ajax({
+				url:'eqmInsert',
+				type : 'POST',
+				data : {eqmFg, eqmNm, prcsNm, prcsCd, eqmIstDt, minTemp,
+						maxTemp, useYn, chckPerd, lineCd},
+				dataType : 'json'
+				}).done(function(xhr){
+					$.ajax({
+						url: "eqmList",
+						method: "GET",
+						dataType: "JSON",
+						success: function (result) {
+							grid.resetData(result);
+				}
+			});
+				})
+			})
+		
+		
+		//삭제버튼
+		$('#delBtn').on('click',function(){
+				var result = confirm("설비를 정말 삭제할까요?")
+				var eqmCd = $('#eqmCd').val()
+				
+			
+				if(! result)
+				return;
+				
+				$.ajax({
+				url : "eqmDelete/"+eqmCd,
+				type : 'POST',
+				dataType:'json'
+				}).done(function(xhr){
+					$.ajax({
+						url: "eqmList",
+						method: "GET",
+						dataType: "JSON",
+						success: function (result) {
+							grid.resetData(result);
+				}
+			});
+				})
+			})
+			
+			
+			
+		//공통코드 클릭 상세코드 리스트
+		
+			
+			
+		// 설비 리스트 이동	
+		
+		grid.on('click',ev => {
+		var value = grid.getValue(ev.rowKey, 'eqmNm');
+		var keyword = grid.getValue(ev.rowKey, 'eqmCd');
+		$('#eqmCd').val(value);
+		
+			$.ajax({
+				url: "eqmList",
+				type: "get",
+				data: {
+					"keyword": keyword
+					},
+				dataType: "JSON",
+				success: function (result) {
+				grid.resetData(result);
+				}
+			})	
+			
+		$.ajax({
+				url: "eqmSelect",
+				type: "post",
+				data: {
+					"keyword": keyword
+					},
+				dataType: "JSON",
+				success: function (result) {
+				$('#eqmNm').val(result[0].eqmNm);
+				$('#eqmCd').val(result[0].eqmCd);
+				$('[name="prcsCd"]').val([result[0].prcsCd]);
+				$('[name="useYN"]').val([result[0].useYn]);
+				$('#minTemp').val(result[0].minTemp);
+				$('#maxTemp').val(result[0].maxTemp);
+				$('#chckPred').val(result[0].chckPred);
+				$('[name="optionSelect"]').val([result[0].lineCd]);
+				$('#eqmIstDt').val(result[0].eqmIstDt);
+				
+				}
+			})	
+		})
+			
+		// 공정명 change event
+		$('#prcsNm').on('change',function(){
+			$('#prcsCd').val($(this).val())
+		})	
+		
+		
+		
 		</script>
 	</th:block>
 </body>
