@@ -2,9 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rezzo.mes.prod.plan.mapper.PlanMapper">
 
-
 <select id="orderListModal" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
-	SELECT *
+	SELECT ORDER_NO, EDCTS_CD, VEND_CD, VEND_NM, ORDER_DT, PROG_APPE, PAPRD_DT, PRDT_NM, ORDER_CNT
 	FROM ORDER_SHEET
 </select>
+
+<select id="getIndex" resultType="int">
+	SELECT MAX(SUBSTR(PLAN_CD, 12)) 
+	FROM PLAN
+	WHERE PLAN_DT = #{planDt}
+</select>
+
 </mapper>

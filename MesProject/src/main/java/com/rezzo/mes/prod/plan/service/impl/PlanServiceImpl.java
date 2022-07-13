@@ -18,4 +18,9 @@ public class PlanServiceImpl implements PlanService {
 		return mapper.orderListModal(vo);
 	}
 
+	@Override
+	public Integer getIndex(PlanVO vo) {
+		return mapper.getIndex(vo);
+	}
+
 }
