@@ -14,9 +14,10 @@ public class EqmVO {
 	private Date eqmIstDt;
 	private int minTemp;
 	private int maxTemp;
-	private int chckPred;
+	private String chckPerd;
 	private String useYn;
 	private String prcsNm;
 	private String imgPath;
 	private String eqmImg;
+	private String eqmFgNm;
 }
