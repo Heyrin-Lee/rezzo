@@ -11,8 +11,8 @@
 	
 	<!-- 주문서 등록 -->
 	<insert id="addOrdr" parameterType="com.rezzo.mes.sales.order.service.OrderVO">
-		INSERT INTO ORDER_SHEET (ORDER_NO, EDCTS_CD, VEND_CD, VEND_NM, ORDER_DT, PAPRD_DT, PROG_APPE, PRDT_NM, ORDER_CNT)
-		VALUES (#{orderNo}, #{edctsCd}, #{vendCd}, #{vendNm}, #{orderDt}, #{paprdDt},  #{progAppe}, #{prdtNm}, #{orderCnt})
+		INSERT INTO ORDER_SHEET (ORDER_NO, EDCTS_CD, VEND_CD, VEND_NM, ORDER_DT, PROG_APPE, PAPRD_DT, PRDT_NM, ORDER_CNT)
+		VALUES (#{orderNo}, #{edctsCd}, #{vendCd}, #{vendNm}, #{orderDt}, #{progAppe}, #{paprdDt}, #{prdtNm}, #{orderCnt})
 	</insert>
 	
 	<!-- 거래처 목록 조회 모달창 -->
@@ -22,6 +22,20 @@
 	
 	<!-- 제품명 목록 조회 모달창 -->
 	<select id="proSearch" resultType="com.rezzo.mes.sales.order.service.OrderVO">
-		SELECT EDCTS_CD, PRDT_NM FROM EDCTS_STC
+		SELECT EDCTS_CD, PRDT_NM FROM EDCTS
 	</select>
+	
+	<!-- 조건별 주문서 조회 -->
+	<select id="findOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
+		SELECT * 
+		FROM ORDER_SHEET
+		WHERE 
+		<if test="progAppe != null">PROG_APPE = #{progAppe} and</if>
+		<if test="vendNm != null">VEND_NM = #{vendNm} and</if>
+		<if test="prdtNm != null">PRDT_NM = #{prdtNm} and</if>
+		<if test="start != null">ORDER_DT BETWEEN #{start} AND #{end} </if>
+		ORDER BY ORDER_DT		
+	</select>
+	
+	<!-- 주문서 삭제 -->
 </mapper>
