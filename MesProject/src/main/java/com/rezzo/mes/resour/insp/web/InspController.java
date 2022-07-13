@@ -4,14 +4,16 @@ import com.rezzo.mes.resour.insp.service.InspService;
 import com.rezzo.mes.resour.insp.vo.OrdrVO;
 import com.rezzo.mes.resour.insp.vo.VendVO;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class InspController {
 
     @RequestMapping("/rscInsp")
     public String rscInsp() {
-        return "resour/rscInsp";
+        return "resour/insp/rscInsp";
     }
 
     @RequestMapping("/getVendList")
@@ -41,7 +43,5 @@ public class InspController {
     public List<OrdrVO> getOrdrList(@RequestBody OrdrVO ordrVO) {
         return sv.getOrdrList(ordrVO);
     }
-
-
 
 }
