@@ -21,4 +21,6 @@ public interface CcdsService {
 	public List<CcdsVO> getCodeList(CcdsVO ccdsVO);
 	//공통코드 검색(다중 파라미터)
 	public Map<String, List<CcdsVO>> getCodes(String ... ccds);
+	//세부코드 추가, 수정
+	public void saveCcdDtl(String ccd, List<CcdsVO> dtlList);
 }

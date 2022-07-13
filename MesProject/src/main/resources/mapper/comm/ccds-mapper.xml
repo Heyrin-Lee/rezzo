@@ -38,4 +38,26 @@
 		VALUES ( #{ccd}, #{ccdNm}, #{ccdDesct}, #{useYn})
 	</insert>
 	
+	<!-- 공통코드 수정 -->
+	<update id="ccdsUpdate" parameterType="CcdsVO">
+		UPDATE CCDS_DTL 
+		<set>
+			<if test="ccdNm != null">CCD_NM = #{ccdNm},</if>
+			<if test="ccdDesct != null">CCD_DESCT = #{ccdDesct},</if>
+			<if test="useYn != null">USE_YN = #{useYn},</if>
+		</set>
+		WHERE CCD = #{ccd}
+	</update>
+	
+	<!-- 세부코드 등록,수정 -->
+	<update id="saveCcdDtl" parameterType="CcdsVO">
+		MERGE INTO CCDS_DTL c
+  		USING DUAL ON (c.CCD_DTL = #{ccdDtl})
+  	WHEN MATCHED THEN
+  		UPDATE 
+  			SET c.CCD_DTL_NM = #{ccdDtlNm}, c.CCD_DTL_DESCT = #{ccdDtlDesct}, c.DTL_USE_YN = #{dtlUseYn} 
+  	WHEN NOT MATCHED THEN
+  		INSERT (c.CCD_DTL, c.CCD, c.CCD_DTL_NM, c.CCD_DTL_DESCT, c.DTL_USE_YN)
+  		VALUES ( #{ccdDtl}, #{ccd}, #{ccdDtlNm}, #{ccdDtlDesct}, #{dtlUseYn})
+	</update>
 </mapper>
