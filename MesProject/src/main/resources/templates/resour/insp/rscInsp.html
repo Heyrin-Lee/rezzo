@@ -166,7 +166,7 @@
             let val = this.el.value.replace(/[^0-9]/g, '')
             grid.setValue(this.rowKey, 'inspCnt', val);
             grid.setValue(this.rowKey, 'inspPassCnt', val);
-            return parseInt(val);
+            return val;
         }
 
 
@@ -200,7 +200,7 @@
                 return '';
             } else {
                 grid.setValue(this.rowKey, 'inspPassCnt', val);
-                return parseInt(val);
+                return val;
             }
         }
 
@@ -224,7 +224,7 @@
 
         getValue() {
             let val = this.el.value.replace(/[^0-9]/g, '')
-            return parseInt(val);
+            return val;
         }
 
         mounted() {
@@ -234,9 +234,9 @@
 
     //
     let iModal;
+
     class CustomBtnRenderer {
         constructor(props) {
-            console.log(props)
             let {rowKey, value} = props;
             let btn = document.createElement('button');
             let text = document.createTextNode(value);
@@ -427,26 +427,34 @@
         vModal.show('vendModal');
     })
 
-    // modal refresh section
+    // modal event section
     let vendModal = document.getElementById('vendModal');
     vendModal.addEventListener('shown.bs.modal', e => {
         vendGrid.refreshLayout();
     })
 
+    //
+    let inferCnt = new Map();
     let inspModal = document.getElementById('inspModal');
     inspModal.addEventListener('shown.bs.modal', e => {
         let rowKey = inspModal.dataset.rowKey;
-        let val = grid.getValue(rowKey,'insp');
-        console.log(val)
-        // inspGrid.resetData();
+        let infCnt = inferCnt.get(rowKey)
+        if (infCnt !== undefined) {
+            for (let i = 0; i < infCnt.length; i++)
+                inspGrid.setValue(i, 'infCnt', infCnt[i]);
+        } else {
+            inspGrid.setColumnValues('infCnt', '')
+        }
         inspGrid.refreshLayout();
     })
 
     inspModal.addEventListener('hidden.bs.modal', e => {
         let rowKey = inspModal.dataset.rowKey;
-        let colVal = inspGrid.getColumnValues('infCnt');
-        grid.setValue(rowKey,'insp', colVal);
-        grid.clear();
+        let colVal = inspGrid.getColumnValues('infCnt')
+        inferCnt.set(rowKey, colVal);
+        inspGrid.setColumnValues('infCnt', '')
+        inspGrid.cancelEditing(); // foucs 제거
+        inspGrid.refreshLayout();
     })
 
     // get vendor list in modal
@@ -476,6 +484,7 @@
         let startDt = document.getElementById('startpicker-input');
         let endDt = document.getElementById('endpicker-input');
         let vendCd = document.getElementById('vendCd');
+        inferCnt.clear();
 
         if (startDt.value == '' || endDt.value == '') {
             alert('기간을 입력하세요')
@@ -503,8 +512,10 @@
 
     let calInfCnt = document.getElementById('calInfCnt');
     calInfCnt.addEventListener('click', function () {
-
-        console.log(inspGrid.getColumnValues('infCnt'))
+        let rowKey = inspModal.dataset.rowKey;
+        let colVal = inspGrid.getColumnValues('infCnt')
+        let val = colVal.reduce((a,b) => (a+b));
+        console.log(val)
     })
 </script>
 </html>
