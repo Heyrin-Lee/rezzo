@@ -16,6 +16,8 @@ public class OrderVO {
 	private String vendCd;
 	private String vendNm;
 	private Date orderDt;
+	private Date start;
+	private Date end;
 	private String progAppe;
 	private Date paprdDt;
 	private String prdtNm;

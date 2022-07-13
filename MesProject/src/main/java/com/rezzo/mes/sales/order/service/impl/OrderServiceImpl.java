@@ -1,11 +1,12 @@
 package com.rezzo.mes.sales.order.service.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rezzo.mes.prod.prcs.service.PrcsVO;
 import com.rezzo.mes.sales.order.mapper.OrderMapper;
 import com.rezzo.mes.sales.order.service.OrderService;
 import com.rezzo.mes.sales.order.service.OrderVO;
@@ -40,6 +41,13 @@ public class OrderServiceImpl implements OrderService{
 	public List<OrderVO> proSearch(OrderVO vo) {
 		return mapper.proSearch(vo);
 	}
-
+	
+	//조건별 주문서 조회
+		@Override
+	public List<OrderVO> findOrdr(OrderVO vo) {
+		return mapper.findOrdr(vo);
+	}
+		
+	//주문서 삭제
 
 }
