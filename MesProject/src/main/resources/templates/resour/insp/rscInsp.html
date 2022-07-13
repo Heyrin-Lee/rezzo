@@ -200,7 +200,11 @@
                 return '';
             } else {
                 grid.setValue(this.rowKey, 'inspPassCnt', val);
-                return val;
+                if (val == '') {
+                    return val;
+                } else {
+                    return parseInt(val);
+                }
             }
         }
 
@@ -224,7 +228,11 @@
 
         getValue() {
             let val = this.el.value.replace(/[^0-9]/g, '')
-            return val;
+            if (val == '') {
+                return val;
+            } else {
+                return parseInt(val);
+            }
         }
 
         mounted() {
@@ -514,8 +522,16 @@
     calInfCnt.addEventListener('click', function () {
         let rowKey = inspModal.dataset.rowKey;
         let colVal = inspGrid.getColumnValues('infCnt')
-        let val = colVal.reduce((a,b) => (a+b));
-        console.log(val)
+        let infSum = colVal.reduce((a, b) => (a + b));
+        let inspCnt = grid.getValue(rowKey, 'inspCnt')
+
+        if (infSum > parseInt(inspCnt)) {
+            alert("불량수량이 검사량 보다 많습니다.")
+        } else {
+            grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
+            grid.setValue(rowKey, 'inspFailCnt', infSum)
+        }
+
     })
 </script>
 </html>
