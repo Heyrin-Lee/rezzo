@@ -105,6 +105,7 @@
             <div class="modal-body">
                 <div id="insp-grid"></div>
             </div>
+            <input type="button" id="calInfCnt" value="입력">
         </div>
     </div>
 </div>
@@ -118,7 +119,7 @@
 <script>
     window.addEventListener('load', function () {
         getVendListInit();
-        getDefList();
+        getInfList();
     })
 
     // range date picker
@@ -162,18 +163,12 @@
         }
 
         getValue() {
-            if (parseInt(this.el.value) > parseInt(grid.getValue(this.rowKey, 'ordrCnt'))) {
-                alert('입고량이 발주량 보다 많습니다.');
-                grid.setValue(this.rowKey, 'inspCnt', '');
-                grid.setValue(this.rowKey, 'inspPassCnt', '');
-                grid.setValue(this.rowKey, 'inspFailCnt', '');
-                return '';
-            } else {
-                grid.setValue(this.rowKey, 'inspCnt', this.el.value);
-                grid.setValue(this.rowKey, 'inspPassCnt', this.el.value);
-                return this.el.value;
-            }
+            let val = this.el.value.replace(/[^0-9]/g, '')
+            grid.setValue(this.rowKey, 'inspCnt', val);
+            grid.setValue(this.rowKey, 'inspPassCnt', val);
+            return parseInt(val);
         }
+
 
         mounted() {
             this.el.select();
@@ -197,68 +192,61 @@
         }
 
         getValue() {
-            if (parseInt(this.el.value) > parseInt(grid.getValue(this.rowKey, 'ordrInstCnt'))) {
+            let val = this.el.value.replace(/[^0-9]/g, '')
+            if (parseInt(val) > parseInt(grid.getValue(this.rowKey, 'ordrInstCnt'))) {
                 alert('검사량이 입고량 보다 많습니다.');
                 grid.setValue(this.rowKey, 'inspPassCnt', '');
                 grid.setValue(this.rowKey, 'inspFailCnt', '');
                 return '';
             } else {
-                grid.setValue(this.rowKey, 'inspPassCnt', this.el.value);
-                return this.el.value;
+                grid.setValue(this.rowKey, 'inspPassCnt', val);
+                return parseInt(val);
             }
         }
+
         mounted() {
             this.el.select();
         }
     }
 
-    class inputInspPassCnt {
+    class inputInferCnt {
         constructor(props) {
-            let el = document.createElement('input');
-            let {rowKey} = props;
-            this.rowKey = rowKey;
+            const el = document.createElement('input');
             el.type = 'text';
             el.value = String(props.value);
             this.el = el;
         }
 
         getElement() {
-            grid.check(this.rowKey);
-            this.el.value = ''
+            this.el.value = '';
             return this.el;
         }
 
         getValue() {
-            if (parseInt(this.el.value) > parseInt(grid.getValue(this.rowKey, 'ordrCnt'))) {
-                alert('합격량이 검사량 보다 많습니다.');
-                grid.setValue(this.rowKey, 'inspPassCnt', '');
-                return '';
-            } else {
-                let res = parseInt(grid.getValue(this.rowKey, 'inspCnt'))-parseInt(this.el.value);
-                grid.setValue(this.rowKey, 'insFailCnt', res);
-                return this.el.value;
-            }
+            let val = this.el.value.replace(/[^0-9]/g, '')
+            return parseInt(val);
         }
+
         mounted() {
             this.el.select();
         }
     }
 
-
-
     //
     let iModal;
-
     class CustomBtnRenderer {
         constructor(props) {
-            let {grid, rowKey, columnInfo, value} = props;
+            console.log(props)
+            let {rowKey, value} = props;
             let btn = document.createElement('button');
             let text = document.createTextNode(value);
             btn.appendChild(text);
             btn.innerHTML = '검사'
             btn.className = 'insp-btn';
-            btn.addEventListener('click', function () {
-                iModal = new bootstrap.Modal(document.getElementById('inspModal'), {})
+            btn.addEventListener('click', function (e) {
+                let modDiv = document.getElementById('inspModal');
+                modDiv.dataset.rowKey = rowKey
+                iModal = new bootstrap.Modal(modDiv, {})
                 iModal.show('inspModal');
             })
             this.el = btn;
@@ -267,6 +255,7 @@
         getElement() {
             return this.el;
         }
+
     }
 
     // grid theme
@@ -401,15 +390,21 @@
         columns: [
             {
                 header: '불량코드',
-                name: 'infCd'
+                name: 'ccdDtl'
             },
             {
-                header: '불량유형',
-                name: 'infTyp'
+                header: '불량명',
+                name: 'ccdDtlNm'
             },
             {
                 header: '불량수량',
-                name: 'infCnt'
+                name: 'infCnt',
+                editor: {
+                    type: inputInferCnt,
+                    options: {
+                        maxLength: 10
+                    }
+                }
             },
             {
                 header: '비고',
@@ -440,7 +435,18 @@
 
     let inspModal = document.getElementById('inspModal');
     inspModal.addEventListener('shown.bs.modal', e => {
+        let rowKey = inspModal.dataset.rowKey;
+        let val = grid.getValue(rowKey,'insp');
+        console.log(val)
+        // inspGrid.resetData();
         inspGrid.refreshLayout();
+    })
+
+    inspModal.addEventListener('hidden.bs.modal', e => {
+        let rowKey = inspModal.dataset.rowKey;
+        let colVal = inspGrid.getColumnValues('infCnt');
+        grid.setValue(rowKey,'insp', colVal);
+        grid.clear();
     })
 
     // get vendor list in modal
@@ -484,19 +490,22 @@
                 body: JSON.stringify(obj)
             })
                 .then(res => res.json())
-                .then(res => {
-                    grid.resetData(res);
-                })
+                .then(res => grid.resetData(res))
         }
     })
 
     //
-    function getDefList() {
-        // let url = 'getDefList'
-        // fetch(url).then(res => res.json())
-        //     .then(res => inspGrid.resetData(res))
-
+    function getInfList() {
+        let url = 'getInfList'
+        fetch(url).then(res => res.json())
+            .then(res => inspGrid.resetData(res.INF));
     }
+
+    let calInfCnt = document.getElementById('calInfCnt');
+    calInfCnt.addEventListener('click', function () {
+
+        console.log(inspGrid.getColumnValues('infCnt'))
+    })
 </script>
 </html>
 
