@@ -7,10 +7,16 @@
 	FROM ORDER_SHEET
 </select>
 
-<select id="getIndex" resultType="int">
+<select id="getIndex" resultType="Integer">
 	SELECT MAX(SUBSTR(PLAN_CD, 12)) 
 	FROM PLAN
 	WHERE PLAN_DT = #{planDt}
+</select>
+
+<select id="getPrcsFlow" resultType="com.rezzo.mes.prod.plan.service.PlanVO" >
+	SELECT EDCTS_CD, PRCS_CD FROM PRCS_FLOW 
+	WHERE EDCTS_CD=#{edctsCd} 
+	ORDER BY EDCTS_CD, PRCS_ORD
 </select>
 
 </mapper>

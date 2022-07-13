@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.prod.prcs.service.PrcsService;
 import com.rezzo.mes.prod.prcs.service.PrcsVO;
@@ -22,6 +23,13 @@ import com.rezzo.mes.prod.prcs.service.PrcsVO;
 public class PrcsController {
 	
 	@Autowired PrcsService service;
+	@Autowired CcdsService ccdsService;
+	
+	@GetMapping("/prcs")
+	public String vend(Model model, CcdsVO vo) {
+		model.addAttribute("ccds", ccdsService.getCodes("100","101"));
+		return "prod/prcs";
+	}
 
 	/* 전체공정조회 */
 	@GetMapping("/prcsList")
@@ -52,11 +60,6 @@ public class PrcsController {
 	public int prcsDelete(@RequestBody List<PrcsVO> list) {
 		service.prcsDelete(list);
 		return list.size();
-	}
-	
-	@GetMapping("/prcs")
-	public String prcs() {
-		return "prod/prcs";
 	}
 	
 	@GetMapping("/indica")
