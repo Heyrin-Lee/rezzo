@@ -30,6 +30,8 @@ public class PlanVO {
 	String rscCd;
 	int rscCnt;
 	int useCnt;
+	int rcsUse;
+
 	
 
 }

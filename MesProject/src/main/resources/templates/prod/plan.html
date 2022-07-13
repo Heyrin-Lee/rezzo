@@ -182,6 +182,15 @@
             });
             
             $("#grid2").on("keyup", function(key){
+            	
+            	// 지시수량이 주문량보다 많을 수 없음 작업종료일자가 작업시작일자보다 빠를 수 없음
+            	let oCnt = grid.getCheckedRows()[0].orderCnt
+            	let iCnt = grid2.getCheckedRows()[0].indicaCnt
+            	let fDate = grid2.getCheckedRows()[0].wkFrDt
+            	console.log(fDate)
+            	let tDate = grid2.getCheckedRows()[0].wkToDt
+            	console.log(tDate)
+            	
             	if(key.keyCode == 13) {
 		           	let edctsCd = grid2.getCheckedRows()[0].edctsCd;
 		           	// grid2에는 공정코드가 없음 
@@ -196,9 +205,12 @@
 		            		$.each(result, function(index, item) {
 		            			item.lineCd = grid2.getCheckedRows()[0].lineCd;
 		            			item.planCd = grid2.getCheckedRows()[0].planCd;
-		            			console.log(item)
 		            		}) 
-		            		grid3.resetData(result)
+		            		if(oCnt>= iCnt) {
+		            			grid3.resetData(result)
+		            		} else {
+		            			alert ("생산 수량은 주문 수량을 초과할 수 없습니다.")
+		            		}
 		            		
 		           		}
 		           	})
@@ -325,24 +337,24 @@
                 scrollY: false,
                 columns: [{
                         header: '자재코드',
-                        name: 'name'
+                        name: 'rscCd'
                     },
                     {
                         header: '자재LOT',
-                        name: 'artist'
+                        name: 'rscLot'
                     },
                     {
                         header: '사용가능수량',
-                        name: 'type'
+                        name: 'rscCnt'
                     },
                     {
                         header: '출고수량',
-                        name: 'release',
-                        editor : text
+                        name: 'rcsUse',
+                        editor : 'text'
                     },
                     {
                         header: '사용량',
-                        name: 'release'
+                        name: 'useCnt'
                     }
                 ]
             });

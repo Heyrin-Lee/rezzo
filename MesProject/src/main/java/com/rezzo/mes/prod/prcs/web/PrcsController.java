@@ -62,18 +62,6 @@ public class PrcsController {
 		return list.size();
 	}
 	
-	/*
-	 * @GetMapping("/prcs") public String prcs() { return "prod/prcs"; }
-	 */
-
-	/*
-	 * @GetMapping("vend") public String vend(Model model) {
-	 * model.addAttribute("ccds", ccdsService.getCodes("100","101","102")); return
-	 * "comm/vend"; }
-	 */
-	
-	
-	
 	@GetMapping("/indica")
 	public String indica() {
 		return "prod/indica";
