@@ -4,19 +4,18 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rezzo.mes.comm.ccds.mapper.CcdsMapper;
+import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 
 @Controller
 public class CcdsController {
 
-	@Autowired CcdsMapper mapper;
+	@Autowired CcdsService service;
 	
 	@RequestMapping("ccds")
 	public String ccds() {
@@ -25,24 +24,37 @@ public class CcdsController {
 	
 	@RequestMapping("ccdsList")
 	@ResponseBody
-	public List<CcdsVO> ccdsList(CcdsVO vo) {
-		List<CcdsVO> ccdsList = mapper.ccdsList(vo);
+	public List<CcdsVO> ccdsList(CcdsVO ccdsVO) {
+		List<CcdsVO> ccdsList = service.ccdsList(ccdsVO);
 		return ccdsList;
 	}
 	
-	@PostMapping("ccdsDtlList")
+	@PostMapping("ccdInfo")
 	@ResponseBody
-	 public List<CcdsVO> ccdsDtlList(@RequestParam(value="keyword") String keyword) {
-		List<CcdsVO> ccdsDtlList = mapper.ccdsDtlList(keyword);
-		 return ccdsDtlList;
+	public CcdsVO ccdInfo(CcdsVO ccdsVO) {
+		CcdsVO ccdInfo = service.ccdInfo(ccdsVO);
+		 return ccdInfo;
 	 }
 	
 	@PostMapping("ccdsSelect")
 	@ResponseBody
-	 public List<CcdsVO> ccdsSelect(@RequestParam(value="keyword") String keyword) {
-		List<CcdsVO> ccdsSelect = mapper.ccdsSelect(keyword);
+	public List<CcdsVO> ccdsSelect(@RequestParam(value="keyword") String keyword) {
+		List<CcdsVO> ccdsSelect = service.ccdsSelect(keyword);
 		 return ccdsSelect;
 	 }
+	
+	@PostMapping("getCodeList")
+	@ResponseBody
+	public List<CcdsVO> getCodeList(CcdsVO ccdsVO) {
+		List<CcdsVO> getCodeList = service.getCodeList(ccdsVO);
+		return getCodeList;
+	}
+	
+	@PostMapping("ccdsInsert")
+	public String ccdsInsert(CcdsVO ccdsVO) {
+		service.ccdsInsert(ccdsVO);
+		return "comm/ccds";
+	}
 	
 	
 	//화면확인 test

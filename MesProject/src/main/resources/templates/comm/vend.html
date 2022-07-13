@@ -8,8 +8,13 @@
 </head>
 <body>
 <!-- 본문내용 -->
-<th:block layout:fragment="main"> 
-
+<th:block layout:fragment="main">
+<!-- 공통코드 조회 -->
+<select>
+	<option selected value="">코드선택</option>  
+	<option th:each="code : ${ccds['100']}" 
+	th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option>
+</select> 
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">거래처관리</h1>
 		<ol class="breadcrumb mb-4">
