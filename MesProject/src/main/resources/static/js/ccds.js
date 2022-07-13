@@ -78,6 +78,12 @@ const grid2 = new tui.Grid({
     }]
 });
 
+//데이터 편집 후 체크박스
+grid2.on('editingFinish', (ev) => {
+    var rowKey = ev.rowKey;
+    grid2.check(rowKey);
+});
+
 // 공통코드 클릭시 상세코드 리스트
 grid.on('click', ev => {
     var keyword = grid.getValue(ev.rowKey, 'ccdNm');
@@ -107,11 +113,10 @@ grid.on('click', ev => {
             "ccd": ccd
         },
         success: function (result) {
-            console.log(result);
-            //$('#ccd').val(result[0].ccd);
-            //$('#ccdNm').val(result[0].ccdNm);
-            //$('#ccdDesct').val(result[0].ccdDesct);
-            //$('#useYn').val(result[0].useYn);
+            $('#ccd').val(result.ccd).attr("readonly", true);
+            $('#ccdNm').val(result.ccdNm);
+            $('#ccdDesct').val(result.ccdDesct);
+            $('#useYn').val(result.useYn);
         }
     });
 
@@ -119,6 +124,10 @@ grid.on('click', ev => {
 
 //검색버튼
 $('#searchBtn').click(ev => {
+    search();
+})
+
+function search() {
     var keyword = $('#selCcd').val()
     $.ajax({
         url: "ccdsSelect",
@@ -130,22 +139,45 @@ $('#searchBtn').click(ev => {
             grid.resetData(result);
         }
     });
-})
+}
 
 //저장버튼
 $('#saveBtn').click(ev => {
-    if ($('#selCcd').val() == '') {
-        alert('공통코드를 먼저 선택해주세요!')
-    } else {
-
-        if ($('#nav-codes').hasClass("active")) {
-            //그리드 저장
-            grid2.appendRow();
-
-        } else if ($('#nav-cdInfo').hasClass("active")) {
-            //form 저장
-            $('#dataForm')[0].reset();
-        }
+    //상세코드탭
+    if ($('#nav-codes').hasClass("active")) {
+        var data = grid2.getCheckedRows();
+        var ccd = $('#ccd').val();
+        $.ajax({
+            url: "/saveCcdDtl/" + ccd,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (result) {
+                setTimeout(function () {
+                    grid2.refreshLayout()
+                    grid2.uncheckAll()
+                }, 300);
+                grid2.resetData(result);
+            }
+        })
+        //코드정보탭
+    } else if ($('#nav-cdInfo').hasClass("active")) {
+        //추가
+        $.ajax({
+            url: "ccdsInsert",
+            type: "POST",
+            data: $('#dataForm').serialize(),
+            dataType: 'json',
+            success: search()
+        })
+        //수정
+        $.ajax({
+            url: "ccdsUpdate",
+            type: "POST",
+            data: $('#dataForm').serialize(),
+            dataType: 'json',
+            success: search()
+        })
     }
 });
 
@@ -154,21 +186,23 @@ $('#newBtn').click(ev => {
     if ($('#selCcd').val() == '') {
         alert('공통코드를 먼저 선택해주세요!')
     } else {
-
+        //상세코드탭
         if ($('#nav-codes').hasClass("active")) {
             //그리드 추가
             grid2.appendRow();
 
+            //코드정보탭
         } else if ($('#nav-cdInfo').hasClass("active")) {
             //form 초기화
             $('#dataForm')[0].reset();
+            $('#ccd').attr("readonly", false);
         }
     }
 });
 
 //byte수 출력
 $(function () {
-    $('#codeIdDc').keyup(function () {
+    $('#ccdDesct').keyup(function () {
         bytesHandler(this);
     });
 });

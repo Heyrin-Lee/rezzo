@@ -67,17 +67,12 @@ public class CcdsController {
 	
 	@PostMapping("/saveCcdDtl/{ccd}")
 	@ResponseBody
-	public List<CcdsVO> saveCcdDtl(@PathVariable String ccd, @RequestBody List<CcdsVO> dtlList) {
+	public List<CcdsVO> saveCcdDtl(@PathVariable("ccd") String ccd, @RequestBody List<CcdsVO> dtlList, CcdsVO ccdsVO) {
 		service.saveCcdDtl(ccd, dtlList);
-		return service.ccdsList(null);
+		ccdsVO.setCcd(ccd);
+		return service.getCodeList(ccdsVO);
 	}
 	
-	@PostMapping("ccdDtlUpdate")
-	@ResponseBody
-	public List<CcdsVO> ccdDtlUpdate(@RequestBody List<CcdsVO> dtlList) {
-		service.ccdDtlUpdate(dtlList);
-		return service.ccdsList(null);
-	}
 	
 	//화면확인 test
 	@RequestMapping("bom")

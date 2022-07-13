@@ -49,20 +49,15 @@
 		WHERE CCD = #{ccd}
 	</update>
 	
-	<!-- 세부코드 등록 -->
-	<insert id="ccdDtlInsert" parameterType="CcdsVO">
-		INSERT INTO CCDS_DTL (CCD_DTL, CCD, CCD_DTL_NM, CCD_DTL_DESCT, DTL_USE_YN)
-		VALUES ( #{ccdDtl}, #{ccd}, #{ccdDtlNm}, #{ccdDtlDesct}, #{dtlUseYn})
-	</insert>
-	
-	<!-- 세부코드 수정 -->
-	<update id="ccdDtlUpdate" parameterType="CcdsVO">
-		UPDATE CCDS_DTL 
-		<set>
-			<if test="ccdDtlNm != null">CCD_DTL_NM = #{ccdDtlNm},</if>
-			<if test="ccdDtlDesct != null">CCD_DTL_DESCT = #{ccdDtlDesct},</if>
-			<if test="dtlUseYn != null">DTL_USE_YN = #{dtlUseYn},</if>
-		</set>
-		WHERE CCD_DTL = #{ccdDtl}
+	<!-- 세부코드 등록,수정 -->
+	<update id="saveCcdDtl" parameterType="CcdsVO">
+		MERGE INTO CCDS_DTL c
+  		USING DUAL ON (c.CCD_DTL = #{ccdDtl})
+  	WHEN MATCHED THEN
+  		UPDATE 
+  			SET c.CCD_DTL_NM = #{ccdDtlNm}, c.CCD_DTL_DESCT = #{ccdDtlDesct}, c.DTL_USE_YN = #{dtlUseYn} 
+  	WHEN NOT MATCHED THEN
+  		INSERT (c.CCD_DTL, c.CCD, c.CCD_DTL_NM, c.CCD_DTL_DESCT, c.DTL_USE_YN)
+  		VALUES ( #{ccdDtl}, #{ccd}, #{ccdDtlNm}, #{ccdDtlDesct}, #{dtlUseYn})
 	</update>
 </mapper>

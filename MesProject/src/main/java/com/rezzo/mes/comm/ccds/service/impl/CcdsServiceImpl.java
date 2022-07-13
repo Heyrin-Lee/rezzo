@@ -66,24 +66,10 @@ public class CcdsServiceImpl implements CcdsService {
 	// 세부코드 추가
 	@Override
 	public void saveCcdDtl(String ccd, List<CcdsVO> dtlList) {
-		if (ccd != "") {
-			for (CcdsVO ccdDtl : dtlList) {
-				ccdDtl.setCcd(ccd);
-				mapper.ccdDtlInsert(ccdDtl);
-			}
-		} else {
-			for (CcdsVO ccdDtl : dtlList) {
-				mapper.ccdDtlUpdate(ccdDtl);
-			}
-		}
-
-	}
-
-	// 세부코드 수정
-	@Override
-	public void ccdDtlUpdate(List<CcdsVO> dtlList) {
 		for (CcdsVO ccdDtl : dtlList) {
-			mapper.ccdDtlUpdate(ccdDtl);
+			ccdDtl.setCcd(ccd);
+			mapper.saveCcdDtl(ccdDtl);
 		}
 	}
+
 }
