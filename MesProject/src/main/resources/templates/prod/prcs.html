@@ -64,9 +64,8 @@ body {
                            <label for="name">공정구분</label> 
                				<select id="prcs">
                					<option selected value="">--선택--</option>
-               					<!--<option th:each="code : ${codes.SBJT}"
-               							th:value="${code.cd}" th:text="${code.nm}"
-               							th:selected="${code.cd}==${quizVO.subtCd}"></option>-->
+               					<option th:each="code : ${ccds['100']}"
+               							th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option>
                				</select>
                         </div>
      					<div class="linelist">

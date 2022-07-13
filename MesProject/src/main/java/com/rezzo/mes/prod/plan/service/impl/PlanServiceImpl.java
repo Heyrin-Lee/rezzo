@@ -1,6 +1,7 @@
 package com.rezzo.mes.prod.plan.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,11 @@ public class PlanServiceImpl implements PlanService {
 	@Override
 	public Integer getIndex(PlanVO vo) {
 		return mapper.getIndex(vo);
+	}
+
+	@Override
+	public List<Map> getPrcsFlow(PlanVO vo) {
+		return mapper.getPrcsFlow(vo);
 	}
 
 }

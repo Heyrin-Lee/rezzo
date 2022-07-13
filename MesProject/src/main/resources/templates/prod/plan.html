@@ -116,19 +116,18 @@
         </div>
      
         <script>
+        //주문서 조회 버튼을 클릭했을 때
        	$("#modalBtn").on("click", function(e) {
        		//계획일자 인풋박스에 출력된 값의 타입= String 
    			let planDt = $("#tui-date-picker-target").val();
-   			console.log(planDt)
    			//순번 받아오기 (계획일자 planDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
         	$.ajax({
         		url: 'getIndex',
         		method: 'GET',
-        		dataType: 'text',
-        		contentType:'application/json',
-        		data : planDt,
+        		dataType: 'json',
+        		contentType:'application/text',
+        		data : {"planDt": planDt},
         		success: function (result) {
-        			console.log(result)
         			let index = result+1;
         			function makeCd() {
 	       				return "PLN"+planDt+index
@@ -149,16 +148,13 @@
 		            });
         		}
         	})
-
-   		
        	})
-        	
-            	
 			// 주문서 내용과 계획코드 메인 grid에 띄우기        
        		const gridData = [];
        		 $("#confirmBtn").on("click", function(e){
             	let result = modGrid.getCheckedRows();
             	grid.resetData(result);
+            	grid2.resetData(result);
             })
             
             const grid = new tui.Grid({
@@ -184,7 +180,32 @@
                     }
                 ]
             });
-
+            
+            $("#grid2").on("keyup", function(key){
+            	if(key.keyCode == 13) {
+		           	let edctsCd = grid2.getCheckedRows()[0].edctsCd;
+		           	// grid2에는 공정코드가 없음 
+		           	// 제품 코드(String)를 보내고 그 제품코드에 해당하는 공정코드 리스트를 리턴받음
+		           	$.ajax({
+		           		url : 'getPrcsFlow/' + edctsCd,
+		           		data : JSON.stringify({edctsCd : edctsCd}),
+		           		method : 'POST',
+		           		contentType: 'application/json',
+		           		success : function(result) { //성공하면 result에 조건에 맞는 공정코드들이 담김 -> 배열 
+		           									 //result에 담긴 값들을 grid3 prcsCd 칼럼에 넣기
+		            		$.each(result, function(index, item) {
+		            			item.lineCd = grid2.getCheckedRows()[0].lineCd;
+		            			item.planCd = grid2.getCheckedRows()[0].planCd;
+		            			console.log(item)
+		            		}) 
+		            		grid3.resetData(result)
+		            		
+		           		}
+		           	})
+		        }
+            	
+            })
+            
             const gridData2 = [];
 
             const grid2 = new tui.Grid({
@@ -194,7 +215,7 @@
                 scrollY: false,
                 columns: [{
                         header: '제품코드',
-                        name: 'c1',
+                        name: 'edctsCd',
                         editor: {
                             type: 'select',
                             options: {
@@ -217,11 +238,11 @@
                     },
                     {
                         header: '제품명',
-                        name: 'c2'
+                        name: 'prdtNm'
                     },
                     {
                         header: '라인번호',
-                        name: 'c3',
+                        name: 'lineCd',
                         editor: {
                             type: 'select',
                             options: {
@@ -243,29 +264,32 @@
                     },
                     {
                         header: '시작일자',
-                        name: 'c4',
+                        name: 'wkFrDt',
                         editor: 'datePicker'
                     },
                     {
                         header: '종료일자',
-                        name: 'c5',
+                        name: 'wkToDt',
                         editor: 'datePicker'
                     },
                     {
                         header: '생산수량',
-                        name: 'c6'
+                        name: 'indicaCnt',
+                        editor: 'text'
                     },
                     {
                         header: '작업우선순위',
-                        name: 'c7'
+                        name: 'prefRank',
+                        editor: 'text'
                     },
                     {
                         header: '계획코드',
-                        name: 'c8'
+                        name: 'planCd'
                     }
                 ]
             });
-
+			
+		
             const gridData3 = [];
 
             const grid3 = new tui.Grid({
@@ -275,35 +299,25 @@
                 scrollY: false,
                 columns: [{
                         header: '제품코드',
-                        name: 'name'
+                        name: 'edctsCd'
                     },
                     {
                         header: '라인번호',
-                        name: 'artist'
+                        name: 'lineCd'
                     },
                     {
                         header: '공정코드',
-                        name: 'type'
+                        name: 'prcsCd'
                     },
                     {
                         header: '계획코드',
-                        name: 'release',
-                        editor: 'text'
+                        name: 'planCd'
                     }
                 ]
             });
 
             const gridData4 = [];
-            (function () {
-                for (let i = 0; i < 0; i += 1) {
-                    gridData4.push({
-                        c1: 'User' + (i + 1),
-                        c2: ((i + 5) % 8) * 100 + i,
-                        c3: ((i + 3) % 7) * 60,
-                        c4: ((i + 3) % 7) * 60
-                    });
-                }
-            })();
+          
             const grid4 = new tui.Grid({
                 el: document.getElementById('grid4'),
                 data: gridData4,
@@ -324,7 +338,7 @@
                     {
                         header: '출고수량',
                         name: 'release',
-
+                        editor : text
                     },
                     {
                         header: '사용량',
@@ -363,7 +377,7 @@
                     },
                     {
                         header: '계획코드',
-                        name: 'release'
+                        name: 'planCd'
                     }
                 ]
             });
