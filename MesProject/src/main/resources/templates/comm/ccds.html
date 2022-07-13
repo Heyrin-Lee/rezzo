@@ -231,7 +231,11 @@
 
 		//검색버튼
 		$('#searchBtn').click(ev => {
-		    var keyword = $('#selCcd').val()
+		    search();
+		})
+	
+		function search() {
+			var keyword = $('#selCcd').val()
 		    $.ajax({
 		        url: "ccdsSelect",
 		        method: "POST",
@@ -242,27 +246,57 @@
 		            grid.resetData(result);
 		        }
 		    });
-		})
-
+		}
+		
 		//저장버튼
 		$('#saveBtn').click(ev => {
 				//상세코드탭
 		     if ($('#nav-codes').hasClass("active")) {
-		     //다건추가
-		        	
-				 //다건수정
+		     	var saveRows = grid2.getModifiedRows();
+		     	var ccd = '';
+		     	var data = '';
+		     	
+		     		//다건추가
+		     		if(saveRows.createdRows.length != 0) {
+		    			ccd = $('#ccd').val();
+		    			data = saveRows.createdRows
+				 		//다건수정
+		     		} else if (saveRows.updatedRows.length != 0) {
+		     			data = 
+		     		}	
+		     		
+		     		$.ajax({ 
+			    			url: "/ccdDtlInsert/" + ccd,  
+			    			type: "POST",  
+								data: JSON.stringify(data),
+								contentType:'application/json',
+								success: function (result) {
+		            	setTimeout(function () {
+		                grid2.refreshLayout()
+		                grid2.uncheckAll()
+		            	}, 300);
+		            		grid.resetData(result);
+		        		}
+		     			})
 					
-		     } else if ($('#nav-cdInfo').hasClass("active")) {
 		     //코드정보탭
+		     } else if ($('#nav-cdInfo').hasClass("active")) {
+		     	//추가
 		      $.ajax({ 
 			    	url: "ccdsInsert",  
 			    	type: "POST",  
 						data: $('#dataForm').serialize(),
-						dataType: 'json'
-		     })
-		        	
+						dataType: 'json',
+						success: search()
+		     })	        	
 		      //수정
-		           
+		       $.ajax({ 
+			    	url: "ccdsUpdate",  
+			    	type: "POST",  
+						data: $('#dataForm').serialize(),
+						dataType: 'json',
+						success: search()
+		     })   
 		      }
 		    });
 
@@ -287,7 +321,7 @@
 
 		//byte수 출력
 		$(function () {
-		    $('#codeIdDc').keyup(function () {
+		    $('#ccdDesct').keyup(function () {
 		        bytesHandler(this);
 		    });
 		});

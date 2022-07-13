@@ -15,7 +15,7 @@ public class VendController {
 	
 	@GetMapping("vend")
 	public String vend(Model model) {
-		model.addAttribute("ccds", ccdsService.getCodes("100","101"));
+		model.addAttribute("ccds", ccdsService.getCodes("EQM"));
 		return "comm/vend";
 	}
 }

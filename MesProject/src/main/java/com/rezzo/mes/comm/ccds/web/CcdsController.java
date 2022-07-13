@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,6 +46,18 @@ public class CcdsController {
 		 return ccdsSelect;
 	 }
 	
+	@PostMapping("ccdsInsert")
+	public String ccdsInsert(CcdsVO ccdsVO) {
+		service.ccdsInsert(ccdsVO);
+		return "comm/ccds";
+	}
+	
+	@PostMapping("ccdsUpdate")
+	public String ccdsUpdate(CcdsVO ccdsVO) {
+		service.ccdsUpdate(ccdsVO);
+		return "comm/ccds";
+	}
+	
 	@PostMapping("getCodeList")
 	@ResponseBody
 	public List<CcdsVO> getCodeList(CcdsVO ccdsVO) {
@@ -50,12 +65,19 @@ public class CcdsController {
 		return getCodeList;
 	}
 	
-	@PostMapping("ccdsInsert")
-	public String ccdsInsert(CcdsVO ccdsVO) {
-		service.ccdsInsert(ccdsVO);
-		return "comm/ccds";
+	@PostMapping("/saveCcdDtl/{ccd}")
+	@ResponseBody
+	public List<CcdsVO> saveCcdDtl(@PathVariable String ccd, @RequestBody List<CcdsVO> dtlList) {
+		service.saveCcdDtl(ccd, dtlList);
+		return service.ccdsList(null);
 	}
 	
+	@PostMapping("ccdDtlUpdate")
+	@ResponseBody
+	public List<CcdsVO> ccdDtlUpdate(@RequestBody List<CcdsVO> dtlList) {
+		service.ccdDtlUpdate(dtlList);
+		return service.ccdsList(null);
+	}
 	
 	//화면확인 test
 	@RequestMapping("bom")
