@@ -1,12 +1,12 @@
 package com.rezzo.mes.resour.insp.vo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class RscInspVO {
 
     int inspCnt; //검사수량
@@ -18,5 +18,7 @@ public class RscInspVO {
 
     String rscCd; //자재코드
     String rscNm; // 자재품명
+
+    List<RscInfVO> rscInf;
 
 }
