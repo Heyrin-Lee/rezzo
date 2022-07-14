@@ -38,7 +38,7 @@
 <h3>자재수입검사</h3>
 <hr>
 
-<input type="button" value="저장">
+<input type="button" value="저장" id="saveBtn">
 <input type="button" value="다시작성">
 <input type="button" value="삭제">
 <hr>
@@ -144,7 +144,6 @@
     });
 
     // grid section
-
     // custom input renderer
     class inputOrdrInstCnt {
         constructor(props) {
@@ -163,12 +162,13 @@
         }
 
         getValue() {
+            inferCnt.delete(String(this.rowKey))
             let val = this.el.value.replace(/[^0-9]/g, '')
             grid.setValue(this.rowKey, 'inspCnt', val);
             grid.setValue(this.rowKey, 'inspPassCnt', val);
+            grid.setValue(this.rowKey, 'inspFailCnt', '');
             return val;
         }
-
 
         mounted() {
             this.el.select();
@@ -199,7 +199,9 @@
                 grid.setValue(this.rowKey, 'inspFailCnt', '');
                 return '';
             } else {
+                inferCnt.delete(String(this.rowKey))
                 grid.setValue(this.rowKey, 'inspPassCnt', val);
+                grid.setValue(this.rowKey, 'inspFailCnt', '');
                 if (val == '') {
                     return val;
                 } else {
@@ -240,9 +242,27 @@
         }
     }
 
-    //
-    let iModal;
+    class inspCheck {
+        constructor(props) {
+            const el = document.createElement('input');
+            el.type = 'checkbox'
+            this.el = el;
+        }
 
+        getElement() {
+            return this.el;
+        }
+
+        getValue() {
+            return this.el.value;
+        }
+
+        mounted() {
+            this.el.select();
+        }
+    }
+
+    let iModal;
     class CustomBtnRenderer {
         constructor(props) {
             let {rowKey, value} = props;
@@ -360,7 +380,9 @@
             {
                 header: '검사완료',
                 name: 'inspDone',
-                width: 60
+                width: 60,
+                renderer: {type: inspCheck},
+                align: 'center'
             }
         ]
     });
@@ -511,7 +533,6 @@
         }
     })
 
-    //
     function getInfList() {
         let url = 'getInfList'
         fetch(url).then(res => res.json())
@@ -525,14 +546,39 @@
         let infSum = colVal.reduce((a, b) => (a + b));
         let inspCnt = grid.getValue(rowKey, 'inspCnt')
 
-        if (infSum > parseInt(inspCnt)) {
+        if (infSum > parseInt(inspCnt) || inspCnt === null || inspCnt === '') {
             alert("불량수량이 검사량 보다 많습니다.")
         } else {
             grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
             grid.setValue(rowKey, 'inspFailCnt', infSum)
         }
-
+        iModal.hide(inspModal);
     })
+
+    function setRscInspList(data) {
+        let url = 'setRscInspList';
+        fetch(url, {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+    }
+
+    let saveBtn = document.getElementById('saveBtn')
+    saveBtn.addEventListener('click', function () {
+        let gridVal = grid.getCheckedRows();
+        gridVal.forEach(element => {
+            let rowKey = String(element.rowKey);
+            let infCnt = inferCnt.get(rowKey);
+            for (let i = 0; i < infCnt.length; i++) {
+                inspGrid.setValue(i, 'infCnt', infCnt[i]);
+            }
+            element.newvo = inspGrid.getData();
+        })
+        console.log(gridVal)
+        setRscInspList(gridVal)
+    })
+
 </script>
 </html>
 

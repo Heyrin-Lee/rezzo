@@ -4,6 +4,8 @@ import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.resour.insp.service.InspService;
 import com.rezzo.mes.resour.insp.vo.OrdrVO;
+import com.rezzo.mes.resour.insp.vo.RscInfVO;
+import com.rezzo.mes.resour.insp.vo.RscInspVO;
 import com.rezzo.mes.resour.insp.vo.VendVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,6 @@ import java.util.Map;
 public class InspController {
 
     private final InspService sv;
-
     private final CcdsService cdsv;
 
     @RequestMapping("getInfList")
@@ -31,7 +32,7 @@ public class InspController {
 
     @RequestMapping("rscInsp")
     public String rscInsp() {
-        return "resour/insp/rscInsp";
+        return "resour/rscInsp";
     }
 
     @RequestMapping("getVendList")
@@ -52,4 +53,9 @@ public class InspController {
         return sv.getOrdrList(ordrVO);
     }
 
+    @RequestMapping("setRscInspList")
+    public void setRscInspList(@RequestBody List<RscInspVO> vo, @RequestBody List<RscInfVO> vos) {
+        System.out.println("vo = " + vo);
+        System.out.println("vos = " + vos);
+    }
 }
