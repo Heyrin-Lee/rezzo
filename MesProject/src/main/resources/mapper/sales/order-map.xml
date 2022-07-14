@@ -32,7 +32,7 @@
 		WHERE 
 		<if test="progAppe != null">PROG_APPE = #{progAppe} and</if>
 		<if test="vendNm != null">VEND_NM = #{vendNm} and</if>
-		<if test="prdtNm != null">PRDT_NM = #{prdtNm} and</if>
+		<if test="prdtNm != null">PRDT_NM = #{prdtNm} and</if> 
 		<if test="start != null">ORDER_DT BETWEEN #{start} AND #{end} </if>
 		ORDER BY ORDER_DT		
 	</select>

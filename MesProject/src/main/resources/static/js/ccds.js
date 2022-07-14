@@ -28,6 +28,36 @@ $.ajax({
     }
 });
 
+//상세코드 사용자 커스텀에디터
+class CustomTextEditor {
+    constructor(props) {
+        console.log(props);
+        const el = document.createElement('input');
+        const {
+            maxLength
+        } = props.columnInfo.editor.options;
+
+        el.type = 'text';
+        el.maxLength = maxLength;
+        el.value = String(props.value);
+
+        this.el = el;
+    }
+
+    getElement() {
+        return this.el;
+    }
+
+    getValue() {
+        return this.el.value;
+    }
+
+    mounted() {
+        this.el.select();
+    }
+}
+
+
 //상세코드 그리드
 const grid2 = new tui.Grid({
     el: document.getElementById('grid2'),
@@ -38,7 +68,9 @@ const grid2 = new tui.Grid({
         header: '코드',
         name: 'ccdDtl',
         align: 'center',
-        editor: 'text',
+        editor: {
+            type: CustomTextEditor
+        },
         sortable: true,
         sortingType: 'desc'
     }, {
