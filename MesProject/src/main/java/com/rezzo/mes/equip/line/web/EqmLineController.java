@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rezzo.mes.equip.line.mapper.EqmLineMapper;
+import com.rezzo.mes.equip.line.service.EqmLineService;
 import com.rezzo.mes.equip.line.service.EqmLineVO;
 
 @Controller
 public class EqmLineController {
 	
 	@Autowired 
-	EqmLineMapper map;
+	EqmLineService service;
 	
 	@RequestMapping("eqmLine")
 	public String line() {
@@ -27,7 +27,7 @@ public class EqmLineController {
 	@GetMapping("eqmLineList")
 	@ResponseBody
 	public List<EqmLineVO> eqmLineList(EqmLineVO vo){
-		List<EqmLineVO> eqmLineList = map.eqmLineList(vo);
+		List<EqmLineVO> eqmLineList = service.eqmLineList(vo);
 		return eqmLineList;
 	}
 	
@@ -35,21 +35,21 @@ public class EqmLineController {
 	@ResponseBody
 	public EqmLineVO eqmLineDelete (@PathVariable String lindCd, EqmLineVO vo) {
 		vo.setLineCd(lindCd);
-		map.eqmLineDelete(vo);
+		service.eqmLineDelete(vo);
 		return vo;
 	}
 	
 	@PostMapping("eqmLineInsert")
 	@ResponseBody
 	public EqmLineVO eqmLineInsert(EqmLineVO vo) {
-		map.eqmLineInsert(vo);
+		service.eqmLineInsert(vo);
 		return vo;
 	}
 	
 	@PostMapping("eqmLineUpdate")
 	@ResponseBody
 	public EqmLineVO eqmLineUpdate(EqmLineVO vo) {
-		map.eqmLineUpdate(vo);
+		service.eqmLineUpdate(vo);
 		return vo;
 	}
 	

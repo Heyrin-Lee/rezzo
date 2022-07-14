@@ -14,13 +14,18 @@
 	</select>
 
 	<insert id="eqmInsert" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
-
+   DECLARE
+    BEGIN
 		insert into eqm (eqm_cd, line_cd, prcs_cd, eqm_nm, eqm_ist_dt, min_temp,
 		max_temp, chck_perd, use_yn, prcs_nm, eqm_fg)
 		values (<![CDATA[cre_code(#{eqmFg})]]>,
 		#{lineCd}, #{prcsCd}, #{eqmNm}, #{eqmIstDt}, #{minTemp}, 
-		#{maxTemp}, #{chckPerd}, #{useYn}, #{prcsNm},#{eqmFg})
-		
+		#{maxTemp}, #{chckPerd}, #{useYn}, #{prcsNm},#{eqmFg});
+	
+		insert into eqm_img (eqm_cd, prcs_cd, img_path, eqm_img)
+		values(#{eqmCd}, #{prcsCd}, #{imgPath}, #{eqmImg});
+	
+	END;
 	</insert>
 
 	<delete id="eqmDelete" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
