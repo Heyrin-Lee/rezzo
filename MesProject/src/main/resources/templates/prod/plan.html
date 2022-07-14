@@ -75,8 +75,8 @@
             <div class="linelist">
                 <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
                     value="주문서조회"></input>
-                <button class="c_btn" id="regiBtn" form="">계획등록</button>
-                <button class="c_btn" form="">저장</button>
+                <button class="c_btn" id="regiBtn">계획등록</button>
+                <button class="c_btn" id="osBtn">저장</button>
             </div>
 
             <div id="grid"></div>
@@ -119,18 +119,19 @@
         //주문서 조회 버튼을 클릭했을 때
        	$("#modalBtn").on("click", function(e) {
        		//계획일자 인풋박스에 출력된 값의 타입= String 
-   			let planDt = $("#tui-date-picker-target").val();
+   			let indicaDt = $("#tui-date-picker-target").val();
+   			console.log(indicaDt)
    			//순번 받아오기 (계획일자 planDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
         	$.ajax({
         		url: 'getIndex',
         		method: 'GET',
         		dataType: 'json',
         		contentType:'application/text',
-        		data : {"planDt": planDt},
+        		data : {"indicaDt": indicaDt},
         		success: function (result) {
         			let index = result+1;
         			function makeCd() {
-	       				return "PLN"+planDt+index
+	       				return "PLN" + indicaDt + index
        				}
         			let code = makeCd()
         			// 주문서 테이블에 있는 정보들 모달창에 띄우기
@@ -139,6 +140,7 @@
 		                method: "GET",
 		                dataType: "JSON",
 		                success: function (result) {
+		                	console.log(result)
 		                    modGrid.resetData(result); 
 		                    modGrid.on('click', e => {
 								let result = modGrid.getCheckedRows(e);
@@ -182,36 +184,44 @@
             });
             
             $("#grid2").on("keyup", function(key){
-            	
             	// 지시수량이 주문량보다 많을 수 없음 작업종료일자가 작업시작일자보다 빠를 수 없음
             	let oCnt = grid.getCheckedRows()[0].orderCnt
             	let iCnt = grid2.getCheckedRows()[0].indicaCnt
-            	let fDate = grid2.getCheckedRows()[0].wkFrDt
-            	console.log(fDate)
-            	let tDate = grid2.getCheckedRows()[0].wkToDt
-            	console.log(tDate)
             	
             	if(key.keyCode == 13) {
 		           	let edctsCd = grid2.getCheckedRows()[0].edctsCd;
 		           	// grid2에는 공정코드가 없음 
 		           	// 제품 코드(String)를 보내고 그 제품코드에 해당하는 공정코드 리스트를 리턴받음
 		           	$.ajax({
-		           		url : 'getPrcsFlow/' + edctsCd,
-		           		data : JSON.stringify({edctsCd : edctsCd}),
+		           		url : 'getPrcsFlow',
+		           		data : {"edctsCd" : edctsCd},
 		           		method : 'POST',
-		           		contentType: 'application/json',
 		           		success : function(result) { //성공하면 result에 조건에 맞는 공정코드들이 담김 -> 배열 
 		           									 //result에 담긴 값들을 grid3 prcsCd 칼럼에 넣기
 		            		$.each(result, function(index, item) {
 		            			item.lineCd = grid2.getCheckedRows()[0].lineCd;
 		            			item.planCd = grid2.getCheckedRows()[0].planCd;
 		            		}) 
-		            		if(oCnt>= iCnt) {
+		            		if(oCnt >= iCnt) {
 		            			grid3.resetData(result)
+		            			
+		            			$.ajax({
+		            				url : 'getRscInfo',
+		            				data : {"edctsCd" : edctsCd},
+		            				method : 'POST',
+		            				success : function(res) {
+		            					$.each(res, function(index, item) {
+		            						item.planCd = grid.getCheckedRows()[0].planCd;
+		            					})
+		            					
+		            					grid4.resetData(res)
+		            				}
+		            			
+		            			})
+		            			
 		            		} else {
 		            			alert ("생산 수량은 주문 수량을 초과할 수 없습니다.")
 		            		}
-		            		
 		           		}
 		           	})
 		        }
@@ -329,19 +339,24 @@
             });
 
             const gridData4 = [];
+            
+            $("#grid3").on("dblclick", function(){
+            	
+            })
           
             const grid4 = new tui.Grid({
                 el: document.getElementById('grid4'),
                 data: gridData4,
                 scrollX: false,
-                scrollY: false,
+                scrollY: true,
+           		rowHeaders: ['checkbox'],
                 columns: [{
                         header: '자재코드',
                         name: 'rscCd'
                     },
                     {
                         header: '자재LOT',
-                        name: 'rscLot'
+                        name: 'rscLotNo'
                     },
                     {
                         header: '사용가능수량',
@@ -360,32 +375,32 @@
             });
 
             const gridData5 = [];
-            (function () {
-                for (let i = 0; i < 0; i += 1) {
-                    gridData5.push({
-                        c1: 'User' + (i + 1),
-                        c2: ((i + 5) % 8) * 100 + i,
-                        c3: ((i + 3) % 7) * 60,
-                        c4: ((i + 3) % 7) * 60
-                    });
-                }
-            })();
+           	
+           	$("#grid4").on("keyup", function(key) {
+           		if(key.keyCode == 13) {
+	           		let data = grid4.getCheckedRows()
+	           
+	           		grid5.resetData(data)
+           		}
+           	})
+           	
+           	
             const grid5 = new tui.Grid({
                 el: document.getElementById('grid5'),
                 data: gridData5,
                 scrollX: false,
-                scrollY: false,
+                scrollY: true,
                 columns: [{
                         header: '자재코드',
-                        name: 'name'
+                        name: 'rscCd'
                     },
                     {
                         header: '공정코드',
-                        name: 'artist'
+                        name: 'prcsCd'
                     },
                     {
                         header: '출고수량',
-                        name: 'type'
+                        name: 'rcsUse'
                     },
                     {
                         header: '계획코드',
@@ -431,6 +446,20 @@
                     modGrid.refreshLayout()
                 }, 300);
             });
+            
+             $("#osBtn").on("click", function(){
+             	let gridData = grid.getData()
+             	let grid2Data = grid2.getData()
+             	let grid4Data = grid4.getData()
+            	$.ajax({
+            		url : 'planInsert',
+            		method: 'POST',
+            		contentType:'application/json',
+            		data : gridData, grid2Data, grid4Data
+            	})
+            })
+            
+          
         </script>
     </th:block>
 </body>

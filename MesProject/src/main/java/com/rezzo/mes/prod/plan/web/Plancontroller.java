@@ -15,31 +15,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.prod.plan.service.PlanService;
 import com.rezzo.mes.prod.plan.service.PlanVO;
 
 @Controller
 public class Plancontroller {
-	@Autowired PlanService service;
-	
+	@Autowired
+	PlanService service;
+
 	@RequestMapping("orderListModal")
 	@ResponseBody
 	public List<PlanVO> orderListModal(PlanVO vo) {
 		return service.orderListModal(vo);
 	}
-	
+
 	@GetMapping("getIndex")
 	@ResponseBody
 	public Integer getIndex(PlanVO vo) {
+		System.out.println(vo.getIndicaDt());
 		return service.getIndex(vo);
 	}
-	
-	@RequestMapping("getPrcsFlow/{edctsCd}")
+
+	@PostMapping("getPrcsFlow")
 	@ResponseBody
-	public List<Map> getPrcsFlow(@PathVariable String edctsCd, @RequestBody PlanVO vo) {
-		System.out.println(edctsCd);
-		vo.setEdctsCd(edctsCd);
+	public List<PlanVO> getPrcsFlow(PlanVO vo) {
+		System.out.println(vo.getEdctsCd());
 		return service.getPrcsFlow(vo);
 	}
-}
 
+	@RequestMapping("getRscInfo")
+	@ResponseBody
+	public List<PlanVO> getRscInfo(PlanVO vo) {
+		System.out.println(vo.getEdctsCd());
+		return service.getRscInfo(vo);
+	}
+
+	
+	@RequestMapping("planInsert") 
+	public void planInsert(PlanVO vo, List<PlanVO> list) {
+		service.grid1Insert(vo);
+		service.grid2Insert(vo);
+		service.grid4Insert(list);
+	}
+	 
+
+}
