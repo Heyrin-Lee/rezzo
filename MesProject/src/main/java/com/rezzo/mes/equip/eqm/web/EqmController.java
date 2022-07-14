@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rezzo.mes.comm.ccds.service.CcdsService;
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.equip.eqm.service.EqmService;
 import com.rezzo.mes.equip.eqm.service.EqmVO;
 import com.rezzo.mes.equip.line.service.EqmLineService;
@@ -29,14 +31,18 @@ public class EqmController {
 	EqmLineService lineService;
 	@Autowired
 	PrcsService prcsService;
-
+	@Autowired 
+	CcdsService ccdsService;
+	
 	@RequestMapping("eqm")
-	public String eqmLineList (Model model, EqmLineVO vo, PrcsVO prcsVo){
+	public String eqmLineList (Model model, EqmLineVO vo, PrcsVO prcsVo, CcdsVO ccdsVO){
 		List<EqmLineVO> eqmLineList = lineService.eqmLineList(vo);
 		model.addAttribute("opList", eqmLineList);
 		
 		List<PrcsVO> prcsList=prcsService.prcsList(prcsVo);
 		model.addAttribute("prcsList", prcsList);
+		
+		model.addAttribute("ccds", ccdsService.getCodes("EQM"));
 		
 		return "equip/eqm";
 	}
@@ -66,19 +72,11 @@ public class EqmController {
 
 	@PostMapping("eqmInsert")
 	@ResponseBody
-	public EqmVO eqmLineInsert(EqmVO vo) {
+	public List<EqmVO> eqmLineInsert(EqmVO vo) {
 		eqmService.eqmInsert(vo);
-		return vo;
+		return eqmService.eqmList(vo);
 	}
 	
 
-	/*
-	 * @RequestMapping("line") public String line() { return "eqm/line"; }
-	 * 
-	 * @RequestMapping("eqmopr") public String eqmopr() { return "eqm/eqmopr"; }
-	 * 
-	 * @RequestMapping("/eqmchek") public String eqmchek() { return "eqm/eqmchek"; }
-	 * 
-	 * @RequestMapping("/rltmeqm") public String rltmeqm() { return "eqm/rltmeqm"; }
-	 */
+	
 }

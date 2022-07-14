@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rezzo.mes.equip.eqm.mapper.EqmMapper">
 
+    
 	<select id="eqmList"
 		resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
 		select * from eqm
@@ -9,18 +10,22 @@
 	
 	<select id="eqmSelect" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
 		select * from eqm
-		where eqm_nm Like '%'||#{keyword}||'%'
+		where eqm_Cd Like '%'||#{keyword}||'%'
 	</select>
 
 	<insert id="eqmInsert" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
-	
-		insert into eqm
-		values(
-		(select eqm_cd('EQM', LPAD(NVL(SUBSTR(MAX(eqm_cd),4),0)+1,2,0)) FROM eqm), 
-		#{lineCd},#{prcsCd}, #{eqmNm}, #{eqmIstDt}, #{minTemp},
-		#{maxTemp}, #{chckPred}, #{useYn},#{prcsNm}, #{eqmFg})
+
+		insert into eqm (eqm_cd, line_cd, prcs_cd, eqm_nm, eqm_ist_dt, min_temp,
+		max_temp, chck_perd, use_yn, prcs_nm, eqm_fg)
+		values (<![CDATA[cre_code(#{eqmFg})]]>,
+		#{lineCd}, #{prcsCd}, #{eqmNm}, #{eqmIstDt}, #{minTemp}, 
+		#{maxTemp}, #{chckPerd}, #{useYn}, #{prcsNm},#{eqmFg})
 		
 	</insert>
 
+	<delete id="eqmDelete" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
+		delete from eqm
+		where eqm_cd = #{eqmCd}
+	</delete>
 
 </mapper>
