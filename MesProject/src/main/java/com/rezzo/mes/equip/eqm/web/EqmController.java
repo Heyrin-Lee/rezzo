@@ -1,17 +1,23 @@
 package com.rezzo.mes.equip.eqm.web;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
@@ -24,30 +30,32 @@ import com.rezzo.mes.prod.prcs.service.PrcsVO;
 
 @Controller
 public class EqmController {
-
+	@Autowired
+	String saveDir;
 	@Autowired
 	EqmService eqmService;
 	@Autowired
 	EqmLineService lineService;
 	@Autowired
 	PrcsService prcsService;
-	@Autowired 
+	@Autowired
 	CcdsService ccdsService;
-	
+	@Value("$com.rezzo.upload.path}")
+	private String uploadPath;
+
 	@RequestMapping("eqm")
-	public String eqmLineList (Model model, EqmLineVO vo, PrcsVO prcsVo, CcdsVO ccdsVO){
+	public String eqmLineList(Model model, EqmLineVO vo, PrcsVO prcsVo, CcdsVO ccdsVO) {
 		List<EqmLineVO> eqmLineList = lineService.eqmLineList(vo);
 		model.addAttribute("opList", eqmLineList);
-		
-		List<PrcsVO> prcsList=prcsService.prcsList(prcsVo);
+
+		List<PrcsVO> prcsList = prcsService.prcsList(prcsVo);
 		model.addAttribute("prcsList", prcsList);
-		
+
 		model.addAttribute("ccds", ccdsService.getCodes("EQM"));
-		
+
 		return "equip/eqm";
 	}
-	
-	
+
 	@GetMapping("eqmList")
 	@ResponseBody
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -61,22 +69,39 @@ public class EqmController {
 	public List<EqmVO> eqmSelect(@RequestParam(value = "keyword") String keyword, Model model) {
 		return eqmService.eqmSelect(keyword);
 	}
-	
+
 	@PostMapping("eqmDelete/{eqmCd}")
 	@ResponseBody
-	public EqmVO eqmDelete (@PathVariable String eqmCd, EqmVO vo) {
+	public EqmVO eqmDelete(@PathVariable String eqmCd, EqmVO vo) {
 		vo.setEqmCd(eqmCd);
 		eqmService.eqmDelete(vo);
 		return vo;
-	}; 
+	};
 
 	@PostMapping("eqmInsert")
 	@ResponseBody
-	public List<EqmVO> eqmLineInsert(EqmVO vo) {
+	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {
+		
+		String fileName = file.getOriginalFilename();
+		
+		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
+				
+			String uid = UUID.randomUUID().toString();
+			String saveFileName = uid + fileName.substring(fileName.indexOf("_"));
+			
+			File target = new File(saveDir, saveFileName);
+			
+			vo.setEqmImg(fileName);
+			vo.setImgPath(saveFileName);
+			
+			try {
+				FileCopyUtils.copy(file.getBytes(), target);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		eqmService.eqmInsert(vo);
 		return eqmService.eqmList(vo);
-	}
-	
-
+	};
 	
 }
