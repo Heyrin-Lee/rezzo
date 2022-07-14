@@ -5,6 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>ccds.html</title>
+<style>
+.highlight {
+	background : #71b280;
+}
+</style>
 </head>
 <body>
 	<!-- 본문내용 -->
@@ -182,9 +187,10 @@ const grid2 = new tui.Grid({
         header: '코드',
         name: 'ccdDtl',
         align: 'center',
-        editor: {
-            type: CustomTextEditor
-        },
+        editor: 'text',
+        validation: {
+            required: true
+          },
         sortable: true,
         sortingType: 'desc'
     }, {
@@ -192,6 +198,9 @@ const grid2 = new tui.Grid({
         name: 'ccdDtlNm',
         align: 'center',
         editor: 'text',
+        validation: {
+            required: true
+          },
         sortable: true,
         sortingType: 'desc'
     }, {
@@ -230,12 +239,23 @@ grid2.on('editingFinish', (ev) => {
     grid2.check(rowKey);
 });
 
+//셀 클릭시 로우 하이라이팅
+let selectedRowKey = null;
+grid.on('focusChange', ev => {
+  if (selectedRowKey) {
+    grid2.removeRowClassName(selectedRowKey, 'highlight');
+  }
+  selectedRowKey = ev.rowKey;
+  grid2.addRowClassName(selectedRowKey, 'highlight');
+});
+
 // 공통코드 클릭시 상세코드 리스트
 grid.on('click', ev => {
     var keyword = grid.getValue(ev.rowKey, 'ccdNm');
     var ccd = grid.getValue(ev.rowKey, 'ccd');
     $('#selCcd').val(keyword);
 
+    var rowCount = 0;
     //list 호출
     $.ajax({
         url: "getCodeList",
@@ -248,9 +268,18 @@ grid.on('click', ev => {
                 grid2.refreshLayout()
             }, 300);
             grid2.resetData(result);
+            rowCount = grid2.getRowCount();
         }
     });
 
+    //기존정보 셀 편집 막기
+    grid2.on('dblclick', (ev) => {
+    	  const { columnName, rowKey } = ev;
+    	  if(columnName == 'ccdDtl' && rowKey < rowCount )
+    	  alert('이미 저장된 코드입니다.')
+    	});
+    
+    
     //코드정보 form
     $.ajax({
         url: "ccdInfo",
