@@ -1,21 +1,18 @@
 package com.rezzo.mes.sales.order.web;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rezzo.mes.resour.insp.vo.OrdrVO;
+import com.rezzo.mes.resour.insp.vo.VendVO;
 import com.rezzo.mes.sales.order.service.OrderService;
 import com.rezzo.mes.sales.order.service.OrderVO;
 
@@ -45,19 +42,11 @@ public class OrderController {
 	public List<OrderVO> orderSelect(OrderVO vo) {
 		return service.searchOrdr(vo);
 	}
-	
-	//주문서 등록
-	@PostMapping("addOrdr")
-	public String addOrdr(@RequestBody List<OrderVO> vo) {
-		System.out.println(vo);
-		service.addOrdr(vo);
-		return "sales/orderList";
-	}
 
 	//거래처 목록 조회 모달창
 	@RequestMapping("comSearch")
 	@ResponseBody
-	public List<OrderVO> comSearch(OrderVO vo) {
+	public List<VendVO> comSearch(VendVO vo) {
 		return service.comSearch(vo);
 	}
 	
@@ -69,7 +58,7 @@ public class OrderController {
 	}
 	
 	//조건별 주문서 조회
-	@GetMapping("findOrdr")
+	@PostMapping("findOrdr")
 	@ResponseBody
 		public List<OrderVO> findOrdr(OrderVO vo) {
 		return service.findOrdr(vo);	
@@ -77,6 +66,18 @@ public class OrderController {
 	}
 	
 	//주문서 삭제
+	@DeleteMapping("deleteOrdr")
+	public String deleteOrdr(@RequestBody List<OrderVO> delList) {
+		service.deleteOrdr(delList);
+		return "sales/orderList";
+	}
+	
+	//주문서 수정저장
+	@PostMapping("saveOrdr")
+	public String saveOrdr(@RequestBody List<OrderVO> ordList) {
+		service.saveOrdr(ordList);
+		return "sales/orderList";
+	}
 	
 }
 

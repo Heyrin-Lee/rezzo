@@ -7,14 +7,9 @@
 	<!-- 주문서 전체조회 -->
 	<select id="searchOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
 		SELECT * FROM ORDER_SHEET
+		ORDER BY ORDER_NO
 	</select>
-	
-	<!-- 주문서 등록 -->
-	<insert id="addOrdr" parameterType="com.rezzo.mes.sales.order.service.OrderVO">
-		INSERT INTO ORDER_SHEET (ORDER_NO, EDCTS_CD, VEND_CD, VEND_NM, ORDER_DT, PROG_APPE, PAPRD_DT, PRDT_NM, ORDER_CNT)
-		VALUES (#{orderNo}, #{edctsCd}, #{vendCd}, #{vendNm}, #{orderDt}, #{progAppe}, #{paprdDt}, #{prdtNm}, #{orderCnt})
-	</insert>
-	
+
 	<!-- 거래처 목록 조회 모달창 -->
 	<select id="comSearch" resultType="com.rezzo.mes.sales.order.service.OrderVO">
 		SELECT VEND_CD, VEND_NM, BIZNO, TELNO FROM VEND
@@ -29,13 +24,29 @@
 	<select id="findOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
 		SELECT * 
 		FROM ORDER_SHEET
-		WHERE 
-		<if test="progAppe != null">PROG_APPE = #{progAppe} and</if>
-		<if test="vendNm != null">VEND_NM = #{vendNm} and</if>
-		<if test="prdtNm != null">PRDT_NM = #{prdtNm} and</if>
-		<if test="start != null">ORDER_DT BETWEEN #{start} AND #{end} </if>
-		ORDER BY ORDER_DT		
+		WHERE 1=1
+		<if test="progAppe != null">and PROG_APPE = #{progAppe}</if>
+		<if test="vendNm != null and vendNm !='' ">and VEND_NM = #{vendNm}</if>
+		<if test="prdtNm != null and vendNm !='' ">and PRDT_NM = #{prdtNm}</if>
+		<if test="start != null">and ORDER_DT BETWEEN #{start} AND #{end}</if>
+		ORDER BY ORDER_NO		
 	</select>
 	
 	<!-- 주문서 삭제 -->
+	<delete id="deleteOrdr" parameterType="com.rezzo.mes.sales.order.service.OrderVO">
+		DELETE FROM ORDER_SHEET
+		WHERE ORDER_NO = #{orderNo}
+	</delete>
+	
+	<!-- 주문서 수정 및 등록 -->
+	<update id="saveOrdr" parameterType="OrderVO">
+	MERGE INTO ORDER_SHEET o
+	USING DUAL ON (o.ORDER_NO = #{orderNo})
+	WHEN MATCHED THEN 
+    	UPDATE SET 
+    	o.EDCTS_CD = #{edctsCd}, o.VEND_CD = #{vendCd}, o.VEND_NM = #{vendNm}, o.ORDER_DT = #{orderDt}, o.PROG_APPE = #{progAppe}, o.PAPRD_DT = #{paprdDt}, o.PRDT_NM = #{prdtNm}, o.ORDER_CNT = #{orderCnt}
+	WHEN NOT MATCHED THEN
+    	INSERT (o.ORDER_NO, o.EDCTS_CD, o.VEND_CD, o.VEND_NM, o.ORDER_DT, o.PROG_APPE, o.PAPRD_DT, o.PRDT_NM, o.ORDER_CNT)
+    	VALUES(#{orderNo},#{edctsCd},#{vendCd},#{vendNm},#{orderDt},#{progAppe},#{paprdDt},#{prdtNm},#{orderCnt})
+	</update>
 </mapper>
