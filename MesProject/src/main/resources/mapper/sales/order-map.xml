@@ -7,6 +7,7 @@
 	<!-- 주문서 전체조회 -->
 	<select id="searchOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
 		SELECT * FROM ORDER_SHEET
+		WHERE ORDER_DT BETWEEN TO_DATE(#{start},'yyyy-MM-dd') AND TO_DATE(#{end},'yyyy-MM-dd')
 		ORDER BY ORDER_NO
 	</select>
 
@@ -28,9 +29,7 @@
 		<if test="progAppe != null">and PROG_APPE = #{progAppe}</if>
 		<if test="vendNm != null and vendNm !='' ">and VEND_NM = #{vendNm}</if>
 		<if test="prdtNm != null and vendNm !='' ">and PRDT_NM = #{prdtNm}</if>
-		<if test="start != null">and ORDER_DT BETWEEN #{start} AND #{end}</if>
-		ORDER BY ORDER_NO		
-
+		<if test="start != null">and ORDER_DT BETWEEN #{start} AND #{end}+1</if>
 	</select>
 	
 	<!-- 주문서 삭제 -->
@@ -50,4 +49,11 @@
     	INSERT (o.ORDER_NO, o.EDCTS_CD, o.VEND_CD, o.VEND_NM, o.ORDER_DT, o.PROG_APPE, o.PAPRD_DT, o.PRDT_NM, o.ORDER_CNT)
     	VALUES(#{orderNo},#{edctsCd},#{vendCd},#{vendNm},#{orderDt},#{progAppe},#{paprdDt},#{prdtNm},#{orderCnt})
 	</update>
+	
+	<!-- 주문번호 인덱스 가져오기 -->
+	<select id="getordrNo" resultType="String">
+		SELECT MAX(SUBSTR(ORDER_NO, 14))
+		FROM ORDER_SHEET
+		WHERE ORDER_DT = #{orderDt}
+	</select>
 </mapper>

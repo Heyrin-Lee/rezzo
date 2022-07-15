@@ -54,6 +54,12 @@ public class OrderServiceImpl implements OrderService{
 			mapper.saveOrdr(vo);
 		}
 	}
+	
+	//주문번호 생성, 가져오기
+	@Override
+	public String getordrNo(OrderVO vo) {
+		return mapper.getordrNo(vo);
+	}
 
 	
 	
