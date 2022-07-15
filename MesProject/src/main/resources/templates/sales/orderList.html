@@ -41,9 +41,9 @@
                         <div class="mb-3">
                            <label for="no" class="form-label">진행상황</label>&nbsp;
                            
-                           <input type="radio" id="ing" name="radioProg" value="진행"/>진행
-                           <input type="radio" id="complete" name="radioProg" value="완료"/>완료
-                           <input type="radio" id="every" name="radioProg" value="전체"/>전체
+                           <input type="radio" id="progAppe" name="progAppe" value="진행"/>진행
+                           <input type="radio" id="progAppe" name="progAppe" value="완료"/>완료
+                           <input type="radio" id="progAppe" name="progAppe" value="전체"/>전체
                            
                         </div>
                         <div class="mb-3">
@@ -52,13 +52,13 @@
                             <button class="c_btn" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal" form="">검색</button>
                         </div>
                         <div class="mb-3">
-                           <label for="email" class="form-label">제품명</label> 
+                           <label for="prdtNm" class="form-label">제품명</label> 
                            <input type="text" class="form-control" id="prdtNm" name="prdtNm">
                            <button class="c_btn" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal" form="">검색</button>
                         </div>
                         <div class="mb-4">
                            <label for="email" class="form-label">주문일자</label> 
-                           <input type="date" id="start"> - <input type="date" id="end">
+                           <input type="date" id="start" name="start"> - <input type="date" id="end" name="end">
                         </div>
                        </div>
                      </form>
@@ -70,6 +70,7 @@
        <div class="linelist">
    		<button class="c_btn" id="addBtn" form="">추가</button>
    		<button class="c_btn" id="okBtn" form="">저장</button>
+   		<button class="c_btn" id="delBtn" form="">삭제</button>
    		<button class="c_btn" id="ordrBtn">주문서 조회</button>
    </div>
    </div>
@@ -111,7 +112,7 @@
    /* 그리드 */
 		/*초기페이지 - 주문서 전체 목록 보여주기*/
 		$.ajax({
-			url : "order",
+			url : "orderSelect",
 			method : "get",
 			datatype : "json",
 			success : function(list) {
@@ -281,49 +282,16 @@
    		//행추가 버튼
 		   let addBtn = document.getElementById('addBtn');
 		   addBtn.addEventListener('click', function(e){
-		   		grid.appendRow(
-		   		 {
-		   			at : grid.getRowCount(),
-		   			focus : true,
-		   			_attributes : {
-		   				checked : true
-		   			}
-		   		 } 
-		   		)
+		   		grid.appendRow()
 		   })
 		   
-		 //저장버튼 주문서 등록
-		  let okBtn = document.getElementById('okBtn');
-		  okBtn.addEventListener('click', function(e) {
-		  	var result = grid.getCheckedRows();
-		  	//console.log(result);
-		  	$.ajax({
-		  		url:"addOrdr",
-		  		method:"post",
-		  		async:"false",
-		  		dataType:"json",
-		  		data:JSON.stringify(result),
-		  		contentType:"application/json",
-		  		success:document.location.reload()
-		  	})
-		  })
+		   //더블클릭 하면 체크박스 체크
+		   grid.on('editingFinish', (ev) => {
+    					var rowKey = ev.rowKey;
+    					grid.check(rowKey);
+					});
 		   
-		   //JSON.stringify(grid.getCheckedRows())
 		
-		   
-		//체크박스 선택시 거래처명 가져오기
-		//function printCom() {
-		//	var checked = $("comGrid").closest("td").data("column-name");
-		//	if(checked == checked) {
-		//		console.log('a');
-		//	}
-		//}
-		//function printCom() {
-		//var Nm = $("comGrid").closest("td").data("column-name");
-		//comGrid.on('check',function() {
-		//	console.log(Nm);
-		//})		
-		//}
 		comGrid.on('click', e => {
 			let rowInfo = comGrid.getCheckedRows(e)
 			console.log(rowInfo);
@@ -339,32 +307,63 @@
 		//조건별 주문서 조회
 		let ordrBtn = document.getElementById("ordrBtn");
 		ordrBtn.addEventListener('click', function(e) {
-			var send = {
-				progAppe : $("input[name='radioProg']:checked").val(),
-				vendNm : $("#vendNm").val(),
-				prdtNm : $("#prdtNm").val(),
-				start : $("#start").val(),
-				end : $("#end").val()
-			}
-			//var params = jQuery("#searchFrm").serialize();			
-			//var vendNm = $("#vendNm").val();
-			//var prdtNm = $("#prdtNm").val();
-			//var start = $("#date1").val();
-			//var end = $("#date2").val();
-			//var progAppe = $("input[name='radioProg']:checked");
+			search();
+		})
+		
+		function search() {
+			var searchData = $("#searchFrm").serialize();
+			
 			$.ajax({
 				url:"findOrdr",
 				dataType:"json",
-				method:"get",
-				data:send,
-				//{progAppe:progAppe, vendNm:vendNm, prdtNm:prdtNm, orderDt:start, orderDt:end },
+				method:"post",
+				data: searchData,
+				success:function(result) {
+					grid.resetData(result);
+				}
+			})
+		};
+		
+		//주문서 삭제
+		let delBtn = document.getElementById("delBtn");
+		delBtn.addEventListener('click',function(e) {
+			var data = grid.getCheckedRows();
+			var searchData = $("#searchFrm").serialize();
+			
+			$.ajax({
+				url:"deleteOrdr",
+				method:"delete",
+				dataType:"json",
+				data:JSON.stringify(data),
 				contentType:"application/json",
 				success:function(result) {
-				grid.resetData(result);
+					console.log(result);
+					search();
 				}
 			})
 		})
+		
 
+		//주문서 수정입력
+		var okBtn = document.getElementById('okBtn');
+		okBtn.addEventListener('click',function(e) {
+			var data = grid.getCheckedRows();
+			$.ajax({
+				url:"saveOrdr",
+				method:"post",
+				dataType:"json",
+				data:JSON.stringify(data),
+				contentType:"application/json",
+				success:function() {
+					grid.uncheckAll();
+				}
+			})
+			})
+			
+			
+		//Date start & Date end 오늘 날짜로 설정
+		document.getElementById("start").valueAsDate = new Date();
+		document.getElementById("end").valueAsDate = new Date();
 	   </script>
 </th:block>
 
