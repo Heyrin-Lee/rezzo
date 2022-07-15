@@ -15,6 +15,6 @@ public interface InspMapper {
     List<VendVO> getVendList();
     List<VendVO> getVendListByKw(VendVO vendVO);
     List<OrdrVO> getOrdrList(OrdrVO ordrVO);
-    void insertInspList(RscInspVO rscInspVO, List<RscInfVO> rscInfVOS);
+    void insertInspList(List<RscInspVO> rscInspVOS); // test
 
 }
