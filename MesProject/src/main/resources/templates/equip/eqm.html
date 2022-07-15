@@ -84,13 +84,11 @@
 						<div class="card-body">
 							<div>
 
-								<form action="eqmSelect" method="get">
 									<label for="" autofocus="autofocus">설비명</label>
 									<input type="text" id="keyword" name="keyword" placeholder="설비명"></input>
 									<input type="button" data-bs-toggle="modal" class="btn-dark btn-primary btn-sm" id="modalBtn"
 										data-bs-target="#exampleModal" value="설비검색"></input>
 									<button type="button" onclick="eqmSelect()" class="btn-dark btn-primary btn-sm">조회</button>
-								</form>
 							</div>
 
 							<br>
@@ -162,20 +160,19 @@
 											</div>
 											<br> <label>사용여부</label>
 											<div class="form-check form-check-inline" style="margin-bottom: 3px">
-												<input class="form-check-input" type="radio" name="useYN" value="Y"> <label
+												<input class="form-check-input" type="radio" name="useYn" value="Y"> <label
 													class="form-check-label">사용</label> <input class="form-check-input" type="radio" value="N"
-													name="useYN"> <label class="form-check-label">미사용</label>
+													name="useYn"> <label class="form-check-label">미사용</label>
 											</div>
 											<br> <br>
 											<div class="mb-4">
-												<label for="email" class="form-label">점검주기(일)</label> <input type="text" class="form-control"
-													id="chckPerd" style="width: 150px">
+												<label for="" class="form-label">점검주기(일)</label> <input type="text" class="form-control"
+													id="chckPerd" name="chckPerd" style="width: 150px">
 											</div>
 											<div class="mb-4">
-												<label for="form-select" class="form-label">라인코드</label>
-												<select class="form-select" aria-label="Default select example" style="width: 180px"
-													th:name="optionSelect">
-													<option disabled selected>라인코드 선택</option>
+												<label for="form-select" class="form-label">라인명</label>
+												<select class="form-select" aria-label="Default select example" style="width: 180px" name="lineCd">
+													<option disabled selected>라인명 선택</option>
 													<option th:each="value : ${opList}" th:value="${value.lineCd}" th:text="${value.lineCd}">
 													</option>
 												</select>
@@ -207,11 +204,9 @@
 
 					</div><br>
 					<div class="ms-3">
-						<form action="eqmSelect" method="get">
 							<label style="width:60px">설비명</label>
 							<input type="text" id="keyword2" name="keyword2" placeholder="설비명"></input>
 							<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
-						</form>
 					</div>
 					<div id="modGrid" class="modal-body"></div>
 
@@ -339,9 +334,8 @@
 
 
 			// 메인화면 그리드 검색
-			function eqmSelect() {
+	function eqmSelect() {
 				let keyword = $("#keyword").val();
-
 				$.ajax({
 					url: "eqmSelect",
 					type: "post",
@@ -354,13 +348,11 @@
 					}
 				})
 			}
-
 			// 모달 그리드 검색
 			function eqmSelect2() {
 				let keyword = $("#keyword2").val();
-
 				$.ajax({
-					url: "eqmSelect",
+					url: "eqmSelect",		
 					type: "post",
 					data: {
 						"keyword": keyword
@@ -382,7 +374,10 @@
 
 			//등록버튼
 			$('#insertBtn').on('click', function () {
-						let formData = new FormData(dataForm);
+						var formData = new FormData(document.getElementById('dataForm'))
+						for(let a of formData.entries()){
+							console.log(a)
+						}
 						$.ajax({
 								url: "/eqmInsert",
 								method: 'POST',
@@ -401,7 +396,27 @@
 								})
 						});
 
+			//수정버튼
+			$('#modBtn').on('click', function () {
+						var formData = new FormData(document.getElementById('dataForm'))
 
+						$.ajax({
+								url: "/eqmUpdate",
+								method: 'POST',
+								data: formData,
+								contentType: false,
+								processData: false
+							}).done(function (xhr) {
+									$.ajax({
+										url: "eqmList",
+										method: "GET",
+										dataType: "JSON",
+										success: function (result) {
+											grid.resetData(result)
+										}
+									})
+								})
+						});
 
 
 
@@ -451,24 +466,14 @@
 
 
 
-									// 설비 리스트 이동	
+									// 설비 리스트 이동	 
 
 									grid.on('click', ev => {
-										var value = grid.getValue(ev.rowKey, 'eqmNm');
-										var keyword = grid.getValue(ev.rowKey, 'eqmCd');
+										var value = grid.getValue(ev.rowKey, 'eqmCd');
+										var keyword = grid.getValue(ev.rowKey, 'eqmNm');
+										const reader = new FileReader();
 										$('#eqmCd').val(value);
-
-										$.ajax({
-											url: "eqmList",
-											type: "get",
-											data: {
-												"keyword": keyword
-											},
-											dataType: "JSON",
-											success: function (result) {
-												grid.resetData(result);
-											}
-										})
+										
 
 										$.ajax({
 											url: "eqmSelect",
@@ -478,19 +483,24 @@
 											},
 											dataType: "JSON",
 											success: function (result) {
+											console.log(result);
 												$('#eqmNm').val(result[0].eqmNm);
 												$('#eqmCd').val(result[0].eqmCd);
 												$('[name="prcsCd"]').val([result[0].prcsCd]);
-												$('[name="useYN"]').val([result[0].useYn]);
+												$('[name="useYn"]').val([result[0].useYn]);
 												$('#minTemp').val(result[0].minTemp);
+												$('[name="lineCd"]').val(result[0].lineCd);
+												$('[name="prcsNm"]').val(result[0].prcsNm);
 												$('#maxTemp').val(result[0].maxTemp);
 												$('#chckPerd').val(result[0].chckPerd);
-												$('[name="optionSelect"]').val([result[0].lineCd]);
 												$('#eqmIstDt').val(result[0].eqmIstDt);
-												$('#eqm').val
+												$('[name="eqmFg"]').val(result[0].eqmFg);
+												$('#preview').attr("src",'imgfile/'+result[0].imgPath);
+												
 											}
 										})
 									})
+									;
 
 									// 공정명 change event
 									$('#prcsNm').on('change', function () {

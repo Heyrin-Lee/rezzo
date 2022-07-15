@@ -94,13 +94,17 @@ body {
 									<button type = "button"id="insertBtn" class="c_btn" >등록</button>
 									<button type="button" id="modBtn" class="c_btn">수정</button>
 									<button type="button" id="delBtn" class="c_btn">삭제</button>
-									<button type="reset" id="initBtn" class="c_btn">취소</button>
+									<button type="button" id="initBtn" class="c_btn">새자료</button>
 								</div>
 								<br> <br>
 								<form id="form1" action="lineInsert">
 									<div class="mb-3">
-										<label for="no" class="form-label">라인코드</label> <input
-											type="text" class="form-control" id="lineCd" name="lineCd">
+									<label for="no" class="form-label">라인코드</label>
+									<input type="text" class="form-control" id="lineCd" name="lineCd">
+									</div>
+									<div class="mb-3">
+										<label for="no" class="form-label">라인명</label> <input
+											type="text" class="form-control" id="lineNm" name="lineNm">
 									</div>
 									<div class="mb-3">
 										<label for="id" class="form-label">UPH생산량</label> <input
@@ -131,13 +135,13 @@ body {
 		
 		//취소
 		$('#initBtn').on('click',function(){
-			$('#form1').each(function(){
-			this.reset()})
+			$('#lineCd').removeAttr("readonly");
+			$('#form1')[0].reset(); 
 		})
 		
 		
 		// 라인 리스트 확인
-		$.ajax({		url: "eqmLineList",
+		$.ajax({url: "eqmLineList",
 						method: "GET",
 						dataType: "JSON",
 						success: function (result) {
@@ -150,6 +154,10 @@ body {
 				columns : [ {
 					header : '라인코드',
 					name : 'lineCd',
+					align : 'center',
+				}, {
+					header : '라인명',
+					name : 'lineNm',
 					align : 'center',
 				}, {
 					header : 'UPH생산량',
@@ -169,12 +177,14 @@ body {
 			//라인 리스트 이동
 			
 			$('tbody').on('click','tr',function(){
-				let line=$(this).find('td').eq(0).text()
-				let uph =$(this).find('td').eq(1).text()
-				let psch =$(this).find('td').eq(2).text()
-				let yn =$(this).find('td').eq(3).text()
+				let lineCd=$(this).find('td').eq(0).text()
+				let lineNm=$(this).find('td').eq(1).text()
+				let uph =$(this).find('td').eq(2).text()
+				let psch =$(this).find('td').eq(3).text()
+				let yn =$(this).find('td').eq(4).text()
 				
-				$('#lineCd').val(line)
+				$('#lineCd').val(lineCd).attr("readonly",true);
+				$('#lineNm').val(lineNm)
 				$('#uphCnt').val(uph)
 				$('#eqmPsch').val(psch)
 				$('#useYn').val([yn])
@@ -202,6 +212,8 @@ body {
 						dataType: "JSON",
 						success: function (result) {
 							grid.resetData(result);
+						$('#lineCd').removeAttr("readonly");
+						$('#form1')[0].reset(); 
 				}
 			});
 				})
@@ -213,19 +225,19 @@ body {
 			$('#insertBtn').on('click', function(){
 			
 			var lineCd = $('#lineCd').val();
+			var lineNm = $('#lineNm').val();
 			var uphCnt = $('#uphCnt').val();
 			var eqmPsch = $('#eqmPsch').val();
 				if ($('#useYn').is(':checked')){
 				$('#useYn').val("Y");}
 				else{
 				$('#useYn').val("N");}
-
 			var useYn = $('#useYn').val();
 
 			$.ajax({
 				url:'eqmLineInsert',
 				type : 'POST',
-				data : {lineCd, uphCnt, eqmPsch, useYn},
+				data : {lineCd, lineNm,uphCnt, eqmPsch, useYn},
 				dataType : 'json'
 				}).done(function(xhr){
 					$.ajax({
@@ -242,19 +254,19 @@ body {
 			//수정
 			$('#modBtn').on('click',function(){
 			var lineCd = $('#lineCd').val();
+			var lineNm = $('#lineNm').val();
 			var uphCnt = $('#uphCnt').val();
 			var eqmPsch = $('#eqmPsch').val();
 				if ($('#useYn').is(':checked')){
 				$('#useYn').val("Y");}
 				else{
 				$('#useYn').val("N");}
-
 			var useYn = $('#useYn').val();
 
 			$.ajax({
 				url:'eqmLineUpdate',
 				type : 'POST',
-				data : {lineCd, uphCnt, eqmPsch, useYn},
+				data : {lineNm, lineCd, uphCnt, eqmPsch, useYn},
 				dataType : 'json'
 				}).done(function(xhr){
 					$.ajax({
@@ -263,6 +275,8 @@ body {
 						dataType: "JSON",
 						success: function (result) {
 							grid.resetData(result);
+							$('#lineCd').removeAttr("readonly");
+							$('#form1')[0].reset(); 
 				}
 			});
 				})

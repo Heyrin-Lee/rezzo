@@ -34,5 +34,9 @@ public class EqmLineServiceImpl implements EqmLineService {
 	public void eqmLineDelete(EqmLineVO vo) {
 		map.eqmLineDelete(vo);
 	}
+	@Override
+	public List<EqmLineVO> eqmLineSelectList(EqmLineVO vo) {
+		return map.eqmLineSelectList(vo);		
+	};
 
 }

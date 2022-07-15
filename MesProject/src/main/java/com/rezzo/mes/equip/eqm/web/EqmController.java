@@ -45,8 +45,8 @@ public class EqmController {
 
 	@RequestMapping("eqm")
 	public String eqmLineList(Model model, EqmLineVO vo, PrcsVO prcsVo, CcdsVO ccdsVO) {
-		List<EqmLineVO> eqmLineList = lineService.eqmLineList(vo);
-		model.addAttribute("opList", eqmLineList);
+		List<EqmLineVO> eqmLineSelectList = lineService.eqmLineSelectList(vo);
+		model.addAttribute("opList", eqmLineSelectList);
 
 		List<PrcsVO> prcsList = prcsService.prcsList(prcsVo);
 		model.addAttribute("prcsList", prcsList);
@@ -81,19 +81,14 @@ public class EqmController {
 	@PostMapping("eqmInsert")
 	@ResponseBody
 	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {
-		
 		String fileName = file.getOriginalFilename();
-		
 		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
-				
 			String uid = UUID.randomUUID().toString();
 			String saveFileName = uid + fileName.substring(fileName.indexOf("_"));
-			
 			File target = new File(saveDir, saveFileName);
-			
 			vo.setEqmImg(fileName);
 			vo.setImgPath(saveFileName);
-			
+			System.out.println(target.getAbsolutePath());
 			try {
 				FileCopyUtils.copy(file.getBytes(), target);
 			} catch (IOException e) {
@@ -103,5 +98,25 @@ public class EqmController {
 		eqmService.eqmInsert(vo);
 		return eqmService.eqmList(vo);
 	};
+	
+	@PostMapping("eqmUpdate")
+	@ResponseBody
+		public void eqmUpdate(EqmVO vo, MultipartFile file){
+		String fileName = file.getOriginalFilename();
+		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
+			String uid = UUID.randomUUID().toString();
+			String saveFileName = uid + fileName.substring(fileName.indexOf("_"));
+			File target = new File(saveDir, saveFileName);
+			vo.setEqmImg(fileName);
+			vo.setImgPath(saveFileName);
+			try {
+				FileCopyUtils.copy(file.getBytes(), target);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			eqmService.eqmUpdate(vo);
+		}
+		
+	}
 	
 }
