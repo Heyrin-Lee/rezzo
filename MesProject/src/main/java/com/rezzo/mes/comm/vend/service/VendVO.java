@@ -1,4 +1,4 @@
-package com.rezzo.mes.resour.insp.vo;
+package com.rezzo.mes.comm.vend.service;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

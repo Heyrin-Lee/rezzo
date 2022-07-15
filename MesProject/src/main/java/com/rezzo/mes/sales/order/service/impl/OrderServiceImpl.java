@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rezzo.mes.resour.insp.vo.VendVO;
+import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.sales.order.mapper.OrderMapper;
 import com.rezzo.mes.sales.order.service.OrderService;
 import com.rezzo.mes.sales.order.service.OrderVO;

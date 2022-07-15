@@ -2,6 +2,7 @@ package com.rezzo.mes.resour.insp.web;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
+import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.service.InspService;
 import com.rezzo.mes.resour.insp.vo.*;
 import lombok.AllArgsConstructor;

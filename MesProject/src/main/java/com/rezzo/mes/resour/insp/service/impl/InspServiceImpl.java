@@ -1,11 +1,12 @@
 package com.rezzo.mes.resour.insp.service.impl;
 
+import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.mapper.InspMapper;
 import com.rezzo.mes.resour.insp.service.InspService;
 import com.rezzo.mes.resour.insp.vo.OrdrVO;
 import com.rezzo.mes.resour.insp.vo.RscInfVO;
 import com.rezzo.mes.resour.insp.vo.RscInspVO;
-import com.rezzo.mes.resour.insp.vo.VendVO;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

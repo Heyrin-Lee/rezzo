@@ -2,7 +2,7 @@ package com.rezzo.mes.sales.order.service;
 
 import java.util.List;
 
-import com.rezzo.mes.resour.insp.vo.VendVO;
+import com.rezzo.mes.comm.vend.service.VendVO;
 
 public interface OrderService {
 

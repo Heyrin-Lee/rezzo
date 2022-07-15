@@ -1,9 +1,10 @@
 package com.rezzo.mes.resour.insp.mapper;
 
+import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.vo.OrdrVO;
 import com.rezzo.mes.resour.insp.vo.RscInfVO;
 import com.rezzo.mes.resour.insp.vo.RscInspVO;
-import com.rezzo.mes.resour.insp.vo.VendVO;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
