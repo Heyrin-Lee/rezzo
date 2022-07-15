@@ -9,8 +9,9 @@
 	</select>
 	
 	<select id="eqmSelect" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
-		select * from eqm
-		where eqm_Cd Like '%'||#{keyword}||'%'
+		select * from eqm e join eqm_img i
+		on e.eqm_cd = i.eqm_cd
+		where e.eqm_nm Like '%'||#{keyword}||'%'
 	</select>
 
 	<insert id="eqmInsert" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
@@ -23,14 +24,22 @@
 		#{maxTemp}, #{chckPerd}, #{useYn}, #{prcsNm},#{eqmFg});
 	
 		insert into eqm_img (eqm_cd, prcs_cd, img_path, eqm_img)
-		values(#{eqmCd}, #{prcsCd}, #{imgPath}, #{eqmImg});
+		values(<![CDATA[cre_code2(#{eqmFg})]]>, #{prcsCd}, #{imgPath}, #{eqmImg});
 	
 	END;
 	</insert>
 
 	<delete id="eqmDelete" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
+		DECLARE
+		BEGIN
 		delete from eqm
-		where eqm_cd = #{eqmCd}
+		where eqm_cd = #{eqmCd};
+		
+		delete from eqm_img
+		where eqm_cd = #{eqmCd};
+		
+		END;
+		
 	</delete>
 
 </mapper>

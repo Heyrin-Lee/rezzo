@@ -11,4 +11,5 @@ public interface EqmLineService {
 
 	public void eqmLineDelete(EqmLineVO vo);
 
+	public List<EqmLineVO> eqmLineSelectList(EqmLineVO vo);
 }

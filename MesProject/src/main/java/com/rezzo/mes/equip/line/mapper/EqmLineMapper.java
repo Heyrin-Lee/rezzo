@@ -12,4 +12,6 @@ public interface EqmLineMapper {
 	public void eqmLineUpdate(EqmLineVO vo);
 
 	public void eqmLineDelete(EqmLineVO vo);
+	
+	public List<EqmLineVO> eqmLineSelectList(EqmLineVO vo);
 }
