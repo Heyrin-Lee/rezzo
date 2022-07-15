@@ -117,30 +117,40 @@
      
         <script>
         //주문서 조회 버튼을 클릭했을 때
+        let planDt
+        let index
+        let code
+        
        	$("#modalBtn").on("click", function(e) {
        		//계획일자 인풋박스에 출력된 값의 타입= String 
-   			let indicaDt = $("#tui-date-picker-target").val();
-   			console.log(indicaDt)
-   			//순번 받아오기 (계획일자 planDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
+   			 planDt = $("#tui-date-picker-target").val();
+   			//순번 받아오기 (계획일자 indicaDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
         	$.ajax({
         		url: 'getIndex',
         		method: 'GET',
         		dataType: 'json',
         		contentType:'application/text',
-        		data : {"indicaDt": indicaDt},
+        		data : {"planDt": planDt},
+        		error : function(error) {        
+		             		console.log("error")   
+                },
         		success: function (result) {
-        			let index = result+1;
+        			console.log(result)
+        			if (result != '') {
+        				index = result+1;
+        			} else {
+	        			index = 1;
+        			}
         			function makeCd() {
-	       				return "PLN" + indicaDt + index
+						return "PLN" + planDt + index
        				}
-        			let code = makeCd()
-        			// 주문서 테이블에 있는 정보들 모달창에 띄우기
+        			code = makeCd()
+        			
 		        	$.ajax({
 		                url: "orderListModal",
 		                method: "GET",
 		                dataType: "JSON",
 		                success: function (result) {
-		                	console.log(result)
 		                    modGrid.resetData(result); 
 		                    modGrid.on('click', e => {
 								let result = modGrid.getCheckedRows(e);
@@ -150,7 +160,12 @@
 		            });
         		}
         	})
+        	
+        
        	})
+       	
+       	      
+    
 			// 주문서 내용과 계획코드 메인 grid에 띄우기        
        		const gridData = [];
        		 $("#confirmBtn").on("click", function(e){
@@ -213,7 +228,6 @@
 		            					$.each(res, function(index, item) {
 		            						item.planCd = grid.getCheckedRows()[0].planCd;
 		            					})
-		            					
 		            					grid4.resetData(res)
 		            				}
 		            			
@@ -448,17 +462,50 @@
             });
             
              $("#osBtn").on("click", function(){
-             	let gridData = grid.getData()
+             	let gridData = grid.getData();
+             	let iDt= $("#tui-date-picker-target").val();
+             	console.log(iDt);
+             	
+             	gridData[0].indicaDt = makeDate(iDt)
+             	
              	let grid2Data = grid2.getData()
+             	grid2Data[0].indicaDt = makeDate(iDt)
+             	
              	let grid4Data = grid4.getData()
+             	
+             	let arr = []
+             	
+             	arr.push(gridData[0])
+             	arr.push(grid2Data[0])
+             	
+             	//console.log(JSON.stringify(arr))
+            	
             	$.ajax({
-            		url : 'planInsert',
+            		url : 'plan12Insert',
             		method: 'POST',
             		contentType:'application/json',
-            		data : gridData, grid2Data, grid4Data
+            		data : JSON.stringify(arr)
             	})
+            	
+            	$.ajax({
+            		url : 'plan4Insert',
+            		method: 'POST',
+            		contentType:'application/json',
+            		data : JSON.stringify(grid4Data),
+            	})            
+            	
+            	window.location.reload()
             })
             
+            function makeDate(idt) {
+           		let d1 = idt.slice(0,4); //0123
+           		let d2 = idt.slice(4,6); //45
+           		let d3 = idt.slice(6,8); //67
+           		
+           		// 20220715->2022-07-15            		
+           		return d1 + "-" + d2 + "-" + d3
+           		
+           	}
           
         </script>
     </th:block>

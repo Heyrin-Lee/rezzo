@@ -61,6 +61,7 @@ public class OrderController {
 	@PostMapping("findOrdr")
 	@ResponseBody
 		public List<OrderVO> findOrdr(OrderVO vo) {
+		System.out.println(vo);
 		return service.findOrdr(vo);	
 	
 	}
@@ -77,6 +78,14 @@ public class OrderController {
 	public String saveOrdr(@RequestBody List<OrderVO> ordList) {
 		service.saveOrdr(ordList);
 		return "sales/orderList";
+	}
+	
+	//주문번호 생성, 가져오기
+	@GetMapping("getordrNo")
+	@ResponseBody
+	public String getordrNo(OrderVO vo) {
+		System.out.println(vo.getOrderDt());
+		return service.getordrNo(vo);
 	}
 	
 }

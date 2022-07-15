@@ -29,5 +29,24 @@
            or VEND_CD = '${vendCd}'
     </select>
 
+    <insert id="insertInspList" parameterType="List">
+        insert all
+        <foreach item="item" collection="list">
+            into RSC_INSP (RSC_INSP_NO, INSP_DT)
+            values (123, #{item.inspDt})
+        </foreach>
 
+        <foreach item="item" collection="list">
+            into RSC_INSP_DTL (RSC_CD, RSC_INSP_NO, ORDR_NO, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT)
+            values (#{item.rscCd},1234,#{item.ordrNo},#{item.inspCnt},#{item.inspPassCnt},#{item.inspFailCnt})
+        </foreach>
+
+        <foreach item="item" collection="list">
+            <foreach collection="item.rscInf" item="infer">
+                into RSC_INFER (RSC_CD, RSC_INSP_NO, INF_CD, INF_CNT)
+                values (#{item.rscCd},1234,#{infer.ccdDtl},#{infer.infCnt})
+            </foreach>
+        </foreach>
+        select * from DUAL
+    </insert>
 </mapper>

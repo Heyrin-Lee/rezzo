@@ -1,5 +1,6 @@
 package com.rezzo.mes.prod.plan.service;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,15 +16,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlanVO {
+public class PlanVO implements Serializable {
 	String planCd;
 	Date paprdDt;
 	int prefRank;
 	String nowSt;
+	@DateTimeFormat(pattern = "yyyyMMdd") 
 	Date planDt;
-	@DateTimeFormat(pattern = "yyyyMMdd")
+	@DateTimeFormat(pattern = "yyyyMMdd") 
 	Date indicaDt;
-	Date wkFrDt;
+	Date wkFrDt; 
 	Date wkToDt;
 	String lineCd;
 	String prdtCd;
@@ -41,7 +43,7 @@ public class PlanVO {
 	String rscCd;
 	int rscCnt;
 	int useCnt;
-	int rcsUse;
+	int rscUse;
 	String rscLotNo;
 
 	

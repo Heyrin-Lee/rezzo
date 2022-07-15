@@ -3,6 +3,7 @@ package com.rezzo.mes.resour.insp.vo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,6 +16,7 @@ public class RscInspVO {
     int ordrCnt; // 발주수량
     int ordrInstCnt; // 입고수량
     int ordrNo; // 발주번호
+    Date inspDt; // 검사일자
 
     String rscCd; //자재코드
     String rscNm; // 자재품명

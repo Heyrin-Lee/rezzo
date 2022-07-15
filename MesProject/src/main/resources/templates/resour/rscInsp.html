@@ -66,7 +66,7 @@
 
 <b>검사일자</b>
 <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-    <input type="text" id="datepicker-input" aria-label="Date-Time">
+    <input type="text" id="inspDt" aria-label="Date-Time">
     <span class="tui-ico-date"></span>
 </div>
 <div id="wrapper" style="margin-top: -1px;"></div>
@@ -123,12 +123,15 @@
     })
 
     // range date picker
+    let today = new Date();
     let rangepicker = tui.DatePicker.createRangePicker({
         startpicker: {
+            date: today,
             input: '#startpicker-input',
             container: '#startpicker-container'
         },
         endpicker: {
+            date: today,
             input: '#endpicker-input',
             container: '#endpicker-container'
         }
@@ -136,9 +139,9 @@
 
     // set a inspection date
     let datepicker = new tui.DatePicker('#wrapper', {
-        date: new Date(),
+        date: today,
         input: {
-            element: '#datepicker-input',
+            element: '#inspDt',
             format: 'yyyy-MM-dd'
         }
     });
@@ -193,7 +196,8 @@
 
         getValue() {
             let val = this.el.value.replace(/[^0-9]/g, '')
-            if (parseInt(val) > parseInt(grid.getValue(this.rowKey, 'ordrInstCnt'))) {
+            let instCnt = grid.getValue(this.rowKey, 'ordrInstCnt')
+            if (parseInt(val) > parseInt(instCnt) || instCnt == '') {
                 alert('검사량이 입고량 보다 많습니다.');
                 grid.setValue(this.rowKey, 'inspPassCnt', '');
                 grid.setValue(this.rowKey, 'inspFailCnt', '');
@@ -263,6 +267,7 @@
     }
 
     let iModal;
+
     class CustomBtnRenderer {
         constructor(props) {
             let {rowKey, value} = props;
@@ -568,6 +573,7 @@
     saveBtn.addEventListener('click', function () {
         let gridVal = grid.getCheckedRows();
         gridVal.forEach(element => {
+            element.inspDt = inspDt.value;
             let rowKey = String(element.rowKey);
             let infCnt = inferCnt.get(rowKey);
             for (let i = 0; i < infCnt.length; i++) {
@@ -577,6 +583,12 @@
         })
         setRscInspList(gridVal)
     })
+
+    let gridEle = document.getElementById('grid')
+    gridEle.addEventListener('mouseleave', function () {
+        grid.finishEditing();
+    })
+
 
 </script>
 </html>
