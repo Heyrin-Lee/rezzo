@@ -8,69 +8,63 @@
 </head>
 <body>
 <!-- 본문내용 -->
-<th:block layout:fragment="main">
-<!-- 공통코드 조회 -->
-<select>
-	<option selected value="">코드선택</option>  
-	<option th:each="code : ${ccds['EQM']}" 
-	th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option>
-</select> 
+<th:block layout:fragment="main"> 
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">거래처관리</h1>
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 기준정보관리</li>
-			<li class="breadcrumb-item active">> 거래처관리</li>
-		</ol>
+				<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 기준정보관리</li>
+				<li class="breadcrumb-item active">> 거래처관리</li>
+			</ol>
 		<div class="card mb-4">
 			<div class="card-body">
-				<div class="linelist">
-							<button class="c_btn" form="">등록</button>
-							<button class="c_btn" form="">수정</button>
-							<button class="c_btn" form="">삭제</button>
-							<button class="c_btn" form="">취소</button>
-						</div>
+				<label for="" autofocus="autofocus">
+					<select class="dataTable-selector" style="width: 150px">
+							<option selected value="">거래처명</option>  
+							<option value="">사업자등록번호</option>
+							<option th:each="code : ${ccds['EQM']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option>
+					</select></td></label> 
+						<input type="text" class="form-control" id="selCcd" name="sleCcd" style="width: 200px">
+					<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 검색</button>
+				<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
+						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+						<button class="btn btn-primary" form="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 						<br> <br>
-
+					</div>
 						<form autocomplete="off" id="dataForm" name="dataForm" action="#"
 							method="post">
-							<table class="table table-bbs table-write" summary="내용.....">
+							<table class="table" style="vertical-align : middle;">
 								<colgroup>
-									<col style="width: 130px">
+									<col style="width: 150px">
 									<col>
-									<col style="width: 130px">
+									<col style="width: 150px">
+									<col>
+									<col style="width: 150px">
 									<col>
 								</colgroup>
 								<tbody>
 									<tr>
-										<th scope="row">거래처코드 <strong class="blue">*</strong></th>
-										<td data-matr-cd=""><input class="form-control"
-											type="text" id="matrCd" name="matrCd" style="width: 220px"
-											maxlength="20" /> <input type="hidden" id="dbAccessDiv"
-											name="dbAccessDiv" value="insert" /></td>
-										<th scope="row">거래처명 <strong class="blue">*</strong></th>
-										<td><input class="form-control" type="text" id="matrNm"
-											name="matrNm" style="width: 220px" maxlength="50" /></td>
+										<th>구분 <strong class="blue">*</strong></th>
+										<td>
+											<select class="dataTable-selector" style="width: 250px">
+												<option selected value="">==등록시필수선택==</option>  
+												<option th:each="code : ${ccds['EQM']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option>
+											</select></td>
+										<th>거래처코드 <strong class="blue">*</strong></th>
+										<td><input class="form-control" type="text" id="matrCd" name="matrCd" style="width: 250px" maxlength="20"
+											placeholder="저장시 자동부여됩니다." readonly="true" />
+										 <input type="hidden" id="dbAccessDiv" name="dbAccessDiv" value="insert" /></td>
+										<th>거래처명 <strong class="blue">*</strong></th>
+										<td><input class="form-control" type="text" id="matrNm" name="matrNm" style="width: 250px" maxlength="50" /></td>
 									</tr>
 									<tr>
-										<th scope="row">사업자등록번호</th>
-										<td><input class="form-control" type="text" id="stndrd"
-											name="stndrd" style="width: 220px" maxlength="50" /></td>
-										<th scope="row">전화번호</th>
-										<td><input class="form-control" type="text"
-											id="manageUnit" name="manageUnit" style="width: 220px"
-											maxlength="50" /></td>
-									</tr>
-									<tr>
-										<th scope="row">비고</th>
-										<td><input type="text" id="wrhousngEntrps"
-											name="wrhousngEntrps" data-input="search"
-											data-fn-name="fnEntrpsSearchView()" class="form-control"
-											maxlength="20" style="width: 220px" /></td>
-										<th scope="row">구분</th>
-										<td colspan="2"><input type="text" id="wrhousngEntrpsNm"
-											class="form-control disabled" style="width: 220px"
-											maxlength="50" /></td>
+										<th>사업자등록번호</th>
+										<td><input class="form-control" type="text" id="stndrd" name="stndrd" style="width: 250px" maxlength="50" /></td>
+										<th>전화번호</th>
+										<td><input class="form-control" type="text" id="manageUnit" name="manageUnit" style="width: 250px" maxlength="50" /></td>
+										<th>비고</th>
+										<td><input type="text" id="wrhousngEntrps" name="wrhousngEntrps" class="form-control" maxlength="50" style="width: 250px" /></td>
 									</tr>
 								</tbody>
 							</table>
@@ -78,29 +72,17 @@
 			</div>
 		</div>
 		<div class="card mb-4">
-			<div class="card-header">
-				
-			</div>
 			<div class="card-body">
 				<div id="grid"></div>
-						<script>
-    var Grid = tui.Grid;
-     const data = [{
-         id: '10012',
-         city: 'Seoul',
-         country: 'South Korea'
-       },
-       {
-         id: '10013',
-         city: 'Tokyo',
-         country: 'Japan'
-       }
-     ]
-    // case 1 : 인스턴스 생성시 data 옵션으로 데이터 입력
-    const grid = new Grid({
+			</div>
+		</div>
+	</div>
+<script>
+    const grid = new tui.Grid({
       el: document.getElementById('grid'),
-      data : data ,
-      //data만 적어도 가능(축약형)
+			scrollX: false,
+   		bodyHeight: 350,
+    	rowHeaders: ['checkbox'],
       columns: [{
           header: '거래처코드',
           name: '거래처코드',
@@ -144,24 +126,17 @@
         }
       ]
     });
-    //ajax조회하고 grid
-    //$.ajax({
-    //  url: 'data.json'
-    //}).done(result => grid.resetData(result) ) //람다식표현
-    // }).done(function (result) {
-    //   // case 2 : resetData() 메서드로 입력
-    //   grid.resetData(result);
-    // })
-    grid.on('click', ev => {
-      console.log(ev.rowKey)
-      console.log(ev.columnName)
-      var value = grid.getValue(ev.rowKey,ev.columnName);
-      console.log(value);
-    })
+    
+   $.ajax({
+    url: "vendList",
+    method: "GET",
+    dataType: "JSON",
+    success: function (result) {
+        grid.resetData(result);
+    }
+}); 
+   
   </script>
-			</div>
-		</div>
-	</div>
 </th:block>
 </body>
 </html>
