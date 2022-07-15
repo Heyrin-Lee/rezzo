@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,11 @@ public class InspController {
         return "resour/rscInsp";
     }
 
+    @RequestMapping("rscInspList")
+    public String rscInspList() {
+        return "resour/rscInspList";
+    }
+
     @RequestMapping("getVendList")
     @ResponseBody
     public List<VendVO> getVendList() {
@@ -48,15 +55,14 @@ public class InspController {
     @RequestMapping("getOrdrList")
     @ResponseBody
     public List<OrdrVO> getOrdrList(@RequestBody OrdrVO ordrVO) {
+        System.out.println("ordrVO = " + ordrVO);
         return sv.getOrdrList(ordrVO);
     }
 
     @RequestMapping("setRscInspList")
     @ResponseBody
     public void setRscInspList(@RequestBody List<RscInspVO> vo) {
-        for (RscInspVO rscInspVO : vo) {
-            System.out.println("el = " + rscInspVO);
-            System.out.println(rscInspVO.getRscInf());
-        }
+        System.out.println("vo = " + vo);
+        sv.insertInspList(vo);
     }
 }

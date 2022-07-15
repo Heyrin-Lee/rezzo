@@ -32,9 +32,7 @@ public class InspServiceImpl implements InspService {
     }
 
     @Override
-    public void insertInspList(RscInspVO rscInspVO, List<RscInfVO> rscInfVOS) {
-        mapper.insertInspList(rscInspVO, rscInfVOS);
+    public void insertInspList(List<RscInspVO> rscInspVOS) {
+        mapper.insertInspList(rscInspVOS);
     }
-
-
 }
