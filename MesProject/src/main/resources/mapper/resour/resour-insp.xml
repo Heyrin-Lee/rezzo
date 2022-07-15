@@ -29,4 +29,8 @@
            or VEND_CD = '${vendCd}'
     </select>
 
+    <insert id="insertInspList" parameterType="">
+
+    </insert>
+
 </mapper>

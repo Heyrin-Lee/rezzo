@@ -3,8 +3,7 @@ package com.rezzo.mes.resour.insp.web;
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.resour.insp.service.InspService;
-import com.rezzo.mes.resour.insp.vo.OrdrVO;
-import com.rezzo.mes.resour.insp.vo.VendVO;
+import com.rezzo.mes.resour.insp.vo.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +19,6 @@ import java.util.Map;
 public class InspController {
 
     private final InspService sv;
-
     private final CcdsService cdsv;
 
     @RequestMapping("getInfList")
@@ -31,7 +29,7 @@ public class InspController {
 
     @RequestMapping("rscInsp")
     public String rscInsp() {
-        return "resour/insp/rscInsp";
+        return "resour/rscInsp";
     }
 
     @RequestMapping("getVendList")
@@ -52,4 +50,12 @@ public class InspController {
         return sv.getOrdrList(ordrVO);
     }
 
+    @RequestMapping("setRscInspList")
+    @ResponseBody
+    public void setRscInspList(@RequestBody List<RscInspVO> vo) {
+        for (RscInspVO rscInspVO : vo) {
+            System.out.println("el = " + rscInspVO);
+            System.out.println(rscInspVO.getRscInf());
+        }
+    }
 }

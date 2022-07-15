@@ -31,8 +31,8 @@ public class EqmLineServiceImpl implements EqmLineService {
 	}
 
 	@Override
-	public void eqmLineDelete(String lineCd) {
-		
+	public void eqmLineDelete(EqmLineVO vo) {
+		map.eqmLineDelete(vo);
 	}
 
 }

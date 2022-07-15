@@ -25,8 +25,36 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public List<Map> getPrcsFlow(PlanVO vo) {
+	public List<PlanVO> getPrcsFlow(PlanVO vo) {
 		return mapper.getPrcsFlow(vo);
+	}
+
+	@Override
+	public List<PlanVO> getRscInfo(PlanVO vo) {
+		return mapper.getRscInfo(vo);
+	}
+
+	@Override
+	public void planInsert(PlanVO vo) {
+		mapper.planInsert(vo);
+	}
+
+	@Override
+	public void grid1Insert(PlanVO vo) {
+		mapper.grid1Insert(vo);
+		
+	}
+
+	@Override
+	public void grid2Insert(PlanVO vo) {
+		mapper.grid2Insert(vo);
+	}
+
+	@Override
+	public void grid4Insert(List<PlanVO> list) {
+		for(PlanVO vo : list) {
+			mapper.grid4Insert(list);
+		}
 	}
 
 }
