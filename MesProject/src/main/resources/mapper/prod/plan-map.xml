@@ -3,20 +3,64 @@
 <mapper namespace="com.rezzo.mes.prod.plan.mapper.PlanMapper">
 
 <select id="orderListModal" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
-	SELECT ORDER_NO, EDCTS_CD, VEND_CD, VEND_NM, ORDER_DT, PROG_APPE, PAPRD_DT, PRDT_NM, ORDER_CNT
+	SELECT *
 	FROM ORDER_SHEET
 </select>
 
 <select id="getIndex" resultType="Integer">
 	SELECT MAX(SUBSTR(PLAN_CD, 12)) 
 	FROM PLAN
-	WHERE PLAN_DT = #{planDt}
+	WHERE INDICA_DT = #{indicaDt}
 </select>
 
-<select id="getPrcsFlow" resultType="com.rezzo.mes.prod.plan.service.PlanVO" >
-	SELECT EDCTS_CD, PRCS_CD FROM PRCS_FLOW 
-	WHERE EDCTS_CD=#{edctsCd} 
-	ORDER BY EDCTS_CD, PRCS_ORD
+<select id="getPrcsFlow" resultType="PlanVO" >
+	SELECT EDCTS_CD, PRCS_CD 
+	FROM PRCS_FLOW 
+	WHERE EDCTS_CD = #{edctsCd}
 </select>
+
+<select id="getRscInfo" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
+	SELECT I.RSC_CD, I.RSC_LOT_NO, O.RSC_CNT, B.USE_CNT, B.EDCTS_CD, B.PRCS_CD
+	FROM RSC_IST I 
+	JOIN RSC_ORDR_DTL O
+	ON I.RSC_CD = O.RSC_CD
+	JOIN BOM B
+	ON B.RSC_CD = I.RSC_CD
+	WHERE EDCTS_CD=#{edctsCd}
+</select> 
+
+<insert id="grid1Insert" parameterType="PlanVO">
+	insert into plan 
+	values (#{planCd},
+			#{paprdDt},
+			DEFAULT,
+			#{indicaDt},
+			#{orderNo}
+			)
+</insert>
+
+<insert id="grid2Insert" parameterType="PlanVO">
+	insert into plan_dtl 
+	values (#{wkFrDt},
+			#{lineCd},
+			#{edctsCd},
+			#{orderCnt},
+			#{indicaCnt},
+			#{planCd},
+			#{wkToDt},
+			#{indicaDt},
+			#{prefRank}
+			)
+</insert>
+
+<insert id="grid4Insert" parameterType="PlanVO">
+	insert into holding
+	values (
+			#{planCd}
+			#{rscCd}
+			#{rscUse}
+			#{rscLotNo}
+			)
+</insert>
 
 </mapper>
