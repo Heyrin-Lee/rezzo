@@ -7,12 +7,12 @@
 	FROM ORDER_SHEET
 </select>
 
-<select id="getIndex" resultType="Integer">
+<select id="getIndex" resultType="String">
 	SELECT MAX(SUBSTR(PLAN_CD, 12)) 
 	FROM PLAN
-	WHERE INDICA_DT = #{indicaDt}
+	WHERE PLAN_DT = to_date(#{planDt}, 'yyyymmdd')
 </select>
-
+ 
 <select id="getPrcsFlow" resultType="PlanVO" >
 	SELECT EDCTS_CD, PRCS_CD 
 	FROM PRCS_FLOW 
@@ -30,25 +30,30 @@
 </select> 
 
 <insert id="grid1Insert" parameterType="PlanVO">
-	insert into plan 
+	insert into plan (plan_cd,
+					  paprd_Dt,	
+					  now_st,
+					  plan_dt,
+					  order_no	
+						)
 	values (#{planCd},
 			#{paprdDt},
-			DEFAULT,
+			'미진행',
 			#{indicaDt},
 			#{orderNo}
 			)
 </insert>
-
+ 
 <insert id="grid2Insert" parameterType="PlanVO">
 	insert into plan_dtl 
-	values (#{wkFrDt},
+	values (#{planDt},
 			#{lineCd},
 			#{edctsCd},
 			#{orderCnt},
 			#{indicaCnt},
 			#{planCd},
 			#{wkToDt},
-			#{indicaDt},
+			#{wkFrDt},
 			#{prefRank}
 			)
 </insert>
@@ -56,9 +61,9 @@
 <insert id="grid4Insert" parameterType="PlanVO">
 	insert into holding
 	values (
-			#{planCd}
-			#{rscCd}
-			#{rscUse}
+			#{planCd},
+			#{rscCd},
+			#{rscUse},
 			#{rscLotNo}
 			)
 </insert>
