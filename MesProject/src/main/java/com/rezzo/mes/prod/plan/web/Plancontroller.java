@@ -32,32 +32,35 @@ public class Plancontroller {
 
 	@GetMapping("getIndex")
 	@ResponseBody
-	public Integer getIndex(PlanVO vo) {
-		System.out.println(vo.getIndicaDt());
+	public String getIndex(PlanVO vo) {
+		System.out.println(vo.getPlanDt());
 		return service.getIndex(vo);
 	}
-
+  
 	@PostMapping("getPrcsFlow")
 	@ResponseBody
 	public List<PlanVO> getPrcsFlow(PlanVO vo) {
-		System.out.println(vo.getEdctsCd());
 		return service.getPrcsFlow(vo);
 	}
 
 	@RequestMapping("getRscInfo")
 	@ResponseBody
 	public List<PlanVO> getRscInfo(PlanVO vo) {
-		System.out.println(vo.getEdctsCd());
 		return service.getRscInfo(vo);
 	}
 
-	
-	@RequestMapping("planInsert") 
-	public void planInsert(PlanVO vo, List<PlanVO> list) {
-		service.grid1Insert(vo);
-		service.grid2Insert(vo);
-		service.grid4Insert(list);
+	 
+	@PostMapping("plan12Insert") 
+	@ResponseBody
+	public void plan12Insert(@RequestBody List<PlanVO> list) {
+		service.grid1Insert(list.get(0));
+		service.grid2Insert(list.get(1));
 	}
 	 
-
+	@PostMapping("plan4Insert")
+	@ResponseBody
+	public void plan4Insert(@RequestBody List<PlanVO> list) {
+		service.grid4Insert(list);
+	} 
+ 	
 }
