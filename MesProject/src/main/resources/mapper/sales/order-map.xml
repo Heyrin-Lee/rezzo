@@ -30,6 +30,7 @@
 		<if test="prdtNm != null and vendNm !='' ">and PRDT_NM = #{prdtNm}</if>
 		<if test="start != null">and ORDER_DT BETWEEN #{start} AND #{end}</if>
 		ORDER BY ORDER_NO		
+
 	</select>
 	
 	<!-- 주문서 삭제 -->
