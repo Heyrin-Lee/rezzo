@@ -110,18 +110,11 @@
    
    <script>
    /* 그리드 */
-		/*초기페이지 - 주문서 전체 목록 보여주기*/
-		$.ajax({
-			url : "orderSelect",
-			method : "get",
-			datatype : "json",
-			success : function(list) {
-				grid.resetData(list);
-				console.log(list);
-			}
-		})
+		//초기페이지 - 주문서 전체 목록 보여주기-주문일자가 현재 날짜인 주문서만 보이기
+
 
 		$(function() {
+			search();
 			comList();
 			proList();
 		})
@@ -176,31 +169,37 @@
 	        {
 	          header: '주문번호',
 	          name: 'orderNo',
-	          editor: 'text'
+	          editor: 'text',
+	          align:'center'
 	        },
 	        {
 	          header: '제품코드',
 	          name: 'edctsCd',
-	          editor: 'text'
+	          editor: 'text',
+	          align:'center'
 	        },
 	        {
 	          header: '거래처코드',
 	          name: 'vendCd',
-	          editor: 'text'
+	          editor: 'text',
+	          align:'center'
 	        },
 	        {
 	          header: '거래처',
 	          name: 'vendNm',
-	          editor: 'text'
+	          editor: 'text',
+	          align:'center'
 	        },
 	        {
 	          header: '주문일자',
 	          name: 'orderDt',
-	          editor: 'datePicker'
+	          editor: 'datePicker',
+	          align:'center'
 	        },
 	        {
 			    header: '진행상황',
 			    name: 'progAppe',
+			    align:'center',
 			    editor: {
                   type: 'select',
                   options:{
@@ -214,17 +213,20 @@
 	        {
 		       header: '납기일자',
 		       name: 'paprdDt',
-		       editor: 'datePicker'
+		       editor: 'datePicker',
+		       align:'center'
 		        },
 		        {
 		       header: '제품명',
 		       name: 'prdtNm',
-		       editor: 'text'
+		       editor: 'text',
+		       align:'center'
 		        },
 			{
 			    header: '주문수량',
 	          name: 'orderCnt',
-	          editor: 'text'
+	          editor: 'text',
+	          align:'center'
 			},	
 		  ]   
 	    });
@@ -239,12 +241,14 @@
 	            {
 	                header: '완제품코드',
 	                name: 'edctsCd',
-	                width: 200
+	                width: 200,
+	                align:'center'
 	            },
 	            {
 	                header: '제품명',
 	                name: 'prdtNm',
-	                width: 200
+	                width: 200,
+	                align:'center'
 	            }
 	        ]
 	    });
@@ -259,22 +263,26 @@
 	            {
 	                header: '거래처코드',
 	                name: 'vendCd',
-	                width: 100
+	                width: 100,
+	                align:'center'
 	            },
 	            {
 	                header: '거래처명',
 	                name: 'vendNm',
-	                width: 100
+	                width: 100,
+	                align:'center'
 	            },
 	            {
 	                header: '사업자등록번호',
 	                name: 'bizNo',
-	                width: 110
+	                width: 110,
+	                align:'center'
 	            },
 	            {
 	                header: '전화번호',
 	                name: 'telNo',
-	                width: 100
+	                width: 100,
+	                align:'center'
 	            }
 	        ]
 	    });
@@ -282,7 +290,31 @@
    		//행추가 버튼
 		   let addBtn = document.getElementById('addBtn');
 		   addBtn.addEventListener('click', function(e){
-		   		grid.appendRow()
+		   	//주문서 추가시 주문번호 자동 생성 ex.ORS20220715001
+		   	let orderDt =$("input[name=start]").val();
+		   	$.ajax({
+		   		url:"getordrNo",
+		   		dataType:"json",
+		   		method:"get",
+		   		data:{"orderDt":orderDt},
+		   		success:function(makeno) {
+		   			let no = makeno + 1;
+		   			var rcode = orderDt.replaceAll("-","");
+		   				console.log(rcode);
+		   			//function ordrNo() {
+		   			//	return "ORS" + orderDt + no
+		   			//}
+		   			grid.appendRow();
+		   				let result = "ORS" + rcode + no;
+		   				console.log(result);
+		   				let row = grid.getRowCount();
+		   				console.log(row);
+		   				grid.setValue(row,'OrderNo',result);
+		   		}
+		   	})
+		   			
+		   			
+	
 		   })
 		   
 		   //더블클릭 하면 체크박스 체크
