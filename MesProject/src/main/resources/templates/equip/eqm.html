@@ -467,7 +467,8 @@
 
 
 									// 설비 리스트 이동	 
-
+									
+									
 									grid.on('click', ev => {
 										var value = grid.getValue(ev.rowKey, 'eqmCd');
 										var keyword = grid.getValue(ev.rowKey, 'eqmNm');
@@ -484,18 +485,18 @@
 											dataType: "JSON",
 											success: function (result) {
 											console.log(result);
-												$('#eqmNm').val(result[0].eqmNm);
-												$('#eqmCd').val(result[0].eqmCd);
-												$('[name="prcsCd"]').val([result[0].prcsCd]);
-												$('[name="useYn"]').val([result[0].useYn]);
-												$('#minTemp').val(result[0].minTemp);
-												$('[name="lineCd"]').val(result[0].lineCd);
-												$('[name="prcsNm"]').val(result[0].prcsNm);
-												$('#maxTemp').val(result[0].maxTemp);
-												$('#chckPerd').val(result[0].chckPerd);
-												$('#eqmIstDt').val(result[0].eqmIstDt);
-												$('[name="eqmFg"]').val(result[0].eqmFg);
-												$('#preview').attr("src",'imgfile/'+result[0].imgPath);
+												$('#eqmNm').val(result[ev.rowKey].eqmNm);
+												$('#eqmCd').val(result[ev.rowKey].eqmCd);
+												$('[name="prcsCd"]').val([result[ev.rowKey].prcsCd]);
+												$('[name="useYn"]').val([result[ev.rowKey].useYn]);
+												$('#minTemp').val(result[ev.rowKey].minTemp);
+												$('[name="lineCd"]').val(result[ev.rowKey].lineCd);
+												$('[name="prcsNm"]').val(result[ev.rowKey].prcsNm);
+												$('#maxTemp').val(result[ev.rowKey].maxTemp);
+												$('#chckPerd').val(result[ev.rowKey].chckPerd);
+												$('#eqmIstDt').val(result[ev.rowKey].eqmIstDt);
+												$('[name="eqmFg"]').val(result[ev.rowKey].eqmFg);
+												$('#preview').attr("src","imgfile/"+result[ev.rowKey].imgPath);
 												
 											}
 										})

@@ -30,8 +30,16 @@
 	</insert>
 
 	<delete id="eqmDelete" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
+		DECLARE
+		BEGIN
 		delete from eqm
-		where eqm_cd = #{eqmCd}
+		where eqm_cd = #{eqmCd};
+		
+		delete from eqm_img
+		where eqm_cd = #{eqmCd};
+		
+		END;
+		
 	</delete>
 
 </mapper>

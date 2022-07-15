@@ -88,7 +88,6 @@ public class EqmController {
 			File target = new File(saveDir, saveFileName);
 			vo.setEqmImg(fileName);
 			vo.setImgPath(saveFileName);
-			System.out.println(target.getAbsolutePath());
 			try {
 				FileCopyUtils.copy(file.getBytes(), target);
 			} catch (IOException e) {
