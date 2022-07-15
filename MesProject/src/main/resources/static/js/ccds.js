@@ -28,34 +28,15 @@ $.ajax({
     }
 });
 
-//상세코드 사용자 커스텀에디터
-class CustomTextEditor {
-    constructor(props) {
-        console.log(props);
-        const el = document.createElement('input');
-        const {
-            maxLength
-        } = props.columnInfo.editor.options;
-
-        el.type = 'text';
-        el.maxLength = maxLength;
-        el.value = String(props.value);
-
-        this.el = el;
-    }
-
-    getElement() {
-        return this.el;
-    }
-
-    getValue() {
-        return this.el.value;
-    }
-
-    mounted() {
-        this.el.select();
+//테마 호버, 하이라이팅
+let hoverOption = {
+    row: {
+        hover: {
+            background: 'rgba(19,78,94,0.2)'
+        }
     }
 }
+tui.Grid.applyTheme('default', hoverOption);
 
 
 //상세코드 그리드
@@ -68,8 +49,9 @@ const grid2 = new tui.Grid({
         header: '코드',
         name: 'ccdDtl',
         align: 'center',
-        editor: {
-            type: CustomTextEditor
+        editor: 'text',
+        validation: {
+            required: true
         },
         sortable: true,
         sortingType: 'desc'
@@ -78,6 +60,9 @@ const grid2 = new tui.Grid({
         name: 'ccdDtlNm',
         align: 'center',
         editor: 'text',
+        validation: {
+            required: true
+        },
         sortable: true,
         sortingType: 'desc'
     }, {
@@ -110,19 +95,36 @@ const grid2 = new tui.Grid({
     }]
 });
 
+
 //데이터 편집 후 체크박스
 grid2.on('editingFinish', (ev) => {
-    var rowKey = ev.rowKey;
+    const {
+        rowKey
+    } = ev;
     grid2.check(rowKey);
 });
 
+//마우스 영역 벗어나면 수정 종료
+$('#grid2').mouseleave(ev => {
+    grid2.finishEditing();
+})
+
 // 공통코드 클릭시 상세코드 리스트
+var rowCount = 0;
+var selectedRowKey = null;
 grid.on('click', ev => {
     var keyword = grid.getValue(ev.rowKey, 'ccdNm');
     var ccd = grid.getValue(ev.rowKey, 'ccd');
     $('#selCcd').val(keyword);
 
-    //list 호출
+    //셀 클릭시 로우 하이라이팅
+    if (selectedRowKey != ev.rowKey) {
+        grid.removeRowClassName(selectedRowKey, 'highlight');
+    }
+    selectedRowKey = ev.rowKey;
+    grid.addRowClassName(selectedRowKey, 'highlight');
+
+    //세부코드 list 호출
     $.ajax({
         url: "getCodeList",
         method: "POST",
@@ -134,6 +136,7 @@ grid.on('click', ev => {
                 grid2.refreshLayout()
             }, 300);
             grid2.resetData(result);
+            rowCount = grid2.getRowCount();
         }
     });
 
@@ -151,6 +154,26 @@ grid.on('click', ev => {
             $('#useYn').val(result.useYn);
         }
     });
+
+});
+
+//기존정보 셀 편집 막기 & 하이라이팅
+var selectedRowKey2 = null;
+grid2.on('click', (ev) => {
+    const {
+        columnName,
+        rowKey
+    } = ev;
+    if (columnName == 'ccdDtl' && rowKey < rowCount) {
+        alert('이미 저장된 코드ID는 변경할 수 없습니다.')
+        return;
+    }
+
+    if (selectedRowKey2 != ev.rowKey) {
+        grid2.removeRowClassName(selectedRowKey2, 'highlight');
+    }
+    selectedRowKey2 = ev.rowKey;
+    grid2.addRowClassName(selectedRowKey2, 'highlight');
 
 });
 
@@ -215,20 +238,21 @@ $('#saveBtn').click(ev => {
 
 //추가버튼
 $('#newBtn').click(ev => {
-    if ($('#selCcd').val() == '') {
-        alert('공통코드를 먼저 선택해주세요!')
-    } else {
-        //상세코드탭
-        if ($('#nav-codes').hasClass("active")) {
+    //상세코드탭
+    if ($('#nav-codes').hasClass("active")) {
+        //상세코드탭 오류
+        if ($('#selCcd').val() == '') {
+            alert('공통코드를 먼저 선택해주세요!')
+        } else {
             //그리드 추가
             grid2.appendRow();
-
-            //코드정보탭
-        } else if ($('#nav-cdInfo').hasClass("active")) {
-            //form 초기화
-            $('#dataForm')[0].reset();
-            $('#ccd').attr("readonly", false);
         }
+        //코드정보탭
+    } else if ($('#nav-cdInfo').hasClass("active")) {
+
+        //form 초기화
+        $('#dataForm')[0].reset();
+        $('#ccd').attr("readonly", false);
     }
 });
 
