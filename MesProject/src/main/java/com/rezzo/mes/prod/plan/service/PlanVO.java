@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.sales.order.service.OrderVO;
 
@@ -21,10 +22,9 @@ public class PlanVO implements Serializable {
 	Date paprdDt;
 	int prefRank;
 	String nowSt;
-	@DateTimeFormat(pattern = "yyyyMMdd") 
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date planDt;
-	@DateTimeFormat(pattern = "yyyyMMdd") 
-	Date indicaDt;
 	Date wkFrDt; 
 	Date wkToDt;
 	String lineCd;
