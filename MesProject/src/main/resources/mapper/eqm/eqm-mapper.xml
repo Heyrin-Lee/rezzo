@@ -15,19 +15,43 @@
 	</select>
 
 	<insert id="eqmInsert" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
-   DECLARE
-    BEGIN
 		insert into eqm (eqm_cd, line_cd, prcs_cd, eqm_nm, eqm_ist_dt, min_temp,
 		max_temp, chck_perd, use_yn, prcs_nm, eqm_fg)
 		values (<![CDATA[cre_code(#{eqmFg})]]>,
 		#{lineCd}, #{prcsCd}, #{eqmNm}, #{eqmIstDt}, #{minTemp}, 
-		#{maxTemp}, #{chckPerd}, #{useYn}, #{prcsNm},#{eqmFg});
+		#{maxTemp}, #{chckPerd}, #{useYn}, #{prcsNm},#{eqmFg})
 	
-		insert into eqm_img (eqm_cd, prcs_cd, img_path, eqm_img)
-		values(<![CDATA[cre_code2(#{eqmFg})]]>, #{prcsCd}, #{imgPath}, #{eqmImg});
-	
-	END;
 	</insert>
+	
+	<insert id="eqmImgInsert" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
+		insert into eqm_img (eqm_cd, prcs_cd, img_path, eqm_img)
+		values(<![CDATA[cre_code2(#{eqmFg})]]>, #{prcsCd}, #{imgPath}, #{eqmImg})
+	</insert>
+	
+	<update id="eqmUpdate" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
+			update eqm
+			set 
+			line_cd = #{lineCd}, 
+			prcs_cd = #{prcsCd}, 
+			eqm_nm = #{eqmNm}, 
+			eqm_ist_dt = #{eqmIstDt}, 
+			min_temp = #{minTemp},
+			max_temp = #{maxTemp}, 
+			chck_perd = #{chckPerd}, 
+			use_yn = #{useYn}, 
+			prcs_nm = #{prcsNm},
+			eqm_fg = #{eqmFg}
+			where eqm_cd = #{eqmCd}
+	</update>
+	
+	<update id = "eqmImgUpdate" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
+		update eqm_img
+			set prcs_cd = #{prcsCd},
+				img_path = #{imgPath},
+				eqm_img = #{eqmImg}
+			where eqm_cd = #{eqmCd}
+	</update>
+	
 
 	<delete id="eqmDelete" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
 		DECLARE
