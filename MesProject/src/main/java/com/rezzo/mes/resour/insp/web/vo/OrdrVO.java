@@ -1,4 +1,4 @@
-package com.rezzo.mes.resour.insp.vo;
+package com.rezzo.mes.resour.insp.web.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class OrdrVO {
     String rscCd;
     String rscNm;
     String ordrCnt;
-    Date startDt;
-    Date endDt;
+    String startDt;
+    String endDt;
 
 }

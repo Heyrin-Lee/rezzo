@@ -4,7 +4,7 @@
 
 <mapper namespace="com.rezzo.mes.resour.insp.mapper.InspMapper">
     <select id="getOrdrList" parameterType="OrdrVO" resultType="OrdrVO">
-        select RSC_CD, RSC_NM, rod.ORDR_NO, ORDR_CNT
+        select rod.RSC_CD, rod.RSC_NM, rod.ORDR_NO, rod.ORDR_CNT
         from RSC_ORDR ro,
              RSC_ORDR_DTL rod
         where ro.ORDR_NO = rod.ORDR_NO
@@ -17,23 +17,25 @@
         order by PAPRD_CMND_DT
     </select>
 
-    <select id="getVendList" resultType="VendVO">
-        select VEND_CD, VEND_NM, BIZNO, TELNO
-        from VEND
-    </select>
-
-    <select id="getVendListByKw" parameterType="VendVO" resultType="VendVO">
+    <select id="getVendList" parameterType="VendVO" resultType="VendVO">
         select VEND_CD, VEND_NM, BIZNO, TELNO
         from VEND
         where VEND_NM like '%${vendNm}%'
-           or VEND_CD = '${vendCd}'
+          and VEND_CD like '%${vendCd}%'
+    </select>
+
+    <select id="getRscList" resultType="RscVO">
+        select RSC_CD, RSC_NM
+        from RSC
+        where RSC_NM like '%${rscNm}%'
+          and RSC_CD like '%${rscCd}%'
     </select>
 
     <insert id="insertInspList" parameterType="List">
         insert all
         <foreach item="item" collection="list">
             into RSC_INSP (RSC_INSP_NO, INSP_DT)
-            values (123, #{item.inspDt})
+            values (123, to_char(#{item.inspDt}, 'YYYY-MM-DD'))
         </foreach>
 
         <foreach item="item" collection="list">
@@ -49,4 +51,24 @@
         </foreach>
         select * from DUAL
     </insert>
+
+    <select id="getRscInspList" parameterType="OrdrVO" resultType="RscInspVO">
+        select ri.RSC_INSP_NO, to_char(ri.INSP_DT, 'YYYY-MM-DD') INSP_DT, rid.RSC_CD, rsc.RSC_NM, rid.INSP_CNT, rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT
+        from RSC_INSP ri,
+        RSC_INSP_DTL rid,
+        RSC_ORDR_DTL rod,
+        RSC_ORDR ro,
+        RSC
+        where ri.RSC_INSP_NO = rid.RSC_INSP_NO
+        and rod.ORDR_NO = rid.ORDR_NO
+        and rod.RSC_CD = rid.RSC_CD
+        and ro.ORDR_NO = rod.ORDR_NO
+        and rsc.RSC_CD = rid.RSC_CD
+        <![CDATA[
+          and ri.INSP_DT >= #{startDt}
+          and ri.INSP_DT <= #{endDt}
+        ]]>
+        <if test="vendCd != ''">and ro.VEND_CD = #{vendCd}</if>
+        <if test="rscCd != ''">and rid.RSC_CD = #{rscCd}</if>
+    </select>
 </mapper>
