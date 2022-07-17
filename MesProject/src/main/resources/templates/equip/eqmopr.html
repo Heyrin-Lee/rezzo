@@ -26,7 +26,6 @@ body {
 .linelist {
 	display: inline-block;
 	margin-top: 0px;
-	float: right;
 }
 
 label {
@@ -60,9 +59,9 @@ label {
 					</div>
 					<div class="card-body">
 						<div>
-							<label for="">가동여부</label> <select
-								style="width: 120px; text-align: center">
-								<option selected="selected">전체</option>
+							<label for="">가동여부</label> 
+							<select style="width: 120px; text-align: center">
+								<option selected disabled>가동여부 선택</option>
 								<option>가동</option>
 								<option>비가동</option>
 							</select>
@@ -110,28 +109,20 @@ label {
 	<br>
 
 	<script>
-		const gridData = [];
-		(function() {
-			for (let i = 0; i < 120; i += 1) {
-				gridData.push({
-					c1 : 'User' + (i + 1),
-					c2 : ((i + 5) % 8) * 100 + i,
-					c3 : ((i + 3) % 7) * 60,
-					c4 : ((i + 3) % 7) * 60,
-					c5 : ((i + 3) % 7) * 60,
-					c6 : ((i + 3) % 7) * 60,
-					c7 : ((i + 3) % 7) * 60,
-					c8 : ((i + 3) % 7) * 60,
 
-				});
+		
+		$.ajax({
+			url: "eqmList",
+			method: "GET",
+			dataType: "JSON",
+			success: function (result) {
+				grid.resetData(result);
+				console.log(result);
 			}
-		})();
+		});
 
 		const grid = new tui.Grid({
 			el : document.getElementById('grid'),
-			data : gridData,
-			scrollX : false,
-			bodyHeight : 500,
 			rowHeaders : [ 'rowNum' ],
 			columns : [ {
 				header : '설비코드',
@@ -158,8 +149,6 @@ label {
 
 		const grid2 = new tui.Grid({
 			el : document.getElementById('grid2'),
-			data : gridData,
-			scrollX : false,
 			bodyHeight : 200,
 			rowHeaders : [ 'rowNum' ],
 			columns : [ {

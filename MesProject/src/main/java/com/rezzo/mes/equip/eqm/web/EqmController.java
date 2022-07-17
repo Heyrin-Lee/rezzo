@@ -43,6 +43,9 @@ public class EqmController {
 	@Value("$com.rezzo.upload.path}")
 	private String uploadPath;
 
+	
+	// eqm 화면
+	
 	@RequestMapping("eqm")
 	public String eqmLineList(Model model, EqmLineVO vo, PrcsVO prcsVo, CcdsVO ccdsVO) {
 		List<EqmLineVO> eqmLineSelectList = lineService.eqmLineSelectList(vo);
@@ -56,6 +59,8 @@ public class EqmController {
 		return "equip/eqm";
 	}
 
+	// 다건조회
+	
 	@GetMapping("eqmList")
 	@ResponseBody
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -63,12 +68,16 @@ public class EqmController {
 		List<EqmVO> eqmList = eqmService.eqmList(vo);
 		return eqmList;
 	}
+	
+	// 한건조회
 
 	@PostMapping("eqmSelect")
 	@ResponseBody
 	public List<EqmVO> eqmSelect(@RequestParam(value = "keyword") String keyword, Model model) {
 		return eqmService.eqmSelect(keyword);
 	}
+	
+	//삭제
 
 	@PostMapping("eqmDelete/{eqmCd}")
 	@ResponseBody
@@ -78,6 +87,8 @@ public class EqmController {
 		return vo;
 	};
 
+	//추가
+	
 	@PostMapping("eqmInsert")
 	@ResponseBody
 	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {
@@ -95,12 +106,15 @@ public class EqmController {
 			}
 		}
 		eqmService.eqmInsert(vo);
+		eqmService.eqmImgInsert(vo);
 		return eqmService.eqmList(vo);
 	};
 	
+	//수정
+	
 	@PostMapping("eqmUpdate")
 	@ResponseBody
-		public void eqmUpdate(EqmVO vo, MultipartFile file){
+	public List<EqmVO> eqmUpdate(EqmVO vo, MultipartFile file) {
 		String fileName = file.getOriginalFilename();
 		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
 			String uid = UUID.randomUUID().toString();
@@ -113,9 +127,10 @@ public class EqmController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			eqmService.eqmUpdate(vo);
 		}
-		
+		eqmService.eqmUpdate(vo);
+		eqmService.eqmImgUpdate(vo);
+		return eqmService.eqmList(vo);
 	}
 	
 }

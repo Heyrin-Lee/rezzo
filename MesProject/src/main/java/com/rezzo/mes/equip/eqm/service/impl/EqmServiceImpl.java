@@ -41,4 +41,17 @@ public class EqmServiceImpl implements EqmService {
 		return map.eqmSelect(keyword);
 	}
 
+	@Override
+	public void eqmImgInsert(EqmVO vo) {
+		map.eqmImgInsert(vo);
+		
+	}
+
+	@Override
+	public void eqmImgUpdate(EqmVO vo) {
+		map.eqmImgUpdate(vo);	
+	}
+	
+	
+
 }

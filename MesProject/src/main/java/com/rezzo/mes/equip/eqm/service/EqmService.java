@@ -12,5 +12,9 @@ public interface EqmService {
 	public void eqmUpdate(EqmVO vo);
 
 	public void eqmDelete(EqmVO vo);
+	
+	public void eqmImgUpdate(EqmVO vo);
+	
+	public void eqmImgInsert(EqmVO vo);
 
 }
