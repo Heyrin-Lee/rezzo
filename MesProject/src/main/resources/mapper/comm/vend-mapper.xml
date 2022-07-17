@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.comm.vend.mapper.VendMapper">
+	
+	<!-- 전체 리스트 or 조건 -->
+	<select id="getVendList" resultType="VendVO">
+		SELECT * 
+		FROM VEND
+		WHERE 1=1
+		<if test="vendCd != null and vendCd !=''">and VEND_CD = #{vendCd}</if>
+		<if test="vendNm != null and vendNm !=''">and VEND_NM LIKE '%'||#{vendNm}||'%'</if>
+		<if test="bizno != null and bizno !=''">and BIZNO LIKE '%'||#{bizno}||'%'</if>
+		<if test="telno != null and telno !=''">and TELNO LIKE '%'||#{telno}||'%'</if>
+		<if test="remk != null and remk !=''">and REMK LIKE '%'||#{remk}||'%'</if>
+		<if test="vendTyp != null and vendTyp !=''">and VEND_TYP = #{vendTyp}</if>
+	</select>
+	
+	<!-- 거래처 등록,수정 -->
+	<update id="saveVend" parameterType="VendVO" statementType="CALLABLE">
+		<![CDATA[{call proc_vend_save(#{vendCd}, #{vendNm}, #{bizno}, #{telno}, #{remk}, #{vendTyp})}]]>
+	</update>
+	
+	<!-- 거래처 삭제 -->
+	<delete id="delVend" parameterType="VendVO">
+			DELETE FROM VEND
+			WHERE VEND_CD = #{vendCd}
+	</delete>
+</mapper>

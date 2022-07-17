@@ -18,22 +18,14 @@
 			</ol>
 		<div class="card mb-4">
 			<div class="card-body">
-				<label for="" autofocus="autofocus">
-					<select class="dataTable-selector" style="width: 150px">
-							<option selected value="">거래처명</option>  
-							<option value="">사업자등록번호</option>
-							<option th:each="code : ${ccds['EQM']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option>
-					</select></td></label> 
-						<input type="text" class="form-control" id="selCcd" name="sleCcd" style="width: 200px">
-					<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 검색</button>
 				<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
 						<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
 						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
-						<button class="btn btn-primary" form="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+						<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 						<br> <br>
 					</div>
-						<form autocomplete="off" id="dataForm" name="dataForm" action="#"
-							method="post">
+						<form id="dataForm" name="dataForm" action="#" method="post">
 							<table class="table" style="vertical-align : middle;">
 								<colgroup>
 									<col style="width: 150px">
@@ -47,24 +39,23 @@
 									<tr>
 										<th>구분 <strong class="blue">*</strong></th>
 										<td>
-											<select class="dataTable-selector" style="width: 250px">
+											<select class="dataTable-selector" name="vendTyp" id="vendTyp" style="width: 250px">
 												<option selected value="">==등록시필수선택==</option>  
-												<option th:each="code : ${ccds['EQM']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option>
+												<option th:each="code : ${ccds['VND']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtlNm}"></option>
 											</select></td>
 										<th>거래처코드 <strong class="blue">*</strong></th>
-										<td><input class="form-control" type="text" id="matrCd" name="matrCd" style="width: 250px" maxlength="20"
-											placeholder="저장시 자동부여됩니다." readonly="true" />
-										 <input type="hidden" id="dbAccessDiv" name="dbAccessDiv" value="insert" /></td>
+										<td><input class="form-control" type="text" id="vendCd" name="vendCd" style="width: 250px" maxlength="20"
+											placeholder="등록시 자동부여됩니다." readonly />
 										<th>거래처명 <strong class="blue">*</strong></th>
-										<td><input class="form-control" type="text" id="matrNm" name="matrNm" style="width: 250px" maxlength="50" /></td>
+										<td><input class="form-control" type="text" id="vendNm" name="vendNm" style="width: 250px" maxlength="50" /></td>
 									</tr>
 									<tr>
 										<th>사업자등록번호</th>
-										<td><input class="form-control" type="text" id="stndrd" name="stndrd" style="width: 250px" maxlength="50" /></td>
+										<td><input class="form-control" type="text" id="bizno" name="bizno" style="width: 250px" maxlength="50" /></td>
 										<th>전화번호</th>
-										<td><input class="form-control" type="text" id="manageUnit" name="manageUnit" style="width: 250px" maxlength="50" /></td>
+										<td><input class="form-control" type="text" id="telno" name="telno" style="width: 250px" maxlength="50" /></td>
 										<th>비고</th>
-										<td><input type="text" id="wrhousngEntrps" name="wrhousngEntrps" class="form-control" maxlength="50" style="width: 250px" /></td>
+										<td><input type="text" id="remk" name="remk" class="form-control" maxlength="50" style="width: 250px" /></td>
 									</tr>
 								</tbody>
 							</table>
@@ -78,65 +69,145 @@
 		</div>
 	</div>
 <script>
-    const grid = new tui.Grid({
-      el: document.getElementById('grid'),
+const grid = new tui.Grid({
+    el: document.getElementById('grid'),
 			scrollX: false,
-   		bodyHeight: 350,
-    	rowHeaders: ['checkbox'],
-      columns: [{
-          header: '거래처코드',
-          name: '거래처코드',
+ 		bodyHeight: 350,
+  	rowHeaders: ['rowNum'],
+    columns: [{
+        header: '구분',
+        name: 'vendTyp',
+        align: 'center',
+        filter: 'select',
+      	sortable: true,
+        sortingType: 'desc'
+    	},
+  	  {
+        header: '거래처코드',
+        name: 'vendCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '거래처명',
+        name: 'vendNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+          header: '사업자등록번호',
+          name: 'bizno',
+          align: 'center',
         	sortable: true,
           sortingType: 'desc'
-        },
-        {
-          header: '거래처명',
-          name: '거래처명',
-          editor: 'text',
+      },
+      {
+          header: '전화번호',
+          name: 'telno',
+          align: 'center',
         	sortable: true,
           sortingType: 'desc'
-        },
-        {
-            header: '사업자등록번호',
-            name: '사업자등록번호',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '전화번호',
-            name: '전화번호',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '비고',
-            name: '비고',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '구분',
-            name: '구분',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        }
-      ]
-    });
-    
-   $.ajax({
-    url: "vendList",
-    method: "GET",
-    dataType: "JSON",
-    success: function (result) {
-        grid.resetData(result);
-    }
-}); 
+      },
+      {
+          header: '비고',
+          name: 'remk',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+    ]
+  });
+  
+  //테마 호버
+  let hoverOption = {
+      row: {
+          hover: {
+              background: 'rgba(19,78,94,0.2)'
+          }
+      }
+  }
+  tui.Grid.applyTheme('default', hoverOption);
+  
+	//그리드 영역 벗어나면 수정 종료
+  $('#grid').mouseleave(ev => {
+      grid.finishEditing();
+  })
+  
+  //페이지 로딩시 실행
+  getVendList();
+  
+ function getVendList() {
+  	$.ajax({
+  	    url: "getVendList",
+  	    method: "POST",
+  	    data: $('#dataForm').serialize(),
+  	    dataType: "JSON",
+  	    success: function (result) {
+  	        grid.resetData(result);
+  	    }
+  		})
+	}
+
+//검색
+$('#searchBtn').click(ev => {
+	  getVendList();
+	  toastr.success('정상적으로 조회되었습니다.');
+ });
+ 
+//폼 리셋
+ $('#newBtn').click(ev => {
+	   $('#dataForm')[0].reset();
+ })
+ 
+ let selectedRowKey = null;
+ grid.on('focusChange', (ev) => {
+
+	   //하이라이팅
+   if (selectedRowKey != ev.rowKey) {
+       grid.removeRowClassName(selectedRowKey, 'highlight');
+   }
+   selectedRowKey = ev.rowKey;
+   grid.addRowClassName(selectedRowKey, 'highlight');
    
-  </script>
+   //폼데이터 출력
+   $("select[name='vendTyp']").eq(0).val(grid.getValue(ev.rowKey, 'vendTyp'));
+   $('#vendCd').val(grid.getValue(ev.rowKey, 'vendCd'));
+   $('#vendNm').val(grid.getValue(ev.rowKey, 'vendNm'));
+   $('#bizno').val(grid.getValue(ev.rowKey, 'bizno'));
+   $('#telno').val(grid.getValue(ev.rowKey, 'telno'));
+   $('#remk').val(grid.getValue(ev.rowKey, 'remk'));
+	});
+
+//수정&입력
+$('#saveBtn').click(ev => {
+	  $.ajax({
+		    url: "saveVend",
+		    method: "POST",
+      data: $('#dataForm').serialize(),
+      dataType: 'json',
+		    success: function (result) {
+		    	toastr.success('정상적으로 저장되었습니다.');
+		    	grid.resetData(result);
+		    }
+			})
+ });
+
+//삭제
+$('#delBtn').click(ev => {
+	  $.ajax({
+		 	url: "delVend",
+		  method: "POST",
+      data: $('#dataForm').serialize(),
+      dataType: 'json',
+		    success: function (result) {
+		    	toastr.success('정상적으로 삭제되었습니다.');
+		    	grid.resetData(result);
+		    }
+			})
+ });
+</script>
 </th:block>
 </body>
 </html>

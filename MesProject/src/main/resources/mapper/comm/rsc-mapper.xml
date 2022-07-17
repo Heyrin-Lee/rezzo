@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.comm.rsc.mapper.RscMapper">
+
+	<!-- 전체 리스트 or 조건 -->
+	<select id="getRscList" resultType="RscVO">
+		SELECT * 
+		FROM vw_src
+		WHERE
+		<if test="state == 1">1 = 1</if>
+		<if test="state == 2">RSC_NM LIKE '%'||#{keyword}||'%'</if>
+		<if test="state == 3">RSC_CD LIKE '%'||#{keyword}||'%'</if>
+		<if test="state == 4">VEND_NM LIKE '%'||#{keyword}||'%'</if>
+	</select>
+	
+	<!-- 자재 등록,수정 -->
+	<update id="saveRsc" parameterType="RscVO" statementType="CALLABLE">
+		<![CDATA[{call proc_src_save(#{rscCd}, #{rscNm}, #{rscSpec}, #{mngUnit}, #{rscTyp}, #{safStc}, #{useYn}, #{wrhousCd}, #{vendCd})}]]>
+	</update>
+	
+	<!-- 자재 삭제 -->
+	<delete id="delRsc" parameterType="RscVO">
+			DELETE FROM RSC
+			WHERE RSC_CD = #{rscCd}
+	</delete>
+	
+</mapper>

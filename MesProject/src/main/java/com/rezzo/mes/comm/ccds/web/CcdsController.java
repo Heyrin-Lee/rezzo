@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,18 +80,9 @@ public class CcdsController {
 		return "comm/bom";
 	}
 	
-	@RequestMapping("edcts")
-	public String edcts() {
-		return "comm/edcts";
-	}
-	
-	@RequestMapping("rsc")
-	public String rsc() {
-		return "comm/rsc";
-	}
-	
 	@RequestMapping("wrhous")
-	public String wrhous() {
+	public String wrhous(Model model) {
+		model.addAttribute("ccds", service.getCodes("VND"));
 		return "comm/wrhous";
 	}
 	

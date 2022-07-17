@@ -40,7 +40,7 @@
 	
 	<!-- 공통코드 수정 -->
 	<update id="ccdsUpdate" parameterType="CcdsVO">
-		UPDATE CCDS_DTL 
+		UPDATE CCDS
 		<set>
 			<if test="ccdNm != null">CCD_NM = #{ccdNm},</if>
 			<if test="ccdDesct != null">CCD_DESCT = #{ccdDesct},</if>
