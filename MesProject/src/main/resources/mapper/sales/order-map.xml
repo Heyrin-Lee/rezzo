@@ -51,8 +51,8 @@
 	</update>
 	
 	<!-- 주문번호 인덱스 가져오기 -->
-	<select id="getordrNo" resultType="String">
-		SELECT MAX(SUBSTR(ORDER_NO, 14))
+	<select id="getordrNo" resultType="Integer">
+		SELECT NVL(MAX(SUBSTR(ORDER_NO, 14)), 0)
 		FROM ORDER_SHEET
 		WHERE ORDER_DT = #{orderDt}
 	</select>

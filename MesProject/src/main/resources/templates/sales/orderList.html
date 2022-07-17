@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>주문서 관리</title>
 <style>
 	.c_btn {
    color: #fff;
@@ -290,6 +290,7 @@
    		//행추가 버튼
 		   let addBtn = document.getElementById('addBtn');
 		   addBtn.addEventListener('click', function(e){
+		   				grid.appendRow();			   					   			
 		   	//주문서 추가시 주문번호 자동 생성 ex.ORS20220715001
 		   	let orderDt =$("input[name=start]").val();
 		   	$.ajax({
@@ -298,24 +299,17 @@
 		   		method:"get",
 		   		data:{"orderDt":orderDt},
 		   		success:function(makeno) {
-		   			let no = makeno + 1;
+		   			var no = makeno;
 		   			var rcode = orderDt.replaceAll("-","");
-		   				console.log(rcode);
-		   			//function ordrNo() {
-		   			//	return "ORS" + orderDt + no
-		   			//}
-		   			grid.appendRow();
-		   				let result = "ORS" + rcode + no;
-		   				console.log(result);
-		   				let row = grid.getRowCount();
-		   				console.log(row);
-		   				grid.setValue(row,'OrderNo',result);
+		   			var result = "ORS" + rcode + no;
+		   			console.log(result);
+		   			var row = grid.getRowCount();
+		   			console.log(row);
+		   			grid.setValue(row,'orderNo',result);
 		   		}
 		   	})
-		   			
-		   			
-	
-		   })
+		   	});
+
 		   
 		   //더블클릭 하면 체크박스 체크
 		   grid.on('editingFinish', (ev) => {

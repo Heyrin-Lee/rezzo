@@ -83,7 +83,7 @@ public class OrderController {
 	//주문번호 생성, 가져오기
 	@GetMapping("getordrNo")
 	@ResponseBody
-	public String getordrNo(OrderVO vo) {
+	public Integer getordrNo(OrderVO vo) {
 		System.out.println(vo.getOrderDt());
 		return service.getordrNo(vo);
 	}
