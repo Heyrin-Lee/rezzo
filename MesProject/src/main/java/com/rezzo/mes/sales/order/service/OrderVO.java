@@ -18,7 +18,7 @@ public class OrderVO{
 	private String vendCd;
 	private String vendNm;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date orderDt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
