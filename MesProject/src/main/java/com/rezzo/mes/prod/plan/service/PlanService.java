@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 public interface PlanService {
 	public List<PlanVO> orderListModal(PlanVO vo);
-	public String getIndex(PlanVO vo);
+	public int getIndex(PlanVO vo);
 	public List<PlanVO> getPrcsFlow(PlanVO vo);
 	public List<PlanVO> getRscInfo(PlanVO vo);
 	public void planInsert(PlanVO vo);
 	public void grid1Insert(PlanVO vo);
 	public void grid2Insert(PlanVO vo);
-	public void grid4Insert(List<PlanVO> list);
+	public void grid5Insert(List<PlanVO> list);
 }

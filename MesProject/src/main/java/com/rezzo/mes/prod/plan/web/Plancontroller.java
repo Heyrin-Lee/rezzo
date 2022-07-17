@@ -1,5 +1,7 @@
 package com.rezzo.mes.prod.plan.web;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -16,24 +18,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
+import com.rezzo.mes.equip.line.service.EqmLineService;
+import com.rezzo.mes.equip.line.service.EqmLineVO;
 import com.rezzo.mes.prod.plan.service.PlanService;
 import com.rezzo.mes.prod.plan.service.PlanVO;
+import com.rezzo.mes.prod.prcs.service.PrcsVO;
 
 @Controller
 public class Plancontroller {
 	@Autowired
 	PlanService service;
+	
+	@Autowired
+	EqmLineService lineService;
+	
+	@RequestMapping("plan")
+	public String lineList(Model model, EqmLineVO vo) {
+		List<EqmLineVO> eqmLineSelectList = lineService.eqmLineSelectList(vo);
+		model.addAttribute("line", eqmLineSelectList);
+
+		return "prod/plan";
+	}
 
 	@RequestMapping("orderListModal")
 	@ResponseBody
 	public List<PlanVO> orderListModal(PlanVO vo) {
 		return service.orderListModal(vo);
 	}
-
+ 
 	@GetMapping("getIndex")
 	@ResponseBody
-	public String getIndex(PlanVO vo) {
-		System.out.println(vo.getPlanDt());
+	public int getIndex(PlanVO vo) {
 		return service.getIndex(vo);
 	}
   
@@ -57,10 +72,11 @@ public class Plancontroller {
 		service.grid2Insert(list.get(1));
 	}
 	 
-	@PostMapping("plan4Insert")
+	@PostMapping("plan5Insert")
 	@ResponseBody
-	public void plan4Insert(@RequestBody List<PlanVO> list) {
-		service.grid4Insert(list);
-	} 
+	public void plan5Insert(@RequestBody List<PlanVO> list) {
+		service.grid5Insert(list); 
+	}  
  	
+
 }

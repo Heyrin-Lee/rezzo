@@ -69,8 +69,8 @@
                 <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
                     <input type="text" id="tui-date-picker-target" aria-label="Date-Time" />
                     <span class="tui-ico-date"></span>
+                	<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>
                 </div>
-                <div id="tui-date-picker-container1" style="margin-top: -1px;"></div>
             </div>
             <div class="linelist">
                 <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
@@ -117,13 +117,15 @@
      
         <script>
         //주문서 조회 버튼을 클릭했을 때
-        let planDt
-        let index
-        let code
+       
         
        	$("#modalBtn").on("click", function(e) {
        		//계획일자 인풋박스에 출력된 값의 타입= String 
+   			 let planDt
+   	         let index
+   	         let code
    			 planDt = $("#tui-date-picker-target").val();
+       			
    			//순번 받아오기 (계획일자 indicaDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
         	$.ajax({
         		url: 'getIndex',
@@ -131,18 +133,15 @@
         		dataType: 'json',
         		contentType:'application/text',
         		data : {"planDt": planDt},
-        		error : function(error) {        
-		             		console.log("error")   
-                },
         		success: function (result) {
         			console.log(result)
-        			if (result != '') {
-        				index = result+1;
+        			if (result == 0) {
+        				index = 1;
         			} else {
-	        			index = 1;
+	        			index = result + 1;
         			}
         			function makeCd() {
-						return "PLN" + planDt + index
+						return "PLN" + makeDate2(planDt) + index
        				}
         			code = makeCd()
         			
@@ -158,6 +157,9 @@
 							})
 		                }
 		            });
+        		},
+        		error : function(error) {        
+             		console.log("error")   
         		}
         	})
         	
@@ -188,8 +190,9 @@
                         name: 'orderNo'
                     },
                     {
-                        header: '주문량',
-                        name: 'orderCnt'
+                        header: '필요수량',
+                        name: 'orderCnt',
+                        editor : 'text'
                     },
                     {
                         header: '납기일자',
@@ -200,11 +203,11 @@
             
             $("#grid2").on("keyup", function(key){
             	// 지시수량이 주문량보다 많을 수 없음 작업종료일자가 작업시작일자보다 빠를 수 없음
-            	let oCnt = grid.getCheckedRows()[0].orderCnt
-            	let iCnt = grid2.getCheckedRows()[0].indicaCnt
+            	let oCnt = grid.getData()[0].orderCnt
+            	let iCnt = grid2.getData()[0].indicaCnt
             	
             	if(key.keyCode == 13) {
-		           	let edctsCd = grid2.getCheckedRows()[0].edctsCd;
+		           	let edctsCd = grid2.getData()[0].edctsCd;
 		           	// grid2에는 공정코드가 없음 
 		           	// 제품 코드(String)를 보내고 그 제품코드에 해당하는 공정코드 리스트를 리턴받음
 		           	$.ajax({
@@ -214,8 +217,8 @@
 		           		success : function(result) { //성공하면 result에 조건에 맞는 공정코드들이 담김 -> 배열 
 		           									 //result에 담긴 값들을 grid3 prcsCd 칼럼에 넣기
 		            		$.each(result, function(index, item) {
-		            			item.lineCd = grid2.getCheckedRows()[0].lineCd;
-		            			item.planCd = grid2.getCheckedRows()[0].planCd;
+		            			item.lineCd = grid2.getData()[0].lineCd;
+		            			item.planCd = grid2.getData()[0].planCd;
 		            		}) 
 		            		if(oCnt >= iCnt) {
 		            			grid3.resetData(result)
@@ -226,7 +229,7 @@
 		            				method : 'POST',
 		            				success : function(res) {
 		            					$.each(res, function(index, item) {
-		            						item.planCd = grid.getCheckedRows()[0].planCd;
+		            						item.planCd = grid.getData()[0].planCd;
 		            					})
 		            					grid4.resetData(res)
 		            				}
@@ -256,25 +259,38 @@
                             type: 'select',
                             options: {
                                 listItems: [{
-                                        text: 'Deluxe',
-                                        value: '1'
+                                        text: '100',
+                                        value: '100'
                                     },
                                     {
-                                        text: 'EP',
-                                        value: '2'
+                                        text: '200',
+                                        value: '200'
                                     },
                                     {
-                                        text: 'Single',
-                                        value: '3'
+                                        text: '300',
+                                        value: '300'
                                     }
                                 ]
                             }
                         }
-
                     },
                     {
                         header: '제품명',
-                        name: 'prdtNm'
+                        name: 'prdtNm',
+                        editor: {
+                            type: 'select',
+                            options: {
+                                listItems: [{
+                                        text: '유자차',
+                                        value: '유자차'
+                                    },
+                                    {
+                                        text: '자몽차',
+                                        value: '자몽차'
+                                    }
+                                ]
+                            }
+                        }
                     },
                     {
                         header: '라인번호',
@@ -378,8 +394,8 @@
                     },
                     {
                         header: '출고수량',
-                        name: 'rcsUse',
-                        editor : 'text'
+                        name: 'rscUse',
+                        value : 6
                     },
                     {
                         header: '사용량',
@@ -414,7 +430,7 @@
                     },
                     {
                         header: '출고수량',
-                        name: 'rcsUse'
+                        name: 'rscUse'
                     },
                     {
                         header: '계획코드',
@@ -430,7 +446,7 @@
                 date: new Date(),
                 input: {
                     element: '#tui-date-picker-target',
-                    format: 'yyyyMMdd'
+                    format: 'yyyy-MM-dd'
                 }
             });
 
@@ -462,16 +478,19 @@
             });
             
              $("#osBtn").on("click", function(){
-             	let gridData = grid.getData();
              	let iDt= $("#tui-date-picker-target").val();
-             	console.log(iDt);
              	
-             	gridData[0].indicaDt = makeDate(iDt)
+             	let gridData = grid.getData();
+             	gridData[0].planDt = iDt
              	
              	let grid2Data = grid2.getData()
-             	grid2Data[0].indicaDt = makeDate(iDt)
+             	grid2Data[0].planDt = iDt
              	
-             	let grid4Data = grid4.getData()
+             	let grid5Data = grid5.getData()
+             	$.each(grid5Data, function(index, item) {
+		            	item.rscUse = grid4.getCheckedRows()[index].rscUse;
+		            	console.log(item)
+		         }) 
              	
              	let arr = []
              	
@@ -488,25 +507,67 @@
             	})
             	
             	$.ajax({
-            		url : 'plan4Insert',
+            		url : 'plan5Insert',
             		method: 'POST',
             		contentType:'application/json',
-            		data : JSON.stringify(grid4Data),
+            		data : JSON.stringify(grid5Data),
             	})            
             	
             	window.location.reload()
             })
             
             function makeDate(idt) {
-           		let d1 = idt.slice(0,4); //0123
-           		let d2 = idt.slice(4,6); //45
-           		let d3 = idt.slice(6,8); //67
+           		let d1 = idt.slice(0,4); 
+           		let d2 = idt.slice(4,6); 
+           		let d3 = idt.slice(6,8); 
            		
-           		// 20220715->2022-07-15            		
            		return d1 + "-" + d2 + "-" + d3
-           		
            	}
-          
+             
+            function makeDate2 (value) {
+            	let v1 = value.slice(0,4);
+            	let v2 = value.slice(5,7);
+            	let v3 = value.slice(8,10);
+            	
+            	return v1 + v2 + v3
+            	
+            }
+         	
+            $("#regiBtn").on("click", function(e) {
+            	grid.appendRow()
+            	let planDt = $("#tui-date-picker-target").val();
+            	$.ajax({
+            		url: 'getIndex',
+            		method: 'GET',
+            		dataType: 'json',
+            		contentType:'application/text',
+            		data : {"planDt": planDt},
+            		success: function (result) {
+            			if (result == 0) {
+            				index = 1;
+            			} else {
+    	        			index = result + 1;
+            			}
+            			function makeCd() {
+    						return "PLN" + makeDate2(planDt) + index
+           				}
+            			code = makeCd()
+            			console.log(code)
+            			grid.setValue(0, 'planCd', code)
+            		}
+            	})
+            })
+            
+            $("#grid").on("keyup", function(key) {
+            	if(key.keyCode==13) {
+            		grid2.appendRow()
+            		grid2.setValue(0, 'planCd', code)
+            		
+            	}
+            })
+   			
+            
+            
         </script>
     </th:block>
 </body>

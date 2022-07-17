@@ -7,10 +7,10 @@
 	FROM ORDER_SHEET
 </select>
 
-<select id="getIndex" resultType="String">
-	SELECT MAX(SUBSTR(PLAN_CD, 12)) 
+<select id="getIndex" resultType="int">
+	SELECT NVL(MAX(SUBSTR(PLAN_CD, 12)), 0) 
 	FROM PLAN
-	WHERE PLAN_DT = to_date(#{planDt}, 'yyyymmdd')
+	WHERE PLAN_DT = #{planDt}
 </select>
  
 <select id="getPrcsFlow" resultType="PlanVO" >
@@ -20,7 +20,7 @@
 </select>
 
 <select id="getRscInfo" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
-	SELECT I.RSC_CD, I.RSC_LOT_NO, O.RSC_CNT, B.USE_CNT, B.EDCTS_CD, B.PRCS_CD
+	SELECT DISTINCT I.RSC_CD, I.RSC_LOT_NO, O.RSC_CNT, B.USE_CNT, B.EDCTS_CD, B.PRCS_CD
 	FROM RSC_IST I 
 	JOIN RSC_ORDR_DTL O
 	ON I.RSC_CD = O.RSC_CD
@@ -39,7 +39,7 @@
 	values (#{planCd},
 			#{paprdDt},
 			'미진행',
-			#{indicaDt},
+			#{planDt},
 			#{orderNo}
 			)
 </insert>
@@ -58,7 +58,7 @@
 			)
 </insert>
 
-<insert id="grid4Insert" parameterType="PlanVO">
+<insert id="grid5Insert" parameterType="PlanVO">
 	insert into holding
 	values (
 			#{planCd},
@@ -67,5 +67,6 @@
 			#{rscLotNo}
 			)
 </insert>
+
 
 </mapper>
