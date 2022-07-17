@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.comm.edcts.mapper.EdctsmMapper">
+
+	<select id="getEdctsList" resultType="EdctsmVO">
+		SELECT * 
+		FROM EDCTS
+		WHERE 1=1
+		<if test="edctsCd != null and edctsCd !=''">and EDCTS_CD = #{edctsCd}</if>
+		<if test="prdtNm != null and prdtNm !=''">and PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
+		<if test="wrhousCd != null and wrhousCd !=''">and WRHOUS_CD LIKE '%'||#{wrhousCd}||'%'</if>
+	</select>
+	
+	<!-- 거래처 등록,수정 -->
+	<update id="saveEdcts" parameterType="EdctsmVO">
+		MERGE INTO EDCTS e
+  		USING DUAL ON (e.EDCTS_CD = #{edctsCd})
+  	WHEN MATCHED THEN
+  		UPDATE 
+  			SET e.PRDT_NM = #{prdtNm}, e.SPEC = #{spec}, e.UNIT = #{unit}, e.SAF_STC = {safStc}, e.WRHOUS_CD = {wrhousCd}
+  	WHEN NOT MATCHED THEN
+  		INSERT (e.EDCTS_CD, e.PRDT_NM, e.SPEC, e.UNIT, e.SAF_STC, e.WRHOUS_CD)
+  		VALUES (#{edctsCd}, #{prdtNm}, #{spec}, #{unit}, #{safStc}, #{wrhousCd})
+	</update>
+	
+	<!-- 거래처 삭제 -->
+	<delete id="delEdcts" parameterType="EdctsmVO">
+			DELETE FROM EDCTS
+			WHERE EDCTS_CD = #{edctsCd}
+	</delete>
+	
+</mapper>

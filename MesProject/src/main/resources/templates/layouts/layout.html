@@ -18,6 +18,9 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<!-- toastr -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <title>layout</title>
 </head>
 
@@ -39,5 +42,24 @@
 	<!-- 템플릿 js -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" ></script>
 	<script src="/js/scripts.js" ></script>
+	<script type="text/javascript">
+		toastr.options = {
+				  "closeButton": false,
+				  "debug": false,
+				  "newestOnTop": false,
+				  "progressBar": true,
+				  "positionClass": "toast-top-center",
+				  "preventDuplicates": false,
+				  "onclick": null,
+				  "showDuration": "100",
+				  "hideDuration": "1000",
+				  "timeOut": "1500",
+				  "extendedTimeOut": "1000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "fadeIn",
+				  "hideMethod": "fadeOut"
+				}
+	</script>
 </body>
 </html>
