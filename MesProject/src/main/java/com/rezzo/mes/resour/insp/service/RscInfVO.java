@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RscInfVO {
 
-    String ccdDtl;
-    Integer infCnt;
+    String rscInspCd; // 검사코드
+    String rscCd; // 자재코드
+    String ccdDtl; // 공통 불량코드
+    int infCnt; // 불량수량
 
 }

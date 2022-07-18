@@ -1,24 +1,24 @@
 package com.rezzo.mes.resour.ordr.web;
 
+import com.rezzo.mes.resour.ordr.mapper.RscOrdrMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.rezzo.mes.resour.ordr.mapper.RordrMapper;
-
 @Controller
-public class RordrController {
+public class RscOrdrController {
 
-	@Autowired RordrMapper mapper;
+	@Autowired
+	RscOrdrMapper mapper;
 	
-	@RequestMapping("rordrList")
+	@RequestMapping("rscOrdrList")
 	public String rordrList() {
-		return "ressour/rordrList";
+		return "resour/rscOrdrList";
 	}
 	
-	@RequestMapping("rordrAdd")
+	@RequestMapping("rscOrdrAdd")
 	public String rordrAdd() {
-		return "ressour/rordrAdd";
+		return "resour/rscOrdrAdd";
 	}
 	
 }

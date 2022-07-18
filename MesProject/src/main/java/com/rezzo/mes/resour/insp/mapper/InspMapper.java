@@ -1,20 +1,27 @@
 package com.rezzo.mes.resour.insp.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
-
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
+import com.rezzo.mes.resour.insp.service.RscInfVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
-import com.rezzo.mes.resour.ordr.service.RordrVO;
+import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface InspMapper {
 
-    List<VendVO> getVendList(VendVO vendVO);
-    List<RordrVO> getOrdrList(RordrVO ordrVO);
-    void insertInspList(List<RscInspVO> rscInspVOS); // test
-    List<RscVO> getRscList(RscVO rscVO);
-    List<RscInspVO> getRscInspList(RordrVO ordrVO);
+    List<VendVO> getVendors(VendVO vendVO);
+    List<RscOrdrVO> getRscOrdrList(RscOrdrVO rscOrdrVO);
+    List<RscVO> getResources(RscVO rscVO);
+    List<RscInspVO> getRscInspList(RscOrdrVO rscOrdrVO);
+
+    // inspection list insert block
+    String getRscInspCd();
+    void setRscOrdrInspBool(RscInspVO rscInspVO);
+    void setRscInspList(RscInspVO rscInspVO);
+    void setRscInspDtList(RscInspVO rscInspVO);
+    void setRscInfList(RscInfVO rscInfVO);
+
 }

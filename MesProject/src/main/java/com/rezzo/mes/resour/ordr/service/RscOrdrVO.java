@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RordrVO {
+public class RscOrdrVO {
 
 	//자재발주 디테일 테이블
 	private int ordrNo;
@@ -16,9 +16,11 @@ public class RordrVO {
 	private int ordrCnt;
 	
 	//자재발주 테이블
-	private String vendNm;
+	private String vendCd;
 	private Date paprdCmndDt;
 	private Date ordrReqDt;
 	
-	
+	// misc
+	Date startDt;
+	Date endDt;
 }

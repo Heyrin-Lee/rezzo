@@ -223,26 +223,6 @@
         }
     }
 
-    class inspCheck {
-        constructor(props) {
-            const el = document.createElement('input');
-            el.type = 'checkbox'
-            this.el = el;
-        }
-
-        getElement() {
-            return this.el;
-        }
-
-        getValue() {
-            return this.el.value;
-        }
-
-        mounted() {
-            this.el.select();
-        }
-    }
-
     let iModal;
     class CustomBtnRenderer {
         constructor(props) {
@@ -356,13 +336,6 @@
             {
                 header: '불량량',
                 name: 'inspFailCnt'
-            },
-            {
-                header: '검사완료',
-                name: 'inspDone',
-                width: 60,
-                renderer: {type: inspCheck},
-                align: 'center'
             }
         ]
     });
@@ -467,7 +440,7 @@
     let vendSch = document.getElementById('vendSch');
     vendSch.addEventListener('click', function () {
         let data = new FormData(vendSchForm);
-        let url = 'getVendList'
+        let url = 'getVendors'
 
         fetch(url, {
             method: 'POST',
@@ -488,7 +461,7 @@
 
     // get vendor grid data
     function getVendListInit() {
-        let url = 'getVendList'
+        let url = 'getVendors'
         fetch(url).then(res => res.json())
             .then(res => vendGrid.resetData(res))
     }
@@ -539,7 +512,7 @@
     })
 
     function getInfList() {
-        let url = 'getInfList'
+        let url = 'getRscInfList'
         fetch(url).then(res => res.json())
             .then(res => inspGrid.resetData(res.INF));
     }
@@ -559,7 +532,7 @@
             alert('공급업체를 입력하세요')
         } else {
             let obj = {startDt: startDt.value, endDt: endDt.value, vendCd: vendCd.value};
-            let url = 'getOrdrList';
+            let url = 'getRscOrdrList';
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
@@ -587,10 +560,12 @@
             element.inspDt = inspDt.value;
             let rowKey = String(element.rowKey);
             let infCnt = inferCnt.get(rowKey);
-            for (let i = 0; i < infCnt.length; i++) {
-                inspGrid.setValue(i, 'infCnt', infCnt[i]);
+            if (typeof infCnt !== 'undefined') {
+                for (let i = 0; i < infCnt.length; i++) {
+                    inspGrid.setValue(i, 'infCnt', infCnt[i]);
+                }
+                element.rscInf = inspGrid.getData();
             }
-            element.rscInf = inspGrid.getData();
         })
         setRscInspList(gridVal)
     })

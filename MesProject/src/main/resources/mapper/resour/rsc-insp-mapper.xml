@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rezzo.mes.resour.insp.mapper.InspMapper">
+    <select id="getVendors" parameterType="VendVO" resultType="VendVO">
+        select VEND_CD, VEND_NM, BIZNO, TELNO
+        from VEND
+        where VEND_NM like '%${vendNm}%'
+          and VEND_CD like '%${vendCd}%'
+    </select>
+
+    <select id="getResources" resultType="RscVO">
+        select RSC_CD, RSC_NM
+        from RSC
+        where RSC_NM like '%${rscNm}%'
+          and RSC_CD like '%${rscCd}%'
+    </select>
+
+    <select id="getRscOrdrList" parameterType="RscOrdrVO" resultType="RscOrdrVO">
+        select rod.RSC_CD, rod.RSC_NM, rod.ORDR_NO, rod.ORDR_CNT
+        from RSC_ORDR ro,
+             RSC_ORDR_DTL rod
+        where ro.ORDR_NO = rod.ORDR_NO
+          and ro.VEND_CD = #{vendCd}
+          and
+        <![CDATA[
+            PAPRD_CMND_DT >= #{startDt}
+          and PAPRD_CMND_DT <= #{endDt}
+        ]]>
+        order by PAPRD_CMND_DT
+    </select>
+
+    <select id="getRscInspCd" resultType="String">
+        select 'RMI' || to_char(sysdate, 'YYYYMMDD') || lpad(NVL(max(rownum), 0) + 1, 3, '0')
+        from rsc_insp
+        where to_char(insp_dt, 'yyyymmdd') = to_char(sysdate, 'yyyymmdd')
+    </select>
+
+    <update id="setRscOrdrInspBool" parameterType="RscInspVO">
+        update RSC_ORDR_DTL set INSP_BOOL = 1
+        where #{ordrNo} = ordr_no and #{rscCd} = rsc_cd
+    </update>
+
+    <select id="setRscInspDtList" parameterType="RscInspVO">
+        insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_NO, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT)
+        values (#{rscCd}, #{rscInspCd}, #{ordrNo}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt})
+    </select>
+
+    <insert id="setRscInspList" parameterType="RscInspVO">
+        insert into RSC_INSP (RSC_INSP_CD, INSP_DT)
+        values (#{rscInspCd}, to_char(#{inspDt}, 'YYYY-MM-DD'))
+    </insert>
+
+    <insert id="setRscInfList" parameterType="RscInfVO">
+        insert into RSC_INFER (RSC_CD, RSC_INSP_CD, INF_CD, INF_CNT)
+        values (#{rscCd}, #{rscInspCd}, #{ccdDtl}, #{infCnt})
+    </insert>
+
+    <select id="getRscInspList" parameterType="RscOrdrVO" resultType="RscInspVO">
+        select ri.RSC_INSP_CD, to_char(ri.INSP_DT, 'YYYY-MM-DD') as INSP_DT, rid.RSC_CD, rsc.RSC_NM, rid.INSP_CNT,
+        rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT
+        from RSC_INSP ri,
+        RSC_INSP_DTL rid,
+        RSC_ORDR_DTL rod,
+        RSC_ORDR ro,
+        RSC
+        where ri.RSC_INSP_CD = rid.RSC_INSP_CD
+        and rod.ORDR_NO = rid.ORDR_NO
+        and rod.RSC_CD = rid.RSC_CD
+        and ro.ORDR_NO = rod.ORDR_NO
+        and rsc.RSC_CD = rid.RSC_CD
+        <![CDATA[
+          and ri.INSP_DT >= #{startDt}
+          and ri.INSP_DT <= #{endDt}
+        ]]>
+        <if test="vendCd != ''">and ro.VEND_CD = #{vendCd}</if>
+        <if test="rscCd != ''">and rid.RSC_CD = #{rscCd}</if>
+    </select>
+</mapper>
