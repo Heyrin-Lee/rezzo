@@ -4,7 +4,7 @@
 
 	<select id="getEdctsList" resultType="EdctsmVO">
 		SELECT * 
-		FROM EDCTS
+		FROM vw_edcts
 		WHERE 1=1
 		<if test="edctsCd != null and edctsCd !=''">and EDCTS_CD = #{edctsCd}</if>
 		<if test="prdtNm != null and prdtNm !=''">and PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
@@ -12,15 +12,8 @@
 	</select>
 	
 	<!-- 거래처 등록,수정 -->
-	<update id="saveEdcts" parameterType="EdctsmVO">
-		MERGE INTO EDCTS e
-  		USING DUAL ON (e.EDCTS_CD = #{edctsCd})
-  	WHEN MATCHED THEN
-  		UPDATE 
-  			SET e.PRDT_NM = #{prdtNm}, e.SPEC = #{spec}, e.UNIT = #{unit}, e.SAF_STC = {safStc}, e.WRHOUS_CD = {wrhousCd}
-  	WHEN NOT MATCHED THEN
-  		INSERT (e.EDCTS_CD, e.PRDT_NM, e.SPEC, e.UNIT, e.SAF_STC, e.WRHOUS_CD)
-  		VALUES (#{edctsCd}, #{prdtNm}, #{spec}, #{unit}, #{safStc}, #{wrhousCd})
+	<update id="saveEdcts" parameterType="EdctsmVO" statementType="CALLABLE">
+  	<![CDATA[{call proc_edcts_save(#{edctsCd}, #{prdtNm}, #{spec}, #{unit}, #{safStc}, #{wrhousCd})}]]>
 	</update>
 	
 	<!-- 거래처 삭제 -->

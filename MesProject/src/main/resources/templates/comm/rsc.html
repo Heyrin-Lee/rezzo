@@ -250,8 +250,8 @@ $('#modalSelBtn').click(ev => {
 
 //모달 더블클릭
 modalGrid.on('dblclick', (ev) => {
-	var vendCd = grid.getValue(ev.rowKey, 'vendCd');
-  var vendNm = grid.getValue(ev.rowKey, 'vendNm');
+	var vendCd = modalGrid.getValue(ev.rowKey, 'vendCd');
+  var vendNm = modalGrid.getValue(ev.rowKey, 'vendNm');
 	$('#vendCd').val(vendCd);
 	$('#vendNm').val(vendNm);
 	$('#exampleModal').modal('hide');
