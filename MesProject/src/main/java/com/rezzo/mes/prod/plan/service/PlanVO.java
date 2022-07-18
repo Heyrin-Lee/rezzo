@@ -45,7 +45,8 @@ public class PlanVO implements Serializable {
 	int useCnt;
 	int rscUse;
 	String rscLotNo;
-
+	
+	String index;
 	
 
 }

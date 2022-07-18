@@ -20,7 +20,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public int getIndex(PlanVO vo) {
+	public PlanVO getIndex(PlanVO vo) {
 		return mapper.getIndex(vo);
 	}
 

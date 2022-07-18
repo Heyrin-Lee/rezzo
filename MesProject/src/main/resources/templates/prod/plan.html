@@ -117,12 +117,11 @@
      
         <script>
         //주문서 조회 버튼을 클릭했을 때
-       
         
        	$("#modalBtn").on("click", function(e) {
        		//계획일자 인풋박스에 출력된 값의 타입= String 
    			 let planDt
-   	         let index
+   	         //let index
    	         let code
    			 planDt = $("#tui-date-picker-target").val();
        			
@@ -134,11 +133,12 @@
         		contentType:'application/text',
         		data : {"planDt": planDt},
         		success: function (result) {
-        			console.log(result)
-        			if (result == 0) {
-        				index = 1;
+        			console.log(result.index);
+        			if (result.index == "0") {
+        				index = "001";
         			} else {
-	        			index = result + 1;
+	        			index = result.index 
+	        			
         			}
         			function makeCd() {
 						return "PLN" + makeDate2(planDt) + index
@@ -395,7 +395,7 @@
                     {
                         header: '출고수량',
                         name: 'rscUse',
-                        value : 6
+                        editor : 'text'
                     },
                     {
                         header: '사용량',

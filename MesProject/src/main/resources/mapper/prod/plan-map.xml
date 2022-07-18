@@ -7,8 +7,8 @@
 	FROM ORDER_SHEET
 </select>
 
-<select id="getIndex" resultType="int">
-	SELECT NVL(MAX(SUBSTR(PLAN_CD, 12)), 0) 
+<select id="getIndex" resultType="PlanVO">
+SELECT NVL(LPAD(MAX(SUBSTR(PLAN_CD, 12))+1, 3, '0'), 0) as "index"
 	FROM PLAN
 	WHERE PLAN_DT = #{planDt}
 </select>
@@ -35,7 +35,7 @@
 					  now_st,
 					  plan_dt,
 					  order_no	
-						)
+					)
 	values (#{planCd},
 			#{paprdDt},
 			'미진행',

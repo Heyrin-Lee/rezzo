@@ -10,7 +10,7 @@ import com.rezzo.mes.prod.plan.service.PlanVO;
 @Mapper
 public interface PlanMapper {
 	public List<PlanVO> orderListModal(PlanVO vo);
-	public int getIndex(PlanVO vo);
+	public PlanVO getIndex(PlanVO vo);
 	public List<PlanVO> getPrcsFlow(PlanVO vo);
 	public List<PlanVO> getRscInfo(PlanVO vo);
 	public void planInsert(PlanVO vo);

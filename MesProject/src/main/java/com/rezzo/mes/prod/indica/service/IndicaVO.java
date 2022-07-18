@@ -1,29 +1,42 @@
-package com.rezzo.mes.prod.plansrh.service;
+package com.rezzo.mes.prod.indica.service;
 
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rezzo.mes.prod.plan.service.PlanVO;
 
 import lombok.Data;
 
 @Data
-public class PlanSrhVO {
+public class IndicaVO {
+	String planCd;
+	Date paprdDt;
+	int prefRank;
+	String nowSt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date planDt;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date planDt2;
-	String nowSt;
-	String prdtNm;
-	String planCd;
+	Date wkFrDt; 
+	Date wkToDt;
 	String lineCd;
-	String edctsCd;
+	
 	int orderCnt;
+	String prcsCd;
+	String prdtNm;
+	String edctsCd;
 	int indicaCnt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkFrDt;
+	Date indicaDt;
+	//생산수량
+	
+	String rscCd;
+	int rscCnt;
+	int useCnt;
+	int rscUse;
+	String rscLotNo;
+	
+	String prcsPsch;
 }

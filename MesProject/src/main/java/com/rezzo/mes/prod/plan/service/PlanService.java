@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 public interface PlanService {
 	public List<PlanVO> orderListModal(PlanVO vo);
-	public int getIndex(PlanVO vo);
+	public PlanVO getIndex(PlanVO vo);
 	public List<PlanVO> getPrcsFlow(PlanVO vo);
 	public List<PlanVO> getRscInfo(PlanVO vo);
 	public void planInsert(PlanVO vo);
