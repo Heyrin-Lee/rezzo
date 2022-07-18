@@ -61,9 +61,9 @@ label {
 						<div>
 							<label for="">가동여부</label> 
 							<select style="width: 120px; text-align: center">
-								<option selected disabled>가동여부 선택</option>
-								<option>가동</option>
-								<option>비가동</option>
+								<option selected disabled value="">가동여부</option>
+								<option value="Y">가동</option>
+								<option value="N">비가동</option>
 							</select>
 							<button class="c_btn" form="">조회</button>
 						</div>
@@ -88,36 +88,147 @@ label {
 						<div class="row me-3">
 							<div class="col-5">
 								<label for="">설비코드</label> <input type="text"
-									readonly="readonly" id="" name="" style="width: 150px">
+									readonly="readonly" id="rightEqmCd" name="" style="width: 150px">
 							</div>
-							<div class="col-7">
-								<label for="" autofocus="autofocus">설비명</label> <input
-									type="text" readonly="readonly" id="" name="">
-								<button class="c_btn" form="">검색</button>
-								<button class="c_btn" form="">조회</button>
+							<div>
+									<label for="" autofocus="autofocus">설비명</label>
+									<input type="text" id="keyword" name="keyword" placeholder="설비명"></input>
+									<input type="button" data-bs-toggle="modal" class="btn-dark btn-primary btn-sm" id="modalBtn"
+										data-bs-target="#exampleModal" value="설비명 검색"></input>
+									<button type="button" onclick="eqmSelect()" class="btn-dark btn-primary btn-sm">조회</button>
 							</div>
+							<br>
+							<br>
 							<div id="grid2"></div>
 						</div>
+
 
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	
+
+	
+	<!-- 검색 Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">설비명 검색</h5>
+						<br> <br>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+					</div><br>
+					<div class="ms-3">
+							<label style="width:60px">설비명</label>
+							<input type="text" id="keyword2" name="keyword2" placeholder="설비명"></input>
+							<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
+					</div>
+					<div id="modGrid" class="modal-body"></div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 
 	<br>
+	
+	<!-- 설비 비가동 등록 Modal -->
+		<div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">설비 비가동 등록</h5>
+						<br> <br>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+					</div><br>
+				
+					<div class="modal-body">
+						<div class="linelist" style="float: right;">
+									<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+									<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+									<br> <br>
+						</div>
+					
+					<div>
+						<form id="dataForm" name="dataForm" action="#" method="post">
+							<table class="table" style="vertical-align : middle;">
+								<colgroup>
+									<col style="width: 150px">
+									<col>
+									<col style="width: 150px">
+									<col>
+									<col style="width: 150px">
+									<col>
+								</colgroup>
+
+								<tbody>
+									<tr>
+									<th>설비명
+									</th>
+										<td><input class="form-control" type="text" id="frmEqmNm" name="frmEqmNm" style="width: 180px" readonly></input>
+									</tr>
+									<tr>
+									<th>담당자
+									</th>
+										<td><input class="form-control" type="text" id="frmPsch" name="frmPsch" style="width: 180px"></input>
+									</tr>
+									<tr>
+									<th>가동여부<strong class="blue">*</strong>
+									</th>
+										<td>
+										<select name="frmUseYn" id="frmUseYn" class="dataTable-selector" style="width: 180px">
+											<option disabled selected value="">가동여부</option>
+											<option value="Y">가동</option>
+											<option value="N">비가동</option>
+										</select>
+										</td>
+									</tr>
+									<tr>
+										<th>시작일</th>
+											<td><input class="form-control" type="date" id="frDt" name="frDt" style="width: 150px"/></td>
+									</tr>
+									<tr>
+										<th>종료일</th>
+											<td><input class="form-control" type="date" id="toDt" name="toDt" style="width: 150px"/></td>
+										
+									</tr>
+										
+									<tr>
+										<th>작업내용</th>
+										<td><input type="text" id="opertCtnt" name="opertCtnt" class="form-control" style="width: 500px; height:100px" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</form>
+						
+					</div>
+					</div>
+					
+					
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	<script>
 
-		
+	// 설비 리스트		
 		$.ajax({
-			url: "eqmList",
+			url: "eqmOprList",
 			method: "GET",
 			dataType: "JSON",
 			success: function (result) {
 				grid.resetData(result);
-				console.log(result);
 			}
 		});
 
@@ -126,26 +237,61 @@ label {
 			rowHeaders : [ 'rowNum' ],
 			columns : [ {
 				header : '설비코드',
-				name : 'c1',
+				name : 'eqmCd',
 				align : 'center',
 			}, {
 				header : '설비명',
-				name : 'c2',
+				name : 'eqmNm',
 				align : 'center'
 			}, {
 				header : '공정코드',
-				name : 'c3',
+				name : 'prcsCd',
 				align : 'center'
 			}, {
 				header : '공정명',
-				name : 'c4',
+				name : 'prcsNm',
 				align : 'center'
 			}, {
 				header : '사용여부',
-				name : 'c5',
+				name : 'useYN',
 				align : 'center'
 			} ]
 		});
+		
+			
+		// 그리드 클릭 시 
+	grid.on('click', ev => {
+	var value = grid.getValue(ev.rowKey, 'eqmCd');
+	const reader = new FileReader();
+	$('eqmCd').val(value);
+		$('#insertModal').modal('toggle');
+			$.ajax({
+				url:"eqmCdSelect",
+				type : "post",
+				data : {
+					"keyword" : value
+				},
+				dataType : "JSON",
+				success : function(result){
+					console.log(result[0].eqmNm)
+					console.log(result[0].useYN)
+					$('#frmEqmNm').val(result[0].eqmNm);
+					$('[name="frmUseYn"]').val(result[0].useYN);
+				}
+			})
+	});
+	
+
+
+	$.ajax({
+			url: "eqmList",
+			method: "GET",
+			dataType: "JSON",
+			success: function (result) {
+				grid2.resetData(result);
+			}
+		});
+	
 
 		const grid2 = new tui.Grid({
 			el : document.getElementById('grid2'),
@@ -153,28 +299,110 @@ label {
 			rowHeaders : [ 'rowNum' ],
 			columns : [ {
 				header : '설비코드',
-				name : 'c1',
+				name : 'eqmCd',
 				align : 'center',
 			}, {
 				header : '설비명',
-				name : 'c2',
+				name : 'eqmNm',
 				align : 'center'
 			}, {
 				header : '공정코드',
-				name : 'c3',
+				name : 'prcsCd',
 				align : 'center'
 			}, {
 				header : '공정명',
-				name : 'c4',
+				name : 'prcsNm',
 				align : 'center'
 			}, {
 				header : '사용여부',
-				name : 'c5',
+				name : 'useYN',
 				align : 'center'
 			} ]
 		});
-		grid.refreshLayout();
-		grid2.refreshLayout();
+
+console.log($('#frmUseYn').val())
+			if($('#frmUseYn').val() == 'Y'){
+				$('#opertCtnt').attr('readonly','true')
+			} else{
+				$('#opertCtnt').attr('readonly','false')
+			}
+		
+		$('#frmUseYn').on('change',function(){
+			if($('#frmUseYn').val() == 'Y'){
+				$('#opertCtnt').prop('readonly',true)
+			} else{
+				$('#opertCtnt').prop('readonly',false)
+			}
+		})
+		
+		
+		
+		
+	//모달 그리드
+	
+			$.ajax({
+				url: "eqmList",
+				method: "GET",
+				dataType: "JSON",
+				success: function (result) {
+					modGrid.resetData(result);
+					console.log(result);
+				}
+			});
+	
+			const modGrid = new tui.Grid({
+				el: document.getElementById('modGrid'),
+				rowHeaders: ['rowNum'],
+				columns: [{
+					header: '설비명',
+					name: 'eqmNm',
+					align: 'center',
+				}, {
+					header: '설비코드',
+					name: 'eqmCd',
+					align: 'center'
+				}]
+			})
+			
+			modalBtn.addEventListener('click', function () {
+			
+				setTimeout(function () {
+					modGrid.refreshLayout()
+				}, 300);
+			});
+
+
+	
+			
+	// 설비명 검색
+	function eqmSelect2() {
+				let keyword = $("#keyword2").val();
+				$.ajax({
+					url: "eqmSelect",		
+					type: "post",
+					data: {
+						"keyword": keyword
+					},
+					dataType: "JSON",
+					success: function (result) {
+						modGrid.resetData(result);
+					}
+				})
+			}
+	
+	
+
+// 모달 창 데이터 가져오기
+modGrid.on('dblclick', (ev) => {
+	var eqmNm = modGrid.getValue(ev.rowKey, 'eqmNm');
+	var eqmCd = modGrid.getValue(ev.rowKey, 'eqmCd'); 
+			$('#keyword').val(eqmNm);
+			$('#rightEqmCd').val(eqmCd);
+			$('#exampleModal').hide();
+			$('.modal-backdrop').hide();
+	}); 
+	
+		
 	</script>
 
 </th:block>

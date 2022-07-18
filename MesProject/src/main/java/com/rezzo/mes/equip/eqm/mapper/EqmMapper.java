@@ -20,5 +20,7 @@ public interface EqmMapper {
 	public void eqmImgInsert(EqmVO vo);
 
 	public void eqmDelete(EqmVO vo);
+	
+	public List<EqmVO> eqmCdSelect(String keyword);
 
 }

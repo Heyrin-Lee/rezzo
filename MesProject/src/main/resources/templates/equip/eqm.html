@@ -108,7 +108,7 @@
 						<div class="card-body">
 							<form id="dataForm" name="dataForm">
 								<img id="preview" style="width:180px;" /><br><br>
-								<input type="file" id="eqmImg" name="file" onchange="readURL(this);" multiple="multiple">
+								<input type="file" id="eqmImg" name="file" onchange="readURL(this);">
 
 								<br>
 								<br>
@@ -160,9 +160,10 @@
 											</div>
 											<br> <label>사용여부</label>
 											<div class="form-check form-check-inline" style="margin-bottom: 3px">
-												<input class="form-check-input" type="radio" name="useYn" value="Y"> <label
-													class="form-check-label">사용</label> <input class="form-check-input" type="radio" value="N"
-													name="useYn"> <label class="form-check-label">미사용</label>
+												<input class="form-check-input" value="Y" type="radio" name="useYN"> 
+												<label class="form-check-label">사용</label>
+												<input class="form-check-input" value="N" type="radio" name="useYN">
+												<label class="form-check-label">미사용</label>
 											</div>
 											<br> <br>
 											<div class="mb-4">
@@ -265,7 +266,7 @@
 					align: 'center'
 				}, {
 					header: '사용여부',
-					name : 'useYn',
+					name : 'useYN',
 					align: 'center'
 				}, {
 					header: '최소온도',
@@ -321,12 +322,13 @@
 					align: 'center',
 				}, {
 					header: '사용여부',
-					name: 'useYn',
+					name: 'useYN',
 					align: 'center',
 				}]
 			})
 
 			modalBtn.addEventListener('click', function () {
+			
 				setTimeout(function () {
 					modGrid.refreshLayout()
 				}, 300);
@@ -471,13 +473,12 @@
 									
 									grid.on('click', ev => {
 										var value = grid.getValue(ev.rowKey, 'eqmCd');
-										var keyword = grid.getValue(ev.rowKey, 'eqmNm');
+										var keyword = grid.getValue(ev.rowKey, 'eqmCd');
 										const reader = new FileReader();
-										$('#eqmCd').val(value);
-										
+										$('#eqmCd').val(value);										
 
 										$.ajax({
-											url: "eqmSelect",
+											url: "eqmCdSelect",
 											type: "post",
 											data: {
 												"keyword": keyword
@@ -488,7 +489,7 @@
 												$('#eqmNm').val(result[0].eqmNm);
 												$('#eqmCd').val(result[0].eqmCd);
 												$('[name="prcsCd"]').val(result[0].prcsCd);
-												$('[name="useYn"]').val(result[0].useYn);
+												$('[name="useYN"]').val([result[0].useYN]);
 												$('#minTemp').val(result[0].minTemp);
 												$('[name="lineCd"]').val(result[0].lineCd);
 												$('[name="prcsNm"]').val(result[0].prcsNm);
@@ -496,8 +497,7 @@
 												$('#chckPerd').val(result[0].chckPerd);
 												$('#eqmIstDt').val(result[0].eqmIstDt);
 												$('[name="eqmFg"]').val(result[0].eqmFg);
-												$('#preview').attr("src","imgfile/"+result[ev.rowKey].imgPath);
-												
+												$('#preview').attr("src","image/"+result[0].imgPath);
 											}
 										})
 									})

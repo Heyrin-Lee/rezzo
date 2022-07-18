@@ -1,13 +1,19 @@
 package com.rezzo.mes.equip.eqm.web;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -77,6 +83,13 @@ public class EqmController {
 		return eqmService.eqmSelect(keyword);
 	}
 	
+	// 코드 조회	
+	@PostMapping("eqmCdSelect")
+	@ResponseBody
+	public List<EqmVO> eqmCdSelect(@RequestParam(value = "keyword") String keyword, Model model) {
+		return eqmService.eqmCdSelect(keyword);
+	}
+	
 	//삭제
 
 	@PostMapping("eqmDelete/{eqmCd}")
@@ -87,16 +100,26 @@ public class EqmController {
 		return vo;
 	};
 
+	//이미지 파일
+	@GetMapping(value = "image/{imagename}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<byte[]> userSearch(@PathVariable("imagename") String imagename) throws IOException {
+		InputStream imageStream = new FileInputStream("c://imgfile/" + imagename);
+		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+		imageStream.close();
+		return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
+	}
+	
 	//추가
 	
 	@PostMapping("eqmInsert")
 	@ResponseBody
-	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {
+	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {	
 		String fileName = file.getOriginalFilename();
 		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
 			String uid = UUID.randomUUID().toString();
 			String saveFileName = uid + fileName.substring(fileName.indexOf("_"));
 			File target = new File(saveDir, saveFileName);
+			System.out.println(target.getPath());
 			vo.setEqmImg(fileName);
 			vo.setImgPath(saveFileName);
 			try {
@@ -120,6 +143,7 @@ public class EqmController {
 			String uid = UUID.randomUUID().toString();
 			String saveFileName = uid + fileName.substring(fileName.indexOf("_"));
 			File target = new File(saveDir, saveFileName);
+			System.out.println(target.getPath());
 			vo.setEqmImg(fileName);
 			vo.setImgPath(saveFileName);
 			try {
