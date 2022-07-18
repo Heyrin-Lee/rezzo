@@ -31,11 +31,7 @@ public class PlanSrhController {
 		service.deleteHolding(vo);
 	}
 	
-	@RequestMapping("planListModal")
-	@ResponseBody
-	public List<PlanSrhVO> planListModal(PlanSrhVO vo) {
-		return service.planListModal(vo);
-	}
+	
 	
 	
 }

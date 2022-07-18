@@ -40,13 +40,4 @@ DELETE FROM HOLDING
 WHERE PLAN_CD = #{planCd}
 </delete>
 
-<select id="planListModal" resultType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO">
-SELECT D.EDCTS_CD,D.PLAN_CD, P.PAPRD_DT, D.LINE_CD, D.ORDER_CNT, D.INDICA_CNT, PRDT_NM
-FROM PLAN_DTL D 
-JOIN PLAN P
-ON P.PLAN_CD = D.PLAN_CD
-JOIN EDCTS E
-ON D.EDCTS_CD = E.EDCTS_CD
-
-</select>
 </mapper>

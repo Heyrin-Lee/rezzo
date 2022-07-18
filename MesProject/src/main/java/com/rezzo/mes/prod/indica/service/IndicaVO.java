@@ -7,6 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rezzo.mes.prod.plan.service.PlanVO;
 
+import lombok.Data;
+
+@Data
 public class IndicaVO {
 	String planCd;
 	Date paprdDt;
@@ -24,6 +27,9 @@ public class IndicaVO {
 	String prdtNm;
 	String edctsCd;
 	int indicaCnt;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date indicaDt;
 	//생산수량
 	
 	String rscCd;
@@ -32,5 +38,5 @@ public class IndicaVO {
 	int rscUse;
 	String rscLotNo;
 	
-	String index;
+	String prcsPsch;
 }

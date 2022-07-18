@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.prod.indica.mapper.IndicaMapper">
+<select id="planListModal" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
+SELECT D.EDCTS_CD,D.PLAN_CD, P.PAPRD_DT, D.LINE_CD, D.ORDER_CNT, D.INDICA_CNT, PRDT_NM
+FROM PLAN_DTL D 
+JOIN PLAN P
+ON P.PLAN_CD = D.PLAN_CD
+JOIN EDCTS E
+ON D.EDCTS_CD = E.EDCTS_CD
+</select>
+
+</mapper>

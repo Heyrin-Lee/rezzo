@@ -29,12 +29,7 @@ public class PlanSrhServiceImpl implements PlanSrhService {
 	public void deleteHolding(PlanSrhVO vo) {
 		mapper.deleteHolding(vo);
 	}
-	@Override
-	public List<PlanSrhVO> planListModal(PlanSrhVO vo) {
-		return mapper.planListModal(vo);
-	}
-	
-	
+
 	
 
 }
