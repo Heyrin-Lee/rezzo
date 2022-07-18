@@ -13,5 +13,6 @@ public class EdctsmVO {
 	String unit;   
 	Integer safStc;
 	String wrhousCd;
-
+	
+	String ccdDtlNm;
 }

@@ -111,11 +111,19 @@ const grid = new tui.Grid({
       },
       {
           header: '보관창고',
+          name: 'ccdDtlNm',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '보관창고',
           name: 'wrhousCd',
           align: 'center',
         	sortable: true,
           sortingType: 'desc'
       }
+      
     ]
   });
   
@@ -129,10 +137,8 @@ const grid = new tui.Grid({
   }
   tui.Grid.applyTheme('default', hoverOption);
   
-	//그리드 영역 벗어나면 수정 종료
-  $('#grid').mouseleave(ev => {
-      grid.finishEditing();
-  })
+  //컬럼숨기기
+  grid.hideColumn('wrhousCd');
   
   //페이지 로딩시 실행
   getEdctsList();
@@ -151,7 +157,7 @@ const grid = new tui.Grid({
 
 //검색
 $('#searchBtn').click(ev => {
-	  getVendList();
+	  getEdctsList();
 	  toastr.success('정상적으로 조회되었습니다.');
  });
  
@@ -171,13 +177,19 @@ $('#searchBtn').click(ev => {
    grid.addRowClassName(selectedRowKey, 'highlight');
    
    //폼데이터 출력
+   $('#edctsCd').val(grid.getValue(ev.rowKey, 'edctsCd'));
+   $('#prdtNm').val(grid.getValue(ev.rowKey, 'prdtNm'));
+   $('#spec').val(grid.getValue(ev.rowKey, 'spec'));
+   $('#unit').val(grid.getValue(ev.rowKey, 'unit'));
+   $('#safStc').val(grid.getValue(ev.rowKey, 'safStc'));
+   $("select[name='wrhousCd']").eq(0).val(grid.getValue(ev.rowKey, 'wrhousCd'));
   
 	});
 
 //수정&입력
 $('#saveBtn').click(ev => {
 	  $.ajax({
-		    url: "saveVend",
+		    url: "saveEdcts",
 		    method: "POST",
       data: $('#dataForm').serialize(),
       dataType: 'json',
@@ -191,7 +203,7 @@ $('#saveBtn').click(ev => {
 //삭제
 $('#delBtn').click(ev => {
 	  $.ajax({
-		 	url: "delVend",
+		 	url: "delEdcts",
 		  method: "POST",
       data: $('#dataForm').serialize(),
       dataType: 'json',
