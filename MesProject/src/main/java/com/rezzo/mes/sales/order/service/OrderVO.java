@@ -13,27 +13,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderVO{
 	
-	private String orderNo;
-	private String edctsCd;
-	private String vendCd;
-	private String vendNm;
+	String orderNo;
+	String edctsCd;
+	String vendCd;
+	String vendNm;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Date orderDt;
+	Date orderDt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Date start;
+	Date start;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Date end;
-	private String progAppe;
+	Date end;
+	String progAppe;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	private Date paprdDt;
-	private String prdtNm;
-	private int orderCnt;
-	private String checked;
+	Date paprdDt;
+	String prdtNm;
+	int orderCnt;
+	String checked;
+	String bizNo;
+	String telNo;
 	
-	
+	String index;
 	
 }

@@ -17,19 +17,12 @@ import com.rezzo.mes.sales.order.service.OrderService;
 import com.rezzo.mes.sales.order.service.OrderVO;
 
 
-
 @Controller
 public class OrderController {
 	
 	@Autowired OrderService service;
 	
-	//데이터 넘어오는지 확인
-	@RequestMapping("order")
-	@ResponseBody
-	public List<OrderVO> searchOrdr(Model model) {
-		return service.searchOrdr(null);
-	}
-	
+
 	//주문서 조회/등록 페이지 불러오기
 	@RequestMapping("orderList")
 	public String orderList() {
@@ -83,7 +76,7 @@ public class OrderController {
 	//주문번호 생성, 가져오기
 	@GetMapping("getordrNo")
 	@ResponseBody
-	public Integer getordrNo(OrderVO vo) {
+	public OrderVO getordrNo(OrderVO vo) {
 		System.out.println(vo.getOrderDt());
 		return service.getordrNo(vo);
 	}

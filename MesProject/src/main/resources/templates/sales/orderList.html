@@ -35,7 +35,7 @@
                   <div class="card-header">
                      <i class="fas fa-tachometer-alt"></i> 주문서 조회
                   </div>
-	<div class="card-body" id="vendModal">
+				<div class="card-body" id="vendModal">
                      <form name="searchFrm" id="searchFrm">
                       <div class="r_input">
                         <div class="mb-3">
@@ -92,7 +92,25 @@
         </div>
     </div>
  	
-  <!-- 거래처 모달 -->
+ 	<!-- 거래처 모달(등록)-->
+  <div class="modal fade" id="vendGridModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">거래처 목록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                	<div id="vendGrid"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  <!-- 거래처 모달(조회)-->
   <div class="modal fade" id="comModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -107,8 +125,10 @@
             </div>
         </div>
     </div>
-   
-   <script>
+    
+    
+    
+    <script>
    /* 그리드 */
 		//초기페이지 - 주문서 전체 목록 보여주기-주문일자가 현재 날짜인 주문서만 보이기
 
@@ -253,7 +273,7 @@
 	        ]
 	    });
 		 
-	 // 거래처 모달 그리드    
+	 // 거래처 모달 그리드(조회)
 	    const comGrid = new tui.Grid({
 	        el: document.getElementById('comGrid'),
 	        scrollX: false,
@@ -286,28 +306,87 @@
 	            }
 	        ]
 	    });
+	    
+	    // 거래처 모달 그리드(등록)    
+	     const vendGrid = new tui.Grid({
+      	el: document.getElementById('vendGrid'),
+      	//scrollX: false,
+      	rowHeaders: ['checkbox'],
+      	columns: [
+        {
+          header: '거래처코드',
+          name: 'vendCd'
+        },
+        {
+          header: '거래처명',
+          name: 'vendNm'
+        },
+        {
+          header: '사업자등록번호',
+          name: 'bizNo'
+        },
+        {
+          header: '전화번호',
+          name: 'telNo'
+        }
+      	]
+   		});
    
    		//행추가 버튼
-		   let addBtn = document.getElementById('addBtn');
-		   addBtn.addEventListener('click', function(e){
-		   				grid.appendRow();			   					   			
-		   	//주문서 추가시 주문번호 자동 생성 ex.ORS20220715001
+   			let vendRowKey = null;
+		   $('#addBtn').click(ev => {
+		   	var row = grid.getRowCount();
+		   				grid.appendRow();
+		   				console.log(row);		   					   			
+		   	//주문서 추가시 주문번호 자동 생성 ex.ORS202207151
 		   	let orderDt =$("input[name=start]").val();
 		   	$.ajax({
 		   		url:"getordrNo",
 		   		dataType:"json",
 		   		method:"get",
 		   		data:{"orderDt":orderDt},
+		   		error:console.log("error"),
 		   		success:function(makeno) {
-		   			var no = makeno;
+		   			var no = makeno.index;
 		   			var rcode = orderDt.replaceAll("-","");
 		   			var result = "ORS" + rcode + no;
 		   			console.log(result);
-		   			var row = grid.getRowCount();
 		   			console.log(row);
+		   			console.log(no);
 		   			grid.setValue(row,'orderNo',result);
 		   		}
 		   	})
+		   	//거래처코드 칸 클릭 -> 거래처 목록 모달창 띄우기
+		   		grid.on("click",(e) => {
+		   			const { columnName } = e;
+		   			vendRowKey = e.rowKey;
+		   			if(columnName == 'vendCd') {
+		   				$("#vendGridModal").modal('show');
+		   				$.ajax({
+		   					url:"comSearch",
+							method:"get",
+							datatype:"json",
+							success:function(vendlist) {
+							setTimeout(function () {
+								vendGrid.refreshLayout()
+								}, 300);
+								vendGrid.resetData(vendlist);
+							}
+		   					
+		   				})
+		   			}
+		   		})
+		   		
+		   		vendGrid.on("click",ev => {
+		   			let row = vendGrid.getCheckedRowKeys(ev);
+		   			console.log(row);
+		   			let nmInfo = vendGrid.getValue(row,'vendNm');
+		   			console.log(nmInfo);
+		   			let cdInfo = vendGrid.getValue(row,'vendCd');
+		   			console.log(cdInfo);
+		   			grid.setValue(vendRowKey, 'vendNm', nmInfo);
+		   			grid.setValue(vendRowKey, 'vendCd', cdInfo);
+		   		})
 		   	});
 
 		   
@@ -318,6 +397,7 @@
 					});
 		   
 		
+		//체크박스 선택시 거래처명 가져오기
 		comGrid.on('click', e => {
 			let rowInfo = comGrid.getCheckedRows(e)
 			console.log(rowInfo);
@@ -391,6 +471,8 @@
 		document.getElementById("start").valueAsDate = new Date();
 		document.getElementById("end").valueAsDate = new Date();
 	   </script>
+  
+	</div>
 </th:block>
 
    
