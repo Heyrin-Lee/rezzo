@@ -1,159 +1,207 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/layout}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
 <title>edcts.html</title>
 </head>
 <body>
-	<!-- 본문내용 -->
-	<th:block layout:fragment="main">
-		<div class="container-fluid px-4">
-			<h1 class="mt-4">완제품관리</h1>
-			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+<!-- 본문내용 -->
+<th:block layout:fragment="main"> 
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">완제품관리</h1>
+		<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 기준정보관리</li>
 				<li class="breadcrumb-item active">> 완제품관리</li>
 			</ol>
-			<div class="card mb-4">
-				<div class="card-body">
-					<div class="linelist">
-						<button class="c_btn" form="">등록</button>
-						<button class="c_btn" form="">수정</button>
-						<button class="c_btn" form="">삭제</button>
-						<button class="c_btn" form="">취소</button>
+		<div class="card mb-4">
+			<div class="card-body">
+				<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
+						<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
+						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+						<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+						<br> <br>
 					</div>
-					<br> <br>
-
-					<form autocomplete="off" id="dataForm" name="dataForm" action="#"
-						method="post">
-						<table class="table table-bbs table-write" summary="내용.....">
-							<colgroup>
-								<col style="width: 130px">
-								<col>
-								<col style="width: 130px">
-								<col>
-							</colgroup>
-							<tbody>
-								<tr>
-									<th scope="row">완제품코드 <strong class="blue">*</strong></th>
-									<td data-matr-cd=""><input class="form-control"
-										type="text" id="matrCd" name="matrCd" style="width: 220px"
-										maxlength="20" /> <input type="hidden" id="dbAccessDiv"
-										name="dbAccessDiv" value="insert" /></td>
-									<th scope="row">제품명 <strong class="blue">*</strong></th>
-									<td><input class="form-control" type="text" id="matrNm"
-										name="matrNm" style="width: 220px" maxlength="50" /></td>
-								</tr>
-								<tr>
-									<th scope="row">규격 </th>
-									<td><input class="form-control" type="text" id="stndrd"
-										name="stndrd" style="width: 220px" maxlength="50" /></td>
-									<th scope="row">단위</th>
-									<td><input class="form-control" type="text"
-										id="manageUnit" name="manageUnit" style="width: 220px"
-										maxlength="50" /></td>
-								</tr>
-								<tr>
-									<th scope="row">안전재고</th>
-									<td><input type="text" id="wrhousngEntrps"
-										name="wrhousngEntrps" data-input="search"
-										data-fn-name="fnEntrpsSearchView()" class="form-control"
-										maxlength="20" style="width: 220px" /></td>
-									<th scope="row">보관창고</th>
-									<td colspan="2"><input type="text" id="wrhousngEntrpsNm"
-										class="form-control disabled" style="width: 220px"
-										maxlength="50" /></td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				</div>
-			</div>
-			<div class="card mb-4">
-				<div class="card-header"></div>
-				<div class="card-body">
-					<div id="grid"></div>
-					<script>
-    var Grid = tui.Grid;
-     const data = [{
-         id: '10012',
-         city: 'Seoul',
-         country: 'South Korea'
-       },
-       {
-         id: '10013',
-         city: 'Tokyo',
-         country: 'Japan'
-       }
-     ]
-    // case 1 : 인스턴스 생성시 data 옵션으로 데이터 입력
-    const grid = new Grid({
-      el: document.getElementById('grid'),
-      data : data ,
-      //data만 적어도 가능(축약형)
-      columns: [{
-          header: '완제품코드',
-          name: '완제품코드',
-        	sortable: true,
-          sortingType: 'desc'
-        },
-        {
-          header: '제품명',
-          name: '제품명',
-          editor: 'text',
-        	sortable: true,
-          sortingType: 'desc'
-        },
-        {
-            header: '규격',
-            name: '규격',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '단위',
-            name: '단위',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '안전재고',
-            name: '안전재고',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '보관창고',
-            name: '보관창고',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        }
-      ]
-    });
-    //ajax조회하고 grid
-    //$.ajax({
-    //  url: 'data.json'
-    //}).done(result => grid.resetData(result) ) //람다식표현
-    // }).done(function (result) {
-    //   // case 2 : resetData() 메서드로 입력
-    //   grid.resetData(result);
-    // })
-    grid.on('click', ev => {
-      console.log(ev.rowKey)
-      console.log(ev.columnName)
-      var value = grid.getValue(ev.rowKey,ev.columnName);
-      console.log(value);
-    })
-  </script>
-				</div>
+						<form id="dataForm" name="dataForm" action="#" method="post">
+							<table class="table" style="vertical-align : middle;">
+								<colgroup>
+									<col style="width: 150px">
+									<col>
+									<col style="width: 150px">
+									<col>
+									<col style="width: 150px">
+									<col>
+								</colgroup>
+								<tbody>
+									<tr>
+										<th>완제품코드 <strong class="blue">*</strong></th>
+										<td><input class="form-control" type="text" id="edctsCd" name="edctsCd" style="width: 250px" maxlength="20"
+											placeholder="등록시 자동부여됩니다." readonly />
+										<th>제품명 <strong class="blue">*</strong></th>
+										<td><input class="form-control" type="text" id="prdtNm" name="prdtNm" style="width: 250px" maxlength="50" /></td>
+										<th>보관창고</th>
+										<td>
+											<select class="dataTable-selector" name="wrhousCd" id="wrhousCd" style="width: 250px">
+												<option selected value="">==선택==</option>  
+												<option th:each="code : ${ccds['WHS']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"></option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>규격</th>
+										<td><input class="form-control" type="text" id="spec" name="spec" style="width: 250px" maxlength="50" /></td>
+										<th>단위</th>
+										<td><input class="form-control" type="text" id="unit" name="unit" style="width: 250px" maxlength="50" /></td>
+										<th>안전재고</th>
+										<td><input type="text" id="safStc" name="safStc" class="form-control" maxlength="50" style="width: 250px" /></td>
+									</tr>
+								</tbody>
+							</table>
+						</form>
 			</div>
 		</div>
-	</th:block>
+		<div class="card mb-4">
+			<div class="card-body">
+				<div id="grid"></div>
+			</div>
+		</div>
+	</div>
+<script>
+const grid = new tui.Grid({
+    el: document.getElementById('grid'),
+			scrollX: false,
+ 		bodyHeight: 350,
+  	rowHeaders: ['rowNum'],
+    columns: [{
+        header: '완제품코드',
+        name: 'edctsCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '제품명',
+        name: 'prdtNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+          header: '규격',
+          name: 'spec',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '단위',
+          name: 'unit',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '안전재고',
+          name: 'safStc',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '보관창고',
+          name: 'wrhousCd',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      }
+    ]
+  });
+  
+  //테마 호버
+  let hoverOption = {
+      row: {
+          hover: {
+              background: 'rgba(19,78,94,0.2)'
+          }
+      }
+  }
+  tui.Grid.applyTheme('default', hoverOption);
+  
+	//그리드 영역 벗어나면 수정 종료
+  $('#grid').mouseleave(ev => {
+      grid.finishEditing();
+  })
+  
+  //페이지 로딩시 실행
+  getEdctsList();
+  
+ function getEdctsList() {
+  	$.ajax({
+  	    url: "getEdctsList",
+  	    method: "POST",
+  	    data: $('#dataForm').serialize(),
+  	    dataType: "JSON",
+  	    success: function (result) {
+  	        grid.resetData(result);
+  	    }
+  		})
+	}
+
+//검색
+$('#searchBtn').click(ev => {
+	  getVendList();
+	  toastr.success('정상적으로 조회되었습니다.');
+ });
+ 
+//폼 리셋
+ $('#newBtn').click(ev => {
+	   $('#dataForm')[0].reset();
+ })
+ 
+ let selectedRowKey = null;
+ grid.on('focusChange', (ev) => {
+
+	   //하이라이팅
+   if (selectedRowKey != ev.rowKey) {
+       grid.removeRowClassName(selectedRowKey, 'highlight');
+   }
+   selectedRowKey = ev.rowKey;
+   grid.addRowClassName(selectedRowKey, 'highlight');
+   
+   //폼데이터 출력
+  
+	});
+
+//수정&입력
+$('#saveBtn').click(ev => {
+	  $.ajax({
+		    url: "saveVend",
+		    method: "POST",
+      data: $('#dataForm').serialize(),
+      dataType: 'json',
+		    success: function (result) {
+		    	toastr.success('정상적으로 저장되었습니다.');
+		    	grid.resetData(result);
+		    }
+			})
+ });
+
+//삭제
+$('#delBtn').click(ev => {
+	  $.ajax({
+		 	url: "delVend",
+		  method: "POST",
+      data: $('#dataForm').serialize(),
+      dataType: 'json',
+		    success: function (result) {
+		    	toastr.success('정상적으로 삭제되었습니다.');
+		    	grid.resetData(result);
+		    }
+			})
+ });
+</script>
+</th:block>
 </body>
 </html>

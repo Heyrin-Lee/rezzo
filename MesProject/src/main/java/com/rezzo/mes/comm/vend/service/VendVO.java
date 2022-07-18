@@ -12,5 +12,5 @@ public class VendVO {
     String bizno;
     String telno;
     String vendTyp;
-
+    String remk;
 }

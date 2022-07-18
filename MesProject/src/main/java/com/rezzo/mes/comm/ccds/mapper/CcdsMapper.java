@@ -3,11 +3,8 @@ package com.rezzo.mes.comm.ccds.mapper;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Mapper;
-
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 
-@Mapper
 public interface CcdsMapper {
 	//공통코드 전체리스트 조회
 	public List<CcdsVO> ccdsList(CcdsVO ccdsVO);

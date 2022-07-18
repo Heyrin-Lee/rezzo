@@ -5,6 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <style>
 body {
    background: #eee
@@ -58,75 +60,98 @@ body {
                      <form>
                         <div class="mb-3">
                            <label for="frDate">계획일자</label> 
-                           <input type="date" id="frDate" name="frDate" style="width: 200px">~<input type="date" id="toDate" name="toDate" style="width: 200px">
+	                           <input type="date" id="start-input" name="start-input" style="width: 200px">
+                           -
+	                           <input type="date" id="end-input" name="end-input" style="width: 200px">
                         </div>
                         <div class="mb-3">
-                           <label for="all">지시상태</label> 
-                            <label><input type="radio" name="all" value="all">전체</label>
-                            <label><input type="radio" name="indicaY" value="indicaY">지시</label>
-                            <label><input type="radio" name="indicaN" value="indicaN">미지시</label>
+                           <label>지시상태</label> 
+                            <label><input type="radio" name="all" value="전체">전체</label>
+                            <label><input type="radio" name="indicaY" value="진행">진행</label>
+                            <label><input type="radio" name="indicaN" value="미진행">미진행</label>
                         </div>
                         <div class="mb-3">
                            <label for="name">제품명</label> <input
                               type="text" id="name" name="name">
                         </div>
      					<div class="linelist">
-                        <button class="c_btn" form="">조회</button>
-                     </div>
-              	
+                        <button type="button" class="c_btn" id="sBtn">조회</button>
+                     	</div>
                      </form>
+                   
                   </div>
                </div>
             </div>
          </section>
+           <div class="linelist">
+              <button type="button" class="c_btn" id="dBtn">삭제</button>
+           </div>
+           <br><br>
    		<div id='grid'></div> 
    	</div>
    <script>
    const gridData = [];
-   (function() {
-      for (let i = 0; i < 1; i += 1) {
-         gridData.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
+  
    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      data: gridData,
 	      scrollX: false,
-	      scrollY: false,
+	      scrollY: true,
+	      rowHeaders: ['checkbox'],
 	      columns: [
 	        {
 	          header: '계획코드',
-	          name: 'name'
+	          name: 'planCd'
 	        },
 	        {
 	          header: '라인코드',
-	          name: 'artist'
+	          name: 'lineCd'
 	        },
 	        {
 	          header: '제품코드',
-	          name: 'type'
+	          name: 'edctsCd'
 	        },
 	        {
 	          header: '필요수량',
-	          name: 'release'
+	          name: 'orderCnt'
 	        },
 	        {
 	          header: '지시수량',
-	          name: 'IndicaCnt'
+	          name: 'indicaCnt'
 	        },
 	        {
 	          header: '작업시작일',
-	          name: 'frWkDt'
+	          name: 'wkFrDt'
 	        }
 	      ]
 	    });
    
+   /* 조회하기  */
+   $("#sBtn").on("click", function(){
+	   let planDt = $("#start-input").val();
+	   let planDt2 = $("#end-input").val();
+	   let nowSt = $("input[type=radio]:checked").val();
+	   let prdtNm = $("#name").val();
+	   console.log(planDt)
+	   console.log(planDt2)
+	   console.log(nowSt)
+	   console.log(prdtNm)
+	   
+	   $.ajax({
+		 url : 'getList',
+		 method : 'POST',
+		 data : {"planDt" : planDt, "planDt2" : planDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
+		 success : function(result) {
+			 grid.resetData(result)
+		 }
+	   })
+   })
    
+   /* 삭제하기  */
+   $("#dBtn").on("click", function(e) {
+	   
+   })
+  
    </script>
 </th:block>
 </body>

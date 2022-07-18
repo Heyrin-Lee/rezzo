@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.prod.plansrh.mapper.PlanSrhMapper">
+
+<select id="getList" resultType="com.rezzo.mes.prod.plansrh.service.PlanSrhVO">
+	SELECT P.PLAN_CD, P.LINE_CD, P.EDCTS_CD, P.ORDER_CNT, P.INDICA_CNT, P.WK_FR_DT, E.PRDT_NM
+	FROM PLAN_DTL P
+	JOIN EDCTS E
+	ON P.EDCTS_CD = E.EDCTS_CD
+	JOIN PLAN N
+	ON N.PLAN_CD = P.PLAN_CD
+	<![CDATA[
+	WHERE P.PLAN_DT >= #{planDt}
+	  AND P.PLAN_DT <= #{planDt2}
+	]]>
+	<if test="nowSt != null">
+	AND N.NOW_ST = #{nowSt}
+	</if>
+	AND E.PRDT_NM = #{prdtNm}
+</select>
+
+</mapper>

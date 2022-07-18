@@ -20,7 +20,7 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public String getIndex(PlanVO vo) {
+	public int getIndex(PlanVO vo) {
 		return mapper.getIndex(vo);
 	}
 
@@ -51,10 +51,11 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public void grid4Insert(List<PlanVO> list) {
+	public void grid5Insert(List<PlanVO> list) {
 		for(PlanVO vo : list) {
-			mapper.grid4Insert(vo);
+			mapper.grid5Insert(vo);
 		}
 	}
+
 
 }

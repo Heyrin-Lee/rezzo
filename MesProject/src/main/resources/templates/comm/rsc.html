@@ -1,185 +1,380 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
 <title>rsc.html</title>
 </head>
 <body>
-<!-- 본문내용 -->
-<th:block layout:fragment="main">  
-	<div class="container-fluid px-4">
-		<h1 class="mt-4">자재관리</h1>
-		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 기준정보관리</li>
-			<li class="breadcrumb-item active">> 자재관리</li>
-		</ol>
-		<div class="card mb-4">
-			<div class="card-body">
-				<label for="" autofocus="autofocus">자재명</label> <input type="text"
-					readonly="readonly" id="" name="" style="width: 150px">
-				<button class="c_btn">검색</button>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-lg-6">
-				<div class="card mb-4">
-					<div class="card-header"></div>
-					<div class="card-body">
-						<div id="grid"></div>
-						<script>
-    var Grid = tui.Grid;
-     const data = [{
-         id: '10012',
-         city: 'Seoul',
-         country: 'South Korea'
-       },
-       {
-         id: '10013',
-         city: 'Tokyo',
-         country: 'Japan'
-       }
-     ]
-    // case 1 : 인스턴스 생성시 data 옵션으로 데이터 입력
-    const grid = new Grid({
-      el: document.getElementById('grid'),
-      data : data ,
-      //data만 적어도 가능(축약형)
-      columns: [{
-          header: '자재코드',
-          name: '자재코드',
-        	sortable: true,
-          sortingType: 'desc'
-        },
-        {
-          header: '자재명',
-          name: '자재명',
-          editor: 'text',
-        	sortable: true,
-          sortingType: 'desc'
-        },
-        {
-            header: '규격',
-            name: '규격',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-          }
-      ]
-    });
-    //ajax조회하고 grid
-    //$.ajax({
-    //  url: 'data.json'
-    //}).done(result => grid.resetData(result) ) //람다식표현
-    // }).done(function (result) {
-    //   // case 2 : resetData() 메서드로 입력
-    //   grid.resetData(result);
-    // })
-    grid.on('click', ev => {
-      console.log(ev.rowKey)
-      console.log(ev.columnName)
-      var value = grid.getValue(ev.rowKey,ev.columnName);
-      console.log(value);
-    })
-  </script>
+	<!-- 본문내용 -->
+	<th:block layout:fragment="main">
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">자재관리</h1>
+			<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item"><a href="home.do"><i
+						class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 기준정보관리</li>
+				<li class="breadcrumb-item active">> 자재관리</li>
+			</ol>
+			<div class="card mb-4">
+				<div class="card-body">
+					<label for="" autofocus="autofocus">
+						<select class="dataTable-selector" name="state" id="state" style="width: 150px">
+								<option selected value="1">전체</option>
+								<option value="2">자재명</option>  
+								<option value="3">자재코드</option>
+								<option value="4">입고업체명</option>
+						</select></label> 
+						<input type="text" class="form-control" id="keyword" name="keyword" style="width: 200px">
+						<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 검색</button>
+					<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
+						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+						<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 					</div>
-					<div class="card-footer small text-muted"></div>
 				</div>
 			</div>
-			<div class="col-lg-6">
-				<div class="card mb-4">
-					<div class="card-header">
-						<i class="fas fa-table me-1"></i> 상세조회
-					</div>
-					<div class="card-body">
-						<div class="linelist">
-							<button class="c_btn" form="">등록</button>
-							<button class="c_btn" form="">수정</button>
-							<button class="c_btn" form="">삭제</button>
-							<button class="c_btn" form="">취소</button>
+
+			<div class="row">
+				<div class="col-lg-6" style="width: 45%">
+					<div class="card mb-4">
+						<div class="card-body">
+							<div id="grid"></div>
 						</div>
-						<br> <br>
-
-						<form autocomplete="off" id="dataForm" name="dataForm" action="#"
-							method="post">
-							<table class="table table-bbs table-write" summary="내용.....">
-								<colgroup>
-									<col style="width: 90px">
-									<col>
-									<col style="width: 90px">
-									<col>
-								</colgroup>
-								<tbody>
-									<tr>
-										<th scope="row">자재코드 <strong class="blue">*</strong></th>
-										<td data-matr-cd=""><input class="form-control"
-											type="text" id="matrCd" name="matrCd" style="width: 150px"
-											maxlength="20" /> <input type="hidden" id="dbAccessDiv"
-											name="dbAccessDiv" value="insert" /></td>
-										<th scope="row">자재명 <strong class="blue">*</strong></th>
-										<td><input class="form-control" type="text" id="matrNm"
-											name="matrNm" style="width: 220px" maxlength="50" /></td>
-									</tr>
-									<tr>
-										<th scope="row">자재규격</th>
-										<td><input class="form-control" type="text" id="stndrd"
-											name="stndrd" style="width: 120px" maxlength="50"
-											readonly="readonly" /></td>
-										<th scope="row">관리단위</th>
-										<td><input class="form-control" type="text"
-											id="manageUnit" name="manageUnit" style="width: 120px"
-											maxlength="50" readonly="readonly" /></td>
-									</tr>
-									<tr>
-										<th scope="row">입고업체</th>
-										<td><input type="text" id="wrhousngEntrps"
-											name="wrhousngEntrps" data-input="search"
-											data-fn-name="fnEntrpsSearchView()" class="form-control"
-											maxlength="20" style="width: 120px" />
-											<button type="button" id="entrpsPopBtn"
-												class="btn btn-find-small">찾아보기</button></td>
-										<th scope="row">업체명</th>
-										<td colspan="2"><input type="text" id="wrhousngEntrpsNm"
-											class="form-control disabled" style="width: 120px"
-											maxlength="50" readonly="readonly" /></td>
-									</tr>
-									<tr>
-										<th scope="row">자재구분</th>
-										<td><input id="matrAcnt" name="matrAcnt" type="text"
-											data-input="search"
-											class="form-control" style="width: 50px" />
-											<button id="matrAcntPopBtn" type="button"
-												class="btn btn-find-small">찾아보기</button> <input
-											id="matrAcntNm" type="text" class="form-control"
-											style="width: 100px" readonly="readonly" /></td>
-										<th scope="row">보관창고</th>
-										<td><input id="matrDiv" name="matrDiv" type="text"
-											data-input="search"
-											class="form-control" style="width: 50px" />
-											<button id="matrDivPopBtn" type="button"
-												class="btn btn-find-small">찾아보기</button> <input
-											id="matrDivNm" type="text" class="form-control"
-											style="width: 100px" readonly="readonly" /></td>
-									</tr>
-									<tr>
-										<th>사용유무</th>
-										<td><input type="checkbox" id="notUseYn" name="notUseYn" /></td>
-										<th scope="row">안전재고</th>
-										<td><input class="form-control" type="text" id="stndrd"
-											name="stndrd" style="width: 120px" maxlength="50"/></td>
-									</tr>
-								</tbody>
-							</table>
-						</form>
 					</div>
-					<div class="card-footer small text-muted"></div>
+				</div>
+				<div class="col-lg-6" style="width: 1%"></div>
+				<div class="col-lg-6" style="width: 54%">
+					<div class="card mb-4">
+						<div class="card-body">
+							<form id="dataForm" name="dataForm" action="#" method="post">
+								<table class="table" style="vertical-align : middle;">
+									<colgroup>
+										<col style="width: 100px">
+										<col>
+										<col style="width: 100px">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>구분 <strong class="blue">*</strong></th>
+											<td>
+											<select class="dataTable-selector" name="rscTyp" id="rscTyp" style="width: 220px">
+												<option selected value="">==등록시필수선택==</option>  
+												<option th:each="code : ${ccds['RSC']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtlNm}"></option>
+											</select></td>
+											<th>자재코드 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="rscCd" name="rscCd" style="width: 220px" 
+												placeholder="등록시 자동부여됩니다." readonly/></td>
+										</tr>
+										<tr>
+											<th>자재명 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="rscNm"
+												name="rscNm" style="width: 220px" maxlength="50" /></td>
+											<th>보관창고 <strong class="blue">*</strong></th>
+											<td><select class="dataTable-selector" name="wrhousCd" id="wrhousCd" style="width: 220px">
+												<option selected value="">==선택==</option>  
+												<option th:each="code : ${ccds['WHS']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"></option>
+											</select></td>
+										</tr>
+										<tr>
+											<th>자재규격</th>
+											<td><input class="form-control" type="text" id="rscSpec"
+												name="rscSpec" style="width: 220px" maxlength="50"/></td>
+											<th>관리단위</th>
+											<td><input type="text" id="mngUnit" name="mngUnit" class="form-control" maxlength="30" style="width: 220px" />
+											</td>
+										</tr>
+										<tr>
+											<th>입고업체</th>
+											<td><input type="text" id="vendCd" name="vendCd" class="form-control"
+												maxlength="6" style="width: 220px" />
+												<!-- Button trigger modal -->
+												<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="modalBtn"><i class="fas fa-search"></i></button></td>
+											<th>입고업체명</th>
+											<td><input type="text" id="vendNm"
+												class="form-control disabled" style="width: 220px"
+												maxlength="50" readonly="readonly" /></td>
+										</tr>
+										<tr>
+											<th>사용유무</th>
+											<td><select class="dataTable-selector" name="useYn" id="useYn" style="width: 220px">
+												<option value="">==선택==</option>
+												<option value="Y">Yes</option>  
+												<option value="N">No</option>
+											</select></td>
+											<th>안전재고</th>
+											<td><input class="form-control" type="text" id="safStc"
+												name="safStc" style="width: 220px"/></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+							<!-- Modal -->
+							<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							  <div class="modal-dialog modal-xl">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <h5 class="modal-title" id="exampleModalLabel">거래처 목록</h5>
+							        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							      </div>
+							      <div class="modal-body">
+							      	<label for="" autofocus="autofocus">거래처명</label> <input type="text" class="form-control"
+											id="modalSearch" name="modalSearch" style="width: 200px">
+											<button class="btn btn-primary" id="modalSearchBtn"><i class="fas fa-search"></i> 검색</button>
+											<br><br>
+							        <div id="modalGrid"></div>
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+							        <button type="button" class="btn btn-primary" id="modalSelBtn">확인</button>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</th:block>
+<script>
+//자재그리드
+const grid = new tui.Grid({
+    el: document.getElementById('grid'),
+			scrollX: false,
+ 		bodyHeight: 350,
+  	rowHeaders: ['rowNum'],
+    columns: [{
+        header: '구분',
+        name: 'rscTyp',
+        align: 'center',
+        filter: 'select',
+      	sortable: true,
+        sortingType: 'desc'
+    	},
+  	  {
+        header: '자재코드',
+        name: 'rscCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '자재명',
+        name: 'rscNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      }
+    ]
+  });
+  
+//모달그리드
+const modalGrid = new tui.Grid({
+    el: document.getElementById('modalGrid'),
+    scrollX: false,
+    rowHeaders: ['checkbox'],
+    columns: [{
+        header: '구분',
+        name: 'vendTyp',
+        align: 'center',
+        filter: 'select',
+      	sortable: true,
+        sortingType: 'desc'
+    	},
+  	  {
+        header: '거래처코드',
+        name: 'vendCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '거래처명',
+        name: 'vendNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+          header: '사업자등록번호',
+          name: 'bizno',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '전화번호',
+          name: 'telno',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '비고',
+          name: 'remk',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+    ]
+});
+
+//모달창 리스트
+$('#modalBtn').click(ev => {
+	getVendList();
+});
+
+//모달 검색
+$('#modalSearchBtn').click(ev => {
+	getVendList();
+})
+
+//체크된 셀 하이라이팅
+ modalGrid.on('check', (ev) => {
+	 modalGrid.addRowClassName(ev.rowKey, 'highlight2');
+ });
+
+modalGrid.on('uncheck', (ev) => {
+	modalGrid.removeRowClassName(ev.rowKey, 'highlight2');
+ });
+ 
+//모달 확인버튼
+$('#modalSelBtn').click(ev => {
+	var select = modalGrid.getCheckedRows()[0]
+	$('#vendCd').val(select.vendCd);
+	$('#vendNm').val(select.vendNm);
+	$('#exampleModal').modal('hide');
+})
+
+//모달 더블클릭
+modalGrid.on('dblclick', (ev) => {
+	var vendCd = grid.getValue(ev.rowKey, 'vendCd');
+  var vendNm = grid.getValue(ev.rowKey, 'vendNm');
+	$('#vendCd').val(vendCd);
+	$('#vendNm').val(vendNm);
+	$('#exampleModal').modal('hide');
+})
+
+//모달 거래처 리스트
+function getVendList() {
+	var vendNm = $('#modalSearch').val();
+	$.ajax({
+	    url: "getVendList",
+	    method: "POST",
+	    data: {vendNm},
+	    dataType: "JSON",
+	    success: function (result) {
+	    	setTimeout(function () {
+	    		modalGrid.refreshLayout()
+	    		}, 300);
+	    	modalGrid.resetData(result);
+	    }
+		})
+}
+  
+  //테마 호버
+  let hoverOption = {
+      row: {
+          hover: {
+              background: 'rgba(19,78,94,0.2)'
+          }
+      }
+  }
+  tui.Grid.applyTheme('default', hoverOption);
+  
+  //페이지로드시 실행
+  let state = $('#state').val();
+	let keyword = $('#keyword').val();
+  getRscList(state, keyword);
+
+ function getRscList(state, keyword) {
+  	$.ajax({
+  	    url: "getRscList",
+  	    method: "POST",
+  	    data: {"state" : state, "keyword" : keyword},
+  	    dataType: "JSON",
+  	    success: function (result) {
+  	        grid.resetData(result);
+  	    }
+  		})
+	}
+
+//검색
+$('#searchBtn').click(ev => {
+		state = $('#state').val();
+		keyword = $('#keyword').val();
+		getRscList(state, keyword);
+	  toastr.success('정상적으로 조회되었습니다.');
+ });
+ 
+//폼 리셋
+ $('#newBtn').click(ev => {
+	   $('#dataForm')[0].reset();
+ })
+ 
+ let selectedRowKey = null;
+ grid.on('focusChange', (ev) => {
+
+	   //하이라이팅
+   if (selectedRowKey != ev.rowKey) {
+       grid.removeRowClassName(selectedRowKey, 'highlight');
+   }
+   selectedRowKey = ev.rowKey;
+   grid.addRowClassName(selectedRowKey, 'highlight');
+   
+   //폼데이터 출력
+  	keyword = grid.getValue(ev.rowKey, 'rscCd')
+  	$.ajax({
+  	    url: "getRscList",
+  	    method: "POST",
+  	    data: {"state" : 3, "keyword" : keyword},
+  	    dataType: "JSON",
+  	    success: function (result) {
+  	    	let data = result[0];
+  	    	$("select[name='rscTyp']").val(data.rscTyp);
+  	      $('#rscCd').val(data.rscCd);
+  	      $('#rscNm').val(data.rscNm);
+  	    	$("select[name='wrhousCd']").val(data.wrhousCd);
+  	    	$('#rscSpec').val(data.rscSpec);
+  	    	$('#mngUnit').val(data.mngUnit);
+  	    	$('#vendCd').val(data.vendCd);
+  	    	$('#vendNm').val(data.vendNm);
+  	    	$("select[name='useYn']").val(data.useYn);
+  	    	$('#safStc').val(data.safStc);
+  	    }
+  		})
+	});
+
+//수정&입력
+$('#saveBtn').click(ev => {
+	  $.ajax({
+		    url: "saveRsc",
+		    method: "POST",
+      data: $('#dataForm').serialize(),
+      dataType: 'json',
+		    success: function (result) {
+		    	toastr.success('정상적으로 저장되었습니다.');
+		    	grid.resetData(result);
+		    }
+			})
+ });
+
+//삭제
+$('#delBtn').click(ev => {
+	  $.ajax({
+		 	url: "delRsc",
+		  method: "POST",
+      data: $('#dataForm').serialize(),
+      dataType: 'json',
+		    success: function (result) {
+		    	toastr.success('정상적으로 삭제되었습니다.');
+		    	grid.resetData(result);
+		    }
+			})
+ });
+</script>
+	</th:block>
 </body>
 </html>

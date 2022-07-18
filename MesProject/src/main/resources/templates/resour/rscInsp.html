@@ -117,37 +117,14 @@
 </body>
 
 <script>
+    ///////////////////////////// init ////////////////////////////////
     window.addEventListener('load', function () {
         getVendListInit();
         getInfList();
     })
 
-    // range date picker
-    let today = new Date();
-    let rangepicker = tui.DatePicker.createRangePicker({
-        startpicker: {
-            date: today,
-            input: '#startpicker-input',
-            container: '#startpicker-container'
-        },
-        endpicker: {
-            date: today,
-            input: '#endpicker-input',
-            container: '#endpicker-container'
-        }
-    });
-
-    // set a inspection date
-    let datepicker = new tui.DatePicker('#wrapper', {
-        date: today,
-        input: {
-            element: '#inspDt',
-            format: 'yyyy-MM-dd'
-        }
-    });
-
-    // grid section
-    // custom input renderer
+    ///////////////////////////// grid section ////////////////////////////////
+    // custom input renderers
     class inputOrdrInstCnt {
         constructor(props) {
             let el = document.createElement('input');
@@ -267,7 +244,6 @@
     }
 
     let iModal;
-
     class CustomBtnRenderer {
         constructor(props) {
             let {rowKey, value} = props;
@@ -288,7 +264,6 @@
         getElement() {
             return this.el;
         }
-
     }
 
     // grid theme
@@ -448,7 +423,62 @@
         ]
     })
 
-    // vend modal action
+    ///////////////////////////// date picker ////////////////////////////////
+    // range date picker
+    let today = new Date();
+    let rangepicker = tui.DatePicker.createRangePicker({
+        startpicker: {
+            date: today,
+            input: '#startpicker-input',
+            container: '#startpicker-container'
+        },
+        endpicker: {
+            date: today,
+            input: '#endpicker-input',
+            container: '#endpicker-container'
+        }
+    });
+
+    // set a inspection date
+    let datepicker = new tui.DatePicker('#wrapper', {
+        date: today,
+        input: {
+            element: '#inspDt',
+            format: 'yyyy-MM-dd'
+        }
+    });
+
+
+    ///////////////////////////// vendor ////////////////////////////////
+    // declare vendor modal
+    let vModal;
+    modalBtn.addEventListener('click', function () {
+        vModal = new bootstrap.Modal(document.getElementById('vendModal'), {})
+        vModal.show('vendModal');
+    })
+
+    // when vendor modal shown => refresh
+    let vendModal = document.getElementById('vendModal');
+    vendModal.addEventListener('shown.bs.modal', e => {
+        vendGrid.refreshLayout();
+    })
+
+    // search vendors
+    let vendSch = document.getElementById('vendSch');
+    vendSch.addEventListener('click', function () {
+        let data = new FormData(vendSchForm);
+        let url = 'getVendList'
+
+        fetch(url, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json()).then(res => {
+            vendGrid.innerHTML = '';
+            vendGrid.resetData(res);
+        })
+    });
+
+    // action in vendor modal
     vendGrid.on('dblclick', e => {
         let rowInfo = vendGrid.getRow(e.rowKey)
         vendNm.value = rowInfo.vendNm;
@@ -456,20 +486,18 @@
         vModal.hide(vendModal);
     })
 
-    let vModal;
-    modalBtn.addEventListener('click', function () {
-        vModal = new bootstrap.Modal(document.getElementById('vendModal'), {})
-        vModal.show('vendModal');
-    })
+    // get vendor grid data
+    function getVendListInit() {
+        let url = 'getVendList'
+        fetch(url).then(res => res.json())
+            .then(res => vendGrid.resetData(res))
+    }
 
-    // modal event section
-    let vendModal = document.getElementById('vendModal');
-    vendModal.addEventListener('shown.bs.modal', e => {
-        vendGrid.refreshLayout();
-    })
-
-    //
+    ///////////////////////////// inferior rsc ////////////////////////////////
+    // store each inf count
     let inferCnt = new Map();
+
+    // when rsc inf modal shown
     let inspModal = document.getElementById('inspModal');
     inspModal.addEventListener('shown.bs.modal', e => {
         let rowKey = inspModal.dataset.rowKey;
@@ -483,6 +511,7 @@
         inspGrid.refreshLayout();
     })
 
+    // when rsc inf modal hidden
     inspModal.addEventListener('hidden.bs.modal', e => {
         let rowKey = inspModal.dataset.rowKey;
         let colVal = inspGrid.getColumnValues('infCnt')
@@ -492,27 +521,30 @@
         inspGrid.refreshLayout();
     })
 
-    // get vendor list in modal
-    function getVendListInit() {
-        let url = 'getVendList'
+    // calculate inf count
+    let calInfCnt = document.getElementById('calInfCnt');
+    calInfCnt.addEventListener('click', function () {
+        let rowKey = inspModal.dataset.rowKey;
+        let colVal = inspGrid.getColumnValues('infCnt')
+        let infSum = colVal.reduce((a, b) => (a + b));
+        let inspCnt = grid.getValue(rowKey, 'inspCnt')
+
+        if (infSum > parseInt(inspCnt) || inspCnt === null || inspCnt === '') {
+            alert("불량수량이 검사량 보다 많습니다.")
+        } else {
+            grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
+            grid.setValue(rowKey, 'inspFailCnt', infSum)
+        }
+        iModal.hide(inspModal);
+    })
+
+    function getInfList() {
+        let url = 'getInfList'
         fetch(url).then(res => res.json())
-            .then(res => vendGrid.resetData(res))
+            .then(res => inspGrid.resetData(res.INF));
     }
 
-    let vendSch = document.getElementById('vendSch');
-    vendSch.addEventListener('click', function () {
-        let data = new FormData(vendSchForm);
-        let url = 'getVendListByKw'
-
-        fetch(url, {
-            method: 'POST',
-            body: data
-        }).then(res => res.json()).then(res => {
-            vendGrid.innerHTML = '';
-            vendGrid.resetData(res);
-        })
-    });
-
+    ///////////////////////////// inferior rsc ////////////////////////////////
     // get order list
     let getOrdrList = document.getElementById('getOrdrList');
     getOrdrList.addEventListener('click', function () {
@@ -538,28 +570,7 @@
         }
     })
 
-    function getInfList() {
-        let url = 'getInfList'
-        fetch(url).then(res => res.json())
-            .then(res => inspGrid.resetData(res.INF));
-    }
-
-    let calInfCnt = document.getElementById('calInfCnt');
-    calInfCnt.addEventListener('click', function () {
-        let rowKey = inspModal.dataset.rowKey;
-        let colVal = inspGrid.getColumnValues('infCnt')
-        let infSum = colVal.reduce((a, b) => (a + b));
-        let inspCnt = grid.getValue(rowKey, 'inspCnt')
-
-        if (infSum > parseInt(inspCnt) || inspCnt === null || inspCnt === '') {
-            alert("불량수량이 검사량 보다 많습니다.")
-        } else {
-            grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
-            grid.setValue(rowKey, 'inspFailCnt', infSum)
-        }
-        iModal.hide(inspModal);
-    })
-
+    ///////////////////////////// insert inspection result ////////////////////////////////
     function setRscInspList(data) {
         let url = 'setRscInspList';
         fetch(url, {
@@ -584,15 +595,16 @@
         setRscInspList(gridVal)
     })
 
+    ///////////////////////////// action on grid ////////////////////////////////
     let gridEle = document.getElementById('grid')
     gridEle.addEventListener('mouseleave', function () {
         grid.finishEditing();
     })
 
+    let inspGridEle = document.getElementById('insp-grid');
+    inspGridEle.addEventListener('mouseleave', function () {
+        inspGrid.finishEditing();
+    })
 
 </script>
 </html>
-
-
-
-
