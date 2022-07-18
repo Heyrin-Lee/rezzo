@@ -17,4 +17,5 @@ public interface EqmService {
 	
 	public void eqmImgInsert(EqmVO vo);
 
+	public List<EqmVO> eqmCdSelect(String keyword);
 }

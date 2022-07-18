@@ -51,6 +51,11 @@ public class EqmServiceImpl implements EqmService {
 	public void eqmImgUpdate(EqmVO vo) {
 		map.eqmImgUpdate(vo);	
 	}
+
+	@Override
+	public List<EqmVO> eqmCdSelect(String keyword) {
+		return map.eqmCdSelect(keyword);
+	}
 	
 	
 

@@ -13,13 +13,19 @@
 		on e.eqm_cd = i.eqm_cd
 		where e.eqm_nm Like '%'||#{keyword}||'%'
 	</select>
+	
+	<select id="eqmCdSelect" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
+		select * from eqm e join eqm_img i
+		on e.eqm_cd = i.eqm_cd
+		where e.eqm_cd = #{eqmCd}
+	</select>
 
 	<insert id="eqmInsert" parameterType="com.rezzo.mes.equip.eqm.service.EqmVO">
 		insert into eqm (eqm_cd, line_cd, prcs_cd, eqm_nm, eqm_ist_dt, min_temp,
 		max_temp, chck_perd, use_yn, prcs_nm, eqm_fg)
 		values (<![CDATA[cre_code(#{eqmFg})]]>,
 		#{lineCd}, #{prcsCd}, #{eqmNm}, #{eqmIstDt}, #{minTemp}, 
-		#{maxTemp}, #{chckPerd}, #{useYn}, #{prcsNm},#{eqmFg})
+		#{maxTemp}, #{chckPerd}, #{useYN}, #{prcsNm},#{eqmFg})
 	
 	</insert>
 	
@@ -38,7 +44,7 @@
 			min_temp = #{minTemp},
 			max_temp = #{maxTemp}, 
 			chck_perd = #{chckPerd}, 
-			use_yn = #{useYn}, 
+			use_yn = #{useYN}, 
 			prcs_nm = #{prcsNm},
 			eqm_fg = #{eqmFg}
 			where eqm_cd = #{eqmCd}
