@@ -1,19 +1,19 @@
 package com.rezzo.mes.resour.ordr.service.impl;
 
-import java.util.List;
-
+import com.rezzo.mes.resour.ordr.mapper.RscOrdrMapper;
+import com.rezzo.mes.resour.ordr.service.RscOrdrService;
+import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.rezzo.mes.resour.ordr.mapper.RordrMapper;
-import com.rezzo.mes.resour.ordr.service.RordrService;
-import com.rezzo.mes.resour.ordr.service.RordrVO;
+import java.util.List;
 
-public class RordrServiceImpl implements RordrService{
+public class RordrServiceImpl implements RscOrdrService {
 
-	@Autowired RordrMapper mapper;
+	@Autowired
+	RscOrdrMapper mapper;
 
 	@Override
-	public List<RordrVO> ordrList(RordrVO vo) {
-		return mapper.rordrList(vo);
+	public List<RscOrdrVO> RscOrdrList(RscOrdrVO vo) {
+		return mapper.RscOrdrList(vo);
 	}
 }

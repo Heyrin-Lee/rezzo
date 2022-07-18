@@ -467,7 +467,7 @@
     let vendSch = document.getElementById('vendSch');
     vendSch.addEventListener('click', function () {
         let data = new FormData(vendSchForm);
-        let url = 'getVendList'
+        let url = 'getVendors'
 
         fetch(url, {
             method: 'POST',
@@ -488,7 +488,7 @@
 
     // get vendor grid data
     function getVendListInit() {
-        let url = 'getVendList'
+        let url = 'getVendors'
         fetch(url).then(res => res.json())
             .then(res => vendGrid.resetData(res))
     }
@@ -539,7 +539,7 @@
     })
 
     function getInfList() {
-        let url = 'getInfList'
+        let url = 'getRscInfList'
         fetch(url).then(res => res.json())
             .then(res => inspGrid.resetData(res.INF));
     }
@@ -559,7 +559,7 @@
             alert('공급업체를 입력하세요')
         } else {
             let obj = {startDt: startDt.value, endDt: endDt.value, vendCd: vendCd.value};
-            let url = 'getOrdrList';
+            let url = 'getRscOrdrList';
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
@@ -587,10 +587,12 @@
             element.inspDt = inspDt.value;
             let rowKey = String(element.rowKey);
             let infCnt = inferCnt.get(rowKey);
-            for (let i = 0; i < infCnt.length; i++) {
-                inspGrid.setValue(i, 'infCnt', infCnt[i]);
+            if (typeof infCnt !== 'undefined') {
+                for (let i = 0; i < infCnt.length; i++) {
+                    inspGrid.setValue(i, 'infCnt', infCnt[i]);
+                }
+                element.rscInf = inspGrid.getData();
             }
-            element.rscInf = inspGrid.getData();
         })
         setRscInspList(gridVal)
     })

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rezzo.mes.resour.insp.mapper.InspMapper">
+    <select id="getVendors" parameterType="VendVO" resultType="VendVO">
+        select VEND_CD, VEND_NM, BIZNO, TELNO
+        from VEND
+        where VEND_NM like '%${vendNm}%'
+          and VEND_CD like '%${vendCd}%'
+    </select>
+
+    <select id="getResources" resultType="RscVO">
+        select RSC_CD, RSC_NM
+        from RSC
+        where RSC_NM like '%${rscNm}%'
+          and RSC_CD like '%${rscCd}%'
+    </select>
+
+    <select id="getRscOrdrList" parameterType="RscOrdrVO" resultType="RscOrdrVO">
+        select rod.RSC_CD, rod.RSC_NM, rod.ORDR_NO, rod.ORDR_CNT
+        from RSC_ORDR ro,
+             RSC_ORDR_DTL rod
+        where ro.ORDR_NO = rod.ORDR_NO
+          and ro.VEND_CD = #{vendCd}
+          and
+        <![CDATA[
+            PAPRD_CMND_DT >= #{startDt}
+          and PAPRD_CMND_DT <= #{endDt}
+        ]]>
+        order by PAPRD_CMND_DT
+    </select>
+
+    <insert id="setRscInspList" parameterType="List" statementType="CALLABLE">
+        <selectKey resultType="String" keyProperty="rscInspCd" order="BEFORE">
+            select 'RMI'||to_char(sysdate, 'YYYYMMDD')||lpad(NVL(max(rownum),0) + 1, 3, '0')
+            from rsc_insp
+            where to_char(insp_dt, 'yyyymmdd') = to_char(sysdate, 'yyyymmdd')
+        </selectKey>
+        <foreach item="item" collection="list">
+            {call rsc_insp_set(#{rscInspCd},#{item.rscCd},#{item.ordrNo},#{item.inspDt},#{item.inspCnt},#{item.inspPassCnt},#{item.inspFailCnt})}
+<!--            <if test="item.inspFailCnt != ''">-->
+<!--                <foreach collection="item.rscInf" item="infer">-->
+<!--                    {call rsc_insp_inf_set(#{rscInspCd},#{item.rscCd},#{infer.ccdDtl},#{infer.infCnt})}-->
+<!--                </foreach>-->
+<!--            </if>-->
+            <if test="item.inspFailCnt != ''">
+                <foreach collection="item.rscInf" item="infer">
+                    insert into RSC_INFER (RSC_CD, RSC_INSP_CD, INF_CD, INF_CNT)
+                    values (#{item.rscCd},#{rscInspCd},#{infer.ccdDtl},#{infer.infCnt})
+                </foreach>
+            </if>
+        </foreach>
+    </insert>
+
+    <insert id="setRscInspList" parameterType="List">
+        <selectKey resultType="String" keyProperty="rscInspCd" order="BEFORE">
+            select 'RMI'||to_char(sysdate, 'YYYYMMDD')||lpad(NVL(max(rownum),0) + 1, 3, '0')
+            from rsc_insp
+            where to_char(insp_dt, 'yyyymmdd') = to_char(sysdate, 'yyyymmdd')
+        </selectKey>
+
+        insert all
+        <foreach item="item" collection="list">
+            into RSC_INSP (RSC_INSP_NO, INSP_DT)
+            values (#{rscInspCd}, to_char(#{item.inspDt}, 'YYYY-MM-DD'))
+        </foreach>
+
+        <foreach item="item" collection="list">
+            into RSC_INSP_DTL (RSC_CD, RSC_INSP_NO, ORDR_NO, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT)
+            values (#{item.rscCd},#{rscInspCd},#{item.ordrNo},#{item.inspCnt},#{item.inspPassCnt},#{item.inspFailCnt})
+        </foreach>
+
+        <foreach item="item" collection="list">
+            <if test="item.inspFailCnt != ''">
+                <foreach collection="item.rscInf" item="infer">
+                    into RSC_INFER (RSC_CD, RSC_INSP_NO, INF_CD, INF_CNT)
+                    values (#{item.rscCd},#{rscInspCd},#{infer.ccdDtl},#{infer.infCnt})
+                </foreach>
+            </if>
+        </foreach>
+        select * from DUAL
+    </insert>
+
+
+<!--    <update id="setRscInspList" parameterType="List">-->
+<!--        update RSC_ORDR_DTL rod-->
+<!--        set INSP_BOOL = 1-->
+<!--        where #{item.ordrNo} = rod.ordr_no-->
+<!--          and #{item.rscCd} = rod.rsc_cd-->
+<!--    </update>-->
+
+    <select id="getRscInspList" parameterType="RscOrdrVO" resultType="RscInspVO">
+        select ri.RSC_INSP_NO, to_char(ri.INSP_DT, 'YYYY-MM-DD') INSP_DT, rid.RSC_CD, rsc.RSC_NM, rid.INSP_CNT,
+        rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT
+        from RSC_INSP ri,
+        RSC_INSP_DTL rid,
+        RSC_ORDR_DTL rod,
+        RSC_ORDR ro,
+        RSC
+        where ri.RSC_INSP_NO = rid.RSC_INSP_NO
+        and rod.ORDR_NO = rid.ORDR_NO
+        and rod.RSC_CD = rid.RSC_CD
+        and ro.ORDR_NO = rod.ORDR_NO
+        and rsc.RSC_CD = rid.RSC_CD
+        <![CDATA[
+          and ri.INSP_DT >= #{startDt}
+          and ri.INSP_DT <= #{endDt}
+        ]]>
+        <if test="vendCd != ''">and ro.VEND_CD = #{vendCd}</if>
+        <if test="rscCd != ''">and rid.RSC_CD = #{rscCd}</if>
+    </select>
+</mapper>
