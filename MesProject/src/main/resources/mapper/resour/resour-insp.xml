@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.rezzo.mes.resour.insp.mapper.InspMapper">
-    <select id="getOrdrList" parameterType="OrdrVO" resultType="OrdrVO">
+    <select id="getOrdrList" parameterType="RordrVO" resultType="RordrVO">
         select rod.RSC_CD, rod.RSC_NM, rod.ORDR_NO, rod.ORDR_CNT
         from RSC_ORDR ro,
              RSC_ORDR_DTL rod
@@ -17,14 +17,14 @@
         order by PAPRD_CMND_DT
     </select>
 
-    <select id="getVendList" parameterType="VendVO" resultType="VendVO">
+    <select id="VendList" parameterType="VendVO" resultType="VendVO">
         select VEND_CD, VEND_NM, BIZNO, TELNO
         from VEND
         where VEND_NM like '%${vendNm}%'
           and VEND_CD like '%${vendCd}%'
     </select>
 
-    <select id="getRscList" resultType="RscVO">
+    <select id="RscList" resultType="RscVO">
         select RSC_CD, RSC_NM
         from RSC
         where RSC_NM like '%${rscNm}%'
@@ -52,7 +52,7 @@
         select * from DUAL
     </insert>
 
-    <select id="getRscInspList" parameterType="OrdrVO" resultType="RscInspVO">
+    <select id="getRscInspList" parameterType="RordrVO" resultType="RscInspVO">
         select ri.RSC_INSP_NO, to_char(ri.INSP_DT, 'YYYY-MM-DD') INSP_DT, rid.RSC_CD, rsc.RSC_NM, rid.INSP_CNT, rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT
         from RSC_INSP ri,
         RSC_INSP_DTL rid,

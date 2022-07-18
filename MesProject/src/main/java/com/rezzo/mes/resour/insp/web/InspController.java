@@ -1,21 +1,23 @@
 package com.rezzo.mes.resour.insp.web;
 
-import com.rezzo.mes.comm.ccds.service.CcdsService;
-import com.rezzo.mes.comm.ccds.service.CcdsVO;
-import com.rezzo.mes.comm.vend.service.VendVO;
-import com.rezzo.mes.resour.insp.service.InspService;
-import com.rezzo.mes.resour.insp.web.vo.OrdrVO;
-import com.rezzo.mes.resour.insp.web.vo.RscInspVO;
-import com.rezzo.mes.resour.insp.web.vo.RscVO;
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-import java.util.Map;
+import com.rezzo.mes.comm.ccds.service.CcdsService;
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
+import com.rezzo.mes.comm.rsc.service.RscVO;
+import com.rezzo.mes.comm.vend.service.VendVO;
+import com.rezzo.mes.resour.insp.service.InspService;
+import com.rezzo.mes.resour.insp.service.RscInspVO;
+import com.rezzo.mes.resour.ordr.service.RordrVO;
+
+import lombok.AllArgsConstructor;
 
 @Controller
 @AllArgsConstructor
@@ -40,7 +42,7 @@ public class InspController {
         return "resour/rscInspList";
     }
 
-    @RequestMapping("getVendList")
+    @RequestMapping("VendList")
     @ResponseBody
     public List<VendVO> getVendList(@ModelAttribute VendVO vendVO) {
         return sv.getVendList(vendVO);
@@ -48,7 +50,7 @@ public class InspController {
 
     @RequestMapping("getOrdrList")
     @ResponseBody
-    public List<OrdrVO> getOrdrList(@RequestBody OrdrVO ordrVO) {
+    public List<RordrVO> getOrdrList(@RequestBody RordrVO ordrVO) {
         return sv.getOrdrList(ordrVO);
     }
 
@@ -58,7 +60,7 @@ public class InspController {
         sv.insertInspList(vo);
     }
 
-    @RequestMapping("getRscList")
+    @RequestMapping("RscList")
     @ResponseBody
     public List<RscVO> getRscList(RscVO rscVO) {
         return sv.getRscList(rscVO);
@@ -66,7 +68,7 @@ public class InspController {
 
     @RequestMapping("getRscInspList")
     @ResponseBody
-    public List<RscInspVO> getRscInspList(@ModelAttribute OrdrVO ordrVO) {
+    public List<RscInspVO> getRscInspList(@ModelAttribute RordrVO ordrVO) {
         return sv.getRscInspList(ordrVO);
     }
 

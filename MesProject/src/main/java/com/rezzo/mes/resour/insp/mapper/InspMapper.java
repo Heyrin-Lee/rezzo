@@ -1,19 +1,20 @@
 package com.rezzo.mes.resour.insp.mapper;
 
-import com.rezzo.mes.comm.vend.service.VendVO;
-import com.rezzo.mes.resour.insp.web.vo.OrdrVO;
-import com.rezzo.mes.resour.insp.web.vo.RscInspVO;
-import com.rezzo.mes.resour.insp.web.vo.RscVO;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
+import com.rezzo.mes.comm.rsc.service.RscVO;
+import com.rezzo.mes.comm.vend.service.VendVO;
+import com.rezzo.mes.resour.insp.service.RscInspVO;
+import com.rezzo.mes.resour.ordr.service.RordrVO;
 
 @Mapper
 public interface InspMapper {
 
     List<VendVO> getVendList(VendVO vendVO);
-    List<OrdrVO> getOrdrList(OrdrVO ordrVO);
+    List<RordrVO> getOrdrList(RordrVO ordrVO);
     void insertInspList(List<RscInspVO> rscInspVOS); // test
     List<RscVO> getRscList(RscVO rscVO);
-    List<RscInspVO> getRscInspList(OrdrVO ordrVO);
+    List<RscInspVO> getRscInspList(RordrVO ordrVO);
 }
