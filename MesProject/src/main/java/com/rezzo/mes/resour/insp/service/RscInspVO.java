@@ -17,7 +17,7 @@ public class RscInspVO {
     int ordrCnt; // 발주수량
     int ordrInstCnt; // 입고수량
 
-    int rscInspNo; // 검사번호
+    String rscInspCd; // 검사코드
     Date inspDt; // 검사일자
     int inspCnt; //검사수량
     int inspPassCnt; // 합격수량

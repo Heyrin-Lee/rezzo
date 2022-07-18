@@ -4,11 +4,13 @@ import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.mapper.InspMapper;
 import com.rezzo.mes.resour.insp.service.InspService;
+import com.rezzo.mes.resour.insp.service.RscInfVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,7 +35,27 @@ public class InspServiceImpl implements InspService {
     // get, set inspection list
     @Override
     public void setRscInspList(List<RscInspVO> rscInspVOS) {
-        mapper.setRscInspList(rscInspVOS);
+        String rscInspCd = mapper.getRscInspCd();
+        Date inspDt = new Date();
+        
+        for (RscInspVO rscInspVO : rscInspVOS) {
+            inspDt = rscInspVO.getInspDt();
+            rscInspVO.setRscInspCd(rscInspCd);
+            mapper.setRscOrdrInspBool(rscInspVO);
+            mapper.setRscInspDtList(rscInspVO);
+
+            if (rscInspVO.getInspFailCnt() > 0) {
+                for (RscInfVO rscInfVO : rscInspVO.getRscInf()) {
+                    rscInfVO.setRscInspCd(rscInspCd);
+                    rscInfVO.setRscCd(rscInspVO.getRscCd());
+                    mapper.setRscInfList(rscInfVO);
+                }
+            }
+        }
+        RscInspVO vo = new RscInspVO();
+        vo.setRscInspCd(rscInspCd);
+        vo.setInspDt(inspDt);
+        mapper.setRscInspList(vo);
     }
     @Override
     public List<RscInspVO> getRscInspList(RscOrdrVO rscOrdrVO) {
