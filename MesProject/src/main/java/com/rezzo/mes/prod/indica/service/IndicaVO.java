@@ -1,23 +1,13 @@
-package com.rezzo.mes.prod.plan.service;
+package com.rezzo.mes.prod.indica.service;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.rezzo.mes.comm.ccds.service.CcdsVO;
-import com.rezzo.mes.sales.order.service.OrderVO;
+import com.rezzo.mes.prod.plan.service.PlanVO;
 
-import groovy.transform.builder.Builder;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class PlanVO implements Serializable {
+public class IndicaVO {
 	String planCd;
 	Date paprdDt;
 	int prefRank;
@@ -28,11 +18,7 @@ public class PlanVO implements Serializable {
 	Date wkFrDt; 
 	Date wkToDt;
 	String lineCd;
-	String prdtCd;
 	
-	String orderNo;
-	Date orderDt;
-	String vendNm;
 	int orderCnt;
 	String prcsCd;
 	String prdtNm;
@@ -47,6 +33,4 @@ public class PlanVO implements Serializable {
 	String rscLotNo;
 	
 	String index;
-	
-
 }

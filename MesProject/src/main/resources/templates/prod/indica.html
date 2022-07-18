@@ -59,7 +59,8 @@ body {
  	
      <div class="linelist">
        <button class="c_btn" form="">초기화</button>
-       <button id="btnModal" class="c_btn" form="">생산계획조회</button>
+       <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
+                    value="주문서조회"></input>
        <button class="c_btn" form="">저장</button>
      </div>
      
@@ -73,18 +74,68 @@ body {
 	  <div id="dialog" title="생산계획조회"></div>
    <br>
  </div>	
+    <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
+                        <br> <br>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><br>
+                    <div id="modGrid" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" id="confirmBtn" class="btn btn-primary"
+                            data-bs-dismiss="modal">확인</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
    <script>
+   //미진행 생산계획 띄우기
+   	$("#modalBtn").on("click", function() {
+   		$.ajax({
+   			url : 'planListModal',
+   			method : 'GET',
+   			dataType: "JSON",
+   			success: function (result) {
+   				modGrid.resetData(result);
+   			}
+   		})
+   	})
+   	
+   	 $("#confirmBtn").on("click", function(e){
+        	let result = modGrid.getCheckedRows();
+        	console.log(result)
+        	grid.resetData(result);
+     })
+   	
+   	
+   	
+   	 const modGrid = new tui.Grid({
+                el: document.getElementById('modGrid'),
+                scrollX: false,
+                scrollY: false,
+                rowHeaders: ['checkbox'],
+                columns: [{
+                    header: '생산계획코드',
+                    name: 'planCd',
+                    align: 'center',
+                }, {
+                    header: '제품명',
+                    name: 'prdtNm',
+                    align: 'center'
+                }, {
+                    header: '주문수량',
+                    name: 'orderCnt',
+                    align: 'center',
+                }]
+            })
+   	
+   
    const gridData = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
+  
    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      data: gridData,
@@ -112,10 +163,6 @@ body {
 	          name: 'release'
 	        },
 	        {
-	          header: '공정코드',
-	          name: 'release'
-	        },
-	        {
 	          header: '담당자',
 	          name: 'release'
 	        },
@@ -135,17 +182,7 @@ body {
 	    });
    
    const gridData2 = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData2.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
-   
+      
    const grid2 = new tui.Grid({
 	      el: document.getElementById('grid2'),
 	      data: gridData2,
@@ -180,17 +217,7 @@ body {
 	    });
    
    const gridData3 = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData3.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
-   
+  
    const grid3 = new tui.Grid({
 	      el: document.getElementById('grid3'),
 	      data: gridData2,
@@ -211,27 +238,12 @@ body {
 	        }
 	      ]
 	    });
-   
-   function makeModal() {
-       //모달
-       var dialog = $("#dialog").dialog({
-         autoOpen: false,
-         height: 400,
-         width: 350,
-         modal: true
-       });
-       return dialog;
-     }
-
-     //버튼 클릭
-     $("#btnModal").on("click", function () {
-       $("#dialog").load("newfile.do", function() {  // load 앞에 선택자가 와야 함 그 선택자에 ajax로 가져온 결과를 넣음 load(컨트롤러) 도 가능함
-         var dialog = makeModal();
-         dialog.dialog("open");
-       })
-     })
-   
-   	
+	    
+	modalBtn.addEventListener('click', function () {
+                setTimeout(function () {
+                    modGrid.refreshLayout()
+                }, 300);
+            });    
    </script>
 </th:block>
 </body>

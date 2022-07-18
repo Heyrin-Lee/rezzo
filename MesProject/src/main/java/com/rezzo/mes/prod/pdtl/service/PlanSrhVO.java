@@ -1,4 +1,4 @@
-package com.rezzo.mes.prod.plansrh.service;
+package com.rezzo.mes.prod.pdtl.service;
 
 import java.util.Date;
 

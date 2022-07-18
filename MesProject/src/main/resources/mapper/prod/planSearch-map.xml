@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.rezzo.mes.prod.plansrh.mapper.PlanSrhMapper">
+<mapper namespace="com.rezzo.mes.prod.pdtl.mapper.PlanSrhMapper">
 
-<select id="getList" resultType="com.rezzo.mes.prod.plansrh.service.PlanSrhVO">
+<select id="getList" resultType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO">
 	SELECT P.PLAN_CD, P.LINE_CD, P.EDCTS_CD, P.ORDER_CNT, P.INDICA_CNT, P.WK_FR_DT, E.PRDT_NM
 	FROM PLAN_DTL P
 	JOIN EDCTS E
@@ -13,10 +13,40 @@
 	WHERE P.PLAN_DT >= #{planDt}
 	  AND P.PLAN_DT <= #{planDt2}
 	]]>
-	<if test="nowSt != null">
-	AND N.NOW_ST = #{nowSt}
-	</if>
+	 <choose>
+    <when test='nowSt.equals("전체")'>
+     AND (N.NOW_ST = '미진행'
+        or N.NOW_ST = '진행')
+    </when>
+    <otherwise>
+     AND N.NOW_ST = #{nowSt}
+    </otherwise>
+  </choose>
 	AND E.PRDT_NM = #{prdtNm}
 </select>
 
+<delete id="deletePlan" parameterType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO" >
+DELETE FROM PLAN
+WHERE PLAN_CD = #{planCd}
+</delete>
+
+<delete id="deletePlanDtl" parameterType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO">
+DELETE FROM PLAN_DTL
+WHERE PLAN_CD = #{planCd}
+</delete>
+
+<delete id="deleteHolding" parameterType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO">
+DELETE FROM HOLDING
+WHERE PLAN_CD = #{planCd}
+</delete>
+
+<select id="planListModal" resultType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO">
+SELECT D.EDCTS_CD,D.PLAN_CD, P.PAPRD_DT, D.LINE_CD, D.ORDER_CNT, D.INDICA_CNT, PRDT_NM
+FROM PLAN_DTL D 
+JOIN PLAN P
+ON P.PLAN_CD = D.PLAN_CD
+JOIN EDCTS E
+ON D.EDCTS_CD = E.EDCTS_CD
+
+</select>
 </mapper>

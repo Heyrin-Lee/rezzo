@@ -66,9 +66,9 @@ body {
                         </div>
                         <div class="mb-3">
                            <label>지시상태</label> 
-                            <label><input type="radio" name="all" value="전체">전체</label>
-                            <label><input type="radio" name="indicaY" value="진행">진행</label>
-                            <label><input type="radio" name="indicaN" value="미진행">미진행</label>
+                            <label><input type="radio" name="status" value="전체">전체</label>
+                            <label><input type="radio" name="status" value="진행">진행</label>
+                            <label><input type="radio" name="status" value="미진행">미진행</label>
                         </div>
                         <div class="mb-3">
                            <label for="name">제품명</label> <input
@@ -132,11 +132,7 @@ body {
 	   let planDt2 = $("#end-input").val();
 	   let nowSt = $("input[type=radio]:checked").val();
 	   let prdtNm = $("#name").val();
-	   console.log(planDt)
-	   console.log(planDt2)
-	   console.log(nowSt)
-	   console.log(prdtNm)
-	   
+	  
 	   $.ajax({
 		 url : 'getList',
 		 method : 'POST',
@@ -147,9 +143,30 @@ body {
 	   })
    })
    
-   /* 삭제하기  */
-   $("#dBtn").on("click", function(e) {
-	   
+   /* 계획삭제하기 */
+   $("#dBtn").on("click", function() {
+   	   let planCd = grid.getCheckedRows()[0].planCd;	
+   	   let planDt = $("#start-input").val();
+	   let planDt2 = $("#end-input").val();
+	   let nowSt = $("input[type=radio]:checked").val();
+	   let prdtNm = $("#name").val();
+   	   console.log(planCd)
+	   $.ajax({
+	   		url : 'deletePlan',
+	   		method : 'GET',
+	   		contentType:'application/text',
+	   		data : {"planCd" : planCd},
+	   		success : function(result){
+	   			 $.ajax({
+		 			url : 'getList',
+					method : 'POST',
+		 			data : {"planDt" : planDt, "planDt2" : planDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
+		 			success : function(result) {
+			 			grid.resetData(result)
+		 			}
+	   			 })
+	   		} 
+	   })
    })
   
    </script>

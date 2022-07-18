@@ -48,7 +48,7 @@ public class Plancontroller {
  
 	@GetMapping("getIndex")
 	@ResponseBody
-	public int getIndex(PlanVO vo) {
+	public PlanVO getIndex(PlanVO vo) {
 		return service.getIndex(vo);
 	}
   
