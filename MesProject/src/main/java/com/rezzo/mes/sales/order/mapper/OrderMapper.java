@@ -20,5 +20,5 @@ public interface OrderMapper {
 	//주문서 수정입력
 	public void saveOrdr(OrderVO vo);
 	//주문번호 생성, 가져오기
-	public Integer getordrNo(OrderVO vo);
+	public OrderVO getordrNo(OrderVO vo);
 }

@@ -19,5 +19,5 @@ public interface OrderService {
 	//주문서 수정
 	public void saveOrdr(List<OrderVO> ordList);
 	//주문번호 생성, 가져오기
-	public Integer getordrNo(OrderVO vo);
+	public OrderVO getordrNo(OrderVO vo);
 }

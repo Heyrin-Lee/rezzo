@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService{
 	
 	//주문번호 생성, 가져오기
 	@Override
-	public Integer getordrNo(OrderVO vo) {
+	public OrderVO getordrNo(OrderVO vo) {
 		return mapper.getordrNo(vo);
 	}
 
