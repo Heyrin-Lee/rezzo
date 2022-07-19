@@ -139,6 +139,20 @@ const grid = new tui.Grid({
  		bodyHeight: 350,
   	rowHeaders: ['checkbox'],
     columns: [{
+        header: 'bom코드',
+        name: 'bomCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: 'bom순번',
+        name: 'bomSq',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
         header: '자재코드',
         name: 'rscCd',
         align: 'center',
@@ -275,16 +289,28 @@ $('#newBtn').click(ev => {
 	grid.clear();
 })
   
+
 //저장버튼
 $('#saveBtn').click(ev => {
+	let array = grid.getCheckedRows();
+	for(var i=0; i<array.length; i++) {
+		grid.setValue(array[i].rowKey, "bomSq", i+1);
+		grid.setValue(array[i].rowKey, "bomCd", "");
+	}
+	var data = grid.getCheckedRows();
+	var edctsCd = $('#edctsCd').val();
 	  $.ajax({
-		    url: "saveBom",
+		    url: "saveBom/" + edctsCd,
 		    method: "POST",
-      data: $('#dataForm').serialize(), 
+      data: JSON.stringify(data),
+      contentType: 'application/json',
       dataType: 'json',
 		    success: function (result) {
+		    	setTimeout(function () {
+                    grid.refreshLayout()
+                    grid.uncheckAll()
+                }, 300);
 		    	toastr.success('정상적으로 저장되었습니다.');
-		    	grid.resetData(result);
 		    }
 			})
  });
@@ -548,7 +574,7 @@ modalGrid.on('dblclick', (ev) => {
 	insertForm(getRow);
 })
 
-//모달 데이터 폼에 출력
+//모달 데이터 폼에 출력 & 그리드 호출
 function insertForm(row) {
 	$('#edctsCd').val(row.edctsCd);
 	$('#prdtNm').val(row.prdtNm);
@@ -557,6 +583,20 @@ function insertForm(row) {
 	$('#unit').val(row.unit);
 	$('#safStc').val(row.safStc);
 	$('#exampleModal').modal('hide');
+	
+	var edctsCd = $('#edctsCd').val();
+	$.ajax({
+	 	url: "getBomList",
+	  method: "POST",
+  data: {edctsCd},
+  dataType: 'json',
+	    success: function (result) {
+	    	setTimeout(function () {
+		    	grid.refreshLayout()
+		    		}, 300);
+	    	grid.resetData(result);
+	    }
+		})
 }
 
 //모달 완제품 리스트

@@ -6,11 +6,17 @@
 	<select id="getBomList" resultType="BomVO">
 		SELECT *
 		FROM BOM
-		WHERE EDCTS_CD = #{edctsCd}	
+		WHERE EDCTS_CD = #{edctsCd}
+		ORDER BY BOM_SQ	
 	</select>
 	
+	<!-- 저장 -->
+	<update id="saveBom" parameterType="BomVO" statementType="CALLABLE">
+		<![CDATA[{call proc_bom_save(#{bomCd}, #{bomSq}, #{edctsCd}, #{rscCd}, #{unit}, #{useCnt},  #{prcsCd}, #{remk})}]]>
+	</update>
+	
 	<!-- 삭제 -->
-	<delete id="delBom">
+	<delete id="delBom" parameterType="BomVO">
 		DELETE FROM BOM
 		WHERE EDCTS_CD = #{edctsCd}
 	</delete>

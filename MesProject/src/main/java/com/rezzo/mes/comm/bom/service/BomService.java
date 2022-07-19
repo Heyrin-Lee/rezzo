@@ -5,10 +5,10 @@ import java.util.List;
 public interface BomService {
 	
 	//제품별 목록 조회
-	public List<BomVO> getBomList(String edctsCd);
+	public List<BomVO> getBomList(BomVO bomVO);
 	//저장
 	public void saveBom(String edctsCd, List<BomVO> bomList);
 	//삭제
-	public void delBom(List<BomVO> bomList);
+	public void delBom(BomVO bomVO);
 	
 }

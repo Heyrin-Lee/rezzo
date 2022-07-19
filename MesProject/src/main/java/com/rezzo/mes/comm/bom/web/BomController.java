@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -23,19 +24,18 @@ public class BomController {
 
 	@RequestMapping("getBomList")
 	@ResponseBody
-	public List<BomVO> getBomList(String edctsCd) {
-		return getBomList(edctsCd);
+	public List<BomVO> getBomList(BomVO bomVO) {
+		return service.getBomList(bomVO);
 	}
 	
 	@RequestMapping("saveBom/{edctsCd}")
 	@ResponseBody
-	public List<BomVO> saveBom(@PathVariable("edctsCd") String edctsCd, List<BomVO> bomList) {
+	public void saveBom(@PathVariable("edctsCd") String edctsCd, @RequestBody List<BomVO> bomList) {
 		service.saveBom(edctsCd, bomList);
-		return getBomList(edctsCd);
 	}
 	
 	@RequestMapping("delBom")
-	public void delBom(List<BomVO> bomList) {
-		service.delBom(bomList);
+	public void delBom(BomVO bomVO) {
+		service.delBom(bomVO);
 	}
 }

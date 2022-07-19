@@ -15,18 +15,21 @@ public class BomServiceImpl implements BomService {
 	@Autowired BomMapper mapper;
 
 	@Override
-	public List<BomVO> getBomList(String edctsCd) {
-		return mapper.getBomList(edctsCd);
+	public List<BomVO> getBomList(BomVO bomVO) {
+		return mapper.getBomList(bomVO);
 	}
 
 	@Override
 	public void saveBom(String edctsCd, List<BomVO> bomList) {
-		mapper.saveBom(bomList);
+		for(BomVO bomVO : bomList) {
+			bomVO.setEdctsCd(edctsCd);
+			mapper.saveBom(bomVO);
+		}
 	}
 
 	@Override
-	public void delBom(List<BomVO> bomList) {
-		mapper.delBom(bomList);
+	public void delBom(BomVO bomVO) {
+		mapper.delBom(bomVO);
 	}
 
 }
