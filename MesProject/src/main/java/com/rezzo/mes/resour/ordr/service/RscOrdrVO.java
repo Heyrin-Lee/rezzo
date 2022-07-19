@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class RscOrdrVO {
 
 	//자재발주 디테일 테이블
-	private int ordrNo;
+	private String ordrCd;
 	private String rscCd;
 	private String rscNm;
 	private int ordrCnt;

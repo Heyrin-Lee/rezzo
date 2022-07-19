@@ -39,6 +39,7 @@
 <hr>
 
 <input type="button" value="저장" id="saveBtn">
+<input type="button" value="조회/수정" id="modiBtn">
 <input type="button" value="다시작성">
 <input type="button" value="삭제">
 <hr>
@@ -106,6 +107,36 @@
                 <div id="insp-grid"></div>
             </div>
             <input type="button" id="calInfCnt" value="입력">
+        </div>
+    </div>
+</div>
+
+<!-- modification modal-->
+<div class="modal fade" id="modiModal" tabindex="-1" aria-labelledby="modiModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <b class="modal-title">검사자료 조회</b>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="inspDtRngFrm">
+                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                    <input id="startpicker-input-mod" name="startDt" type="text" aria-label="Date" required>
+                    <span class="tui-ico-date"></span>
+                    <div id="startpicker-container-mod" style="margin-left: -1px;"></div>
+                </div>
+                <span></span>
+                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                    <input id="endpicker-input-mod" name="endDt" type="text" aria-label="Date" required>
+                    <span class="tui-ico-date"></span>
+                    <div id="endpicker-container-mod" style="margin-left: -1px;"></div>
+                </div>
+            </form>
+            <div class="modal-body">
+                <input id="inspHistSchBtn" type="button" value="검색"/>
+                <hr>
+                <div id="modi-grid"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -224,6 +255,7 @@
     }
 
     let iModal;
+
     class CustomBtnRenderer {
         constructor(props) {
             let {rowKey, value} = props;
@@ -271,7 +303,7 @@
             },
             {
                 header: '발주번호',
-                name: 'ordrNo'
+                name: 'ordrCd'
             },
             {
                 header: '발주량',
@@ -396,6 +428,31 @@
         ]
     })
 
+    // inspection detail grid section
+    let modiGrid = new tui.Grid({
+        el: document.getElementById('modi-grid'),
+        scrollX: false,
+        scrollY: false,
+        columns: [
+            {
+                header: '검사일자',
+                name: 'inspDt'
+            },
+            {
+                header: '공급업체',
+                name: 'vendNm'
+            },
+            {
+                header: '건수',
+                name: 'inspCnt'
+            },
+            {
+                header: '검사코드',
+                name: 'rscInspCd'
+            }
+        ]
+    })
+
     ///////////////////////////// date picker ////////////////////////////////
     // range date picker
     let today = new Date();
@@ -409,6 +466,19 @@
             date: today,
             input: '#endpicker-input',
             container: '#endpicker-container'
+        }
+    });
+
+    let rangepickerMod = tui.DatePicker.createRangePicker({
+        startpicker: {
+            date: today,
+            input: '#startpicker-input-mod',
+            container: '#startpicker-container-mod'
+        },
+        endpicker: {
+            date: today,
+            input: '#endpicker-input-mod',
+            container: '#endpicker-container-mod'
         }
     });
 
@@ -469,12 +539,35 @@
     ///////////////////////////// inferior rsc ////////////////////////////////
     // store each inf count
     let inferCnt = new Map();
+    let inspHistRowInfo = '';
 
     // when rsc inf modal shown
     let inspModal = document.getElementById('inspModal');
     inspModal.addEventListener('shown.bs.modal', e => {
         let rowKey = inspModal.dataset.rowKey;
         let infCnt = inferCnt.get(rowKey)
+
+        console.log(inspHistRowInfo)
+
+        if (inspHistRowInfo != '') {
+            let rowData = grid.getRow(rowKey)
+            let obj = {ordrCd: rowData.ordrCd, rscCd: rowData.rscCd, rscInspCd: inspHistRowInfo.rscInspCd}
+
+            let url = 'getRscInfHist'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(obj)
+            }).then(res => res.json()).then(res => {
+                infCnt = res;
+                console.log(infCnt)
+                for (let i = 0; i < infCnt.length; i++)
+                    if (infCnt[i].ccdDtl == inspGrid.ccdDtl) {
+                        inspGrid.setValue(i, 'infCnt', infCnt[i]);
+                    }
+            })
+        }
+
         if (infCnt !== undefined) {
             for (let i = 0; i < infCnt.length; i++)
                 inspGrid.setValue(i, 'infCnt', infCnt[i]);
@@ -514,7 +607,10 @@
     function getInfList() {
         let url = 'getRscInfList'
         fetch(url).then(res => res.json())
-            .then(res => inspGrid.resetData(res.INF));
+            .then(res => {
+                console.log(res)
+                inspGrid.resetData(res.INF)
+            });
     }
 
     ///////////////////////////// inferior rsc ////////////////////////////////
@@ -567,6 +663,7 @@
                 element.rscInf = inspGrid.getData();
             }
         })
+        // console.log(gridVal)
         setRscInspList(gridVal)
     })
 
@@ -580,6 +677,50 @@
     inspGridEle.addEventListener('mouseleave', function () {
         inspGrid.finishEditing();
     })
+
+    ///////////////////////////// modify and delete ////////////////////////////////
+    let mModal;
+    modiBtn.addEventListener('click', function () {
+        mModal = new bootstrap.Modal(document.getElementById('modiModal'), {})
+        mModal.show('modiModal');
+    })
+
+    // when modi modal shown => refresh
+    let modiModal = document.getElementById('modiModal');
+    modiModal.addEventListener('shown.bs.modal', e => {
+        modiGrid.refreshLayout();
+    })
+
+    let inspHistSchBtn = document.getElementById('inspHistSchBtn')
+    inspHistSchBtn.addEventListener('click', function () {
+        let data = new FormData(inspDtRngFrm);
+        let url = 'getRscInspListByDt'
+        fetch(url, {
+            method: 'POST',
+            body: data
+        }).then(res => res.json()).then(res => {
+            modiGrid.resetData(res);
+        })
+    });
+
+    // getRscInspHist
+    modiGrid.on('dblclick', e => {
+        let rowInfo = modiGrid.getRow(e.rowKey)
+        inspHistRowInfo = rowInfo;
+        let data = {rscInspCd: rowInfo.rscInspCd}
+        let url = 'getRscInspHist'
+        fetch(url, {
+            headers: {'Content-Type': 'application/json'},
+            method: 'POST',
+            body: JSON.stringify(data)
+        }).then(res => res.json()).then(res => {
+            grid.resetData(res);
+        })
+        mModal.hide(modiModal);
+    })
+
+    inferCnt
+
 
 </script>
 </html>
