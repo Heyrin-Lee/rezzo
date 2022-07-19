@@ -18,4 +18,6 @@ public interface InspService {
     List<RscInspVO> getRscInspListByDt(RscOrdrVO rscOrdrVO);
     List<RscInspVO> getRscInspHist(RscInspVO rscInspVO);
     List<RscInfVO> getRscInfHist(RscInspVO rscInspVO);
+
+    void updateRscInspList(List<RscInspVO> rscInspVOS);
 }

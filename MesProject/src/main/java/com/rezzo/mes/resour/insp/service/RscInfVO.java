@@ -12,6 +12,7 @@ public class RscInfVO {
     String rscCd; // 자재코드
 
     String ccdDtl; // 공통 불량코드
+    String ccdDtlNm; // 공통 불량코드 이름
     int infCnt; // 불량수량
 
 }

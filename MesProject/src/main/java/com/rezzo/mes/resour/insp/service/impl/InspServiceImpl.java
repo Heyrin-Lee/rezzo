@@ -80,5 +80,13 @@ public class InspServiceImpl implements InspService {
         return mapper.getRscInfHist(rscInspVO);
     }
 
-
+    @Override
+    public void updateRscInspList(List<RscInspVO> rscInspVOS) {
+        for (RscInspVO rscInspVO : rscInspVOS) {
+            mapper.setRscInspDtList(rscInspVO);
+            for (RscInfVO rscInfVO : rscInspVO.getRscInf()) {
+                mapper.setRscInfList(rscInfVO);
+            }
+        }
+    }
 }

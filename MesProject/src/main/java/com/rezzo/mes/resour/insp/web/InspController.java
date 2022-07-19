@@ -55,7 +55,7 @@ public class InspController {
     // get rsc order list
     @RequestMapping("getRscOrdrList")
     @ResponseBody
-    public List<RscOrdrVO> getRscOrdrList(@RequestBody RscOrdrVO rscOrdrVO) {
+    public List<RscOrdrVO> getRscOrdrList(@ModelAttribute RscOrdrVO rscOrdrVO) {
         return sv.getRscOrdrList(rscOrdrVO);
     }
 
@@ -92,5 +92,10 @@ public class InspController {
         return sv.getRscInspList(rscOrdrVO);
     }
 
+    @RequestMapping("updateInspList")
+    @ResponseBody
+    public void updateRscInspList(@RequestBody List<RscInspVO> rscInspVOS) {
+        sv.updateRscInspList(rscInspVOS);
+    }
 
 }
