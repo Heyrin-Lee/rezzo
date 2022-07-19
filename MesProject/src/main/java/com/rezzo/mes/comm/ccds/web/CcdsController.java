@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,19 +70,6 @@ public class CcdsController {
 		service.saveCcdDtl(ccd, dtlList);
 		ccdsVO.setCcd(ccd);
 		return service.getCodeList(ccdsVO);
-	}
-	
-	
-	//화면확인 test
-	@RequestMapping("bom")
-	public String bom() {
-		return "comm/bom";
-	}
-	
-	@RequestMapping("wrhous")
-	public String wrhous(Model model) {
-		model.addAttribute("ccds", service.getCodes("VND"));
-		return "comm/wrhous";
 	}
 	
 }

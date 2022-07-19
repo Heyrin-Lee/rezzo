@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- TUI -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+
+    <link rel="stylesheet" href="https://uicdn.toast.com/select-box/latest/toastui-select-box.css">
+    <script src="https://uicdn.toast.com/select-box/latest/toastui-select-box.js"></script>
+
+    <style>
+        .tui-datepicker {
+            z-index: 100;
+        }
+
+        .tui-select-box-dropdown {
+            z-index: 100;
+        }
+
+        #select-box {
+            display: inline-block;
+        }
+    </style>
+
+    <title>자재LOT조회</title>
+
+
+</head>
+
+<body>
+    <h3>자재LOT조회</h3>
+    <hr>
+
+    <input type="button" value="조회">
+    <input type="button" value="새로고침">
+    <input type="button" value="엑셀">
+    <input type="button" value="인쇄">
+    <hr>
+
+    <label for="inspDt"><b>유통기간</b></label>
+    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+        <input id="startpicker-input" type="text" aria-label="Date">
+        <span class="tui-ico-date"></span>
+        <div id="startpicker-container" style="margin-left: -1px;"></div>
+    </div>
+    <span> ~ </span>
+    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+        <input id="endpicker-input" type="text" aria-label="Date">
+        <span class="tui-ico-date"></span>
+        <div id="endpicker-container" style="margin-left: -1px;"></div>
+    </div>
+    <input type="button" value="가져오기">
+    <hr>
+
+    <label for="mat"><b>자재코드</b></label>
+    <input id="mat" type="text">
+    <input id="mat" type="button" value="검색">
+    <span> ~ </span>
+    <input id="mat" type="text">
+    <input id="mat" type="button" value="검색">
+    <hr>
+
+    <div id="grid"></div>
+
+</body>
+
+<script>
+
+    window.addEventListener('onload', function () {
+
+    })
+
+    let today = new Date();
+    let picker = tui.DatePicker.createRangePicker({
+        startpicker: {
+            date: today,
+            input: '#startpicker-input',
+            container: '#startpicker-container'
+        },
+        endpicker: {
+            date: today,
+            input: '#endpicker-input',
+            container: '#endpicker-container'
+        },
+        selectableRanges: [
+            [today, new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())]
+        ]
+    });
+
+    // grid section
+    class CustomTextEditor {
+        constructor(props) {
+            const el = document.createElement('input');
+            const { maxLength } = props.columnInfo.editor.options;
+
+            el.type = 'text';
+            el.maxLength = maxLength;
+            el.value = String(props.value);
+
+            this.el = el;
+        }
+
+        getElement() {
+            return this.el;
+        }
+
+        getValue() {
+            return this.el.value;
+        }
+
+        mounted() {
+            this.el.select();
+        }
+    }
+
+    const grid = new tui.Grid({
+        el: document.getElementById('grid'),
+        scrollX: false,
+        scrollY: false,
+        rowHeaders: ['checkbox'],
+        columns: [
+            {
+                header: '자재코드',
+                name: 'matCd'
+            },
+            {
+                header: '품명',
+                name: 'matName'
+            },
+            {
+                header: '규격',
+                name: 'matSt'
+            },
+            {
+                header: 'Lot번호',
+                name: 'matLot'
+            },
+            {
+                header: '입고량',
+                name: 'instCnt'
+            },
+            {
+                header: '출고량',
+                name: 'oustCnt'
+            },
+            {
+                header: '현재고',
+                name: 'stock'
+            }
+        ],
+        data: [
+            {
+                matCd: '12312',
+                matName: '감귤',
+                matSt: 'ea',
+                matLot: '12312',
+                instCnt: '2',
+                oustCnt: '3',
+                stock: 3
+            }
+        ]
+    });
+
+</script>
+
+</html>

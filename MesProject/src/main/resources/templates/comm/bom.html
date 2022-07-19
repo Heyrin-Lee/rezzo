@@ -1,145 +1,582 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/layout}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
 <title>bom.html</title>
 </head>
 <body>
-	<!-- 본문내용 -->
-	<th:block layout:fragment="main">
-		<div class="container-fluid px-4">
-			<h1 class="mt-4">BOM관리</h1>
-			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+<!-- 본문내용 -->
+<th:block layout:fragment="main"> 
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">BOM관리</h1>
+		<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 기준정보관리</li>
 				<li class="breadcrumb-item active">> BOM관리</li>
 			</ol>
-			<div class="card mb-4">
-				<div class="card-body">
-					<div class="linelist">
-						<button class="c_btn" form="">등록</button>
-						<button class="c_btn" form="">수정</button>
-						<button class="c_btn" form="">삭제</button>
-						<button class="c_btn" form="">취소</button>
-					</div>
+		<div class="card mb-4">
+			<div class="card-body">
+				<div class="linelist" style="float: right;">
+					<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 초기화</button>
+					<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+					<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 					<br> <br>
-					<form id="dataForm" name="dataForm" method="post" onSubmit="return false;" autocomplete="off">
-						<!-- //search area-->
-						<div class="view-modify-board">
-							<table class="table table-bbs table-write" summary=""
-								style="height: 55px; border-bottom: 1px solid #8e8e8e;">
-								<tbody>
-									<tr>
-										<th scope="row" width="100px">제품코드 <strong class="blue">*</strong></th>
-										<td data-prduct-cd="" width="380px"><input type="text"
-											id="prductCd" name="prductCd"
-											maxlength="20" />
-											<button type="button" id="prductCdPopBtn">찾아보기</button></td>
-										<th scope="row" width="90px">제품명</th>
-										<td width="380px"><input readonly="readonly" type="text" id="prductNm" name="prductNm"
-											style="width: 330px" maxlength="50" /></td>
-										<th scope="row" width="100px">사용유무</th>
-										<td><input type="checkbox" id="useYn" name="useYn" /></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</form>
-
 				</div>
-			</div>
-			<div class="card mb-4">
-				<div class="card-header"></div>
-				<div class="card-body">
-					<div id="grid"></div>
-					<script>
-    var Grid = tui.Grid;
-     const data = [{
-         id: '10012',
-         city: 'Seoul',
-         country: 'South Korea'
-       },
-       {
-         id: '10013',
-         city: 'Tokyo',
-         country: 'Japan'
-       }
-     ]
-    // case 1 : 인스턴스 생성시 data 옵션으로 데이터 입력
-    const grid = new Grid({
-      el: document.getElementById('grid'),
-      data : data ,
-      //data만 적어도 가능(축약형)
-      columns: [{
-          header: '자재코드',
-          name: '자재코드',
-        	sortable: true,
-          sortingType: 'desc'
-        },
-        {
-          header: '자재명',
-          name: '자재명',
-          editor: 'text',
-        	sortable: true,
-          sortingType: 'desc'
-        },
-        {
-            header: '사용량',
-            name: '사용량',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '단위',
-            name: '단위',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '사용공정명',
-            name: '사용공정명',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '비고',
-            name: '비고',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        },
-        {
-            header: '사용여부',
-            name: '사용여부',
-            editor: 'text',
-          	sortable: true,
-            sortingType: 'desc'
-        }
-      ]
-    });
-    //ajax조회하고 grid
-    //$.ajax({
-    //  url: 'data.json'
-    //}).done(result => grid.resetData(result) ) //람다식표현
-    // }).done(function (result) {
-    //   // case 2 : resetData() 메서드로 입력
-    //   grid.resetData(result);
-    // })
-    grid.on('click', ev => {
-      console.log(ev.rowKey)
-      console.log(ev.columnName)
-      var value = grid.getValue(ev.rowKey,ev.columnName);
-      console.log(value);
-    })
-  </script>
+				<form id="dataForm" name="dataForm" action="#" method="post">
+					<table class="table" style="vertical-align : middle;">
+						<colgroup>
+							<col style="width: 150px">
+							<col>
+							<col style="width: 150px">
+							<col>
+							<col style="width: 150px">
+							<col>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>완제품코드 <strong class="blue">*</strong></th>
+								<td><input class="form-control" type="text" id="edctsCd" name="edctsCd" style="width: 250px" maxlength="20" readonly />
+									<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="modalBtn"><i class="fas fa-search"></i></button></td>
+								<th>제품명 <strong class="blue">*</strong></th>
+								<td><input class="form-control" type="text" id="prdtNm" name="prdtNm" style="width: 250px" maxlength="50" readonly /></td>
+								<th>보관창고</th>
+								<td>
+									<input class="form-control" type="text" id="ccdDtlNm" name="ccdDtlNm" style="width: 250px" maxlength="50" readonly /></td>
+							</tr>
+							<tr>
+								<th>규격</th>
+								<td><input class="form-control" type="text" id="spec" name="spec" style="width: 250px" maxlength="50" readonly /></td>
+								<th>단위</th>
+								<td><input class="form-control" type="text" id="unit" name="unit" style="width: 250px" maxlength="50" readonly /></td>
+								<th>안전재고</th>
+								<td><input type="text" id="safStc" name="safStc" class="form-control" maxlength="50" style="width: 250px" readonly /></td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				<!-- 완제품 Modal -->
+				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-xl">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">완제품 목록</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+				      	<label for="" autofocus="autofocus">완제품명</label> <input type="text" class="form-control"
+								id="modalSearch" name="modalSearch" style="width: 200px">
+								<button class="btn btn-primary" id="modalSearchBtn"><i class="fas fa-search"></i> 검색</button>
+								<br><br>
+				        <div id="modalGrid"></div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				        <button type="button" class="btn btn-primary" id="modalSelBtn">확인</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				<!-- 자제 Modal -->
+				<div class="modal fade" id="rcsModal" tabindex="-1" aria-labelledby="rcsModalLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-xl">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="rcsModalLabel">자재 목록</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+				      	<label for="" autofocus="autofocus">자제명</label> <input type="text" class="form-control"
+								id="rscModalSearch" name="rscModalSearch" style="width: 200px">
+								<button class="btn btn-primary" id="rscModalSearchBtn"><i class="fas fa-search"></i> 검색</button>
+								<br><br>
+				        <div id="rscModalGrid"></div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				        <button type="button" class="btn btn-primary" id="rscModalSelBtn">확인</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				<!-- 공정 Modal -->
+				<div class="modal fade" id="prcsModal" tabindex="-1" aria-labelledby="prcsModalLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-xl">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="prcsModalLabel">공정 목록</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+				        <div id="prcsModalGrid"></div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				        <button type="button" class="btn btn-primary" id="prcsModalSelBtn">확인</button>
+				      </div>
+				    </div>
+				  </div>
 				</div>
 			</div>
 		</div>
-	</th:block>
+		<div class="card mb-4">
+			<div class="card-body">
+				<div class="linelist" style="float: right;">
+					<button class="btn btn-primary" id="plusBtn"><i class="fas fa-plus"></i> 추가</button>
+					<button class="btn btn-primary" id="minusBtn"><i class="fas fa-minus"></i> 삭제</button>
+					<br> <br>
+				</div>
+				<div id="grid"></div>
+			</div>
+		</div>
+	</div>
+<script>
+const grid = new tui.Grid({
+    el: document.getElementById('grid'),
+			scrollX: false,
+ 		bodyHeight: 350,
+  	rowHeaders: ['checkbox'],
+    columns: [{
+        header: '자재코드',
+        name: 'rscCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '자재명',
+        name: 'rscNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+          header: '사용량',
+          name: 'useCnt',
+          editor: 'text',
+          validation: {
+             required: true
+         },
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '단위',
+          name: 'unit',
+          editor: {
+            type: 'select',
+            options: {
+              listItems: [
+                { text: 'EA', value: 'EA' },
+                { text: 'KG', value: 'KG' },
+              ]
+            }
+          },
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '사용공정코드',
+          name: 'prcsCd',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '사용공정명',
+          name: 'prcsNm',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '비고',
+          name: 'remk',
+          editor: 'text',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      }
+    ]
+  });
+  
+  //테마 호버
+  let hoverOption = {
+      row: {
+          hover: {
+              background: 'rgba(19,78,94,0.2)'
+          }
+      }
+  }
+  tui.Grid.applyTheme('default', hoverOption);
+  
+  //컬럼숨기기
+  grid.hideColumn('prcsCd');
+  
+ //그리드 행 추가 버튼
+ $('#plusBtn').click(ev => {
+ 	if ($('#edctsCd').val() == '') {
+ 		toastr.warning('제품코드를 먼저 선택하세요!')
+ 	} else {
+ 		grid.appendRow(); 	
+ 	}
+ })  
+ 
+ //그리드 행 삭제버튼
+ $('#minusBtn').click(ev => {
+ 		var check = grid.getCheckedRowKeys();
+ 		check.forEach(rowKey => { 		
+ 			grid.removeRow(rowKey);
+ 		})
+ })
+ 
+ //클릭시 자재 모달 오픈 & 리스트 출력
+let gridRowKey = 0;
+grid.on('click', ev => {
+	gridRowKey = ev.rowKey;
+	
+	//자재그리드모달 출력
+	if (ev.columnName == 'rscCd' || ev.columnName == 'rscNm') {
+		$('#rcsModal').modal('show');
+		getRscList(1, "");
+	
+	//공정모달그리드 출력	
+	} else if (ev.columnName == 'prcsNm') {
+		$('#prcsModal').modal('show');
+		$.ajax({
+		   url:'prcsList'
+	   }).done(function(result){
+		   setTimeout(function () {
+		    	prcsModalGrid.refreshLayout()
+		    		}, 300);
+		   prcsModalGrid.resetData(result);
+	   });
+	}
+});
+ 
+ //데이터 편집 후 체크박스
+ grid.on('editingFinish', (ev) => {
+     const { rowKey } = ev;
+     grid.check(rowKey);
+ });
+
+ //그리드 영역 벗어나면 수정 종료
+ $('#grid').mouseleave(ev => {
+     grid.finishEditing();
+ })
+  
+//초기화버튼
+$('#newBtn').click(ev => {
+	$('#dataForm')[0].reset();
+	grid.clear();
+})
+  
+//저장버튼
+$('#saveBtn').click(ev => {
+	  $.ajax({
+		    url: "saveBom",
+		    method: "POST",
+      data: $('#dataForm').serialize(), 
+      dataType: 'json',
+		    success: function (result) {
+		    	toastr.success('정상적으로 저장되었습니다.');
+		    	grid.resetData(result);
+		    }
+			})
+ });
+
+//삭제버튼
+$('#delBtn').click(ev => {
+	  $.ajax({
+		 	url: "delBom",
+		  method: "POST",
+      data: $('#dataForm').serialize(),
+      dataType: 'json',
+		    success: function () {
+		    	toastr.success('정상적으로 삭제되었습니다.');
+		    	$('#dataForm')[0].reset();
+					grid.clear();
+		    }
+			})
+ });
+ 
+ 
+/* 사용공정명 모달 그리드 */
+const prcsModalGrid = new tui.Grid({
+  el: document.getElementById('prcsModalGrid'),
+  bodyHeight: 350,
+  rowHeaders: ['checkbox'],
+  columns: [
+    {
+      header: '공정코드',
+      name: 'prcsCd',
+    },
+    {
+      header: '공정명',
+      name: 'prcsNm',
+    },
+    {
+      header: '공정구분',
+      name: 'prcsFg'
+    },
+    {
+      header: '공정설명',
+      name: 'prcsCtnt',
+    }
+  ]
+});
+
+//체크된 셀 하이라이팅
+ prcsModalGrid.on('check', (ev) => {
+	 prcsModalGrid.addRowClassName(ev.rowKey, 'highlight2');
+ });
+
+prcsModalGrid.on('uncheck', (ev) => {
+	prcsModalGrid.removeRowClassName(ev.rowKey, 'highlight2');
+ });
+ 
+//공정모달 확인버튼
+$('#prcsModalSelBtn').click(ev => {
+	var prcsSelect = prcsModalGrid.getCheckedRows()[0]
+	insertPrcsModalGrid(prcsSelect);
+})
+
+//공정모달 더블클릭
+prcsModalGrid.on('dblclick', (ev) => {
+	var prcsGetRow = prcsModalGrid.getRow(ev.rowKey);
+	insertPrcsModalGrid(prcsGetRow);
+	
+})
+
+//공정모달 그리드에 출력
+function insertPrcsModalGrid(row) {
+	grid.setValue(gridRowKey, "prcsCd", row.prcsCd);
+	grid.setValue(gridRowKey, "prcsNm", row.prcsNm);
+	$('#prcsModal').modal('hide');
+}
+
+
+
+/* 자재코드 모달 그리드 */
+const rscModalGrid = new tui.Grid({
+    el: document.getElementById('rscModalGrid'),
+			scrollX: false,
+ 		bodyHeight: 350,
+  	rowHeaders: ['checkbox'],
+    columns: [{
+        header: '구분',
+        name: 'rscTyp',
+        align: 'center',
+        filter: 'select',
+      	sortable: true,
+        sortingType: 'desc'
+    	},
+  	  {
+        header: '자재코드',
+        name: 'rscCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '자재명',
+        name: 'rscNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '자재명',
+        name: 'rscSpec',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '자재명',
+        name: 'mngUnit',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '입고업체명',
+        name: 'vendNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      }
+    ]
+  });
+
+//자재 모달 검색
+$('#rscModalSearchBtn').click(ev => {
+	var keyword = $('#rscModalSearch').val();
+	getRscList(2,keyword);
+})
+
+//체크된 셀 하이라이팅
+ rscModalGrid.on('check', (ev) => {
+	 rscModalGrid.addRowClassName(ev.rowKey, 'highlight2');
+ });
+
+rscModalGrid.on('uncheck', (ev) => {
+	rscModalGrid.removeRowClassName(ev.rowKey, 'highlight2');
+ });
+ 
+//자재모달 확인버튼
+$('#rscModalSelBtn').click(ev => {
+	var rscSelect = rscModalGrid.getCheckedRows()[0]
+	insertRscModalGrid(rscSelect);
+})
+
+//자재모달 더블클릭
+rscModalGrid.on('dblclick', (ev) => {
+	var rscGetRow = rscModalGrid.getRow(ev.rowKey);
+	insertRscModalGrid(rscGetRow);
+	
+})
+
+//자재모달 그리드에 출력
+function insertRscModalGrid(row) {
+	grid.setValue(gridRowKey, "rscCd", row.rscCd);
+	grid.setValue(gridRowKey, "rscNm", row.rscNm);
+	$('#rcsModal').modal('hide');
+}
+
+//자재리스트
+function getRscList(state, keyword) {
+	$.ajax({
+    url: "getRscList",
+    method: "POST",
+    data: {"state" : state, "keyword" : keyword},
+    dataType: "JSON",
+    success: function (result) {
+    	setTimeout(function () {
+	    	rscModalGrid.refreshLayout()
+	    		}, 300);
+       rscModalGrid.resetData(result);
+    }
+	})
+}
+ 
+ 
+/* 완제품 모달 그리드 */
+  //모달그리드
+  const modalGrid = new tui.Grid({
+    el: document.getElementById('modalGrid'),
+			scrollX: false,
+ 		bodyHeight: 350,
+  	rowHeaders: ['checkbox'],
+    columns: [{
+        header: '완제품코드',
+        name: 'edctsCd',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '제품명',
+        name: 'prdtNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+          header: '규격',
+          name: 'spec',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '단위',
+          name: 'unit',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '안전재고',
+          name: 'safStc',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+          header: '보관창고',
+          name: 'ccdDtlNm',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+      }
+    ]
+  });
+  
+  //모달창 리스트
+$('#modalBtn').click(ev => {
+	getEdctsList();
+});
+
+//모달 검색
+$('#modalSearchBtn').click(ev => {
+	getEdctsList();
+})
+
+//체크된 셀 하이라이팅
+ modalGrid.on('check', (ev) => {
+	 modalGrid.addRowClassName(ev.rowKey, 'highlight2');
+ });
+
+modalGrid.on('uncheck', (ev) => {
+	modalGrid.removeRowClassName(ev.rowKey, 'highlight2');
+ });
+ 
+//모달 확인버튼
+$('#modalSelBtn').click(ev => {
+	var select = modalGrid.getCheckedRows()[0]
+	insertForm(select);
+})
+
+//모달 더블클릭
+modalGrid.on('dblclick', (ev) => {
+	var getRow = modalGrid.getRow(ev.rowKey);
+	insertForm(getRow);
+})
+
+//모달 데이터 폼에 출력
+function insertForm(row) {
+	$('#edctsCd').val(row.edctsCd);
+	$('#prdtNm').val(row.prdtNm);
+	$('#ccdDtlNm').val(row.ccdDtlNm);
+	$('#spec').val(row.spec);
+	$('#unit').val(row.unit);
+	$('#safStc').val(row.safStc);
+	$('#exampleModal').modal('hide');
+}
+
+//모달 완제품 리스트
+function getEdctsList() {
+	var prdtNm = $('#modalSearch').val();
+	$.ajax({
+	    url: "getEdctsList",
+	    method: "POST",
+	    data: {prdtNm},
+	    dataType: "JSON",
+	    success: function (result) {
+	    	setTimeout(function () {
+	    		modalGrid.refreshLayout()
+	    		}, 300);
+	    	modalGrid.resetData(result);
+	    }
+		})
+}
+  
+</script>
+</th:block>
 </body>
 </html>
