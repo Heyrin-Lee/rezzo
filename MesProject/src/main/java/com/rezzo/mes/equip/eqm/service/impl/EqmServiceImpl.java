@@ -14,7 +14,7 @@ import com.rezzo.mes.equip.eqm.service.EqmVO;
 public class EqmServiceImpl implements EqmService {
 
 	@Autowired
-	private EqmMapper map;
+	public EqmMapper map;
 
 	@Override
 	public List<EqmVO> eqmList(EqmVO vo) {
@@ -56,7 +56,13 @@ public class EqmServiceImpl implements EqmService {
 	public List<EqmVO> eqmCdSelect(String keyword) {
 		return map.eqmCdSelect(keyword);
 	}
-	
-	
+
+
+	@Override
+	public void eqmUsUpdate(EqmVO vo) {
+		map.eqmUsUpdate(vo);
+	}
+
+
 
 }

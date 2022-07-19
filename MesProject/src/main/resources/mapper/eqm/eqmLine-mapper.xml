@@ -18,7 +18,7 @@
 
  	<insert id="eqmLineInsert" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
 		insert into eqm_line(line_cd, uph_cnt, eqm_psch, use_yn, line_nm)
-		values (#{lineCd}, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
+		values (<![CDATA[CRE_LINE_CD('LNE')]]>, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
 		
 	</insert>
 	

@@ -1,0 +1,20 @@
+package com.rezzo.mes.equip.opr.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import com.rezzo.mes.equip.opr.service.EqmOprVO;
+
+public interface EqmOprMapper {
+
+	
+	public List<EqmOprVO> eqmOprList(EqmOprVO vo);
+	
+	public void eqmOprInsert(EqmOprVO vo);
+	
+	public List<Map<String, String>> OprList();
+	
+	public void OprDelete(EqmOprVO vo);
+	
+	public List<Map<String, String>> OprSelectList(String keyword);
+}

@@ -174,7 +174,7 @@
 												<label for="form-select" class="form-label">라인명</label>
 												<select class="form-select" aria-label="Default select example" style="width: 180px" name="lineCd">
 													<option disabled selected>라인명 선택</option>
-													<option th:each="value : ${opList}" th:value="${value.lineCd}" th:text="${value.lineCd}">
+													<option th:each="value : ${opList}" th:value="${value.lineCd}" th:text="${value.lineNm}">
 													</option>
 												</select>
 											</div>
@@ -409,6 +409,7 @@
 								contentType: false,
 								processData: false
 							}).done(function (xhr) {
+							toastr.success('정상적으로 저장되었습니다.');
 									$.ajax({
 										url: "eqmList",
 										method: "GET",
