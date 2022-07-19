@@ -2,12 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rezzo.mes.prod.indica.mapper.IndicaMapper">
 <select id="planListModal" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
-SELECT D.EDCTS_CD,D.PLAN_CD, P.PAPRD_DT, D.LINE_CD, D.ORDER_CNT, D.INDICA_CNT, PRDT_NM
+SELECT DISTINCT D.EDCTS_CD,D.PLAN_CD, P.PAPRD_DT, D.LINE_CD, D.ORDER_CNT, D.INDICA_CNT, PRDT_NM, PREF_RANK, WK_FR_DT,BOM_CD
 FROM PLAN_DTL D 
 JOIN PLAN P
 ON P.PLAN_CD = D.PLAN_CD
 JOIN EDCTS E
 ON D.EDCTS_CD = E.EDCTS_CD
+JOIN BOM B
+ON B.EDCTS_CD = E.EDCTS_CD 
 </select>
 
+<select id="getRsc" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
+SELECT DISTINCT B.PRCS_CD, B.RSC_CD, I.RSC_LOT_NO, H.RSC_USE, D.RSC_CNT, B.USE_CNT
+FROM  BOM B
+JOIN  RSC_ORDR_DTL D
+ON B.RSC_CD = d.rsc_cd
+JOIN HOLDING H
+ON B.RSC_CD = H.RSC_CD
+JOIN RSC_IST I
+ON I.RSC_CD = D.RSC_CD
+</select>
+
+<insert id="indicaDtlInsert" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO">
+INSERT INTO INDICA_DTL 
+VALUES (SEQINDICA.nextval, 
+		#{indicaDt}, 
+		#{edctsCd}, 
+		#{orderCnt}, 
+		#{wkFrDt}, 
+		#{bomCd}, 
+		#{lineCd}, 
+		#{prcsPsch},
+		#{indicaCnt})
+</insert>
+<insert id="indicaInsert" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO">
+INSERT INTO INDICA
+VALUES (
+		#{indicaDt},
+		#{planCd},
+		#{prefRank},
+		'미지시'
+)
+</insert>
+
+<select id="getIndicaList" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
+	SELECT D.LINE_CD, E.EDCTS_CD, D.INDICA_CNT, D.ORDER_CNT, D.WK_FR_DT
+	FROM INDICA_DTL D
+	JOIN EDCTS E
+	ON I.EDCTS_CD = E.EDCTS_CD
+	JOIN INDICA I
+	ON I.PLAN_CD = D.PLAN_CD
+	<![CDATA[
+	WHERE INDICA_DT >= #{indicaDt}
+	  AND INDICA_DT <= #{indicaDt2}
+	]]>
+	 <choose>
+    <when test='nowSt.equals("전체")'>
+     AND (N.NOW_ST = '미진행'
+        or N.NOW_ST = '진행')
+    </when>
+    <otherwise>
+     AND N.NOW_ST = #{nowSt}
+    </otherwise>
+  </choose>
+	AND E.PRDT_NM = #{prdtNm}
+</select>
 </mapper>

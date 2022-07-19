@@ -60,8 +60,8 @@ body {
      <div class="linelist">
        <button class="c_btn" form="">초기화</button>
        <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
-                    value="주문서조회"></input>
-       <button class="c_btn" form="">저장</button>
+                    value="계획조회"></input>
+       <button class="c_btn" id="regiBtn">저장</button>
      </div>
      
 	 <div id="grid"></div>
@@ -71,7 +71,7 @@ body {
 	     <div id="grid3" style="width: 500px;">자재지시</div>
 	  </div>
 	  
-	  
+	  <div id="#tui-date-picker-container1"></div>
 	  <div id="dialog" title="생산계획조회"></div>
    <br>
  </div>	
@@ -106,13 +106,59 @@ body {
    		})
    	})
    	
-   	//메인그리드에 모달 내용 띄우기
-   	 $("#confirmBtn").on("click", function(e){
+   	//grid에 모달 내용 띄우기
+   	 $("#confirmBtn").on("click", function(){
         	let result = modGrid.getCheckedRows();
         	console.log(result)
         	grid.resetData(result);
      })
+     
+     
+   	//grid2에 내용 띄우기 grid에서 엔터(keyCode=13) 누르면 넘어감
+   	//grid에서 유저가 입력한 내용은 여기서 field value로 -> setValue 
+   	$("#grid").on("keyup", function(key) {
+   		if(key.keyCode == 13) {
+   			
+   			$.ajax({
+   				url : 'getRsc',
+   				method : 'GET',
+   				dataType: "JSON",
+   				success: function (result) {
+   					grid2.resetData(result); 
+   					grid3.resetData(result);
+   				}
+   			})
+   		}
+   }) 
    	
+   	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기
+   	$("#regiBtn").on("click", function() {
+   		let gridData = grid.getData()
+   		console.log(gridData)
+   		
+   		let prcsPsch = grid.getData()[0].prcsPsch
+		console.log(prcsPsch)
+		let indicaDt = grid.getData()[0].indicaDt
+		console.log(indicaDt)
+   			
+		gridData[0].prcsPsch = prcsPsch 
+		gridData[0].indicaDt = indicaDt
+   		console.log(JSON.stringify(gridData))
+   		$.ajax({
+   			url : 'indInsert',
+   			method : 'post',
+   			contentType : 'application/json',
+   			data : JSON.stringify(gridData),
+   			error : function(error){
+   				console.log("error!")
+   			},
+   			success : function() {
+   				window.location.reload()
+   			}
+   		})
+   		
+   		
+   	})
    	
    	
    	 const modGrid = new tui.Grid({
@@ -146,44 +192,56 @@ body {
 	      columns: [
 	        {
 	          header: '제품코드',
-	          name: 'edctsCd'
+	          name: 'edctsCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '제품명',
-	          name: 'prdtNm'
+	          name: 'prdtNm',
+	          align : 'center'
 	        },
 	        {
 	          header: '계획번호',
-	          name: 'planCd'
+	          name: 'planCd',
+	          align : 'center'
 	        },
 	        {
 		      header: '납기일자',
-		      name: 'paprdDt'
+		      name: 'paprdDt',
+		      align : 'center'
 		    },
 	        {
 	          header: '라인코드',
-	          name: 'lineCd'
+	          name: 'lineCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '담당자',
 	          name: 'prcsPsch',
+	          align : 'center',
 	          editor : 'text'
 	        },
 	        {
 	          header: '필요수량',
-	          name: 'orderCnt'
+	          name: 'orderCnt',
+	          align : 'center'
 	        },
 	        {
 	          header: '지시수량',
-	          name: 'indicaCnt'
+	          name: 'indicaCnt',
+	          align : 'center'
 	        },
 	        {
 	          header: '작업지시일',
 	          name: 'indicaDt',
+	          align : 'center',
 	          editor : 'datePicker'
 	        }
 	      ]
 	    });
+	    
+    
+   
    
    const gridData2 = [];
       
@@ -195,30 +253,38 @@ body {
 	      columns: [
 	        {
 	          header: '공정코드',
-	          name: 'c1'
+	          name: 'prcsCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '자재코드',
-	          name: 'c2'
+	          name: 'rscCd',
+	          align : 'center'
 	        },
 	        {
 	          header: 'LOT번호',
-	          name: 'c3'
+	          name: 'rscLotNo',
+	          align : 'center'
 	        },
 	        {
-	          header: '사용수량',
-	          name: 'c4',
+	          header: '출고수량',
+	          name: 'rscUse',
+	          align : 'center'
 	        },
 	        {
 	          header: '재고수량',
-	          name: 'c5',
+	          name: 'rscCnt',
+	          align : 'center'
 	        },
 	        {
 	          header: '사용량',
-	          name: 'c6'
+	          name: 'useCnt',
+	          align : 'center'
 	        }
 	      ]
 	    });
+	    
+   	    
    
    const gridData3 = [];
   
@@ -230,15 +296,18 @@ body {
 	      columns: [
 	        {
 	          header: '공정코드',
-	          name: 'c1'
+	          name: 'prcsCd',
+	          align : 'center'
 	        },
 	        {
 	          header: 'LOT번호',
-	          name: 'c3'
+	          name: 'rscLotNo',
+	          align : 'center'
 	        },
 	        {
-	          header: '사용수량',
-	          name: 'c4'
+	          header: '출고수량',
+	          name: 'rscUse',
+	          align : 'center'
 	        }
 	      ]
 	    });
