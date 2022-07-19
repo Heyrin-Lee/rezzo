@@ -1,11 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.rezzo.mex.equip.opr.mapper.EqmOprMapper">
+<mapper namespace="com.rezzo.mes.equip.opr.mapper.EqmOprMapper">
 
-<!-- 
-	<insert id="eqmOprInsert" resultType="com.rezzo.mes.equip.opr.service.EqmOprVO">
+
+	
+	<resultMap type="HashMap" id="eqmMap">
+		<id column="eqm_cd" property="tEqmCd"/>
+		<id column="line_cd" property="tLineCd"/>
+		<id column="prcs_cd" property="tPrcsCd"/>
+		<id column="eqm_nm" property="tEqmNm"/>
+		<id column="use_yn" property="tUseYn"/>
+		<id column="fr_dt" property="tFrDt"/>
+		<id column="to_dt" property="tToDt"/>
+		<id column="eqm_psch" property="tEqmPsch"/>
+		<id column="opert_ctnt" property="tOpertCtnt"/>
+		<id column="nopr_cd" property="noprCd"/>
+	</resultMap>
+	
+<!-- 	<insert id="eqmOqrInsert" parameterType="com.rezzo.mes.equip.opr.service.EqmOprVO">
+	INSERT INTO eqm_opr(nopr_cd, eqm_cd, eqm_nm, fr_dt, to_dt, eqm_psch, opert_ctnt)
+            VALUES (<![CDATA[cre_opr_cd('OPR')]]>,
+                        #{frmEqmCd},
+                        #{frmEqmNm},
+                        #{frDt},
+                        #{toDt},
+                        #{frmPsch},
+                        #{opertCtnt}
+                        )
+	</insert> -->
+	
+	<select id = "eqmOprInsert" statementType="CALLABLE">
+			{call opr_ins(#{frmEqmCd}, #{frmEqmNm}, #{frDt}, #{toDt},#{frmPsch},#{opertCtnt},#{frmUseYN})}
+	</select>
 		
-	</insert>
+	<select id = "OprList" resultMap="eqmMap">
+			select 
+			e.eqm_cd, e.line_cd, e.prcs_cd, 
+			e.eqm_nm, e.use_yn, to_char(o.fr_dt, 'yyyy-mm-dd') as "fr_dt", to_char(o.to_dt, 'yyyy-mm-dd') as "to_dt", o.eqm_psch, 
+			o.opert_ctnt, o.nopr_cd
+			from eqm e 
+			join eqm_opr o 
+			on e.eqm_cd = o.eqm_cd
+	</select>
+	
+		<resultMap type="HashMap" id="eqmSelectMap">
+		<id column="eqm_cd" property="FTEqmCd"/>
+		<id column="line_cd" property="FTLineCd"/>
+		<id column="prcs_cd" property="FTPrcsCd"/>
+		<id column="eqm_nm" property="FTEqmNm"/>
+		<id column="use_yn" property="FTUseYn"/>
+		<id column="fr_dt" property="FTFrDt"/>
+		<id column="to_dt" property="FTToDt"/>
+		<id column="eqm_psch" property="FTEqmPsch"/>
+		<id column="opert_ctnt" property="FTOpertCtnt"/>
+		<id column="nopr_cd" property="FnoprCd"/>
+	</resultMap>
+	
+	<select id = "OprSelectList" resultMap="eqmSelectMap">
+			select 
+			e.eqm_cd, e.line_cd, e.prcs_cd, 
+			e.eqm_nm, e.use_yn, to_char(o.fr_dt, 'yyyy-mm-dd') as "fr_dt", to_char(o.to_dt, 'yyyy-mm-dd') as "to_dt", o.eqm_psch, 
+			o.opert_ctnt, o.nopr_cd
+			from eqm e 
+			join eqm_opr o 
+			on e.eqm_cd = o.eqm_cd
+			WHERE o.nopr_cd = #{keyword}
+	</select>
+	
+	<delete id="OprDelete" parameterType="com.rezzo.mes.equip.opr.service.EqmOprVO">
+		DELETE eqm_opr
+		where nopr_cd = #{noprCd}
+	</delete>
 
- -->
+<!-- 	<select id = "eqmOprList" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
+
+	</select>-->
+	
+<!-- 	<select id="oprSelectList" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
+		SELECT * FROM EQM
+		WHERE
+		<if test="state == 1"></if>
+		<if test="state == 1"></if>
+		<if test="state == 1"></if>
+		<if test="state == 1"></if>
+	</select>	 -->
+	
+	<update id="oprUpdate" parameterType="com.rezzo.mes.equip.opr.service.EqmOprVO">
+		update eqm_opr
+		set eqm_psch = #{eqmPsch},
+			fr_dt = #{frDt},
+			to_dt = #{toDt},
+			opert_ctnt = #{opertCtnt}
+		where nopr_cd = #{noprCd}
+	</update>
+
 </mapper>

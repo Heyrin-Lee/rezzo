@@ -22,5 +22,7 @@ public interface EqmMapper {
 	public void eqmDelete(EqmVO vo);
 	
 	public List<EqmVO> eqmCdSelect(String keyword);
+	
+	public void eqmUsUpdate(EqmVO vo);
 
 }
