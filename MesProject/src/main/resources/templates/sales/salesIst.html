@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>제품 입고 등록</title>
+<style>
+	.c_btn {
+   color: #fff;
+   font-size: 13px;
+   background: #333;
+   border: none;
+   padding: 6px;
+   border-radius: 4px
+}
+</style>
+</head>
+<body>
+<!-- 본문내용 -->
+<th:block layout:fragment="main">  
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">영업관리</h1>
+		<ol class="breadcrumb mb-4">
+			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+			<li class="breadcrumb-item">> 제품 입고 관리</li>
+			<li class="breadcrumb-item active">> 제품 입고 등록</li>
+		</ol>
+		
+		<div class="card mb-4">
+      <div id="cont" style="padding-bottom:0px">
+         <section id="r_section">
+            <div class="col">
+               <div class="card mb-4">
+                  <div class="card-header">
+                     <i class="fas fa-tachometer-alt"></i> 제품 입고 등록
+                  </div>
+				<div class="card-body" id="vendModal">
+                     <form name="submitFrm" id="submitFrm">
+                      <div class="r_input">
+                        <div class="mb-3">
+                           <label for="edctsIstNo" class="form-label">제품 입고번호</label>
+    						<input type="text" class="form-control" id="edctsIstNo" name="edctsIstNo" placeholder="제품 입고 등록시 자동생성됩니다." readonly>
+                        </div>
+                        <div class="mb-3">
+                           <label for="edctsLotNo" class="form-label">완제품LOT번호</label>
+    						<input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo">
+                        </div>
+                        <div class="mb-3">
+                           <label for="edctsCd" class="form-label">제품코드</label>
+    						<input type="text" class="form-control" id="inputCd" name="edctsCd">
+                        </div>
+                        <div class="mb-3">
+                           <label for="edctsIstCnt" class="form-label">제품 입고수량</label> 
+                           <input type="text" class="form-control" id="edctsIstCnt" name="edctsIstCnt">
+                        </div>
+                        <div class="mb-4">
+                           <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
+                           <input type="date" id="edctsIstDt" name="edctsIstDt">
+                           <button class="c_btn" id="saveBtn" data-bs-target="" form="">등록</button>
+                           <button class="c_btn" id="searchBtn" data-bs-target="" form="">조회</button>
+                        </div>
+                       </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </section>
+      </div>
+      <div id="grid"></div>
+      
+     <script>
+     
+     $(function() {
+     	salesIstList();
+     })
+     const grid = new tui.Grid({
+	      el: document.getElementById('grid'),
+	      scrollX: false,
+	      bodyHeight: 300,
+	      rowHeight: 35,
+	      rowHeaders: ['rowNum'],
+	      header: {
+	        height: 40
+	      },
+	      columns: [
+	        {
+	          header: '제품 입고번호',
+	          name: 'edctsIstNo',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '제품 입고일자',
+	          name: 'edctsIstDt',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '제품 입고수량',
+	          name: 'edctsIstCnt',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '제품코드',
+	          name: 'edctsCd',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '완제품LOT번호',
+	          name: 'edctsLotNo',
+	          editor: 'datePicker',
+	          align:'center'
+	        }
+		  ]   
+	    });
+	    
+	    //제품 입고 등록&수정
+	    $("#saveBtn").click(ev => {
+	    	//제품 입고 등록버튼 클릭 -> 제품 입고번호 자동생성 & 등록 시 출력
+	    	var submitData = $("#submitFrm").serialize();
+	    	$.ajax({
+	    		url:"saveIst",
+	    		dataType:"json",
+	    		method:"post",
+	    		data:submitData,
+	    		success:function(result) {
+	    			grid.resetData(result);
+	    		}
+	    	})
+	    })
+	    
+	    //제품 입고 전체 목록 - 현재 날짜 기준으로
+	    function salesIstList() {
+	    	let edctsIstDt = $("#edctsIstDt").val();
+	    	console.log(edctsIstDt);
+	    	$.ajax({
+	    		url:"salesIstList",
+	    		dataType:"json",
+	    		method:"post",
+	    		data:{"edctsIstDt":edctsIstDt},
+	    		success:function(list) {
+	    			grid.resetData(list);
+	    		}
+	    	})
+	    }
+	    
+	    //제품 입고번호 칸 클릭 -> 폼에 상세값 출력
+		grid.on("click",(e) => {
+			const {columnName} = e;			
+			IstNoRowKey = e.rowKey;
+			let edctsIstNoResult = grid.getValue(IstNoRowKey ,'edctsIstNo');
+			let edctsLotNoResult = grid.getValue(IstNoRowKey, 'edctsLotNo');
+			let edctsCdResult = grid.getValue(IstNoRowKey, 'edctsCd');
+			let edctsIstCntResult = grid.getValue(IstNoRowKey, 'edctsIstCnt');
+			console.log(edctsIstNoResult);
+			if(columnName == 'edctsIstNo') {
+				edctsIstNo.value = edctsIstNoResult;
+				edctsLotNo.value = edctsLotNoResult;
+				inputCd.value = edctsCdResult;
+				edctsIstCnt.value = edctsIstCntResult;
+			}
+		})
+		
+		//제품코드 input 클릭 -> 제품코드 목록 모달창
+		$(function edctsCdSearch() {
+			$("#inputCd").click(function() {
+				$.ajax({
+					url:"edctsCdSearch",
+					method:"get",
+					dataType:"json",
+				})
+			})
+		})
+		
+	    //제품 입고일자 현재 날짜로 설정
+	    document.getElementById("edctsIstDt").valueAsDate = new Date();
+     </script>
+</body>
+</html>

@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public void deleteOrdr(List<OrderVO> delList) {
 		for(OrderVO vo : delList) {
-			mapper.deleteOrdr(vo); 			
+			mapper.deleteOrdr(vo); 
 			}
 		}
 
