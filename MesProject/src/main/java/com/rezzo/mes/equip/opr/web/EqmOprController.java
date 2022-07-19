@@ -96,9 +96,12 @@ public class EqmOprController {
 	
 	//세부내역 업데이트
 	
-	/* @PostMapping("eqmOprUpdate")
+	@PostMapping("eqmOprUpdate")
 	@ResponseBody
-	public List<>*/ 
+	public List<EqmOprVO> oprUpdate(EqmOprVO vo){
+		service.oprUpdate(vo);
+		return service.eqmOprList(vo); 		
+	}
 	
 	
 	

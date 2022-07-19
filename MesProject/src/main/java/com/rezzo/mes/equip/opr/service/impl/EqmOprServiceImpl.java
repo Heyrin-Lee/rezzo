@@ -45,6 +45,11 @@ public class EqmOprServiceImpl implements EqmOprService {
 		map.OprDelete(vo);
 	}
 
+	@Override
+	public void oprUpdate(EqmOprVO vo) {
+		map.oprUpdate(vo);
+	}
+
 
 	
 

@@ -85,5 +85,13 @@
 		<if test="state == 1"></if>
 	</select>	 -->
 	
+	<update id="oprUpdate" parameterType="com.rezzo.mes.equip.opr.service.EqmOprVO">
+		update eqm_opr
+		set eqm_psch = #{eqmPsch},
+			fr_dt = #{frDt},
+			to_dt = #{toDt},
+			opert_ctnt = #{opertCtnt}
+		where nopr_cd = #{noprCd}
+	</update>
 
 </mapper>

@@ -270,17 +270,6 @@
 													style="width: 180px"></input>
 										</tr>
 										<tr>
-											<th>가동여부<strong class="blue">*</strong>
-											</th>
-											<td>
-												<select name="GFrmUseYN" id="GFrmUseYN" class="dataTable-selector" style="width: 180px">
-													<option disabled selected value="">가동여부</option>
-													<option value="Y">가동</option>
-													<option value="N">비가동</option>
-												</select>
-											</td>
-										</tr>
-										<tr>
 											<th>시작일</th>
 											<td><input class="form-control" type="date" id="GFrDt" name="frDt" style="width: 150px" /></td>
 										</tr>
@@ -648,6 +637,34 @@
 					})
 				})
 			})
+			
+			// 설비 비가동 내역 세부조회 모달 수정
+			
+				$('#MsaveBtn').on('click', function () {
+				var formData = new FormData(gridDataForm)
+				console.log(formData.get('opertCtnt'));
+				$.ajax({
+					url: "oprUpdate",
+					method: 'POST',
+					data: formData,
+					contentType: false,
+					processData: false
+				}).done(function (result) {
+					toastr.success('정상적으로 저장되었습니다.');
+					$('#GridModal').modal('hide');
+					$.ajax({
+						url: "OprList",
+						method: "GET",
+						dataType: "JSON",
+						success: function (result) {
+							console.log(result);
+							grid2.resetData(result);
+						}
+					})
+
+				})
+			})
+			
 		</script>
 
 	</th:block>

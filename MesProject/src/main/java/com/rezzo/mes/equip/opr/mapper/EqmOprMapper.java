@@ -17,4 +17,6 @@ public interface EqmOprMapper {
 	public void OprDelete(EqmOprVO vo);
 	
 	public List<Map<String, String>> OprSelectList(String keyword);
+	
+	public void oprUpdate (EqmOprVO vo);
 }
