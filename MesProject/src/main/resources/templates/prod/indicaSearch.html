@@ -62,20 +62,20 @@ body {
                      <form>
                         <div class="mb-3">
                            <label for="frDate">지시일자</label> 
-                           <input type="date" id="frDate" name="frDate" style="width: 200px">~<input type="date" id="toDate" name="toDate" style="width: 200px">
+                           <input type="date" id="start-input" name="start-input" style="width: 200px">~<input type="date" id="end-input" name="end-input" style="width: 200px">
                         </div>
                         <div class="mb-3">
                            <label for="all">지시상태</label> 
-                            <label><input type="radio" name="all" value="all">전체</label>
-                            <label><input type="radio" name="progY" value="progY">미진행</label>
-                            <label><input type="radio" name="progN" value="progN">진행</label>
+                            <label><input type="radio" name="status" value="전체">전체</label>
+                            <label><input type="radio" name="status" value="진행">진행</label>
+                            <label><input type="radio" name="status" value="미진행">미진행</label>
                         </div>
                         <div class="mb-3">
                            <label for="name">제품명</label> <input
                               type="text" id="nmae" name="name">
                         </div>
      					<div class="linelist">
-                        <button class="c_btn" form="">조회</button>
+                        <button class="c_btn" id="sBtn">조회</button>
                      </div>
               	
                      </form>
@@ -83,48 +83,87 @@ body {
                </div>
             </div>
          </section>
+          <div class="linelist">
+              <button type="button" class="c_btn" id="dBtn">삭제</button>
+           </div>
+           <br><br>
    <div id='grid'></div>
    </div> 
    <script>
    const gridData = [];
-   (function() {
-      for (let i = 0; i < 1; i += 1) {
-         gridData.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
+
    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      data: gridData,
 	      scrollX: false,
 	      scrollY: false,
+	      rowHeaders: ['checkbox'],
 	      columns: [
 	        {
 	          header: '라인코드',
-	          name: 'name'
+	          name: 'lineCd'
 	        },
 	        {
 	          header: '제품코드',
-	          name: 'artist'
+	          name: 'prdtCd'
 	        },
 	        {
 	          header: '지시수량',
-	          name: 'type'
+	          name: 'indicaCnt'
 	        },
 	        {
-	          header: '생산수량',
-	          name: 'release'
+	          header: '필요수량',
+	          name: 'orderCnt'
 	        },
 	        {
 	          header: '작업시작일',
-	          name: 'IndicaCnt'
+	          name: 'wkFrDt'
 	        }
 	      ]
 	    });
+	    
+    /* 조회하기  */
+   $("#sBtn").on("click", function(){
+	   let planDt = $("#start-input").val();
+	   let planDt2 = $("#end-input").val();
+	   let nowSt = $("input[type=radio]:checked").val();
+	   let prdtNm = $("#name").val();
+	  
+	   $.ajax({
+		 url : 'getIndicaList',
+		 method : 'POST',
+		 data : {},
+		 success : function(result) {
+			 grid.resetData(result)
+		 }
+	   })
+   })
+   
+   /* 계획삭제하기 */
+   $("#dBtn").on("click", function() {
+   	   let planCd = grid.getCheckedRows()[0].planCd;	
+   	   let planDt = $("#start-input").val();
+	   let planDt2 = $("#end-input").val();
+	   let nowSt = $("input[type=radio]:checked").val();
+	   let prdtNm = $("#name").val();
+   	   console.log(planCd)
+	   $.ajax({
+	   		url : 'deletePlan',
+	   		method : 'GET',
+	   		contentType:'application/text',
+	   		data : {"planCd" : planCd},
+	   		success : function(result){
+	   			 $.ajax({
+		 			url : 'getList',
+					method : 'POST',
+		 			data : {"planDt" : planDt, "planDt2" : planDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
+		 			success : function(result) {
+			 			grid.resetData(result)
+		 			}
+	   			 })
+	   		} 
+	   })
+   })
    
    
    </script> 

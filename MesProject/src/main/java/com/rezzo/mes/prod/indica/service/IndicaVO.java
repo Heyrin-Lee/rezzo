@@ -30,7 +30,9 @@ public class IndicaVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date indicaDt;
-	//생산수량
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date indicaDt2;
 	
 	String rscCd;
 	int rscCnt;
@@ -39,4 +41,6 @@ public class IndicaVO {
 	String rscLotNo;
 	
 	String prcsPsch;
+	
+	String bomCd;
 }

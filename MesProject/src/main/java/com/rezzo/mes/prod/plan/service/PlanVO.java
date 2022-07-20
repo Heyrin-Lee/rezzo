@@ -1,25 +1,20 @@
 package com.rezzo.mes.prod.plan.service;
 
-import java.io.Serializable;
+
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.sales.order.service.OrderVO;
 
-import groovy.transform.builder.Builder;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class PlanVO implements Serializable {
+public class PlanVO{
+	
+	// plan
 	String planCd;
-	Date paprdDt;
 	int prefRank;
 	String nowSt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -28,23 +23,30 @@ public class PlanVO implements Serializable {
 	Date wkFrDt; 
 	Date wkToDt;
 	String lineCd;
-	String prdtCd;
+	int indicaCnt;
 	
+	// orderSheet
 	String orderNo;
 	Date orderDt;
 	String vendNm;
 	int orderCnt;
-	String prcsCd;
+	Date paprdDt;
+	
+	// edcts
 	String prdtNm;
 	String edctsCd;
-	int indicaCnt;
-	//생산수량
 	
+	// 자재코드, 자재lot, 자재재고, 
 	String rscCd;
 	int rscCnt;
-	int useCnt;
-	int rscUse;
 	String rscLotNo;
+	
+	// bom  
+	int useCnt;
+	String prcsCd;
+	
+	// holding 출고수량
+	int rscUse;
 	
 	String index;
 	
