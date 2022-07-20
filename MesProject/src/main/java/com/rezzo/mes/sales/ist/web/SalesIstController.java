@@ -39,10 +39,4 @@ public class SalesIstController {
 		return service.salesIstList(vo);
 	}
 	
-	//제품코드 목록 조회 모달창
-	@RequestMapping("edctsCdSearch")
-	@ResponseBody
-	public List<EdctsmVO> edctsCdSearch(EdctsmVO vo) {
-		return service.edctsCdSearch(vo);
-	}
 }
