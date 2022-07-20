@@ -28,11 +28,5 @@ public class SalesIstServiceImpl implements SalesIstService{
 		return mapper.salesIstList(vo);
 	}
 
-	//제품코드 input 클릭 -> 제품코드 목록 모달창
-	@Override
-	public List<EdctsmVO> edctsCdSearch(EdctsmVO vo) {
-		return mapper.edctsCdSearch(vo);
-	}
-
 
 }

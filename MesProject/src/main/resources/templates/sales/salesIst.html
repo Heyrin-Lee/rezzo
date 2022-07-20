@@ -45,10 +45,14 @@
                         <div class="mb-3">
                            <label for="edctsLotNo" class="form-label">완제품LOT번호</label>
     						<input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo">
+    						<!-- 모달버튼 -->
+    						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-3">
                            <label for="edctsCd" class="form-label">제품코드</label>
     						<input type="text" class="form-control" id="inputCd" name="edctsCd">
+    						<!-- 모달버튼 -->
+    						<button type="button" class="btn btn-primary" id="cdSearchBtn" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-3">
                            <label for="edctsIstCnt" class="form-label">제품 입고수량</label> 
@@ -58,7 +62,7 @@
                            <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
                            <input type="date" id="edctsIstDt" name="edctsIstDt">
                            <button class="c_btn" id="saveBtn" data-bs-target="" form="">등록</button>
-                           <button class="c_btn" id="searchBtn" data-bs-target="" form="">조회</button>
+                           <button class="c_btn" id="dtSearchBtn" data-bs-target="" form="">조회</button>
                         </div>
                        </div>
                      </form>
@@ -66,13 +70,52 @@
                </div>
             </div>
          </section>
+         <!-- 제품코드 모달 -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="elLabel" aria-hidden="true">
+		  <div class="modal-dialog">xampleModa
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">제품코드 목록</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <div id="edctsCdGrid"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-primary">확인</button>
+		      </div>
+		    </div>
+		  </div>
+		</div> <!-- 모달 div끝 -->
+		<!-- 완제품LOT번호 모달 -->
+		<div class="modal fade" id="lotModal" tabindex="-1" aria-labelledby="elLabel" aria-hidden="true">
+		  <div class="modal-dialog">xampleModa
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="lotModalLabel">제품코드 목록</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <div id="lotNoGrid"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-primary">확인</button>
+		      </div>
+		    </div>
+		  </div>
+		</div> <!-- 모달 div끝 -->
       </div>
+    </div>
       <div id="grid"></div>
+   </div>
       
      <script>
      
      $(function() {
      	salesIstList();
+     	edctsListModal();
      })
      const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
@@ -116,6 +159,46 @@
 	        }
 		  ]   
 	    });
+	    
+	    // 제품코드 모달 그리드(조회)    
+	    const edctsCdGrid = new tui.Grid({
+	        el:document.getElementById('edctsCdGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	            {
+	                header: '제품코드',
+	                name: 'edctsCd',
+	                align:'center'
+	            },
+	            {
+	                header: '제품명',
+	                name: 'prdtNm',
+	                align:'center'
+	            }
+	        ]
+	    }); 
+	    
+	    // 완제품LOT번호 모달 그리드(조회)    
+	    const lotNoGrid = new tui.Grid({
+	        el:document.getElementById('lotNoGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	            {
+	                header: '완제품LOT번호',
+	                name: 'edctsLotNo',
+	                align:'center'
+	            },
+	            {
+	                header: '완제품명',
+	                name: 'edctsNm',
+	                align:'center'
+	            }
+	        ]
+	    }); 
 	    
 	    //제품 입고 등록&수정
 	    $("#saveBtn").click(ev => {
@@ -164,14 +247,51 @@
 			}
 		})
 		
-		//제품코드 input 클릭 -> 제품코드 목록 모달창
-		$(function edctsCdSearch() {
-			$("#inputCd").click(function() {
+		//제품코드 검색 버튼 클릭 -> 제품코드 목록 모달창
+		function edctsListModal() {
+			$("#cdSearchBtn").on("click",function(cdList) {
+						setTimeout(function () {
+							edctsCdGrid.refreshLayout()
+							}, 300);
 				$.ajax({
-					url:"edctsCdSearch",
-					method:"get",
+					url:"getEdctsList",
+					method:"post",
 					dataType:"json",
-				})
+					error:console.log('r'),
+					success:function(cdList) {
+						edctsCdGrid.resetData(cdList);
+					}
+				})			
+			})
+		
+		}
+		
+		//완제품LOT번호 검색 버튼 클릭 -> 완제품LOT번호 목록 모달창
+		$("#lotSearchBtn").on("click",function(lotList) {
+			setTimeout(function () {
+							lotNoGrid.refreshLayout()
+							}, 300);
+			
+		})
+		//체크박스 선택시 제품코드 가져오기
+		edctsCdGrid.on("click", e => {
+			let rowInfo = edctsCdGrid.getCheckedRows(e);
+			inputCd.value = rowInfo[0].edctsCd;
+		})
+		
+		//입고 등록 일자별 조회
+		$("#dtSearchBtn").on("click",function() {
+			let edctsIstDt = $("#edctsIstDt").val();
+			console.log(edctsIstDt);
+			
+			$.ajax({
+				url:"salesIstList",
+				dataType:"json",
+				method:"post",
+				data:{"edctsIstDt":edctsIstDt},
+				success:function(result) {
+					grid.resetData(result);
+				}
 			})
 		})
 		
