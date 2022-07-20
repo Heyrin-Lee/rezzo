@@ -14,6 +14,9 @@ public class BomVO {
 	String unit;
 	Integer useCnt; 
 	String prcsCd;
-	String remk;     
+	String remk;
+	
+	String rscNm;
+	String prcsNm;
 
 }

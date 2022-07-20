@@ -230,21 +230,44 @@ const grid = new tui.Grid({
   
   //컬럼숨기기
   grid.hideColumn('prcsCd');
+  grid.hideColumn('bomCd');
+  grid.hideColumn('bomSq');
   
  //그리드 행 추가 버튼
+ var cnt = 0;
  $('#plusBtn').click(ev => {
  	if ($('#edctsCd').val() == '') {
  		toastr.warning('제품코드를 먼저 선택하세요!')
  	} else {
- 		grid.appendRow(); 	
+ 		grid.appendRow();
+ 		cnt = grid.getRowCount();
+ 		if(cnt == 1) {
+ 			grid.setValue(0, "bomSq", 1);
+ 			grid.setValue(0, "bomCd", "");
+ 		} else {
+ 			var maxCnt = grid.getValue(cnt-2, "bomSq")
+ 			grid.setValue(cnt-1, 'bomSq', maxCnt+1);
+ 			grid.setValue(cnt-1, 'bomCd', '');
+ 		}
  	}
  })  
  
  //그리드 행 삭제버튼
  $('#minusBtn').click(ev => {
- 		var check = grid.getCheckedRowKeys();
- 		check.forEach(rowKey => { 		
- 			grid.removeRow(rowKey);
+ 		var check = grid.getCheckedRows();
+ 		check.forEach(obj => {
+ 		 if(grid.getValue(obj.rscCd) != null || grid.getValue(obj.rscCd) != '') {
+ 		 		$.ajax({
+				 	url: "delBomGrid",
+				  method: "POST",
+		      data: obj,
+		      dataType: 'json',
+				  success: function () {
+			    	toastr.success('정상적으로 삭제되었습니다.');
+		    	}
+				})
+ 		 }
+ 			grid.removeRow(obj.rowKey);
  		})
  })
  
@@ -292,20 +315,17 @@ $('#newBtn').click(ev => {
 
 //저장버튼
 $('#saveBtn').click(ev => {
-	let array = grid.getCheckedRows();
-	for(var i=0; i<array.length; i++) {
-		grid.setValue(array[i].rowKey, "bomSq", i+1);
-		grid.setValue(array[i].rowKey, "bomCd", "");
-	}
 	var data = grid.getCheckedRows();
 	var edctsCd = $('#edctsCd').val();
-	  $.ajax({
-		    url: "saveBom/" + edctsCd,
+	var saveCheck = grid.getValue(0, 'bomCd');
+	if (saveCheck == '') {
+		$.ajax({
+		    url: "insertBom/" + edctsCd,
 		    method: "POST",
       data: JSON.stringify(data),
       contentType: 'application/json',
       dataType: 'json',
-		    success: function (result) {
+		    success: function () {
 		    	setTimeout(function () {
                     grid.refreshLayout()
                     grid.uncheckAll()
@@ -313,6 +333,22 @@ $('#saveBtn').click(ev => {
 		    	toastr.success('정상적으로 저장되었습니다.');
 		    }
 			})
+	} else {
+		$.ajax({
+		    url: "saveBom/" + edctsCd,
+		    method: "POST",
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      dataType: 'json',
+		    success: function () {
+		    	setTimeout(function () {
+                    grid.refreshLayout()
+                    grid.uncheckAll()
+                }, 300);
+		    	toastr.success('정상적으로 저장되었습니다.');
+		    }
+			})
+	}
  });
 
 //삭제버튼

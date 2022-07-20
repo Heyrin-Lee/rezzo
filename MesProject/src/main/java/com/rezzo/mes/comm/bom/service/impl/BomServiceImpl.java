@@ -18,6 +18,14 @@ public class BomServiceImpl implements BomService {
 	public List<BomVO> getBomList(BomVO bomVO) {
 		return mapper.getBomList(bomVO);
 	}
+	
+	@Override
+	public void insertBom(String edctsCd, List<BomVO> bomList) {
+		for(BomVO bomVO : bomList) {
+			bomVO.setEdctsCd(edctsCd);
+			mapper.insertBom(bomVO);
+		}
+	}
 
 	@Override
 	public void saveBom(String edctsCd, List<BomVO> bomList) {
@@ -30,6 +38,11 @@ public class BomServiceImpl implements BomService {
 	@Override
 	public void delBom(BomVO bomVO) {
 		mapper.delBom(bomVO);
+	}
+
+	@Override
+	public void delBomGrid(BomVO bomVO) {
+		mapper.delBomGrid(bomVO);		
 	}
 
 }

@@ -28,14 +28,26 @@ public class BomController {
 		return service.getBomList(bomVO);
 	}
 	
+	@RequestMapping("insertBom/{edctsCd}")
+	public void insertBom(@PathVariable("edctsCd") String edctsCd, @RequestBody List<BomVO> bomList) {
+		service.insertBom(edctsCd, bomList);
+	}
+	
 	@RequestMapping("saveBom/{edctsCd}")
-	@ResponseBody
 	public void saveBom(@PathVariable("edctsCd") String edctsCd, @RequestBody List<BomVO> bomList) {
 		service.saveBom(edctsCd, bomList);
 	}
 	
 	@RequestMapping("delBom")
+	@ResponseBody
 	public void delBom(BomVO bomVO) {
 		service.delBom(bomVO);
 	}
+	
+	@RequestMapping("delBomGrid")
+	@ResponseBody
+	public void delBomGrid(BomVO bomVO) {
+		service.delBomGrid(bomVO);
+	}
+	
 }
