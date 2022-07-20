@@ -5,6 +5,7 @@
 <select id="orderListModal" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
 	SELECT *
 	FROM ORDER_SHEET
+	WHERE PROG_APPE='접수완료'
 </select>
 
 <select id="getIndex" resultType="PlanVO">

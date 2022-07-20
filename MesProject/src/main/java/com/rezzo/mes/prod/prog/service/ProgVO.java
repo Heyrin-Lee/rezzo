@@ -1,48 +1,37 @@
-package com.rezzo.mes.prod.indica.service;
+package com.rezzo.mes.prod.prog.service;
 
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.rezzo.mes.prod.plan.service.PlanVO;
 
 import lombok.Data;
 
 @Data
-public class IndicaVO {
-	String planCd;
-	Date paprdDt;
-	int prefRank;
-	String nowSt;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date planDt;
-	Date wkFrDt; 
-	Date wkToDt;
-	String lineCd;
-	
-	int orderCnt;
-	String prcsCd;
-	String prdtNm;
-	String edctsCd;
-	int indicaCnt;
+public class ProgVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date indicaDt;
+	String prdtNm;
+	String edctsCd;
+	int indicaCnt;
+	String lineCd;
+	int prefRank;
+	String progCd;
+	String prcsCd;
+	String prcsNm;
+	String prcsPsch;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date indicaDt2;
+	Date wkFrDttm;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date indicaDt3;
-	String rscCd;
-	int rscCnt;
-	int useCnt;
-	int rscUse;
-	String rscLotNo;
+	Date wkToDttm;
+	int inferCnt;
+	int prodCnt;
+	String nowSt;
+	String edctsLotNo;
+	String planCd;
 	
-	String linePsch;
-	
-	String bomCd;
 }

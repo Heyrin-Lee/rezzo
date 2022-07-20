@@ -46,25 +46,35 @@ VALUES (
 </insert>
 
 <select id="getIndicaList" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
-	SELECT D.LINE_CD, E.EDCTS_CD, D.INDICA_CNT, D.ORDER_CNT, D.WK_FR_DT
+	SELECT D.LINE_CD, D.EDCTS_CD, D.INDICA_CNT, D.ORDER_CNT, D.WK_FR_DT, E.PRDT_NM, I.INDICA_DT
 	FROM INDICA_DTL D
 	JOIN EDCTS E
-	ON I.EDCTS_CD = E.EDCTS_CD
-	JOIN INDICA I
-	ON I.PLAN_CD = D.PLAN_CD
+	ON D.EDCTS_CD = E.EDCTS_CD
+	JOIN INDICA I 
+	ON I.INDICA_DT = D.INDICA_DT
 	<![CDATA[
-	WHERE INDICA_DT >= #{indicaDt}
-	  AND INDICA_DT <= #{indicaDt2}
+	WHERE I.INDICA_DT >= #{indicaDt}
+	  AND I.INDICA_DT <= #{indicaDt2}
 	]]>
 	 <choose>
     <when test='nowSt.equals("전체")'>
-     AND (N.NOW_ST = '미진행'
-        or N.NOW_ST = '진행')
+     AND (I.NOW_ST = '미지시'
+        or I.NOW_ST = '지시')
     </when>
     <otherwise>
-     AND N.NOW_ST = #{nowSt}
+     AND I.NOW_ST = #{nowSt}
     </otherwise>
   </choose>
 	AND E.PRDT_NM = #{prdtNm}
 </select>
+
+<delete id="deleteIndica" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO" >
+DELETE FROM INDICA
+WHERE INDICA_DT = #{indicaDt3}
+</delete>
+
+<delete id="deleteIndicaDtl" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO">
+DELETE FROM INDICA_DTL
+WHERE INDICA_DT = #{indicaDt3}
+</delete>
 </mapper>

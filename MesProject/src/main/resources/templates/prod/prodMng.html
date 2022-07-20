@@ -68,14 +68,15 @@ display:inline-block;
    </div>
    <!-- 헤더부분 -->
 <div id="container">   
-   <button id="lbtn" name="lbtn" class="c_btn" form="">생산지시조회</button>
+   <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
+                    value="지시조회"></input>
    <button id="rbtn" name="rbtn" class="c_btn" form="">공정이동표</button>
    <br>
    <br>
    <div id="grid">진행생산지시</div>
    <br>
    <div class="d-flex flex-row justify-content-between">
-   	   <div id="grid2"  style="width: 1000px;">공정목록</div>	
+   	   <div id="grid2"  style="width: 1200px;">공정목록</div>	
 	   <div id="grid3" style="width: 400px;">공정가동관리<br>
 	   <br>
 	   	<div class="linelist">
@@ -85,20 +86,77 @@ display:inline-block;
 	     </div>
 	   </div>
 	</div>	  
-	<div id="dialog" title="생산지시조회"></div> 
+	<div id="dialog" title=""></div> 
+	<!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
+                        <br> <br>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div><br>
+                    <div id="modGrid" class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" id="confirmBtn" class="btn btn-primary"
+                            data-bs-dismiss="modal">확인</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>
    <script>
+   //지시 계획 모달에 띄우기
+   $("#modalBtn").on("click", function(){
+   		$.ajax({
+   			url : "indicaListModal",
+   			method : 'GET',
+   			dataType: 'JSON',
+   			success: function (result) {
+   				modGrid.resetData(result);
+   			}
+   		})
+   })
+   
+   const modGrid = new tui.Grid({
+        el: document.getElementById('modGrid'),
+        scrollX: false,
+        scrollY: false,
+        rowHeaders: ['checkbox'],
+        columns: [{
+            header: '생산계획코드',
+            name: 'planCd',
+            align: 'center',
+        }, 
+        {
+            header: '제품명',
+            name: 'prdtNm',
+            align: 'center'
+        }, 
+        {
+            header: '생산지시일자',
+            name: 'indicaDt',
+            align: 'center',
+        },
+        {
+            header: '지시수량',
+            name: 'indicaCnt',
+            align: 'center'
+        },
+        
+        ]
+     })
+   	
+   //grid에 모달 내용 띄우기
+   $("#confirmBtn").on("click", function(){
+   		let result = modGrid.getCheckedRows();
+        	console.log(result)
+        	grid.resetData(result);
+   })
+   
    const gridData = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
+  
    
    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
@@ -108,113 +166,111 @@ display:inline-block;
 	      columns: [
 	        {
 	          header: '생산지시일자',
-	          name: 'c1'
+	          name: 'indicaDt'
 	        },
 	        {
 	          header: '제품명',
-	          name: 'c2'
+	          name: 'prdtNm'
 	        },
 	        {
 	          header: '제품코드',
-	          name: 'c3'
+	          name: 'edctsCd'
 	        },
 	        {
 	          header: '수량',
-	          name: 'c4',
+	          name: 'indicaCnt',
 	        },
 	        {
 	          header: '라인코드',
-	          name: 'c5',
+	          name: 'lineCd',
 	        },
 	        {
-	          header: '지시순번',
-	          name: 'c6'
+	          header: '우선순위',
+	          name: 'prefRank'
 	        }      
 	        ]
 	    });
-   
+	    
+   //grid2에 grid1에 있는 완제품 코드를 통해서 그 제품 만드는 공정들 띄우기
+   //각 공정마다 코드 부여해야 함 PRG+생산시작날짜(wkFrDt)+index 
+   $("#grid").on("dblclick", function(){
+   		let edctsCd = grid.getData()[0].edctsCd
+   		$.ajax({
+   			url : 'getPrcsProg',
+   			method : 'get',
+   			data : {"edctsCd" : edctsCd},
+   			success : function(result){
+   				grid2.resetData(result)
+   			}
+   		})
+   })
+      
    const gridData2 = [];
-   (function() {
-      for (let i = 0; i < 0; i += 1) {
-         gridData2.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
-   
+  
    const grid2 = new tui.Grid({
 	      el: document.getElementById('grid2'),
 	      data: gridData2,
 	      scrollX: false,
-	      scrollY: false,
+	      scrollY: true,
 	      columns: [
 	        {
-	          header: '진행공정코드',
-	          name: 'c1'
-	        },
-	        {
-	          header: '생산지시일자',
-	          name: 'c2'
-	        },
-	        {
 	          header: '공정코드',
-	          name: 'c3'
+	          name: 'prcsCd'
 	        },
 	        {
 	          header: '공정명',
-	          name: 'c4',
+	          name: 'prcsNm',
 	        },
 	        {
-	          header: '담당자',
-	          name: 'c5',
+	          header: '공정담당자',
+	          name: 'prcsPsch',
+              editor: {
+                type: 'select',
+                options: {
+                    listItems: [{
+                            text: '홍길동',
+                            value: '홍길동'
+                        },
+                        {
+                            text: '박길동',
+                            value: '박길동'
+                        },
+                        {
+                            text: '최길동',
+                            value: '최길동'
+                        }
+                    ]
+                }
+               }
 	        },
 	        {
 	          header: '시작시간',
-	          name: 'c6'
+	          name: 'wkFrDttm'
 	        },
 	        {
 	          header: '종료시간',
-	          name: 'c6'
+	          name: 'wkToDttm'
 	        },
 	        {
 	          header: '불량량',
-	          name: 'c6'
+	          name: 'inferCnt'
+	        },
+	        {
+	          header: '생산량',
+	          name: 'prodCnt'
 	        },
 	        {
 	          header: '현재상태',
-	          name: 'c6'
-	        },
-	        {
-	          header: '완제품LOT번호',
-	          name: 'c6'
+	          name: 'nowSt'
 	        }
 	        ]
 	    });
-   
-   
-   function makeModal() {
-       //모달
-       var dialog = $("#dialog").dialog({
-         autoOpen: false,
-         height: 400,
-         width: 350,
-         modal: true
-       });
-       return dialog;
-     }
-
-     //버튼 클릭
-     $("#lbtn").on("click", function () {
-       $("#dialog").load("newfile.do", function() {  // load 앞에 선택자가 와야 함 그 선택자에 ajax로 가져온 결과를 넣음 load(컨트롤러) 도 가능함
-         var dialog = makeModal();
-         dialog.dialog("open");
-       })
-     })
-   
-   	
+	    
+	    modalBtn.addEventListener('click', function () {
+                setTimeout(function () {
+                    modGrid.refreshLayout()
+                }, 300);
+            });    
    </script>
 </th:block>
 </body>

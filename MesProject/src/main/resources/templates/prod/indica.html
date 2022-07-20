@@ -80,7 +80,7 @@ body {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">생산지시조회</h5>
                         <br> <br>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
@@ -136,12 +136,12 @@ body {
    		let gridData = grid.getData()
    		console.log(gridData)
    		
-   		let prcsPsch = grid.getData()[0].prcsPsch
-		console.log(prcsPsch)
+   		let linePsch = grid.getData()[0].linePsch
+		console.log(linePsch)
 		let indicaDt = grid.getData()[0].indicaDt
 		console.log(indicaDt)
    			
-		gridData[0].prcsPsch = prcsPsch 
+		gridData[0].linePsch = linePsch 
 		gridData[0].indicaDt = indicaDt
    		console.log(JSON.stringify(gridData))
    		$.ajax({
@@ -216,8 +216,8 @@ body {
 	          align : 'center'
 	        },
 	        {
-	          header: '담당자',
-	          name: 'prcsPsch',
+	          header: '라인책임자',
+	          name: 'linePsch',
 	          align : 'center',
 	          editor : 'text'
 	        },

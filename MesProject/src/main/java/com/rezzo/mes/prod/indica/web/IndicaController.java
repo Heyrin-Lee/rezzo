@@ -46,6 +46,7 @@ public class IndicaController {
 	@RequestMapping("deleteIndica")
 	@ResponseBody
 	public void deletePlan(IndicaVO vo) {
+		System.out.println(vo.getIndicaDt3());
 		service.deleteIndica(vo);
 		service.deleteIndicaDtl(vo);
 	}
