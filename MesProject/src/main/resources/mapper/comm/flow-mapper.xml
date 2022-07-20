@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.comm.flow.mapper.PrcsFlowMapper">
+	
+	<!-- 공정흐름도 조회 -->
+	<select id="getFlowList" resultType="prcsFlowVO">
+		SELECT *
+		FROM vw_flow
+		WHERE 1=1
+		<if test="edctsCd != null and edctsCd !=''">and EDCTS_CD = #{edctsCd}</if>
+		ORDER BY PRCS_ORD
+	</select>
+	
+	<update id="saveFlow" parameterType="prcsFlowVO">
+		MERGE INTO PRCS_FLOW p
+  		USING DUAL ON (p.PRCS_ORD = #{prcsOrd} AND EDCTS_CD = #{edctsCd} )
+  	WHEN MATCHED THEN
+  		UPDATE 
+  			SET p.PRCS_CD = #{prcsCd}
+  	WHEN NOT MATCHED THEN
+  		INSERT (p.PRCS_ORD, EDCTS_CD, p.PRCS_CD)
+  		VALUES ( #{prcsOrd}, #{edctsCd}, #{prcsCd})
+	</update>
+	
+	<delete id="delFlow" parameterType="prcsFlowVO">
+		DELETE FROM PRCS_FLOW
+		WHERE PRCS_ORD = #{prcsOrd} AND EDCTS_CD = #{edctsCd}
+	</delete>
+
+</mapper>

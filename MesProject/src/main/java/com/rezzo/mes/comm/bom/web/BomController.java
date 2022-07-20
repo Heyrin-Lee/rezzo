@@ -29,25 +29,35 @@ public class BomController {
 	}
 	
 	@RequestMapping("insertBom/{edctsCd}")
-	public void insertBom(@PathVariable("edctsCd") String edctsCd, @RequestBody List<BomVO> bomList) {
+	@ResponseBody
+	public List<BomVO> insertBom(@PathVariable("edctsCd") String edctsCd, @RequestBody List<BomVO> bomList) {
 		service.insertBom(edctsCd, bomList);
+		BomVO bomVO = new BomVO();
+		bomVO.setEdctsCd(edctsCd);
+		return service.getBomList(bomVO);
 	}
 	
 	@RequestMapping("saveBom/{edctsCd}")
-	public void saveBom(@PathVariable("edctsCd") String edctsCd, @RequestBody List<BomVO> bomList) {
+	@ResponseBody
+	public List<BomVO> saveBom(@PathVariable("edctsCd") String edctsCd, @RequestBody List<BomVO> bomList) {
 		service.saveBom(edctsCd, bomList);
+		BomVO bomVO = new BomVO();
+		bomVO.setEdctsCd(edctsCd);
+		return service.getBomList(bomVO);
 	}
 	
 	@RequestMapping("delBom")
 	@ResponseBody
-	public void delBom(BomVO bomVO) {
+	public List<BomVO> delBom(BomVO bomVO) {
 		service.delBom(bomVO);
+		return service.getBomList(bomVO);
 	}
 	
 	@RequestMapping("delBomGrid")
 	@ResponseBody
-	public void delBomGrid(BomVO bomVO) {
+	public List<BomVO> delBomGrid(BomVO bomVO) {
 		service.delBomGrid(bomVO);
+		return service.getBomList(bomVO);
 	}
 	
 }
