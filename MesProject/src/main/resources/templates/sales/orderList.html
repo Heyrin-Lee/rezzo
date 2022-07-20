@@ -75,6 +75,23 @@
    </div>
    </div>
    <div id="grid"></div>
+   <!-- 제품코드 모달(등록) -->
+   <div class="modal fade" id="edctsCdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">거래처 목록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                	<div id="CdModal"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
    
    <!-- 제품명 모달 -->
 	    <div class="modal fade" id="proModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -251,9 +268,31 @@
 		  ]   
 	    });
    		
-		 // 제품명 모달 그리드    
+		 // 제품명 모달 그리드(조회)    
 	    const proGrid = new tui.Grid({
 	        el: document.getElementById('proGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	            {
+	                header: '완제품코드',
+	                name: 'edctsCd',
+	                width: 200,
+	                align:'center'
+	            },
+	            {
+	                header: '제품명',
+	                name: 'prdtNm',
+	                width: 200,
+	                align:'center'
+	            }
+	        ]
+	    });
+	    
+	    // 제품코드 모달 그리드(등록)    
+	    const CdModal = new tui.Grid({
+	        el: document.getElementById('CdModal'),
 	        scrollX: false,
 	        scrollY: false,
 	        rowHeaders: ['checkbox'],
@@ -376,7 +415,7 @@
 		   				})
 		   			}
 		   		})
-		   		
+		   		//거래처 목록 모달창에서 거래처 선택 -> 추가된 행 거래처명,코드에 값 들어가기
 		   		vendGrid.on("click",ev => {
 		   			let row = vendGrid.getCheckedRowKeys(ev);
 		   			console.log(row);
@@ -388,7 +427,36 @@
 		   			grid.setValue(vendRowKey, 'vendCd', cdInfo);
 		   		})
 		   	});
-
+			
+			//제품코드 칸 클릭 -> 제품코드 모달창 띄우기
+			grid.on("click",(e) => {
+				const {columnName} = e;
+				edctsCdRowKey = e.rowKey;
+				if(columnName == 'edctsCd') {
+					$("#edctsCdModal").modal("show");
+					$.ajax({
+						url:"proSearch",
+						dataType:"json",
+						method:"get",
+						success:function(edctsCdList) {
+							setTimeout(function() {
+								CdModal.refreshLayout();
+							},300);
+							CdModal.resetData(edctsCdList);
+						}
+					})
+				}
+			})
+			//제품코드 모달창에서 제품코드 선택 -> 추가된 행 제품명,코드에 값 들어가기
+			CdModal.on("click", ev => {
+				let row = CdModal.getCheckedRowKeys(ev);
+				let cdInfo = CdModal.getValue(row,'edctsCd');
+				console.log(cdInfo);
+				let nmInfo = CdModal.getValue(row,'prdtNm');
+				console.log(nmInfo);
+				grid.setValue(edctsCdRowKey, 'edctsCd', cdInfo);
+				grid.setValue(edctsCdRowKey, 'prdtNm', nmInfo)
+			})
 		   
 		   //더블클릭 하면 체크박스 체크
 		   grid.on('editingFinish', (ev) => {
