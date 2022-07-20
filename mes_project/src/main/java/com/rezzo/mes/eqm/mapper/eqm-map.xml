@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.eqm.mapper.EqmMapper">
+
+	<select id="eqmList" resultType="com.rezzo.mes.eqm.service.EqmVO">
+
+select e.eqm_nm, e.eqm_cd, p.prcs_cd, p.prcs_nm, e.use_yn, e.min_temp, 
+			e.max_temp, e.chck_perd, e.line_cd from eqm e inner join prcs p on e.prcs_cd 
+			= p.prcs_cd 
+	</select>
+	
+	<select id="eqmSelect" parameterType="com.rezzo.mes.eqm.service.EqmVO" resultType="com.rezzo.mes.eqm.service.EqmVO"> 
+<!-- 		select e.eqm_nm, e.eqm_cd, p.prcs_cd, p.prcs_nm, e.use_yn, e.min_temp, e.max_temp, 
+		e.chck_perd, e.line_cd from eqm e inner join prcs p on e.prcs_cd = p.prcs_cd 
+		where e.eqm_nm = #{eqm_nm}  -->
+		
+	</select>
+		
+</mapper>
