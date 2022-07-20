@@ -5,10 +5,15 @@
 	<!-- 제품BOM 목록 불러오기 -->
 	<select id="getBomList" resultType="BomVO">
 		SELECT *
-		FROM BOM
+		FROM VW_BOM
 		WHERE EDCTS_CD = #{edctsCd}
 		ORDER BY BOM_SQ	
 	</select>
+	
+	<!-- 새로입력 -->
+	<update id="insertBom" parameterType="BomVO" statementType="CALLABLE">
+		<![CDATA[{call proc_bom_insert(#{bomCd}, #{bomSq}, #{edctsCd}, #{rscCd}, #{unit}, #{useCnt},  #{prcsCd}, #{remk})}]]>
+	</update>
 	
 	<!-- 저장 -->
 	<update id="saveBom" parameterType="BomVO" statementType="CALLABLE">
@@ -19,5 +24,11 @@
 	<delete id="delBom" parameterType="BomVO">
 		DELETE FROM BOM
 		WHERE EDCTS_CD = #{edctsCd}
+	</delete>
+	
+	<!-- 그리드 단건삭제 -->
+	<delete id="delBomGrid" parameterType="BomVO">
+		DELETE FROM BOM
+		WHERE RSC_CD = #{rscCd}
 	</delete>
 </mapper>

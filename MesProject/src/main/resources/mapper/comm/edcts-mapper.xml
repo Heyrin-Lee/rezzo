@@ -11,12 +11,12 @@
 		<if test="wrhousCd != null and wrhousCd !=''">and WRHOUS_CD LIKE '%'||#{wrhousCd}||'%'</if>
 	</select>
 	
-	<!-- 거래처 등록,수정 -->
+	<!-- 제품 등록,수정 -->
 	<update id="saveEdcts" parameterType="EdctsmVO" statementType="CALLABLE">
   	<![CDATA[{call proc_edcts_save(#{edctsCd}, #{prdtNm}, #{spec}, #{unit}, #{safStc}, #{wrhousCd})}]]>
 	</update>
 	
-	<!-- 거래처 삭제 -->
+	<!-- 제품 삭제 -->
 	<delete id="delEdcts" parameterType="EdctsmVO">
 			DELETE FROM EDCTS
 			WHERE EDCTS_CD = #{edctsCd}

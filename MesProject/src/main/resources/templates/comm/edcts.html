@@ -8,71 +8,128 @@
 </head>
 <body>
 <!-- 본문내용 -->
-<th:block layout:fragment="main"> 
+<th:block layout:fragment="main">
 	<div class="container-fluid px-4">
-		<h1 class="mt-4">완제품관리</h1>
+		<h1 class="mt-4">제품공정흐름관리</h1>
 		<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
-				<li class="breadcrumb-item">> 기준정보관리</li>
-				<li class="breadcrumb-item active">> 완제품관리</li>
-			</ol>
+			<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item">> 기준정보관리</li>
+			<li class="breadcrumb-item active">> 제품공정흐름관리</li>
+		</ol>
 		<div class="card mb-4">
 			<div class="card-body">
+				<label for="" autofocus="autofocus">제품명</label>
+					<input type="text" class="form-control" id="keyword" name="keyword" style="width: 200px">
+					<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 검색</button>
 				<div class="linelist" style="float: right;">
-						<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
-						<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
-						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
-						<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
-						<br> <br>
-					</div>
-						<form id="dataForm" name="dataForm" action="#" method="post">
-							<table class="table" style="vertical-align : middle;">
-								<colgroup>
-									<col style="width: 150px">
-									<col>
-									<col style="width: 150px">
-									<col>
-									<col style="width: 150px">
-									<col>
-								</colgroup>
-								<tbody>
-									<tr>
-										<th>완제품코드 <strong class="blue">*</strong></th>
-										<td><input class="form-control" type="text" id="edctsCd" name="edctsCd" style="width: 250px" maxlength="20"
-											placeholder="등록시 자동부여됩니다." readonly /></td>
-										<th>제품명 <strong class="blue">*</strong></th>
-										<td><input class="form-control" type="text" id="prdtNm" name="prdtNm" style="width: 250px" maxlength="50" /></td>
-										<th>보관창고</th>
-										<td>
-											<select class="dataTable-selector" name="wrhousCd" id="wrhousCd" style="width: 250px">
-												<option selected value="">==선택==</option>  
-												<option th:each="code : ${ccds['WHS']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"></option>
-											</select></td>
-									</tr>
-									<tr>
-										<th>규격</th>
-										<td><input class="form-control" type="text" id="spec" name="spec" style="width: 250px" maxlength="50" /></td>
-										<th>단위</th>
-										<td><input class="form-control" type="text" id="unit" name="unit" style="width: 250px" maxlength="50" /></td>
-										<th>안전재고</th>
-										<td><input type="text" id="safStc" name="safStc" class="form-control" maxlength="50" style="width: 250px" /></td>
-									</tr>
-								</tbody>
-							</table>
-						</form>
+					<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
+					<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+					<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+				</div>
 			</div>
 		</div>
-		<div class="card mb-4">
-			<div class="card-body">
-				<div id="grid"></div>
+
+		<div class="row">
+			<div class="col-lg-6" style="width: 40%">
+				<div class="card mb-4">
+					<div class="card-body">
+						<!-- 완제품 그리드 -->
+						<div id="grid"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6" style="width: 1%"></div>
+			<div class="col-lg-6" style="width: 59%">
+				<div class="card mb-4">
+					<div class="card-body">
+					<!-- 탭메뉴 -->
+						<nav>
+							<div class="nav nav-tabs" id="nav-tab" role="tablist">
+								<button class="nav-link active" id="nav-edcts-tab"
+									data-bs-toggle="tab" data-bs-target="#nav-edcts" type="button"
+									role="tab" aria-controls="nav-edcts" aria-selected="true">제품정보</button>
+								<button class="nav-link" id="nav-flow-tab"
+									data-bs-toggle="tab" data-bs-target="#nav-flow"
+									type="button" role="tab" aria-controls="nav-flow"
+									aria-selected="false">공정흐름</button>
+							</div>
+						</nav>
+						<div class="tab-content" id="nav-tabContent">
+						<!-- 제품정보탭 -->
+						<div class="tab-pane fade show active" id="nav-edcts" role="tabpanel"
+									aria-labelledby="nav-edcts-tab">
+							<form id="dataForm" name="dataForm" action="#" method="post">
+								<table class="table" style="vertical-align : middle;">
+									<colgroup>
+										<col style="width: 120px">
+										<col>
+										<col style="width: 120px">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>완제품코드 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="edctsCd" name="edctsCd" style="width: 250px" maxlength="20"
+												placeholder="등록시 자동부여됩니다." readonly /></td>
+											<th>제품명 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="prdtNm" name="prdtNm" style="width: 250px" maxlength="50" /></td>
+										</tr>
+										<tr>
+											<th>규격</th>
+											<td><input class="form-control" type="text" id="spec" name="spec" style="width: 250px" maxlength="50" /></td>
+											<th>단위</th>
+											<td><input class="form-control" type="text" id="unit" name="unit" style="width: 250px" maxlength="50" /></td>
+										</tr>
+										<tr>
+											<th>안전재고</th>
+											<td><input type="text" id="safStc" name="safStc" class="form-control" maxlength="50" style="width: 250px" /></td>
+											<th>보관창고</th>
+											<td>
+												<select class="dataTable-selector" name="wrhousCd" id="wrhousCd" style="width: 250px">
+													<option selected value="">==선택==</option>  
+													<option th:each="code : ${ccds['WHS']}" th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"></option>
+												</select></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+						<!-- 상세코드 탭 -->
+						<div class="tab-pane fade" id="nav-flow"
+							role="tabpanel" aria-labelledby="nav-flow-tab">
+							<div id="grid2"></div>
+						</div>
+						<!-- 공정 Modal -->
+						<div class="modal fade" id="prcsModal" tabindex="-1" aria-labelledby="prcsModalLabel" aria-hidden="true">
+						  <div class="modal-dialog modal-xl">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="prcsModalLabel">공정 목록</h5>
+						        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						      </div>
+						      <div class="modal-body">
+						        <div id="prcsModalGrid"></div>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						        <button type="button" class="btn btn-primary" id="prcsModalSelBtn">확인</button>
+						      </div>
+						    </div>
+						  </div>
+						</div><!-- 모달끝 -->
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 <script>
+
+//완제품 목록 그리드
 const grid = new tui.Grid({
     el: document.getElementById('grid'),
 			scrollX: false,
- 		bodyHeight: 350,
+ 		bodyHeight: 450,
   	rowHeaders: ['rowNum'],
     columns: [{
         header: '완제품코드',
@@ -87,45 +144,63 @@ const grid = new tui.Grid({
         align: 'center',
       	sortable: true,
         sortingType: 'desc'
-      },
-      {
-          header: '규격',
-          name: 'spec',
-          align: 'center',
-        	sortable: true,
-          sortingType: 'desc'
-      },
-      {
-          header: '단위',
-          name: 'unit',
-          align: 'center',
-        	sortable: true,
-          sortingType: 'desc'
-      },
-      {
-          header: '안전재고',
-          name: 'safStc',
-          align: 'center',
-        	sortable: true,
-          sortingType: 'desc'
-      },
-      {
-          header: '보관창고',
-          name: 'ccdDtlNm',
-          align: 'center',
-        	sortable: true,
-          sortingType: 'desc'
-      },
-      {
-          header: '보관창고',
-          name: 'wrhousCd',
-          align: 'center',
-        	sortable: true,
-          sortingType: 'desc'
       }
-      
     ]
   });
+  
+  //공정흐름 그리드
+  const grid2 = new tui.Grid({
+    el: document.getElementById('grid2'),
+			scrollX: false,
+ 		bodyHeight: 350,
+  	rowHeaders: ['checkbox'],
+    columns: [{
+        header: '공정순서',
+        name: 'prcsOrd',
+        align: 'center',
+        editor: 'text',
+        validation: {
+            required: true
+        },
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+          header: '공정코드',
+          name: 'prcsCd',
+          align: 'center',
+          validation: {
+              required: true
+          },
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
+        header: '공정명',
+        name: 'prcsNm',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+        header: '공정내용',
+        name: 'prcsCtnt',
+        align: 'center',
+      	sortable: true,
+        sortingType: 'desc'
+      },
+      {
+          header: '제품코드',
+          name: 'edctsCd',
+          align: 'center',
+        	sortable: true,
+          sortingType: 'desc'
+        }
+    ]
+  });
+  
+	//숨기기
+  grid2.hideColumn('edctsCd');
   
   //테마 호버
   let hoverOption = {
@@ -137,45 +212,61 @@ const grid = new tui.Grid({
   }
   tui.Grid.applyTheme('default', hoverOption);
   
-  //컬럼숨기기
-  grid.hideColumn('wrhousCd');
   
-  //페이지 로딩시 실행
-  getEdctsList();
-  
- function getEdctsList() {
-  	$.ajax({
-  	    url: "getEdctsList",
-  	    method: "POST",
-  	    data: $('#dataForm').serialize(),
-  	    dataType: "JSON",
-  	    success: function (result) {
-  	        grid.resetData(result);
-  	    }
-  		})
-	}
+ //페이지 로딩시 실행
+ $.ajax({
+   url: "getEdctsList",
+   method: "POST",
+   data: $('#dataForm').serialize(),
+   dataType: "JSON",
+   success: function (result) {
+       grid.resetData(result);
+   }
+ });
+
 
 //검색
 $('#searchBtn').click(ev => {
-	  getEdctsList();
+	var prdtNm = $('#keyword').val();
+	$.ajax({
+   url: "getEdctsList",
+   method: "POST",
+   data: {prdtNm},
+   dataType: "JSON",
+   success: function (result) {
+       grid.resetData(result);
+	   }
+	 });
 	  toastr.success('정상적으로 조회되었습니다.');
  });
  
-//폼 리셋
+ 
+//폼 리셋 or 그리드 추가
  $('#newBtn').click(ev => {
-	   $('#dataForm')[0].reset();
+	 if ($('#nav-edcts').hasClass("active")) {
+		 $('#dataForm')[0].reset();
+		} else if($('#nav-flow').hasClass("active")) {
+			if($('#keyword').val()=='') {
+				toastr.warning('제품을 먼저 선택하세요!');
+			} else {				
+				grid2.appendRow();
+			}
+		}
  })
  
+ 
  let selectedRowKey = null;
+ var edctsCd = null
  grid.on('focusChange', (ev) => {
-
-	   //하이라이팅
+	  //하이라이팅
    if (selectedRowKey != ev.rowKey) {
        grid.removeRowClassName(selectedRowKey, 'highlight');
    }
    selectedRowKey = ev.rowKey;
    grid.addRowClassName(selectedRowKey, 'highlight');
    
+   //검색창에 출력
+   $('#keyword').val(grid.getValue(ev.rowKey, 'prdtNm'));
    //폼데이터 출력
    $('#edctsCd').val(grid.getValue(ev.rowKey, 'edctsCd'));
    $('#prdtNm').val(grid.getValue(ev.rowKey, 'prdtNm'));
@@ -183,11 +274,30 @@ $('#searchBtn').click(ev => {
    $('#unit').val(grid.getValue(ev.rowKey, 'unit'));
    $('#safStc').val(grid.getValue(ev.rowKey, 'safStc'));
    $("select[name='wrhousCd']").eq(0).val(grid.getValue(ev.rowKey, 'wrhousCd'));
-  
-	});
+   
+   //공정흐름도 호출
+   edctsCd = grid.getValue(ev.rowKey, 'edctsCd')
+   $.ajax({
+	   url: "getFlowList",
+	   method: "POST",
+	   data: {edctsCd},
+	   dataType: "JSON",
+	   success: function (result) {
+	       grid2.resetData(result);
+		   }
+		 });
+});
 
+ //레이아웃 재배치
+ $('#nav-flow-tab').click(ev => {
+	 setTimeout(function () {
+   		grid2.refreshLayout()
+   }, 200);
+ });
+ 
 //수정&입력
 $('#saveBtn').click(ev => {
+	if ($('#nav-edcts').hasClass("active")) {
 	  $.ajax({
 		    url: "saveEdcts",
 		    method: "POST",
@@ -198,10 +308,29 @@ $('#saveBtn').click(ev => {
 		    	grid.resetData(result);
 		    }
 			})
+	} else if($('#nav-flow').hasClass("active")) {
+		//흐름도 저장&수정
+		var data = grid2.getCheckedRows();
+      $.ajax({
+          url: "saveFlow/" + edctsCd,
+          type: "POST",
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+          success: function (result) {
+              setTimeout(function () {
+                  grid2.refreshLayout()
+                  grid2.uncheckAll()
+              }, 300);
+              grid2.resetData(result);
+              toastr.success('성공적으로 저장되었습니다.');
+          }
+      })
+	}
  });
 
 //삭제
 $('#delBtn').click(ev => {
+	if ($('#nav-edcts').hasClass("active")) {
 	  $.ajax({
 		 	url: "delEdcts",
 		  method: "POST",
@@ -210,9 +339,112 @@ $('#delBtn').click(ev => {
 		    success: function (result) {
 		    	toastr.success('정상적으로 삭제되었습니다.');
 		    	grid.resetData(result);
+		    	$('#dataForm')[0].reset();
 		    }
 			})
+	} else if($('#nav-flow').hasClass("active")) {
+		//흐름도 체크된 셀 삭제
+		var check = grid.getCheckedRows();
+ 		check.forEach(obj => {
+ 		 if(grid2.getValue(obj.edctsCd) != null || grid2.getValue(obj.edctsCd) != '') {
+ 		 		$.ajax({
+				 	url: "delFlow",
+				  method: "POST",
+		      data: obj,
+		      dataType: 'json',
+				  success: function (result) {
+					  grid.resetData(result);
+			    	toastr.success('정상적으로 삭제되었습니다.');
+		    	}
+				})
+ 		 } else { 			 
+ 			grid.removeRow(obj.rowKey);
+ 		 }
+ 		})
+	}
  });
+ 
+//클릭시 자재 모달 오픈 & 리스트 출력
+let gridRowKey = 0;
+grid2.on('click', ev => {
+	gridRowKey = ev.rowKey;
+	
+	//체크
+	grid2.check(gridRowKey);
+	
+	//공정모달그리드 출력
+	if (ev.columnName == 'prcsCd' || ev.columnName == 'prcsNm') {
+		$('#prcsModal').modal('show');
+		$.ajax({
+		   url:'prcsList'
+	   }).done(function(result){
+		   setTimeout(function () {
+		    	prcsModalGrid.refreshLayout()
+		    		}, 300);
+		   prcsModalGrid.resetData(result);
+	   });
+	}
+});
+
+/* 사용공정명 모달 그리드 */
+const prcsModalGrid = new tui.Grid({
+  el: document.getElementById('prcsModalGrid'),
+  bodyHeight: 350,
+  rowHeaders: ['checkbox'],
+  columns: [
+    {
+      header: '공정코드',
+      name: 'prcsCd',
+    },
+    {
+      header: '공정명',
+      name: 'prcsNm',
+    },
+    {
+      header: '공정구분',
+      name: 'prcsFg'
+    },
+    {
+      header: '공정설명',
+      name: 'prcsCtnt',
+    }
+  ]
+});
+
+//그리드 영역 벗어나면 수정 종료
+$('#grid2').mouseleave(ev => {
+    grid2.finishEditing();
+})
+
+//체크된 셀 하이라이팅
+ prcsModalGrid.on('check', (ev) => {
+	 prcsModalGrid.addRowClassName(ev.rowKey, 'highlight2');
+ });
+
+prcsModalGrid.on('uncheck', (ev) => {
+	prcsModalGrid.removeRowClassName(ev.rowKey, 'highlight2');
+ });
+ 
+//공정모달 확인버튼
+$('#prcsModalSelBtn').click(ev => {
+	var prcsSelect = prcsModalGrid.getCheckedRows()[0]
+	insertPrcsModalGrid(prcsSelect);
+})
+
+//공정모달 더블클릭
+prcsModalGrid.on('dblclick', (ev) => {
+	var prcsGetRow = prcsModalGrid.getRow(ev.rowKey);
+	insertPrcsModalGrid(prcsGetRow);
+})
+
+//공정모달 그리드에 출력
+function insertPrcsModalGrid(row) {
+	grid2.setValue(gridRowKey, "prcsCd", row.prcsCd);
+	grid2.setValue(gridRowKey, "prcsNm", row.prcsNm);
+	grid2.setValue(gridRowKey, "prcsCtnt", row.prcsCtnt);
+	$('#prcsModal').modal('hide');
+}
+ 
 </script>
 </th:block>
 </body>

@@ -230,21 +230,46 @@ const grid = new tui.Grid({
   
   //컬럼숨기기
   grid.hideColumn('prcsCd');
+  grid.hideColumn('bomCd');
+  grid.hideColumn('bomSq');
   
  //그리드 행 추가 버튼
+ var cnt = 0;
  $('#plusBtn').click(ev => {
  	if ($('#edctsCd').val() == '') {
  		toastr.warning('제품코드를 먼저 선택하세요!')
  	} else {
- 		grid.appendRow(); 	
+ 		grid.appendRow();
+ 		cnt = grid.getRowCount();
+ 		if(cnt == 1) {
+ 			grid.setValue(0, "bomSq", 1);
+ 			grid.setValue(0, "bomCd", "");
+ 		} else {
+ 			var maxCnt = grid.getValue(cnt-2, "bomSq")
+ 			grid.setValue(cnt-1, 'bomSq', maxCnt+1);
+ 			grid.setValue(cnt-1, 'bomCd', '');
+ 		}
  	}
- })  
+ })
  
  //그리드 행 삭제버튼
  $('#minusBtn').click(ev => {
- 		var check = grid.getCheckedRowKeys();
- 		check.forEach(rowKey => { 		
- 			grid.removeRow(rowKey);
+ 		var check = grid.getCheckedRows();
+ 		check.forEach(obj => {
+ 		 if(grid.getValue(obj.rowKey,"rscCd") != null || grid.getValue(obj.rowKey,"rscCd") != '') {
+ 		 		$.ajax({
+				 	url: "delBomGrid",
+				  method: "POST",
+		      data: obj,
+		      dataType: 'json',
+				  success: function (result) {
+					  grid.resetData(result);
+			    	toastr.success('정상적으로 삭제되었습니다.');
+		    	}
+				})
+ 		 } else { 			 
+ 			grid.removeRow(obj.rowKey);
+ 		 }
  		})
  })
  
@@ -252,6 +277,9 @@ const grid = new tui.Grid({
 let gridRowKey = 0;
 grid.on('click', ev => {
 	gridRowKey = ev.rowKey;
+	
+	//체크
+	grid.check(gridRowKey);
 	
 	//자재그리드모달 출력
 	if (ev.columnName == 'rscCd' || ev.columnName == 'rscNm') {
@@ -271,12 +299,6 @@ grid.on('click', ev => {
 	   });
 	}
 });
- 
- //데이터 편집 후 체크박스
- grid.on('editingFinish', (ev) => {
-     const { rowKey } = ev;
-     grid.check(rowKey);
- });
 
  //그리드 영역 벗어나면 수정 종료
  $('#grid').mouseleave(ev => {
@@ -292,14 +314,27 @@ $('#newBtn').click(ev => {
 
 //저장버튼
 $('#saveBtn').click(ev => {
-	let array = grid.getCheckedRows();
-	for(var i=0; i<array.length; i++) {
-		grid.setValue(array[i].rowKey, "bomSq", i+1);
-		grid.setValue(array[i].rowKey, "bomCd", "");
-	}
 	var data = grid.getCheckedRows();
 	var edctsCd = $('#edctsCd').val();
-	  $.ajax({
+	var saveCheck = grid.getValue(0, 'bomCd');
+	if (saveCheck == '') {
+		$.ajax({
+		    url: "insertBom/" + edctsCd,
+		    method: "POST",
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      dataType: 'json',
+		    success: function (result) {
+		    	setTimeout(function () {
+                    grid.refreshLayout()
+                    grid.uncheckAll()
+                }, 300);
+		    	grid.resetData(result);
+		    	toastr.success('정상적으로 저장되었습니다.');
+		    }
+			})
+	} else {
+		$.ajax({
 		    url: "saveBom/" + edctsCd,
 		    method: "POST",
       data: JSON.stringify(data),
@@ -310,24 +345,31 @@ $('#saveBtn').click(ev => {
                     grid.refreshLayout()
                     grid.uncheckAll()
                 }, 300);
+		    	grid.resetData(result);
 		    	toastr.success('정상적으로 저장되었습니다.');
 		    }
 			})
+	}
  });
 
 //삭제버튼
 $('#delBtn').click(ev => {
-	  $.ajax({
-		 	url: "delBom",
-		  method: "POST",
-      data: $('#dataForm').serialize(),
-      dataType: 'json',
-		    success: function () {
-		    	toastr.success('정상적으로 삭제되었습니다.');
-		    	$('#dataForm')[0].reset();
-					grid.clear();
-		    }
+		if(confirm("BOM데이터가 모두 삭제됩니다. 계속하시겠습니까?") == false){
+     return;   
+		} else {
+		  $.ajax({
+			 	url: "delBom",
+			  method: "POST",
+	      data: $('#dataForm').serialize(),
+	      dataType: 'json',
+			    success: function (result) {
+			    	toastr.success('정상적으로 삭제되었습니다.');
+			    	$('#dataForm')[0].reset();
+			    	grid.resetData(result);
+						//grid.clear();
+			    }
 			})
+		}
  });
  
  
@@ -375,7 +417,6 @@ $('#prcsModalSelBtn').click(ev => {
 prcsModalGrid.on('dblclick', (ev) => {
 	var prcsGetRow = prcsModalGrid.getRow(ev.rowKey);
 	insertPrcsModalGrid(prcsGetRow);
-	
 })
 
 //공정모달 그리드에 출력
