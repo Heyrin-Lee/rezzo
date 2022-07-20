@@ -60,12 +60,12 @@
 						<div class="card-body">
 							<div>
 								<label for="">가동여부</label>
-								<select style="width: 120px; text-align: center">
+								<select id="getKeyword" style="width: 120px; text-align: center">
 									<option selected disabled value="">가동여부</option>
 									<option value="Y">가동</option>
 									<option value="N">비가동</option>
 								</select>
-								<button class="c_btn" form="">조회</button>
+								<button class="c_btn" id="getBtn">조회</button>
 							</div>
 							<br>
 							<div id="grid"></div>
@@ -80,33 +80,35 @@
 					</div>
 
 					<div class="card-body">
-						<div class="row">
-							<div class="col-12" style="margin-bottom: 3px">
-								<label for="">해당일자</label> <input type="date" id="" name="">&nbsp;
-								- &nbsp;<input type="date" id="" name="">
+						<form id="eqmForm" name="eqmForm">
+							<div class="row">
+								<div class="col-12" style="margin-bottom: 3px">
+									<label for="">해당일자</label> <input type="date" id="STrDt" name="frDt">&nbsp;
+									- &nbsp;<input type="date" id="SToDt" name="toDt">
+								</div>
 							</div>
-						</div>
-						<div class="row me-3">
-							<div class="col-5">
-								<label for="">설비코드</label> <input type="text" readonly="readonly" id="rightEqmCd" name=""
-									style="width: 150px">
-							</div>
-							<div>
-								<label for="" autofocus="autofocus">설비명</label>
-								<input type="text" id="keyword" name="keyword" placeholder="설비명"></input>
-								<input type="button" data-bs-toggle="modal" class="btn-dark btn-primary btn-sm" id="modalBtn"
-									data-bs-target="#exampleModal" value="설비명 검색"></input>
-								<button type="button" onclick="eqmSelect()" class="btn-dark btn-primary btn-sm">조회</button>
-							</div>
-							<br>
-							<br>
-							<div id="grid2"></div>
-						</div>
-
-
+							<div class="row me-3">
+								<div class="col-5">
+									<label for="">설비코드</label> <input type="text" readonly="readonly" id="SEqmCd" name="eqmCd"
+										style="width: 150px">
+								</div>
+								<div>
+									<label for="" autofocus="autofocus">설비명</label>
+									<input type="text" id="SEqmNm" name="eqmNm" placeholder="설비명"></input>
+									<input type="button" data-bs-toggle="modal" class="btn-dark btn-primary btn-sm" id="modalBtn"
+										data-bs-target="#exampleModal" value="설비명 검색"></input>
+									<button type="button" onclick="eqmSelect()" class="btn-dark btn-primary btn-sm">조회</button>
+						</form>
 					</div>
+					<br>
+					<br>
+					<div id="grid2"></div>
 				</div>
+
+
 			</div>
+		</div>
+		</div>
 		</div>
 
 
@@ -220,7 +222,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- 설비 비가동 조회 Modal -->
+		<!-- 설비 비가동 eqmSelect Modal -->
 		<div class="modal fade" id="GridModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -251,7 +253,7 @@
 									</colgroup>
 
 									<tbody>
-										<input type="hidden" id="GFrmNoprCd" name="GFrmNoprCd"></input>
+										<input type="hidden" id="GFrmNoprCd" name="noprCd"></input>
 										<tr>
 											<th>설비코드</th>
 											<td><input class="form-control" type="text" id="GFrmEqmNm" name="frmEqmNm" style="width: 180px"
@@ -339,6 +341,7 @@
 			});
 
 
+
 			// 그리드 클릭 시 
 			grid.on('click', ev => {
 				// 모달 로딩 시 초기화
@@ -407,10 +410,6 @@
 						name: 'tEqmNm',
 						align: 'center'
 					}, {
-						header: '비가동여부',
-						name: 'tUseYn',
-						align: 'center'
-					}, {
 						header: '시작날짜',
 						name: 'tFrDt',
 						align: 'center'
@@ -422,6 +421,23 @@
 
 				]
 			});
+
+			// 비가동조회 (가동여부 검색)
+
+			$('#getBtn').on('click', ev => {
+				var keyword = $('#getKeyword').val()
+				console.log(keyword)
+				$.ajax({
+					url: "OprGetList",
+					type: "post",
+					data: {
+						"keyword": keyword
+					},
+					success: function (result) {
+						grid.resetData(result)
+					}
+				})
+			})
 
 			// 설비비가동조회 그리드 클릭 (세부조회)
 			grid2.on('click', ev => {
@@ -486,6 +502,7 @@
 
 
 			// 모달 데이터 저장
+			// 추후 아작스로 수정 필요함 (location.reload ()삭제)
 
 			$('#saveBtn').on('click', function () {
 				var formData = new FormData(dataForm)
@@ -497,7 +514,6 @@
 					contentType: false,
 					processData: false
 				}).done(function (result) {
-					toastr.success('정상적으로 저장되었습니다.');
 					$('#insertModal').modal('hide');
 					$.ajax({
 						url: "OprList",
@@ -505,7 +521,8 @@
 						dataType: "JSON",
 						success: function (result) {
 							console.log(result);
-							grid2.resetData(result);
+							window.location.reload()
+							toastr.success('정상적으로 저장되었습니다.');
 						}
 					})
 
@@ -529,25 +546,21 @@
 				}
 			})
 
-			// 설비비가동내역 검색
+			// 설비비가동내역 세부 조건 검색
 
 			function eqmSelect() {
-				let keyword = $("#keyword").val();
+				var formData = new FormData(eqmForm)
 				$.ajax({
-					url: "eqmSelect",
+					url: "OprKeyList",
 					type: "post",
-					data: {
-						"keyword": keyword
-					},
-					dataType: "JSON",
+					data: formData,
+					contentType: false,
+					processData: false,
 					success: function (result) {
 						grid2.resetData(result);
 					}
 				})
 			};
-
-
-
 
 
 			//모달 그리드
@@ -587,64 +600,41 @@
 
 			// 설비명 검색
 			function eqmSelect2() {
-				let keyword = $("#keyword2").val();
+				var keyword = keyword2.val()
 				$.ajax({
-					url: "eqmSelect",
+					url: "OprSelectList",
 					type: "post",
 					data: {
 						"keyword": keyword
 					},
-					dataType: "JSON",
+					contentType: false,
+					processData: false,
 					success: function (result) {
-						modGrid.resetData(result);
+						grid2.resetData(result);
+						console.log(result)
 					}
 				})
-			}
+			};
+
 
 
 			// 모달 더블클릭 이벤트 (데이터 폼으로 이동)
 			modGrid.on('dblclick', (ev) => {
 				var eqmNm = modGrid.getValue(ev.rowKey, 'eqmNm');
 				var eqmCd = modGrid.getValue(ev.rowKey, 'eqmCd');
-				$('#keyword').val(eqmNm);
-				$('#rightEqmCd').val(eqmCd);
+				$('#SEqmNm').val(eqmNm);
+				$('#SEqmCd').val(eqmCd);
 				$('#exampleModal').modal('hide');
 			});
 
 
-
-			// 설비 비가동 조회 모달 저장
+			// 설비 비가동 내역 세부조회 모달 수정
 
 			$('#MsaveBtn').on('click', function () {
 				var formData = new FormData(gridDataForm)
-				$.ajax({
-					url: "eqmOqrUpdate",
-					method: 'POST',
-					data: formData,
-					contentType: false,
-					processData: false
-				}).done(function (result) {
-					toastr.success('정상적으로 저장되었습니다.');
-					$('#GridModal').modal('hide');
-					$.ajax({
-						url: "OprList",
-						method: "GET",
-						dataType: "JSON",
-						success: function (result) {
-							console.log(result);
-							grid2.resetData(result)
-						}
-					})
-				})
-			})
-			
-			// 설비 비가동 내역 세부조회 모달 수정
-			
-				$('#MsaveBtn').on('click', function () {
-				var formData = new FormData(gridDataForm)
 				console.log(formData.get('opertCtnt'));
 				$.ajax({
-					url: "oprUpdate",
+					url: "OprUpdate",
 					method: 'POST',
 					data: formData,
 					contentType: false,
@@ -664,7 +654,6 @@
 
 				})
 			})
-			
 		</script>
 
 	</th:block>

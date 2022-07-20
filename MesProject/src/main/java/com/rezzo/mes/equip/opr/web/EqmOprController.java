@@ -1,6 +1,5 @@
 package com.rezzo.mes.equip.opr.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,6 +60,7 @@ public class EqmOprController {
 		return "equip/eqmOpr";
 	}
 
+	//전체목록
 	@GetMapping("OprList")
 	@ResponseBody
 	public List<Map<String, String>> OprList() {
@@ -69,10 +68,17 @@ public class EqmOprController {
 		return result;
 	}
 	
+	// 가동/비가동 검색
 	@PostMapping("OprSelectList")
 	@ResponseBody
 	public List<Map<String, String>> OprSelectList(@RequestParam(value="keyword")String keyword, Model model) {
 		return service.OprSelectList(keyword);
+	}
+	
+	@PostMapping("OprGetList")
+	@ResponseBody
+	public List<Map<String, String>> OprGetList(@RequestParam(value="keyword")String keyword) {
+		return service.OprGetList(keyword);
 	}
 
 	// 등록
@@ -89,18 +95,28 @@ public class EqmOprController {
 
 	@PostMapping("OprDelete")
 	@ResponseBody
-	public EqmOprVO eqmO(EqmOprVO vo) {
+	public EqmOprVO eqmDelete(EqmOprVO vo) {
 		service.OprDelete(vo);
 		return vo;
 	};
 	
 	//세부내역 업데이트
 	
-	@PostMapping("eqmOprUpdate")
+	@PostMapping("OprUpdate")
 	@ResponseBody
-	public List<EqmOprVO> oprUpdate(EqmOprVO vo){
+	public List<Map<String, String>> oprUpdate(EqmOprVO vo){
+		System.out.println(vo);
 		service.oprUpdate(vo);
-		return service.eqmOprList(vo); 		
+		List<Map<String, String>> result = service.OprList();
+		return result;
+	}
+	
+	// 세부내역 검색
+	
+	@PostMapping("OprKeyList")
+	@ResponseBody
+	public List<EqmOprVO> OprKeyList(EqmOprVO vo) {
+		return service.OprKeyList(vo);
 	}
 	
 	

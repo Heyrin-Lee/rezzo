@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style>
+		#grid {
+			width: 100%
+		}
+
+		body {
+			background: #eee
+		}
+
+		.c_btn {
+			color: #fff;
+			font-size: 13px;
+			background: #333;
+			border: none;
+			padding: 6px;
+			border-radius: 4px
+		}
+
+		.c_btn:hover {
+			background: #555;
+		}
+
+		.linelist {
+			display: inline-block;
+			float: right;
+			margin-top: 0px;
+		}
+
+		label {
+			width: 90px;
+			float: left;
+		}
+
+		textarea {
+			resize: none;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- 본문내용 -->
+	<th:block layout:fragment="main">
+		<!-- 헤더부분 -->
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">설비관리</h1>
+			<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item active">설비점검내역</li>
+			</ol>
+		</div>
+		<!-- 헤더부분 -->
+		<div class="container-fluid px-4">
+			<div class="row">
+				<div class="col">
+					<div class="card mb-4">
+
+						<div class="card-body">
+							<div class="linelist" style="float: right;">
+								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+								<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="searchBtn"><i
+										class="fas fa-search"></i> 설비검색</button>
+								<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
+								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+							</div>
+							<br><br>
+
+							<form id="dataForm" name="dataForm" action="#" method="post">
+								<table class="table" style="vertical-align : middle;">
+									<colgroup>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>설비코드</th>
+											<td>
+												<input class="form-control" name="eqmCd" id="eqmCd" style="width: 250px" readonly>
+											</td>
+											<th>설비명</th>
+											<td><input class="form-control" type="text" id="eqmNm" name="eqmNm" style="width: 250px"
+													readonly />
+											<th>점검일자</th>
+											<td><input class="form-control" type="date" id="chckDt" name="chckDt" style="width: 250px" /></td>
+										</tr>
+										<tr>
+											<th>판정</th>
+											<td>
+												<select class="dataTable-selector" name="jdgmnt" id="jdgmnt" style="width: 250px">
+													<option selected value="">==등록시필수선택==</option>
+													<option value="적합">적합</option>
+													<option value="부적합">부적합</option>
+												</select>
+											</td>
+											<th>조치사항</th>
+											<td>
+												<select class="dataTable-selector" name="dispoMatter" id="dispoMatter" style="width: 250px">
+													<option selected value="">==등록시필수선택==</option>
+													<option value="수리">수리</option>
+													<option value="점검">점검</option>
+												</select>
+											</td>
+											<th>점검구분</th>
+											<td>
+												<select class="dataTable-selector" name="chckFg" id="chckFg" style="width: 250px; ">
+													<option selected value="">==등록시필수선택==</option>
+													<option value="상시점검">상시점검</option>
+													<option value="정기점검">정기점검</option>
+												</select>
+										</tr>
+										<tr>
+
+											<th>조치내역</th>
+											<td>
+												<textarea name="dispoCtnt" id="dispoCtnt" class="form-control"
+													style="width: 350px; height:100px"></textarea>
+											</td>
+											<th>담당자</th>
+											<td>
+												<input class="form-control" name="chckPsch" id="chckPsch" style="width: 250px">
+											</td>
+											<td>
+												<input type="hidden" id="chckCd" name="chckCd">
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+			<div class="card mb-4">
+				<div class="card-body">
+
+					<tr>
+						<th>설비명</th>
+						<td><input class="form-control" type="text" id="keyword3" name="eqmNm" style="width: 150px"></td>
+						<!-- <button style="margin-bottom:3px" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gridModal"
+							id="mSearchBtn"><i class="fas fa-search"></i></button>
+						-->&nbsp&nbsp
+						<th>해당일자</th>
+						<td>
+							<input type="date" class="form-control" id="stDt" name="stDt" style="width: 150px;"> ~
+							<input type="date" class="form-control" id="toDt" name="toDt" style="width: 150px;">
+						</td>&nbsp
+						<td>
+							<button style="margin-bottom:3px" class="btn btn-primary" id="bSearchBtn"><i class="fas fa-search"></i>
+								검색</button>
+						</td>
+					</tr>
+
+
+					<br><br>
+					<div id="grid"></div>
+				</div>
+			</div>
+
+			<!-- 설비검색 Modal -->
+			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">설비명 검색</h5>
+							<br> <br>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+						</div><br>
+						<div class="ms-3">
+							<label style="width:60px">설비명</label>
+							<input type="text" id="keyword2" name="keyword2" placeholder="설비명"></input>
+							<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
+						</div>
+						<div id="modGrid" class="modal-body"></div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- 그리드 설비 검색 Modal -->
+			<div class="modal fade" id="gridModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">설비명 검색</h5>
+							<br> <br>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+						</div><br>
+						<div class="ms-3">
+							<label style="width:60px">설비명</label>
+							<input type="text" id="keyword" name="keyword" placeholder="설비명"></input>
+							
+							<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
+						</div>
+						<div id="gridModalDiv" class="modal-body"></div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<script>
+				// 로딩 시 점검 리스트 그리드 데이터 실행
+
+				$.ajax({
+					url: "eqmChckList",
+					method: "GET",
+					dataType: "JSON",
+					success: function (result) {
+						grid.resetData(result);
+					}
+				})
+
+				const grid = new tui.Grid({
+					el: document.getElementById('grid'),
+					bodyHeight: 200,
+					rowHeaders: ['rowNum'],
+					columns: [{
+							header: '점검코드',
+							name: 'chckCd',
+							align: 'center',
+						}, {
+							header: '설비코드',
+							name: 'eqmCd',
+							align: 'center',
+						}, {
+							header: '설비명',
+							name: 'eqmNm',
+							align: 'center',
+						},
+						{
+							header: '점검일자',
+							name: 'chckDt',
+							align: 'center'
+						}, {
+							header: '판정',
+							name: 'jdgmnt',
+							align: 'center'
+						}, {
+							header: '조치사항',
+							name: 'dispoMatter',
+							align: 'center'
+						}
+					]
+				});
+
+				// 그리드 클릭
+				grid.on('click', (ev) => {
+					console.log()
+					var eqmCd = grid.getValue(ev.rowKey, 'eqmCd');
+					var eqmNm = grid.getValue(ev.rowKey, 'eqmNm');
+					var chckDt = grid.getValue(ev.rowKey, 'chckDt');
+					var jdgmnt = grid.getValue(ev.rowKey, 'jdgmnt');
+					var dispoMatter = grid.getValue(ev.rowKey, 'dispoMatter');
+					var chckFg = grid.getValue(ev.rowKey, 'chckFg');
+					var dispoCtnt = grid.getValue(ev.rowKey, 'dispoCtnt');
+					var chckPsch = grid.getValue(ev.rowKey, 'chckPsch');
+					var chckCd = grid.getValue(ev.rowKey, 'chckCd');
+					$('#eqmCd').val(eqmCd)
+					$('#eqmNm').val(eqmNm)
+					$('#chckDt').val(chckDt)
+					$('[name="jdgmnt"]').val(jdgmnt)
+					$('[name="dispoMatter"]').val(dispoMatter)
+					$('[name="chckFg"]').val(chckFg)
+					$('#dispoCtnt').val(dispoCtnt)
+					$('#chckPsch').val(chckPsch)
+					$('#chckCd').val(chckCd)
+				});
+
+
+				// 설비 점검내역 저장
+
+				$('#saveBtn').on('click', function () {
+					var formData = new FormData(dataForm)
+					$.ajax({
+						url: "eqmChckSave",
+						method: "post",
+						data: formData,
+						contentType: false,
+						processData: false
+					}).done(function (e) {
+						toastr.success('정상적으로 저장되었습니다.');
+						$('#dataForm').each(function () {
+							this.reset();
+						});
+						$.ajax({
+							url: "eqmChckList",
+							method: "GET",
+							dataType: "JSON",
+							success: function (result) {
+								grid.resetData(result);
+							}
+						})
+					})
+				})
+
+				// 모달 그리드
+
+				$.ajax({
+					url: "eqmList",
+					method: "GET",
+					dataType: "JSON",
+					success: function (result) {
+						modGrid.resetData(result);
+						console.log(result);
+					}
+				});
+
+				const modGrid = new tui.Grid({
+					el: document.getElementById('modGrid'),
+					rowHeaders: ['rowNum'],
+					columns: [{
+						header: '설비명',
+						name: 'eqmNm',
+						align: 'center',
+					}, {
+						header: '설비코드',
+						name: 'eqmCd',
+						align: 'center'
+					}, {
+						header: '공정코드',
+						name: 'prcsCd',
+						align: 'center',
+					}, {
+						header: '공정명',
+						name: 'prcsNm',
+						align: 'center',
+					}, {
+						header: '사용여부',
+						name: 'useYN',
+						align: 'center',
+					}]
+				})
+
+				searchBtn.addEventListener('click', function () {
+
+					setTimeout(function () {
+						modGrid.refreshLayout()
+					}, 300);
+				});
+
+				// 모달 그리드 검색
+				function eqmSelect2() {
+					let keyword = $("#keyword2").val();
+					$.ajax({
+						url: "eqmSelect",
+						type: "post",
+						data: {
+							"keyword": keyword
+						},
+						dataType: "JSON",
+						success: function (result) {
+							modGrid.resetData(result);
+						}
+					})
+				}
+
+				// 모달 그리드 더블클릭
+
+				modGrid.on('dblclick', (ev) => {
+					var eqmNm = modGrid.getValue(ev.rowKey, 'eqmNm');
+					var eqmCd = modGrid.getValue(ev.rowKey, 'eqmCd');
+					$('#eqmNm').val(eqmNm);
+					$('#eqmCd').val(eqmCd);
+					$('#exampleModal').modal('hide');
+				});
+
+
+				// 설비 점검 내역 삭제
+
+				$('#delBtn').on('click', function () {
+					var result = confirm("해당 설비를 정말 삭제할까요?")
+					var chckCd = $('#chckCd').val()
+
+					if (!result)
+						return;
+
+					$.ajax({
+						url: "eqmChckDelete",
+						type: 'POST',
+						data: {
+							chckCd: chckCd
+						}
+					}).done(function (xhr) {
+						$.ajax({
+							url: "eqmChckList",
+							method: "GET",
+							dataType: "JSON",
+							success: function (result) {
+								console.log(result);
+								grid.resetData(result);
+								toastr.success('설비점검내역이 삭제되었습니다.');
+								$('#dataForm').each(function () {
+									this.reset();
+								});
+							}
+						});
+					})
+				})
+
+				// 새자료 버튼
+				$('#newBtn').on('click', function () {
+					$('#dataForm').each(function () {
+						this.reset();
+					});
+				})
+
+
+				const gridModalDiv = new tui.Grid({
+					el: document.getElementById('gridModalDiv'),
+					rowHeaders: ['rowNum'],
+					columns: [{
+						header: '설비명',
+						name: 'eqmNm',
+						align: 'center',
+					}, {
+						header: '설비코드',
+						name: 'eqmCd',
+						align: 'center'
+					}, {
+						header: '공정코드',
+						name: 'prcsCd',
+						align: 'center',
+					}, {
+						header: '공정명',
+						name: 'prcsNm',
+						align: 'center',
+					}, {
+						header: '사용여부',
+						name: 'useYN',
+						align: 'center',
+					}]
+				})
+
+				$.ajax({
+					url: "eqmList",
+					method: "GET",
+					dataType: "JSON",
+					success: function (result) {
+						gridModalDiv.resetData(result);
+						console.log(result);
+					}
+				});
+
+				// 설비 조건 검색 - 설비명 검색
+				$('#mSearchBtn').on('click', function () {
+					setTimeout(function () {
+						gridModalDiv.refreshLayout()
+					}, 300);
+				})
+
+				gridModalDiv.on('dblclick', (ev) => {
+					var eqmNm = modGrid.getValue(ev.rowKey, 'eqmNm');
+					var eqmCd = modGrid.getValue(ev.rowKey, 'eqmCd');
+					$('#keyword').val(eqmNm);
+					$('#gridModal').modal('hide');
+				});
+
+				// 설비조건검색 - 세부 내용 검색
+				$('#bSearchBtn').on('click', function () {
+					var eqmNm = $('#keyword3').val()
+					var toDt = $('#toDt').val()
+					var stDt = $('#stDt').val()
+					console.log(eqmNm, toDt, stDt)
+					$.ajax({
+						url: "eqmChckSearch",
+						method: 'post',
+						dataType: 'JSON',
+						data: {
+							eqmNm: eqmNm,
+							toDt: toDt,
+							stDt: stDt
+						},
+						success: function (result) {
+							gridModalDiv.resetData(result);
+						}
+					})
+
+				})
+			</script>
+	</th:block>
+</body>
+
+</html>
