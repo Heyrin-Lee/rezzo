@@ -45,6 +45,13 @@ VALUES (
 )
 </insert>
 
+<update id="updatePlan">
+UPDATE PLAN
+SET NOW_ST='진행'
+WHERE PLAN_CD=#{planCd}
+</update>
+
+
 <select id="getIndicaList" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
 	SELECT D.LINE_CD, D.EDCTS_CD, D.INDICA_CNT, D.ORDER_CNT, D.WK_FR_DT, E.PRDT_NM, I.INDICA_DT
 	FROM INDICA_DTL D

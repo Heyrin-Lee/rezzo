@@ -131,7 +131,7 @@ body {
    		}
    }) 
    	
-   	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기
+   	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기+ 지시가 내려졌으므로 계획 테이블 상태 업데이트
    	$("#regiBtn").on("click", function() {
    		let gridData = grid.getData()
    		console.log(gridData)
@@ -144,6 +144,9 @@ body {
 		gridData[0].linePsch = linePsch 
 		gridData[0].indicaDt = indicaDt
    		console.log(JSON.stringify(gridData))
+   		
+   		let planCd = grid.getData();
+   		
    		$.ajax({
    			url : 'indInsert',
    			method : 'post',
@@ -156,7 +159,10 @@ body {
    				window.location.reload()
    			}
    		})
-   		
+   		$.ajax({
+   			url : 'updatePlan',
+   			data : {"planCd" : planCd}
+   		})
    		
    	})
    	

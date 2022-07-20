@@ -52,4 +52,9 @@ public class IndicaServiceImpl implements IndicaService {
 	public void deleteIndicaDtl(IndicaVO vo) {
 		mapper.deleteIndicaDtl(vo);
 	}
+
+	@Override
+	public void updatePlan(IndicaVO vo) {
+		mapper.updatePlan(vo);
+	}
 }

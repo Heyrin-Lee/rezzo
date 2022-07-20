@@ -11,8 +11,11 @@ public interface IndicaMapper {
 	public List<IndicaVO> getRsc(IndicaVO vo);
 	public void indicaInsert(IndicaVO vo);
 	public void indicaDtlInsert(IndicaVO vo);
+	public void updatePlan(IndicaVO vo);
 	
 	public List<IndicaVO> getIndicaList(IndicaVO vo);
 	public void deleteIndica(IndicaVO vo);
 	public void deleteIndicaDtl(IndicaVO vo);
+	
+	
 }

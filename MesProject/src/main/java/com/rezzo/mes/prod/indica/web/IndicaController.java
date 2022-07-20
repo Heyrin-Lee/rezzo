@@ -37,6 +37,11 @@ public class IndicaController {
 		service.indicaDtlInsert(list);
 	}
 	
+	@RequestMapping("updatePlan")
+	public void updatePlan(IndicaVO vo) {
+		service.updatePlan(vo);
+	}
+	
 	@PostMapping("getIndicaList")
 	@ResponseBody
 	public List<IndicaVO> getIndicaList(IndicaVO vo) {
