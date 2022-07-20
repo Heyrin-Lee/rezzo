@@ -11351,3 +11351,14 @@ html, body {
 	font-size: 0.75rem;
 	border-radius: 0.25rem !important;
 }
+
+/*hyeonil*/
+ .tui-datepicker {
+	 z-index: 100;
+ }
+
+.insp-btn {
+	background-color: rgb(255, 255, 255);
+	border-width: 1px;
+	border-radius: 4px;
+}

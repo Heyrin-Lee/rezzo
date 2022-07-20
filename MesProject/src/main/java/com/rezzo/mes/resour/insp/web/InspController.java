@@ -1,11 +1,9 @@
 package com.rezzo.mes.resour.insp.web;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
-import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.service.InspService;
-import com.rezzo.mes.resour.insp.service.RscInfVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @AllArgsConstructor
@@ -38,64 +35,27 @@ public class InspController {
     // search conditions
     @RequestMapping("getVendors")
     @ResponseBody
-    public List<VendVO> getVendors(@ModelAttribute VendVO vendVO) {
-        return sv.getVendors(vendVO);
+    public List<VendVO> getRscVendList(@ModelAttribute VendVO vendVO) {
+        return sv.getRscVendList(vendVO);
     }
-    @RequestMapping("getResources")
+    @RequestMapping("getResource")
     @ResponseBody
-    public List<RscVO> getResources(RscVO rscVO) {
-        return sv.getResources(rscVO);
-    }
-    @RequestMapping("getRscInfList")
-    @ResponseBody
-    public Map<String, List<CcdsVO>> getRscInfList() {
-        return cdsv.getCodes("INF");
+    public List<RscVO> getResource(RscVO rscVO) {
+        return sv.getResource(rscVO);
     }
 
-    // get rsc order list
-    @RequestMapping("getRscOrdrList")
-    @ResponseBody
-    public List<RscOrdrVO> getRscOrdrList(@ModelAttribute RscOrdrVO rscOrdrVO) {
-        return sv.getRscOrdrList(rscOrdrVO);
-    }
-
-    // set inspection list
+    // 검사내역 저장
     @RequestMapping("setRscInspList")
     @ResponseBody
     public void setRscInspList(@RequestBody List<RscInspVO> rscInspVOS) {
         sv.setRscInspList(rscInspVOS);
     }
 
-    //
-    @RequestMapping("getRscInspListByDt")
+    @RequestMapping("getRscOrdrList")
     @ResponseBody
-    public List<RscInspVO> getRscInspListByDt(@ModelAttribute RscOrdrVO rscOrdrVO) {
-        return sv.getRscInspListByDt(rscOrdrVO);
+    public List<RscOrdrVO> getRscOrdrList(@ModelAttribute RscOrdrVO rscOrdrVO) {
+        return sv.getRscOrdrList(rscOrdrVO);
     }
 
-    @RequestMapping("getRscInspHist")
-    @ResponseBody
-    public List<RscInspVO> getRscInspHist(@RequestBody RscInspVO rscInspVO) {
-        return sv.getRscInspHist(rscInspVO);
-    }
-
-    @RequestMapping("getRscInfHist")
-    @ResponseBody
-    public List<RscInfVO> getRscInfHist(@RequestBody RscInspVO rscInspVO) {
-        return sv.getRscInfHist(rscInspVO);
-    }
-
-    // get inspection list
-    @RequestMapping("getRscInspList")
-    @ResponseBody
-    public List<RscInspVO> getRscInspList(@ModelAttribute RscOrdrVO rscOrdrVO) {
-        return sv.getRscInspList(rscOrdrVO);
-    }
-
-    @RequestMapping("updateInspList")
-    @ResponseBody
-    public void updateRscInspList(@RequestBody List<RscInspVO> rscInspVOS) {
-        sv.updateRscInspList(rscInspVOS);
-    }
 
 }

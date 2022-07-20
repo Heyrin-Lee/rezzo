@@ -185,7 +185,7 @@
         columns: [
             {
                 header: '검사번호',
-                name: 'rscInspNo'
+                name: 'rscInspCd'
             },
             {
                 header: '검사일자',
@@ -254,7 +254,7 @@
     let vendSch = document.getElementById('vendSch');
     vendSch.addEventListener('click', function () {
         let data = new FormData(vendSchForm);
-        let url = 'getVendList'
+        let url = 'getVendors'
 
         fetch(url, {
             method: 'POST',
@@ -275,7 +275,7 @@
 
     // get vendor grid data
     function getVendListInit() {
-        let url = 'getVendList'
+        let url = 'getVendors'
         fetch(url).then(res => res.json())
             .then(res => vendGrid.resetData(res))
     }
@@ -297,7 +297,7 @@
     let rscSch = document.getElementById('rscSch');
     rscSch.addEventListener('click', function () {
         let data = new FormData(rscSchForm);
-        let url = 'getRscList'
+        let url = 'getResources'
 
         fetch(url, {
             method: 'POST',
@@ -318,7 +318,7 @@
 
     // get rsc grid data
     function getRscListInit() {
-        let url = 'getRscList'
+        let url = 'getResources'
         fetch(url).then(res => res.json())
             .then(res => rscGrid.resetData(res))
     }
