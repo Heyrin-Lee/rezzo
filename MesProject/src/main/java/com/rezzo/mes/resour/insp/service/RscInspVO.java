@@ -12,10 +12,12 @@ public class RscInspVO {
 
     String rscCd; //자재코드
     String rscNm; // 자재품명
+    String ordrCd; // 발주코드
 
-    int ordrNo; // 발주번호
     int ordrCnt; // 발주수량
     int ordrInstCnt; // 입고수량
+    String vendCd; // 공급업체 코드
+    String vendNm; // 공급업체 이름
 
     String rscInspCd; // 검사코드
     Date inspDt; // 검사일자

@@ -5,6 +5,7 @@ import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.service.InspService;
+import com.rezzo.mes.resour.insp.service.RscInfVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
@@ -54,15 +55,34 @@ public class InspController {
     // get rsc order list
     @RequestMapping("getRscOrdrList")
     @ResponseBody
-    public List<RscOrdrVO> getRscOrdrList(@RequestBody RscOrdrVO rscOrdrVO) {
+    public List<RscOrdrVO> getRscOrdrList(@ModelAttribute RscOrdrVO rscOrdrVO) {
         return sv.getRscOrdrList(rscOrdrVO);
     }
 
     // set inspection list
     @RequestMapping("setRscInspList")
     @ResponseBody
-    public void setRscInspList(@RequestBody List<RscInspVO> vo) {
-        sv.setRscInspList(vo);
+    public void setRscInspList(@RequestBody List<RscInspVO> rscInspVOS) {
+        sv.setRscInspList(rscInspVOS);
+    }
+
+    //
+    @RequestMapping("getRscInspListByDt")
+    @ResponseBody
+    public List<RscInspVO> getRscInspListByDt(@ModelAttribute RscOrdrVO rscOrdrVO) {
+        return sv.getRscInspListByDt(rscOrdrVO);
+    }
+
+    @RequestMapping("getRscInspHist")
+    @ResponseBody
+    public List<RscInspVO> getRscInspHist(@RequestBody RscInspVO rscInspVO) {
+        return sv.getRscInspHist(rscInspVO);
+    }
+
+    @RequestMapping("getRscInfHist")
+    @ResponseBody
+    public List<RscInfVO> getRscInfHist(@RequestBody RscInspVO rscInspVO) {
+        return sv.getRscInfHist(rscInspVO);
     }
 
     // get inspection list
@@ -70,6 +90,12 @@ public class InspController {
     @ResponseBody
     public List<RscInspVO> getRscInspList(@ModelAttribute RscOrdrVO rscOrdrVO) {
         return sv.getRscInspList(rscOrdrVO);
+    }
+
+    @RequestMapping("updateInspList")
+    @ResponseBody
+    public void updateRscInspList(@RequestBody List<RscInspVO> rscInspVOS) {
+        sv.updateRscInspList(rscInspVOS);
     }
 
 }

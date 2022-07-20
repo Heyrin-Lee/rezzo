@@ -15,6 +15,8 @@ public interface InspMapper {
     List<VendVO> getVendors(VendVO vendVO);
     List<RscOrdrVO> getRscOrdrList(RscOrdrVO rscOrdrVO);
     List<RscVO> getResources(RscVO rscVO);
+
+    // 조회
     List<RscInspVO> getRscInspList(RscOrdrVO rscOrdrVO);
 
     // inspection list insert block
@@ -24,4 +26,8 @@ public interface InspMapper {
     void setRscInspDtList(RscInspVO rscInspVO);
     void setRscInfList(RscInfVO rscInfVO);
 
+    // 수정
+    List<RscInspVO> getRscInspListByDt(RscOrdrVO rscOrdrVO);
+    List<RscInspVO> getRscInspHist(RscInspVO rscInspVO);
+    List<RscInfVO> getRscInfHist(RscInspVO rscInspVO);
 }

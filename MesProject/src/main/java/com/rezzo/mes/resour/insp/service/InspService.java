@@ -13,4 +13,11 @@ public interface InspService {
     void setRscInspList(List<RscInspVO> rscInspVOS); // test
     List<RscVO> getResources(RscVO rscVO);
     List<RscInspVO> getRscInspList(RscOrdrVO rscOrdrVO);
+
+    //
+    List<RscInspVO> getRscInspListByDt(RscOrdrVO rscOrdrVO);
+    List<RscInspVO> getRscInspHist(RscInspVO rscInspVO);
+    List<RscInfVO> getRscInfHist(RscInspVO rscInspVO);
+
+    void updateRscInspList(List<RscInspVO> rscInspVOS);
 }
