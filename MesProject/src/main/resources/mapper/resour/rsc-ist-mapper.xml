@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rezzo.mes.resour.ist.mapper.RscIstMapper">
+
+    <select id="getRscIstCd" parameterType="RscIstVO">
+        <if test="rscTyp = '원자재'">
+            select 'RMR-L'||to_char(#{expDt}, 'YYYYMMDD')||lpad(NVL(max(substr(LOT_CD, 14, 3)), 0) + 1, 3, '0')
+            from RSC_LOT where 'RMR' = substr(RSC_CD, 0, 3) and substr(LOT_CD, 6, 8) = to_char(#{expDt}, 'YYYYMMDD')
+        </if>
+        <if test="rscTyp = '부자재'">
+            select 'SMR-L'||to_char(sysdate, 'YYYYMMDD')||lpad(NVL(max(substr(LOT_CD, 14, 3)), 0) + 1, 3, '0')
+            from RSC_LOT where 'SMR' = substr(RSC_CD, 0, 3) and substr(LOT_CD, 6, 8) = to_char(sysdate, 'YYYYMMDD')
+        </if>
+    </select>
+
+    <insert id="saveRscIst" parameterType="RscIstVO">
+        insert into RSC_LOT (LOT_CD, ORDR_CD, RSC_CD, LOT_CNT, LOT_CNT_REM)
+        values (#{lotCd}, #{ordrCd}, #{rscCd}, #{inspPassCnt}, #{inspPassCnt})
+    </insert>
+</mapper>

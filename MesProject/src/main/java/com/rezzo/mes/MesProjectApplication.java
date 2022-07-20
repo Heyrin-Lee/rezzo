@@ -17,5 +17,5 @@ public class MesProjectApplication {
 	public String saveDir() {
 
 		return "c://imgfile/";
-	};
+	}
 }

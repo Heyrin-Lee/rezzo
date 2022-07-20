@@ -85,6 +85,12 @@ public class InspController {
         return sv.getRscInfHist(rscInspVO);
     }
 
+    @RequestMapping("updateInspList")
+    @ResponseBody
+    public void updateRscInspList(@RequestBody List<RscInspVO> rscInspVOS) {
+        sv.updateRscInspList(rscInspVOS);
+    }
+
     // get inspection list
     @RequestMapping("getRscInspList")
     @ResponseBody
@@ -92,10 +98,6 @@ public class InspController {
         return sv.getRscInspList(rscOrdrVO);
     }
 
-    @RequestMapping("updateInspList")
-    @ResponseBody
-    public void updateRscInspList(@RequestBody List<RscInspVO> rscInspVOS) {
-        sv.updateRscInspList(rscInspVOS);
-    }
+
 
 }

@@ -47,33 +47,38 @@
 
     <update id="setRscInspDtList" parameterType="RscInspVO">
         MERGE INTO RSC_INSP_DTL rid
-        USING DUAL ON (rid.RSC_INSP_CD = #{rscInspCd} and rid.RSC_CD = #{rscCd} and rid.ORDR_CD = #{ordrCd})
+        USING DUAL
+        ON (rid.RSC_INSP_CD = #{rscInspCd} and rid.RSC_CD = #{rscCd} and rid.ORDR_CD = #{ordrCd})
         WHEN MATCHED THEN
             UPDATE
-            SET rid.INSP_CNT = #{inspCnt}, rid.INSP_PASS_CNT = #{inspPassCnt}, rid.INSP_FAIL_CNT = #{inspFailCnt}, rid.ORDR_INST_CNT = #{ordrInstCnt}
+            SET rid.INSP_CNT      = #{inspCnt},
+                rid.INSP_PASS_CNT = #{inspPassCnt},
+                rid.INSP_FAIL_CNT = #{inspFailCnt},
+                rid.ORDR_INST_CNT = #{ordrInstCnt}
         WHEN NOT MATCHED THEN
             insert (RSC_CD, RSC_INSP_CD, ORDR_CD, ORDR_INST_CNT, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT)
             values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{ordrInstCnt}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt})
     </update>
 
-<!--    <select id="setRscInspDtList" parameterType="RscInspVO">-->
-<!--        insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, ORDR_INST_CNT, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT)-->
-<!--        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{ordrInstCnt}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt})-->
-<!--    </select>-->
+    <!--    <select id="setRscInspDtList" parameterType="RscInspVO">-->
+    <!--        insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, ORDR_INST_CNT, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT)-->
+    <!--        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{ordrInstCnt}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt})-->
+    <!--    </select>-->
+
+    <!--    <insert id="setRscInfList" parameterType="RscInfVO">-->
+    <!--        insert into RSC_INFER (RSC_CD, RSC_INSP_CD, INF_CD, INF_CNT, ORDR_CD)-->
+    <!--        values (#{rscCd}, #{rscInspCd}, #{ccdDtl}, #{infCnt}, #{ordrCd})-->
+    <!--    </insert>-->
 
     <insert id="setRscInspList" parameterType="RscInspVO">
         insert into RSC_INSP (RSC_INSP_CD, INSP_DT)
         values (#{rscInspCd}, to_char(#{inspDt}, 'YYYY-MM-DD'))
     </insert>
 
-<!--    <insert id="setRscInfList" parameterType="RscInfVO">-->
-<!--        insert into RSC_INFER (RSC_CD, RSC_INSP_CD, INF_CD, INF_CNT, ORDR_CD)-->
-<!--        values (#{rscCd}, #{rscInspCd}, #{ccdDtl}, #{infCnt}, #{ordrCd})-->
-<!--    </insert>-->
-
     <update id="setRscInfList" parameterType="RscInfVO">
         MERGE INTO RSC_INFER ri
-        USING DUAL ON (ri.ORDR_CD = #{ordrCd} and ri.RSC_INSP_CD = #{rscInspCd} and ri.RSC_CD = #{rscCd} and ri.INF_CD = #{ccdDtl})
+        USING DUAL
+        ON (ri.ORDR_CD = #{ordrCd} and ri.RSC_INSP_CD = #{rscInspCd} and ri.RSC_CD = #{rscCd} and ri.INF_CD = #{ccdDtl})
         WHEN MATCHED THEN
             UPDATE
             SET ri.INF_CNT = #{infCnt}
@@ -81,27 +86,6 @@
             insert (RSC_CD, RSC_INSP_CD, INF_CD, INF_CNT, ORDR_CD)
             values (#{rscCd}, #{rscInspCd}, #{ccdDtl}, #{infCnt}, #{ordrCd})
     </update>
-
-    <select id="getRscInspList" parameterType="RscOrdrVO" resultType="RscInspVO">
-        select ri.RSC_INSP_CD, to_char(ri.INSP_DT, 'YYYY-MM-DD') as INSP_DT, rid.RSC_CD, rsc.RSC_NM, rid.INSP_CNT,
-        rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT
-        from RSC_INSP ri,
-        RSC_INSP_DTL rid,
-        RSC_ORDR_DTL rod,
-        RSC_ORDR ro,
-        RSC
-        where ri.RSC_INSP_CD = rid.RSC_INSP_CD
-        and rod.ORDR_CD = rid.ORDR_CD
-        and rod.RSC_CD = rid.RSC_CD
-        and ro.ORDR_CD = rod.ORDR_CD
-        and rsc.RSC_CD = rid.RSC_CD
-        <![CDATA[
-          and ri.INSP_DT >= #{startDt}
-          and ri.INSP_DT <= #{endDt}
-        ]]>
-        <if test="vendCd != ''">and ro.VEND_CD = #{vendCd}</if>
-        <if test="rscCd != ''">and rid.RSC_CD = #{rscCd}</if>
-    </select>
 
     <select id="getRscInspListByDt" parameterType="RscOrdrVO" resultType="RscInspVO">
         select ri.INSP_DT, vend.VEND_NM, count(*) inspCnt, ri.RSC_INSP_CD
@@ -145,5 +129,27 @@
           and ri.INF_CD = cd.CCD_DTL
     </select>
 
+
+    <!-- 조회 -->
+    <select id="getRscInspList" parameterType="RscOrdrVO" resultType="RscInspVO">
+        select ri.RSC_INSP_CD, ri.INSP_DT, rod.ORDR_CD, rsc.RSC_SPEC, rsc.RSC_TYP, rsc.MNG_UNIT, rid.RSC_CD, rsc.RSC_NM, rid.INSP_CNT,
+        rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT
+        from RSC_INSP ri,
+        RSC_INSP_DTL rid,
+        RSC_ORDR_DTL rod,
+        RSC_ORDR ro,
+        RSC
+        where ri.RSC_INSP_CD = rid.RSC_INSP_CD
+        and rod.ORDR_CD = rid.ORDR_CD
+        and rod.RSC_CD = rid.RSC_CD
+        and ro.ORDR_CD = rod.ORDR_CD
+        and rsc.RSC_CD = rid.RSC_CD
+        <![CDATA[
+          and ri.INSP_DT >= #{startDt}
+          and ri.INSP_DT <= #{endDt}
+        ]]>
+        <if test="vendCd != '' and vendCd != null">and ro.VEND_CD = #{vendCd}</if>
+        <if test="rscCd != '' and rscCd != null">and rid.RSC_CD = #{rscCd}</if>
+    </select>
 
 </mapper>

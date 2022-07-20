@@ -244,7 +244,7 @@
 
         getValue() {
             let val = this.el.value.replace(/[^0-9]/g, '')
-            if (val == '') {
+            if (val === '') {
                 return val;
             } else {
                 return parseInt(val);
