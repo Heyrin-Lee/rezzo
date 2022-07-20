@@ -3,8 +3,7 @@
 <mapper namespace="com.rezzo.mes.equip.eqm.mapper.EqmMapper">
 
     
-	<select id="eqmList"
-		resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
+	<select id="eqmList" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
 		select * from eqm ORDER BY eqm_cd
 	</select>
 

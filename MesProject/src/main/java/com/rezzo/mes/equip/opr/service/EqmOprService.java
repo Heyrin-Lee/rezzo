@@ -15,6 +15,10 @@ public interface EqmOprService {
 				
 		public List<Map<String, String>> OprList();
 		
+		public List<Map<String, String>> OprGetList(String keyword);
+		
+		public List<EqmOprVO> OprKeyList(EqmOprVO vo);
+		
 		public void eqmOprInsert (EqmOprVO vo);
 		
 		public void OprDelete(EqmOprVO vo);

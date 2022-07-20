@@ -1,6 +1,5 @@
 package com.rezzo.mes.equip.opr.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +47,16 @@ public class EqmOprServiceImpl implements EqmOprService {
 	@Override
 	public void oprUpdate(EqmOprVO vo) {
 		map.oprUpdate(vo);
+	}
+
+	@Override
+	public List<Map<String, String>> OprGetList(String keyword) {
+		return map.OprGetList(keyword);
+	}
+
+	@Override
+	public List<EqmOprVO> OprKeyList(EqmOprVO vo) {
+		return map.OprKeyList(vo);
 	}
 
 

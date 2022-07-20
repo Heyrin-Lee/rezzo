@@ -17,17 +17,18 @@
 		<id column="nopr_cd" property="noprCd"/>
 	</resultMap>
 	
-<!-- 	<insert id="eqmOqrInsert" parameterType="com.rezzo.mes.equip.opr.service.EqmOprVO">
-	INSERT INTO eqm_opr(nopr_cd, eqm_cd, eqm_nm, fr_dt, to_dt, eqm_psch, opert_ctnt)
-            VALUES (<![CDATA[cre_opr_cd('OPR')]]>,
-                        #{frmEqmCd},
-                        #{frmEqmNm},
-                        #{frDt},
-                        #{toDt},
-                        #{frmPsch},
-                        #{opertCtnt}
-                        )
-	</insert> -->
+	<resultMap type="HashMap" id="eqmSMap">
+		<id column="eqm_cd" property="eqmCd"/>
+		<id column="line_cd" property="lineCd"/>
+		<id column="prcs_cd" property="prcsCd"/>
+		<id column="eqm_nm" property="eqmNm"/>
+		<id column="eqm_ist_dt" property="eqmIstDt"/>
+		<id column="min_temp" property="minTemp"/>
+		<id column="max_temp" property="maxTemp"/>
+		<id column="chck_perd" property="chckPerd"/>
+		<id column="use_yn" property="useYN"/>
+		<id column="prcs_nm" property="prcsNm"/>
+	</resultMap>
 	
 	<select id = "eqmOprInsert" statementType="CALLABLE">
 			{call opr_ins(#{frmEqmCd}, #{frmEqmNm}, #{frDt}, #{toDt},#{frmPsch},#{opertCtnt},#{frmUseYN})}
@@ -43,17 +44,32 @@
 			on e.eqm_cd = o.eqm_cd
 	</select>
 	
+	<select id = "OprKeyList" resultMap="eqmMap">
+			select * from eqm_opr
+			where 1=1
+			<if test="frDt != null"><![CDATA[ AND fr_dt <= #{frDt}]]></if>
+			<if test="toDt != null"><![CDATA[ AND to_dt < #{toDt}]]></if>
+			<if test="eqmNm != null and eqmNm !=''">and eqm_nm = #{eqmNm}</if>
+			<if test="eqmCd != null and eqmCd !=''">and eqm_cd = #{eqmCd}</if>
+	</select>
+	
+	<select id = "OprGetList" resultMap="eqmSMap">
+			select eqm_cd, eqm_nm, prcs_cd, prcs_nm, use_yn from eqm
+			WHERE 1=1
+			<if test="frmUseYN != null and frmUseYN != ''"> and use_yn=#{keyword}</if>
+	</select>
+	
 		<resultMap type="HashMap" id="eqmSelectMap">
-		<id column="eqm_cd" property="FTEqmCd"/>
-		<id column="line_cd" property="FTLineCd"/>
-		<id column="prcs_cd" property="FTPrcsCd"/>
-		<id column="eqm_nm" property="FTEqmNm"/>
-		<id column="use_yn" property="FTUseYn"/>
-		<id column="fr_dt" property="FTFrDt"/>
-		<id column="to_dt" property="FTToDt"/>
-		<id column="eqm_psch" property="FTEqmPsch"/>
-		<id column="opert_ctnt" property="FTOpertCtnt"/>
-		<id column="nopr_cd" property="FnoprCd"/>
+		<id column="eqm_cd" property="eqmCd"/>
+		<id column="line_cd" property="lineCd"/>
+		<id column="prcs_cd" property="prcsCd"/>
+		<id column="eqm_nm" property="eqmNm"/>
+		<id column="use_yn" property="useYn"/>
+		<id column="fr_dt" property="frDt"/>
+		<id column="to_dt" property="toDt"/>
+		<id column="eqm_psch" property="eqmPsch"/>
+		<id column="opert_ctnt" property="opertCtnt"/>
+		<id column="nopr_cd" property="noprCd"/>
 	</resultMap>
 	
 	<select id = "OprSelectList" resultMap="eqmSelectMap">
@@ -72,25 +88,13 @@
 		where nopr_cd = #{noprCd}
 	</delete>
 
-<!-- 	<select id = "eqmOprList" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
-
-	</select>-->
-	
-<!-- 	<select id="oprSelectList" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
-		SELECT * FROM EQM
-		WHERE
-		<if test="state == 1"></if>
-		<if test="state == 1"></if>
-		<if test="state == 1"></if>
-		<if test="state == 1"></if>
-	</select>	 -->
 	
 	<update id="oprUpdate" parameterType="com.rezzo.mes.equip.opr.service.EqmOprVO">
 		update eqm_opr
-		set eqm_psch = #{eqmPsch},
-			fr_dt = #{frDt},
-			to_dt = #{toDt},
-			opert_ctnt = #{opertCtnt}
+		set eqm_psch = #{frmPsch},
+				fr_dt = #{frDt},
+				to_dt = #{toDt},
+				opert_ctnt = #{opertCtnt}
 		where nopr_cd = #{noprCd}
 	</update>
 
