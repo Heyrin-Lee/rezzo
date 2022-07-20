@@ -1,0 +1,723 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      layout:decorate="~{layouts/layout}">-->
+
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>자재수입검사</title>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<th:block layout:fragment="main">-->
+
+<!--    <div class="container-fluid px-4">-->
+<!--        <h3>자재수입검사</h3>-->
+<!--        <hr>-->
+<!--        <div class="card">-->
+<!--            <div class="card-body">-->
+<!--                <input type="button" value="저장" id="saveBtn">-->
+<!--                <input type="button" value="조회/수정" id="modiBtn">-->
+<!--                <input type="button" value="다시작성">-->
+<!--                <input type="button" value="삭제">-->
+<!--                <hr>-->
+
+<!--                <form id="getInspListFrm">-->
+<!--                    <label for="vendNm"><b>업체명</b></label>-->
+<!--                    <input id="vendNm" type="text" placeholder="검색버튼을 이용하세요" required readonly>-->
+<!--                    <input id="vendCd" type="hidden" name="vendCd">-->
+<!--                    <input type="button" id="modalBtn" value="검색"/>-->
+<!--                    <hr>-->
+
+<!--                    <b>납기예정일</b>-->
+<!--                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
+<!--                        <input id="startpicker-input" name="startDt" type="text" aria-label="Date" required>-->
+<!--                        <span class="tui-ico-date"></span>-->
+<!--                        <div id="startpicker-container" style="margin-left: -1px;"></div>-->
+<!--                    </div>-->
+<!--                    <span></span>-->
+<!--                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
+<!--                        <input id="endpicker-input" name="endDt" type="text" aria-label="Date" required>-->
+<!--                        <span class="tui-ico-date"></span>-->
+<!--                        <div id="endpicker-container" style="margin-left: -1px;"></div>-->
+<!--                    </div>-->
+<!--                    <input id="getOrdrList" type="button" value="가져오기"/>-->
+<!--                    <hr>-->
+
+<!--                    <b>검사일자</b>-->
+<!--                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
+<!--                        <input type="text" id="inspDt" aria-label="Date-Time">-->
+<!--                        <span class="tui-ico-date"></span>-->
+<!--                    </div>-->
+<!--                    <div id="wrapper" style="margin-top: -1px;"></div>-->
+<!--                    <hr>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <hr>-->
+<!--        <div class="card">-->
+<!--            <div class="card-body">-->
+<!--                <div id="grid"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Modal for vend search &ndash;&gt;-->
+<!--    <div class="modal fade" id="vendModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <b class="modal-title">업체검색</b>-->
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <form id="vendSchForm">-->
+<!--                        <label>업체명<input type="text" name="vendNm" style="width:100px;"></label>-->
+<!--                        <label>업체코드<input type="text" name="vendCd" style="width:100px;"></label>-->
+<!--                        <input id="vendSch" type="button" value="검색">-->
+<!--                    </form>-->
+<!--                    <hr>-->
+<!--                    <div id="vend-grid"></div>-->
+<!--                    <p>선택 : 더블클릭</p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash;inspection detail modal&ndash;&gt;-->
+<!--    <div class="modal fade" id="inspModal" tabindex="-1" aria-labelledby="inspModal" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <b class="modal-title">검사상세</b>-->
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <div id="insp-grid"></div>-->
+<!--                </div>-->
+<!--                <input type="button" id="calInfCnt" value="입력">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; modification modal&ndash;&gt;-->
+<!--    <div class="modal fade" id="modiModal" tabindex="-1" aria-labelledby="modiModal" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <b class="modal-title">검사자료 조회</b>-->
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                </div>-->
+<!--                <form id="inspDtRngFrm">-->
+<!--                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
+<!--                        <input id="startpicker-input-mod" name="startDt" type="text" aria-label="Date" required>-->
+<!--                        <span class="tui-ico-date"></span>-->
+<!--                        <div id="startpicker-container-mod" style="margin-left: -1px;"></div>-->
+<!--                    </div>-->
+<!--                    <span></span>-->
+<!--                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
+<!--                        <input id="endpicker-input-mod" name="endDt" type="text" aria-label="Date" required>-->
+<!--                        <span class="tui-ico-date"></span>-->
+<!--                        <div id="endpicker-container-mod" style="margin-left: -1px;"></div>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--                <div class="modal-body">-->
+<!--                    <input id="inspHistSchBtn" type="button" value="검색"/>-->
+<!--                    <hr>-->
+<!--                    <div id="modi-grid"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+<!--    <script>-->
+<!--        ///////////////////////////// init ////////////////////////////////-->
+<!--        window.addEventListener('load', function () {-->
+<!--            getVendListInit();-->
+<!--            getInfList();-->
+<!--        })-->
+
+<!--        ///////////////////////////// grid section ////////////////////////////////-->
+<!--        // custom input renderers-->
+<!--        class inputOrdrInstCnt {-->
+<!--            constructor(props) {-->
+<!--                let el = document.createElement('input');-->
+<!--                let {rowKey} = props;-->
+<!--                this.rowKey = rowKey;-->
+<!--                el.type = 'text';-->
+<!--                el.value = String(props.value);-->
+<!--                this.el = el;-->
+<!--            }-->
+
+<!--            getElement() {-->
+<!--                grid.check(this.rowKey);-->
+<!--                this.el.value = '';-->
+<!--                return this.el;-->
+<!--            }-->
+
+<!--            getValue() {-->
+<!--                inferCnt.delete(String(this.rowKey))-->
+<!--                let val = this.el.value.replace(/[^0-9]/g, '')-->
+<!--                grid.setValue(this.rowKey, 'inspCnt', val);-->
+<!--                grid.setValue(this.rowKey, 'inspPassCnt', val);-->
+<!--                grid.setValue(this.rowKey, 'inspFailCnt', '');-->
+<!--                return val;-->
+<!--            }-->
+
+<!--            mounted() {-->
+<!--                this.el.select();-->
+<!--            }-->
+<!--        }-->
+
+<!--        class inputInspCnt {-->
+<!--            constructor(props) {-->
+<!--                let el = document.createElement('input');-->
+<!--                let {rowKey} = props;-->
+<!--                this.rowKey = rowKey;-->
+<!--                el.type = 'text';-->
+<!--                el.value = String(props.value);-->
+<!--                this.el = el;-->
+<!--            }-->
+
+<!--            getElement() {-->
+<!--                grid.check(this.rowKey);-->
+<!--                this.el.value = ''-->
+<!--                return this.el;-->
+<!--            }-->
+
+<!--            getValue() {-->
+<!--                let val = this.el.value.replace(/[^0-9]/g, '')-->
+<!--                let instCnt = grid.getValue(this.rowKey, 'ordrInstCnt')-->
+<!--                if (parseInt(val) > parseInt(instCnt) || instCnt === '') {-->
+<!--                    alert('검사량이 입고량 보다 많습니다.');-->
+<!--                    grid.setValue(this.rowKey, 'inspPassCnt', '');-->
+<!--                    grid.setValue(this.rowKey, 'inspFailCnt', '');-->
+<!--                    return '';-->
+<!--                } else {-->
+<!--                    inferCnt.delete(String(this.rowKey))-->
+<!--                    grid.setValue(this.rowKey, 'inspPassCnt', val);-->
+<!--                    grid.setValue(this.rowKey, 'inspFailCnt', '');-->
+<!--                    if (val === '') {-->
+<!--                        return val;-->
+<!--                    } else {-->
+<!--                        return parseInt(val);-->
+<!--                    }-->
+<!--                }-->
+<!--            }-->
+
+<!--            mounted() {-->
+<!--                this.el.select();-->
+<!--            }-->
+<!--        }-->
+
+<!--        class inputInferCnt {-->
+<!--            constructor(props) {-->
+<!--                const el = document.createElement('input');-->
+<!--                el.type = 'text';-->
+<!--                el.value = String(props.value);-->
+<!--                this.el = el;-->
+<!--            }-->
+
+<!--            getElement() {-->
+<!--                this.el.value = '';-->
+<!--                return this.el;-->
+<!--            }-->
+
+<!--            getValue() {-->
+<!--                let val = this.el.value.replace(/[^0-9]/g, '')-->
+<!--                if (val === '') {-->
+<!--                    return val;-->
+<!--                } else {-->
+<!--                    return parseInt(val);-->
+<!--                }-->
+<!--            }-->
+
+<!--            mounted() {-->
+<!--                this.el.select();-->
+<!--            }-->
+<!--        }-->
+
+<!--        let iModal;-->
+<!--        class CustomBtnRenderer {-->
+<!--            constructor(props) {-->
+<!--                let {rowKey, value} = props;-->
+<!--                let btn = document.createElement('button');-->
+<!--                let text = document.createTextNode(value);-->
+<!--                btn.appendChild(text);-->
+<!--                btn.innerHTML = '검사'-->
+<!--                btn.className = 'insp-btn';-->
+<!--                btn.addEventListener('click', function (e) {-->
+<!--                    let modDiv = document.getElementById('inspModal');-->
+<!--                    modDiv.dataset.rowKey = rowKey-->
+<!--                    iModal = new bootstrap.Modal(modDiv, {})-->
+<!--                    iModal.show('inspModal');-->
+<!--                })-->
+<!--                this.el = btn;-->
+<!--            }-->
+
+<!--            getElement() {-->
+<!--                return this.el;-->
+<!--            }-->
+<!--        }-->
+
+<!--        // grid theme-->
+<!--        let gridOption = {-->
+<!--            row: {-->
+<!--                hover: {background: 'coral'}-->
+<!--            }-->
+<!--        }-->
+<!--        tui.Grid.applyTheme('default', gridOption);-->
+
+<!--        // main grid section-->
+<!--        let grid = new tui.Grid({-->
+<!--            el: document.getElementById('grid'),-->
+<!--            scrollX: false,-->
+<!--            scrollY: false,-->
+<!--            rowHeaders: ['checkbox'],-->
+<!--            columns: [-->
+<!--                {-->
+<!--                    header: '자재코드',-->
+<!--                    name: 'rscCd'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '품명',-->
+<!--                    name: 'rscNm'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '발주번호',-->
+<!--                    name: 'ordrCd'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '발주량',-->
+<!--                    name: 'ordrCnt',-->
+<!--                    validation: {-->
+<!--                        dataType: 'number'-->
+<!--                    }-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '가입고량',-->
+<!--                    name: 'ordrInstCnt',-->
+<!--                    validation: {-->
+<!--                        dataType: 'number',-->
+<!--                        required: true,-->
+<!--                        validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])-->
+<!--                    },-->
+<!--                    relations: [-->
+<!--                        {-->
+<!--                            targetNames: ['inspCnt'],-->
+<!--                            editable({value}) {-->
+<!--                                return value !== null;-->
+<!--                            }-->
+<!--                        }-->
+<!--                    ],-->
+<!--                    editor: {-->
+<!--                        type: inputOrdrInstCnt,-->
+<!--                        options: {-->
+<!--                            maxLength: 10-->
+<!--                        }-->
+<!--                    }-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '검사량',-->
+<!--                    name: 'inspCnt',-->
+<!--                    validation: {-->
+<!--                        dataType: 'number',-->
+<!--                        required: true,-->
+<!--                        validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])-->
+<!--                    },-->
+<!--                    editor: {-->
+<!--                        type: inputInspCnt,-->
+<!--                        options: {-->
+<!--                            maxLength: 10-->
+<!--                        }-->
+<!--                    }-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '검사',-->
+<!--                    name: 'rscInspCd',-->
+<!--                    align: 'center',-->
+<!--                    renderer: {type: CustomBtnRenderer},-->
+<!--                    width: 50-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '합격량',-->
+<!--                    name: 'inspPassCnt',-->
+<!--                    validation: {-->
+<!--                        dataType: 'number',-->
+<!--                        required: true-->
+<!--                    }-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '불량량',-->
+<!--                    name: 'inspFailCnt'-->
+<!--                }-->
+<!--            ]-->
+<!--        });-->
+
+
+
+
+<!--        ///////////////////////////// date picker ////////////////////////////////-->
+<!--        let today = new Date();-->
+<!--        let rangepicker = tui.DatePicker.createRangePicker({-->
+<!--            startpicker: {-->
+<!--                date: today,-->
+<!--                input: '#startpicker-input',-->
+<!--                container: '#startpicker-container'-->
+<!--            },-->
+<!--            endpicker: {-->
+<!--                date: today,-->
+<!--                input: '#endpicker-input',-->
+<!--                container: '#endpicker-container'-->
+<!--            }-->
+<!--        });-->
+
+<!--        let rangepickerMod = tui.DatePicker.createRangePicker({-->
+<!--            startpicker: {-->
+<!--                date: today,-->
+<!--                input: '#startpicker-input-mod',-->
+<!--                container: '#startpicker-container-mod'-->
+<!--            },-->
+<!--            endpicker: {-->
+<!--                date: today,-->
+<!--                input: '#endpicker-input-mod',-->
+<!--                container: '#endpicker-container-mod'-->
+<!--            }-->
+<!--        });-->
+
+<!--        let datepicker = new tui.DatePicker('#wrapper', {-->
+<!--            date: today,-->
+<!--            input: {-->
+<!--                element: '#inspDt',-->
+<!--                format: 'yyyy-MM-dd'-->
+<!--            }-->
+<!--        });-->
+
+<!--        //////////////////////////// flag ////////////////////////////////-->
+<!--        let modFlag; // 0 = 등록, 1 = 수정-->
+
+<!--        ///////////////////////////// vendor ////////////////////////////////-->
+<!--        // declare vendor modal-->
+<!--        let vModal-->
+<!--        modalBtn.addEventListener('click', function () {-->
+<!--            vModal = new bootstrap.Modal(document.getElementById('vendModal'), {})-->
+<!--            vModal.show('vendModal');-->
+<!--        })-->
+
+<!--        // when vendor modal shown-->
+<!--        let vendModal = document.getElementById('vendModal');-->
+<!--        vendModal.addEventListener('shown.bs.modal', e => {-->
+<!--            vendGrid.refreshLayout();-->
+<!--        })-->
+
+<!--        // vendor grid-->
+<!--        let vendGrid = new tui.Grid({-->
+<!--            el: document.getElementById('vend-grid'),-->
+<!--            scrollX: false,-->
+<!--            scrollY: false,-->
+<!--            columns: [-->
+<!--                {-->
+<!--                    header: '업체코드',-->
+<!--                    name: 'vendCd'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '업체이름',-->
+<!--                    name: 'vendNm'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '사업자번호',-->
+<!--                    name: 'bizno'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '전화번호',-->
+<!--                    name: 'telno'-->
+<!--                }-->
+<!--            ]-->
+<!--        })-->
+
+<!--        // search vendors by keyword-->
+<!--        let vendSch = document.getElementById('vendSch');-->
+<!--        vendSch.addEventListener('click', function () {-->
+<!--            let data = new FormData(vendSchForm);-->
+<!--            let url = 'getVendors'-->
+
+<!--            fetch(url, {-->
+<!--                method: 'POST',-->
+<!--                body: data-->
+<!--            }).then(res => res.json()).then(res => {-->
+<!--                vendGrid.innerHTML = '';-->
+<!--                vendGrid.resetData(res);-->
+<!--            })-->
+<!--        });-->
+
+<!--        // action in vendor modal-->
+<!--        vendGrid.on('dblclick', e => {-->
+<!--            let rowInfo = vendGrid.getRow(e.rowKey)-->
+<!--            let vendInfo = `${rowInfo.vendNm} - ${rowInfo.vendCd}`-->
+<!--            vendNm.value = vendInfo;-->
+<!--            vendCd.value = rowInfo.vendCd;-->
+<!--            vModal.hide(vendModal);-->
+<!--        })-->
+
+<!--        // get vendor grid data-->
+<!--        function getVendListInit() {-->
+<!--            let url = 'getVendors'-->
+<!--            fetch(url).then(res => res.json())-->
+<!--                .then(res => vendGrid.resetData(res))-->
+<!--        }-->
+
+<!--        ///////////////////////////// inferior rsc ////////////////////////////////-->
+<!--        // inspection detail grid-->
+<!--        let inspGrid = new tui.Grid({-->
+<!--            el: document.getElementById('insp-grid'),-->
+<!--            scrollX: false,-->
+<!--            scrollY: false,-->
+<!--            columns: [-->
+<!--                {-->
+<!--                    header: '불량코드',-->
+<!--                    name: 'ccdDtl'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '불량명',-->
+<!--                    name: 'ccdDtlNm'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '불량수량',-->
+<!--                    name: 'infCnt',-->
+<!--                    editor: {-->
+<!--                        type: inputInferCnt,-->
+<!--                        options: {-->
+<!--                            maxLength: 10-->
+<!--                        }-->
+<!--                    }-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '비고',-->
+<!--                    name: 'infDesc'-->
+<!--                }-->
+<!--            ]-->
+<!--        })-->
+
+<!--        // store each inf count-->
+<!--        let inferCnt = new Map();-->
+<!--        let gridRowInfo = ''; // flag-->
+
+<!--        // when rsc inf modal shown-->
+<!--        let inspModal = document.getElementById('inspModal');-->
+<!--        inspModal.addEventListener('shown.bs.modal', e => {-->
+<!--            let rowKey = inspModal.dataset.rowKey;-->
+<!--            let infCnt = inferCnt.get(rowKey)-->
+<!--            if (gridRowInfo !== '') {-->
+<!--                let rowData = grid.getRow(rowKey)-->
+<!--                let obj = {ordrCd: rowData.ordrCd, rscCd: rowData.rscCd, rscInspCd: gridRowInfo.rscInspCd}-->
+<!--                let url = 'getRscInfHist'-->
+<!--                fetch(url, {-->
+<!--                    headers: {'Content-Type': 'application/json'},-->
+<!--                    method: 'POST',-->
+<!--                    body: JSON.stringify(obj)-->
+<!--                }).then(res => res.json()).then(res => {-->
+<!--                    inspGrid.resetData(res)-->
+<!--                })-->
+<!--            }-->
+
+<!--            if (infCnt !== undefined) {-->
+<!--                for (let i = 0; i < infCnt.length; i++)-->
+<!--                    inspGrid.setValue(i, 'infCnt', infCnt[i]);-->
+<!--            } else {-->
+<!--                inspGrid.setColumnValues('infCnt', '')-->
+<!--            }-->
+<!--            inspGrid.refreshLayout();-->
+<!--        })-->
+
+<!--        // when rsc inf modal hidden-->
+<!--        inspModal.addEventListener('hidden.bs.modal', e => {-->
+<!--            let rowKey = inspModal.dataset.rowKey;-->
+<!--            let colVal = inspGrid.getColumnValues('infCnt')-->
+<!--            inferCnt.set(rowKey, colVal);-->
+<!--            inspGrid.setColumnValues('infCnt', '')-->
+<!--            inspGrid.cancelEditing(); // foucs 제거-->
+<!--            inspGrid.refreshLayout();-->
+<!--        })-->
+
+<!--        // calculate inf count-->
+<!--        let calInfCnt = document.getElementById('calInfCnt');-->
+<!--        calInfCnt.addEventListener('click', function () {-->
+<!--            let rowKey = inspModal.dataset.rowKey;-->
+<!--            let colVal = inspGrid.getColumnValues('infCnt')-->
+<!--            let infSum = colVal.reduce((a, b) => (a + b));-->
+<!--            let inspCnt = grid.getValue(rowKey, 'inspCnt')-->
+
+<!--            if (infSum > parseInt(inspCnt) || inspCnt === null || inspCnt === '') {-->
+<!--                alert("불량수량이 검사량 보다 많습니다.")-->
+<!--            } else {-->
+<!--                grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))-->
+<!--                grid.setValue(rowKey, 'inspFailCnt', infSum)-->
+<!--            }-->
+<!--            iModal.hide(inspModal);-->
+<!--        })-->
+
+<!--        function getInfList() {-->
+<!--            let url = 'getRscInfList'-->
+<!--            fetch(url).then(res => res.json())-->
+<!--                .then(res => {-->
+<!--                    inspGrid.resetData(res.INF)-->
+<!--                });-->
+<!--        }-->
+
+<!--        ///////////////////////////// get list ////////////////////////////////-->
+<!--        // get order list-->
+<!--        let getOrdrList = document.getElementById('getOrdrList');-->
+<!--        getOrdrList.addEventListener('click', function () {-->
+<!--            modFlag = 0;-->
+<!--            let startDt = document.getElementById('startpicker-input');-->
+<!--            let endDt = document.getElementById('endpicker-input');-->
+<!--            let vendCd = document.getElementById('vendCd');-->
+<!--            inferCnt.clear();-->
+<!--            gridRowInfo = '';-->
+
+<!--            if (startDt.value === '' || endDt.value === '') {-->
+<!--                alert('기간을 입력하세요')-->
+<!--            } else if (vendCd.value === '') {-->
+<!--                alert('공급업체를 입력하세요')-->
+<!--            } else {-->
+<!--                let data = new FormData(getInspListFrm)-->
+<!--                let url = 'getRscOrdrList';-->
+<!--                fetch(url, {-->
+<!--                    method: 'POST',-->
+<!--                    body: data-->
+<!--                })-->
+<!--                    .then(res => res.json())-->
+<!--                    .then(res => grid.resetData(res))-->
+<!--            }-->
+<!--        })-->
+
+<!--        ///////////////////////////// insert inspection result ////////////////////////////////-->
+<!--        function setRscInspList(data) {-->
+<!--            let url = 'setRscInspList';-->
+<!--            fetch(url, {-->
+<!--                headers: {'Content-Type': 'application/json'},-->
+<!--                method: 'POST',-->
+<!--                body: JSON.stringify(data)-->
+<!--            })-->
+<!--        }-->
+
+<!--        function updateRscInspList(data) {-->
+<!--            let url = 'updateInspList'-->
+<!--            fetch(url, {-->
+<!--                headers: {'Content-Type': 'application/json'},-->
+<!--                method: 'POST',-->
+<!--                body: JSON.stringify(data)-->
+<!--            })-->
+<!--        }-->
+
+<!--        let saveBtn = document.getElementById('saveBtn')-->
+<!--        saveBtn.addEventListener('click', function () {-->
+<!--            let gridVal = grid.getCheckedRows();-->
+<!--            gridVal.forEach(element => {-->
+<!--                element.inspDt = inspDt.value;-->
+<!--                let rowKey = String(element.rowKey);-->
+<!--                let infCnt = inferCnt.get(rowKey);-->
+<!--                if (typeof infCnt !== 'undefined') {-->
+<!--                    for (let i = 0; i < infCnt.length; i++) {-->
+<!--                        inspGrid.setValue(i, 'infCnt', infCnt[i]);-->
+<!--                    }-->
+<!--                    element.rscInf = inspGrid.getData();-->
+<!--                }-->
+<!--            })-->
+<!--            if (modFlag === 0) {-->
+<!--                setRscInspList(gridVal)-->
+<!--            } else {-->
+<!--                updateRscInspList(gridVal);-->
+<!--            }-->
+<!--        })-->
+
+<!--        /////////////////////////// inspection history  ////////////////////////////////////-->
+<!--        ///////////////////////////// modify and delete ////////////////////////////////-->
+<!--        // declare modal-->
+<!--        let mModal;-->
+<!--        modiBtn.addEventListener('click', function () {-->
+<!--            mModal = new bootstrap.Modal(document.getElementById('modiModal'), {})-->
+<!--            mModal.show('modiModal');-->
+<!--        })-->
+
+<!--        // modal cation-->
+<!--        let modiModal = document.getElementById('modiModal');-->
+<!--        modiModal.addEventListener('shown.bs.modal', e => {-->
+<!--            modiGrid.refreshLayout();-->
+<!--        })-->
+
+<!--        // search grid-->
+<!--        let modiGrid = new tui.Grid({-->
+<!--            el: document.getElementById('modi-grid'),-->
+<!--            scrollX: false,-->
+<!--            scrollY: false,-->
+<!--            columns: [-->
+<!--                {-->
+<!--                    header: '검사일자',-->
+<!--                    name: 'inspDt'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '공급업체',-->
+<!--                    name: 'vendNm'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '건수',-->
+<!--                    name: 'inspCnt'-->
+<!--                },-->
+<!--                {-->
+<!--                    header: '검사코드',-->
+<!--                    name: 'rscInspCd'-->
+<!--                }-->
+<!--            ]-->
+<!--        })-->
+
+<!--        // search by date range-->
+<!--        let inspHistSchBtn = document.getElementById('inspHistSchBtn')-->
+<!--        inspHistSchBtn.addEventListener('click', function () {-->
+<!--            let data = new FormData(inspDtRngFrm);-->
+<!--            let url = 'getRscInspListByDt'-->
+<!--            fetch(url, {-->
+<!--                method: 'POST',-->
+<!--                body: data-->
+<!--            }).then(res => res.json()).then(res => {-->
+<!--                modiGrid.resetData(res);-->
+<!--            })-->
+<!--        });-->
+
+<!--        // select-->
+<!--        modiGrid.on('dblclick', e => {-->
+<!--            modFlag = 1;-->
+<!--            let rowInfo = modiGrid.getRow(e.rowKey)-->
+<!--            gridRowInfo = rowInfo;-->
+<!--            console.log(gridRowInfo)-->
+<!--            grid.setColumn-->
+<!--            let data = {rscInspCd: rowInfo.rscInspCd}-->
+<!--            let url = 'getRscInspHist'-->
+<!--            fetch(url, {-->
+<!--                headers: {'Content-Type': 'application/json'},-->
+<!--                method: 'POST',-->
+<!--                body: JSON.stringify(data)-->
+<!--            }).then(res => res.json()).then(res => {-->
+<!--                grid.resetData(res);-->
+<!--            })-->
+<!--            mModal.hide(modiModal);-->
+<!--        })-->
+
+<!--        ///////////////////////////// action on grid ////////////////////////////////-->
+<!--        let gridEle = document.getElementById('grid')-->
+<!--        gridEle.addEventListener('mouseleave', function () {-->
+<!--            grid.finishEditing();-->
+<!--        })-->
+
+<!--        let inspGridEle = document.getElementById('insp-grid');-->
+<!--        inspGridEle.addEventListener('mouseleave', function () {-->
+<!--            inspGrid.finishEditing();-->
+<!--        })-->
+
+
+
+<!--    </script>-->
+<!--</th:block>-->
+<!--</body>-->
+<!--</html>-->

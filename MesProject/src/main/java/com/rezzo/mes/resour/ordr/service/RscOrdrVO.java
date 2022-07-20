@@ -14,6 +14,7 @@ public class RscOrdrVO {
 	private String rscCd;
 	private String rscNm;
 	private int ordrCnt;
+	private int rmnCnt;
 	
 	//자재발주 테이블
 	private String vendCd;
