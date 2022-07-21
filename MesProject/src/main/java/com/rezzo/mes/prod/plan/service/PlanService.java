@@ -14,4 +14,5 @@ public interface PlanService {
 	public void grid1Insert(PlanVO vo);
 	public void grid2Insert(PlanVO vo);
 	public void grid5Insert(List<PlanVO> list);
+	public void orderUpdate(PlanVO vo);
 }

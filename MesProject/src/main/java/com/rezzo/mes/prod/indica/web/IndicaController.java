@@ -37,6 +37,11 @@ public class IndicaController {
 		service.indicaDtlInsert(list);
 	}
 	
+	@RequestMapping("updatePlan")
+	public void updatePlan(IndicaVO vo) {
+		service.updatePlan(vo);
+	}
+	
 	@PostMapping("getIndicaList")
 	@ResponseBody
 	public List<IndicaVO> getIndicaList(IndicaVO vo) {
@@ -46,6 +51,7 @@ public class IndicaController {
 	@RequestMapping("deleteIndica")
 	@ResponseBody
 	public void deletePlan(IndicaVO vo) {
+		System.out.println(vo.getIndicaDt3());
 		service.deleteIndica(vo);
 		service.deleteIndicaDtl(vo);
 	}

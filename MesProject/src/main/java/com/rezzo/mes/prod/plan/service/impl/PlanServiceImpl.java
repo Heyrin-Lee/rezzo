@@ -57,5 +57,10 @@ public class PlanServiceImpl implements PlanService {
 		}
 	}
 
+	@Override
+	public void orderUpdate(PlanVO vo) {
+		mapper.orderUpdate(vo);
+	}
+
 
 }

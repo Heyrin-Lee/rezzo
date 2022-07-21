@@ -5,6 +5,7 @@
 <select id="orderListModal" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
 	SELECT *
 	FROM ORDER_SHEET
+	WHERE PROG_APPE='접수완료'
 </select>
 
 <select id="getIndex" resultType="PlanVO">
@@ -68,5 +69,10 @@ SELECT NVL(LPAD(MAX(SUBSTR(PLAN_CD, 12))+1, 3, '0'), 0) as "index"
 			)
 </insert>
 
+<update id="orderUpdate" parameterType="com.rezzo.mes.prod.plan.service.PlanVO">
+UPDATE ORDER_SHEET 
+SET PROG_APPE='계획완료'
+WHERE ORDER_NO = #{orderNO}
+</update>
 
 </mapper>

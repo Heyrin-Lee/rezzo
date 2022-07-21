@@ -80,7 +80,7 @@ body {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">생산지시조회</h5>
                         <br> <br>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
@@ -131,19 +131,22 @@ body {
    		}
    }) 
    	
-   	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기
+   	//그리드에 띄운 데이터들을 저장 버튼을 눌렀을 때 테이블 두 개에 저장하기+ 지시가 내려졌으므로 계획 테이블 상태 업데이트
    	$("#regiBtn").on("click", function() {
    		let gridData = grid.getData()
    		console.log(gridData)
    		
-   		let prcsPsch = grid.getData()[0].prcsPsch
-		console.log(prcsPsch)
+   		let linePsch = grid.getData()[0].linePsch
+		console.log(linePsch)
 		let indicaDt = grid.getData()[0].indicaDt
 		console.log(indicaDt)
    			
-		gridData[0].prcsPsch = prcsPsch 
+		gridData[0].linePsch = linePsch 
 		gridData[0].indicaDt = indicaDt
    		console.log(JSON.stringify(gridData))
+   		
+   		let planCd = grid.getData();
+   		
    		$.ajax({
    			url : 'indInsert',
    			method : 'post',
@@ -156,7 +159,10 @@ body {
    				window.location.reload()
    			}
    		})
-   		
+   		$.ajax({
+   			url : 'updatePlan',
+   			data : {"planCd" : planCd}
+   		})
    		
    	})
    	
@@ -216,8 +222,8 @@ body {
 	          align : 'center'
 	        },
 	        {
-	          header: '담당자',
-	          name: 'prcsPsch',
+	          header: '라인책임자',
+	          name: 'linePsch',
 	          align : 'center',
 	          editor : 'text'
 	        },

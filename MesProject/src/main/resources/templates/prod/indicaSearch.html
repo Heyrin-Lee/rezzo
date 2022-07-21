@@ -67,15 +67,15 @@ body {
                         <div class="mb-3">
                            <label for="all">지시상태</label> 
                             <label><input type="radio" name="status" value="전체">전체</label>
-                            <label><input type="radio" name="status" value="진행">진행</label>
-                            <label><input type="radio" name="status" value="미진행">미진행</label>
+                            <label><input type="radio" name="status" value="지시">지시</label>
+                            <label><input type="radio" name="status" value="미지시">미지시</label>
                         </div>
                         <div class="mb-3">
                            <label for="name">제품명</label> <input
-                              type="text" id="nmae" name="name">
+                              type="text" id="name" name="name">
                         </div>
      					<div class="linelist">
-                        <button class="c_btn" id="sBtn">조회</button>
+                        <button type="button" class="c_btn" id="sBtn">조회</button>
                      </div>
               	
                      </form>
@@ -99,70 +99,84 @@ body {
 	      scrollY: false,
 	      rowHeaders: ['checkbox'],
 	      columns: [
+	      	{
+	          header: '지시일자',
+	          name: 'indicaDt',
+	          align: 'center'
+	        },
 	        {
 	          header: '라인코드',
-	          name: 'lineCd'
+	          name: 'lineCd',
+	          align: 'center'
 	        },
 	        {
 	          header: '제품코드',
-	          name: 'prdtCd'
+	          name: 'edctsCd',
+	          align: 'center'
 	        },
 	        {
 	          header: '지시수량',
-	          name: 'indicaCnt'
+	          name: 'indicaCnt',
+	          align: 'center'
 	        },
 	        {
 	          header: '필요수량',
-	          name: 'orderCnt'
+	          name: 'orderCnt',
+	          align: 'center'
 	        },
 	        {
 	          header: '작업시작일',
-	          name: 'wkFrDt'
+	          name: 'wkFrDt',
+	          align: 'center'
 	        }
 	      ]
 	    });
 	    
     /* 조회하기  */
    $("#sBtn").on("click", function(){
-	   let planDt = $("#start-input").val();
-	   let planDt2 = $("#end-input").val();
+	   let indicaDt = $("#start-input").val();
+	   let indicaDt2 = $("#end-input").val();
 	   let nowSt = $("input[type=radio]:checked").val();
 	   let prdtNm = $("#name").val();
 	  
 	   $.ajax({
 		 url : 'getIndicaList',
 		 method : 'POST',
-		 data : {},
+		 data : {"indicaDt" : indicaDt, "indicaDt2" : indicaDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
 		 success : function(result) {
+		 	console.log(result)
 			 grid.resetData(result)
 		 }
 	   })
    })
    
-   /* 계획삭제하기 */
+   /* 지시삭제하기 */
    $("#dBtn").on("click", function() {
-   	   let planCd = grid.getCheckedRows()[0].planCd;	
-   	   let planDt = $("#start-input").val();
-	   let planDt2 = $("#end-input").val();
+   		// 조회 ajax에서 쓰는 거 
+   	   let indicaDt = $("#start-input").val();
+	   let indicaDt2 = $("#end-input").val();
 	   let nowSt = $("input[type=radio]:checked").val();
 	   let prdtNm = $("#name").val();
-   	   console.log(planCd)
+	   // 삭제 ajax에서 쓰는 거
+	   let indicaDt3 = grid.getData()[0].indicaDt;
+	       	   
 	   $.ajax({
-	   		url : 'deletePlan',
+	   		url : 'deleteIndica',
 	   		method : 'GET',
 	   		contentType:'application/text',
-	   		data : {"planCd" : planCd},
+	   		data : {"indicaDt3" : indicaDt3},
 	   		success : function(result){
 	   			 $.ajax({
-		 			url : 'getList',
+		 			url : 'getIndicaList',
 					method : 'POST',
-		 			data : {"planDt" : planDt, "planDt2" : planDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
+		 			data : {"indicaDt" : indicaDt, "indicaDt2" : indicaDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
 		 			success : function(result) {
 			 			grid.resetData(result)
 		 			}
 	   			 })
 	   		} 
 	   })
+	  
    })
    
    

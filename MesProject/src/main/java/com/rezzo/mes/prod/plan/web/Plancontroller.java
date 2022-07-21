@@ -70,6 +70,7 @@ public class Plancontroller {
 	public void plan12Insert(@RequestBody List<PlanVO> list) {
 		service.grid1Insert(list.get(0));
 		service.grid2Insert(list.get(1));
+		service.orderUpdate(null);
 	}
 	 
 	@PostMapping("plan5Insert")
@@ -78,5 +79,9 @@ public class Plancontroller {
 		service.grid5Insert(list); 
 	}  
  	
+	@RequestMapping("orderUpdate")
+	public void orderUpdate(PlanVO vo) {
+		service.orderUpdate(vo);
+	}
 
 }
