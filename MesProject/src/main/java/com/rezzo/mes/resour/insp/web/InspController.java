@@ -53,6 +53,10 @@ public class InspController {
         sv.setRscInspList(rscInspVOS);
     }
 
+    @RequestMapping("setRscInsp")
+    public void setRscInsp(@RequestBody RscInspVO rscInsp) {
+    }
+
     @RequestMapping("getRscOrdrList")
     @ResponseBody
     public List<RscOrdrVO> getRscOrdrList(@ModelAttribute RscOrdrVO rscOrdrVO) {
@@ -65,9 +69,21 @@ public class InspController {
         return sv.getRscInspHist(rscInspVO);
     }
 
-//    @RequestMapping("schRscInspHist")
-//    @ResponseBody
-//    public List<RscInspVO> schRscInspHist(@ModelAttribute RscInspVO rscInspVO) {
-//        return
-//    }
+    @RequestMapping("schRscInspHist")
+    @ResponseBody
+    public List<RscInspVO> schRscInspHist(@ModelAttribute RscInspVO rscInspVO) {
+        return sv.schRscInspHist(rscInspVO);
+    }
+
+    @RequestMapping("getRscInspHistByCd")
+    @ResponseBody
+    public List<RscInspVO> getRscInspHistByCd(@RequestBody RscInspVO rscInspVO) {
+        return sv.getRscInspHistByCd(rscInspVO);
+    }
+
+    @RequestMapping("updRscInspHist")
+    @ResponseBody
+    public void updRscInspHist(@RequestBody List<RscInspVO> rscInspVOS) {
+        sv.updRscInspHist(rscInspVOS);
+    }
 }

@@ -7,6 +7,7 @@ import com.rezzo.mes.resour.insp.service.InspService;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ public class InspServiceImpl implements InspService {
 
     private final InspMapper mapper;
 
-    // 입고검사관리
+    // 입고검사등록
     @Override
     public List<VendVO> getRscVendList(VendVO vendVO) {
         return mapper.getRscVendList(vendVO);
@@ -32,13 +33,33 @@ public class InspServiceImpl implements InspService {
     @Override
     public void setRscInspList(List<RscInspVO> rscInspVOS) {
         String rscInspCd = mapper.genRscInspCd();
+        String inspDt = rscInspVOS.get(0).getInspDt();
+        mapper.setRscInsp(rscInspCd, inspDt);
         for(RscInspVO rscInspVO : rscInspVOS) {
-            String inspDt = rscInspVO.getInspDt(); // get insp date
             rscInspVO.setRscInspCd(rscInspCd);
             mapper.setRscInspList(rscInspVO);
             mapper.updRscOrdrRmnCnt(rscInspVO);
         }
     }
+
+    // 입고검사 수정
+    @Override
+    public List<RscInspVO> schRscInspHist(RscInspVO rscInspVO) {
+        return mapper.schRscInspHist(rscInspVO);
+    }
+
+    @Override
+    public List<RscInspVO> getRscInspHistByCd(RscInspVO rscInspVO) {
+        return mapper.getRscInspHistByCd(rscInspVO);
+    }
+
+    @Override
+    public void updRscInspHist(List<RscInspVO> rscInspVOS) {
+        for (RscInspVO rscInspVO : rscInspVOS) {
+            mapper.updRscInspHist(rscInspVO);
+        }
+    }
+
 
     // 입고검사조회
     @Override

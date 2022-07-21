@@ -53,6 +53,8 @@
             </div>
         </div>
         <br>
+        <input type="button" value="추가" id="addRow">
+        <input type="button" value="삭제" id="delRow">
         <div class="card">
             <div class="card-body">
                 <div id="grid"></div>
@@ -89,6 +91,8 @@
             getVendListInit()
         })
 
+        let addRow = document.getElementById('addRow')
+        let delRow = document.getElementById('delRow')
         ///////////////////////////// !date picker ////////////////////////////////
         // range date picker
         let today = new Date();
@@ -296,6 +300,16 @@
                 getRscInspHist();
             })
         });
+
+        ////////////////////////////// add & delelte row ////////////////////////////
+        addRow.addEventListener('click', function () {
+            grid.appendRow()
+        })
+
+        delRow.addEventListener('click', function () {
+            let rowKeys = grid.getCheckedRowKeys()
+            grid.removeRows(rowKeys)
+        })
     </script>
 </th:block>
 </body>
