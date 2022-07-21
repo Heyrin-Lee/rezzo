@@ -9,4 +9,9 @@ import java.util.List;
 public interface RscOrdrMapper {
 
 	List<RscOrdrVO> RscOrdrList(RscOrdrVO vo);
+	
+	List<RscOrdrVO> rscOrdrCd(RscOrdrVO vo);
+	
+	// 그리드 상단 조회
+	List<RscOrdrVO> rscCOrdrList(RscOrdrVO vo);
 }

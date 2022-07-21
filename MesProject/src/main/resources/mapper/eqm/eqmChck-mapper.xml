@@ -21,14 +21,14 @@
 </delete>
 
 <select id="eqmChckSearch" resultType="com.rezzo.mes.equip.chck.service.EqmChckVO">
-	select *
+select e.prcs_cd, e.eqm_ist_dt, e.chck_perd, e.use_yn, e.prcs_nm, c.chck_cd, c.eqm_cd, c.eqm_nm, c.chck_fg, c.chck_dt, c.jdgmnt, c.dispo_matter, c.dispo_ctnt, c.chck_psch
 	from eqm e
-	inner join eqm_chck o
-	on e.eqm_cd = o.eqm_cd
+	inner join eqm_chck c
+	on e.eqm_cd = c.eqm_cd
 	where 1=1
-	<if test="stDt != null"><![CDATA[ AND o.chck_dt <= #{stDt}]]></if>
-	<if test="toDt != null"><![CDATA[ AND o.chck_dt < #{toDt}]]></if>
-	<if test="eqmNm != null and eqmNm !=''">and o.eqm_nm = '%'||#{eqmNm}||'%'</if>
+	<if test="stDt != null"><![CDATA[ AND c.chck_dt >= #{stDt}]]></if>
+	<if test="toDt != null"><![CDATA[ AND c.chck_dt < #{toDt}]]></if>
+	<if test="eqmNm != null"> and e.eqm_nm like '%'||#{eqmNm}||'%'</if>
 </select>
 
 </mapper>

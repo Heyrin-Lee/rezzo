@@ -192,8 +192,7 @@
 				</div>
 			</div>
 
-
-			<!-- 그리드 설비 검색 Modal -->
+			<!-- 그리드 설비 검색 Modal 
 			<div class="modal fade" id="gridModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -216,7 +215,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 
 			<script>
@@ -461,7 +460,7 @@
 						console.log(result);
 					}
 				});
-
+/*
 				// 설비 조건 검색 - 설비명 검색
 				$('#mSearchBtn').on('click', function () {
 					setTimeout(function () {
@@ -475,7 +474,7 @@
 					$('#keyword').val(eqmNm);
 					$('#gridModal').modal('hide');
 				});
-
+*/
 				// 설비조건검색 - 세부 내용 검색
 				$('#bSearchBtn').on('click', function () {
 					var eqmNm = $('#keyword3').val()
@@ -492,7 +491,7 @@
 							stDt: stDt
 						},
 						success: function (result) {
-							gridModalDiv.resetData(result);
+							grid.resetData(result);
 						}
 					})
 
