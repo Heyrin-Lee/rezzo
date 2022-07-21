@@ -4,16 +4,41 @@
  
  <mapper namespace="com.rezzo.mes.sales.oust.mapper.SalesOustMapper">
  
- 	<!-- 진행중 주문서 조회 -->
+ 	<!-- 생산완료 주문서 조회 -->
  	<select id="findOrder" resultType="OrderVO">
- 		SELECT ORDER_NO, VEND_NM, EDCTS_CD, PRDT_NM, ORDER_CNT
+ 		SELECT ORDER_NO, VEND_NM, EDCTS_CD, PRDT_NM, ORDER_CNT, PAPRD_DT
 		FROM ORDER_SHEET
+		WHERE PROG_APPE = '생산완료'
  	</select>
  	
- 	<!-- 완제품 재고 현황 모달로 조회 -->
- 	<select id="salesStcList" resultType="SalesStcVO">
- 		SELECT I.EDCTS_LOT_NO, S.STC_CNT, S.MAKE_DT, DISTB_TERM
-		FROM EDCTS_IST I JOIN EDCTS_STC S
-		ON(#{edctsCd} = I.EDCTS_CD)
+ 	<resultMap type="SalesStcVO" id="SalesStcVO">
+ 		<result column="EDCTS_LOT_NO" property="edctsLotNo"/>
+ 		<result column="PRDT_NM" property="prdtNm"/>
+ 		<result column="STC_CNT" property="stcCnt"/>
+ 		<result column="MAKE_DT" property="makeDt"/>
+ 		<result column="DISTB_TERM" property="distbTerm"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="OrderVO" id="OrderVO">
+ 		<result column="PRDT_NM" property="prdtNm"/>
+ 		<result column="PROG_APPE" property="progAppe"/>
+ 		<result column="ORDER_CNT" property="orderCnt"/>
+ 	</resultMap>
+ 	
+ 	<!-- 완제품 재고 현황 모달로 조회(주문서에 해당하는 제품의 재고만 조회하도록 함)-->
+ 	<select id="salesStcList" resultMap="SalesStcVO">
+ 		SELECT S.EDCTS_LOT_NO, S.PRDT_NM, S.STC_CNT, S.MAKE_DT, S.DISTB_TERM,O.ORDER_CNT
+		FROM EDCTS_STC S JOIN ORDER_SHEET O
+		ON(S.PRDT_NM = O.PRDT_NM AND O.PROG_APPE='생산완료')
+ 	</select>
+ 	
+ 	<!-- 완제품 재고 모달에서 출고량 입력하여 출고테이블에 저장 -->
+ 	<insert id="saveSalesOust" parameterType="SalesOustVO" statementType="CALLABLE">
+ 		<![CDATA[call proc_edctsOust_save(#{edctsOustNo},#{edctsOustDt},#{edctsOustCnt},#{edctsCd},#{edctsLotNo})]]>
+ 	</insert>
+ 	
+ 	<!-- 출고현황 조회 -->
+ 	<select id="findOust" resultType="SalesOustVO">
+ 		SELECT * FROM EDCTS_OUST
  	</select>
  </mapper>

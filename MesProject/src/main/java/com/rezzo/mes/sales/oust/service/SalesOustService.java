@@ -11,4 +11,8 @@ public interface SalesOustService {
 	public List<OrderVO> findOrder(OrderVO vo);
 	//완제품 재고현황 모달로 조회
 	public List<SalesStcVO> salesStcList(SalesStcVO vo);
+	//완제품 재고현황 모달에서 출고량 입력 후 출고등록
+	public void saveSalesOust(SalesOustVO vo);
+	//출고현황 조회
+	public List<SalesOustVO> findOust(SalesOustVO vo);
 }

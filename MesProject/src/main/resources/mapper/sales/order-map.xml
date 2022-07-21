@@ -47,7 +47,7 @@
     	o.EDCTS_CD = #{edctsCd}, o.VEND_CD = #{vendCd}, o.VEND_NM = #{vendNm}, o.ORDER_DT = #{orderDt}, o.PROG_APPE = #{progAppe}, o.PAPRD_DT = #{paprdDt}, o.PRDT_NM = #{prdtNm}, o.ORDER_CNT = #{orderCnt}
 	WHEN NOT MATCHED THEN
     	INSERT (o.ORDER_NO, o.EDCTS_CD, o.VEND_CD, o.VEND_NM, o.ORDER_DT, o.PROG_APPE, o.PAPRD_DT, o.PRDT_NM, o.ORDER_CNT)
-    	VALUES(#{orderNo},#{edctsCd},#{vendCd},#{vendNm},#{orderDt},#{progAppe},#{paprdDt},#{prdtNm},#{orderCnt})
+    	VALUES(#{orderNo},#{edctsCd},#{vendCd},#{vendNm},#{orderDt},'접수완료',#{paprdDt},#{prdtNm},#{orderCnt})
 	</update>
 	
 	<!-- 주문번호 인덱스 가져오기 -->

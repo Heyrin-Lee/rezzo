@@ -39,11 +39,11 @@
                      <form name="searchFrm" id="searchFrm">
                       <div class="r_input">
                         <div class="mb-3">
-                           <label for="no" class="form-label">진행상황</label>&nbsp;
+                           <!-- <label for="no" class="form-label">진행상황</label>&nbsp;
                            
                            <input type="radio" id="progAppe" name="progAppe" value="진행"/>진행
                            <input type="radio" id="progAppe" name="progAppe" value="완료"/>완료
-                           <input type="radio" id="progAppe" name="progAppe" value="전체"/>전체
+                           <input type="radio" id="progAppe" name="progAppe" value="전체"/>전체 -->
                            
                         </div>
                         <div class="mb-3">
@@ -237,15 +237,7 @@
 			    header: '진행상황',
 			    name: 'progAppe',
 			    align:'center',
-			    editor: {
-                  type: 'select',
-                  options:{
-                  	listItems:[
-                  		{text:'진행',value:'진행'},
-                  		{text:'완료',value:'완료'}
-                  	]
-                  }
-            	}
+			    defaultValue: '접수완료'
               },
 	        {
 		       header: '납기일자',
@@ -376,7 +368,7 @@
 		   $('#addBtn').click(ev => {
 		   	var row = grid.getRowCount();
 		   				grid.appendRow();
-		   				console.log(row);		   					   			
+		   				console.log(row);				   			
 		   	//주문서 추가시 주문번호 자동 생성 ex.ORS202207151
 		   	let orderDt =$("input[name=start]").val();
 		   	$.ajax({
