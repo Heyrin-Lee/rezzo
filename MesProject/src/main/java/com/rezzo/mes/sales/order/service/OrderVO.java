@@ -37,5 +37,6 @@ public class OrderVO{
 	String telNo;
 	
 	String index;
+	String defaultValue;
 	
 }

@@ -61,19 +61,38 @@
 	</div>
 <!-- 주문서,출고 등록 그리드 끝 -->
 
+<!--검사완료 완제품 재고 모달-->
+  <div class="modal fade" id="StcGridModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">완제품 재고</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                	<div id="StcGrid"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="c_btn" id="addBtn" data-bs-dismiss="modal">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--검사완료 완제품 재고 모달 끝-->
 <script>
 
 		$(function() {
 			findOrder();
+			findOust();
 		})
 
-		//진행중 주문서 현황 그리드
+		//생산완료 주문서 현황 그리드
 	    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      scrollX: false,
 	      bodyHeight: 300,
 	      rowHeight: 35,
-	      rowHeaders: ['checkbox'],
+	      rowHeaders: ['rowNum'],
 	      header: {
 	        height: 40
 	      },
@@ -111,41 +130,62 @@
 	        columns: [
 	          {
 	            header: '제품코드',
-	            name: 'name',
+	            name: 'edctsCd',
 	          },
 	          {
 	            header: '완제품LOT번호',
-	            name: 'artist',
+	            name: 'edctsLotNo',
 	            width: 100
 	          },
 	          {
 	            header: '출고일자',
-	            name: 'type'
+	            name: 'edctsOustDt'
 	          },
 	          {
 	            header: '출고수량',
-	            name: 'release'
+	            name: 'edctsOustCnt'
 	          }
 	        ]
 	      });
 	      
 	      //완제품 재고 현황 모달
 	      const StcGrid = new tui.Grid({
-	        el:document.getElementById('edctsSTCGrid'),
+	        el:document.getElementById('StcGrid'),
 	        scrollX: false,
 	        scrollY: false,
 	        rowHeaders: ['checkbox'],
 	        columns: [
 	            {
 	                header: '완제품LOT번호',
-	                name: 'edctsCd',
+	                name: 'edctsLotNo',
 	                align:'center'
 	            },
 	            {
 	                header: '제품명',
 	                name: 'prdtNm',
 	                align:'center'
-	            }
+	            },
+	            {
+	                header: '완제품 재고량',
+	                name: 'stcCnt',
+	                align:'center'
+	            },
+	            {
+	                header: '제조일자',
+	                name: 'makeDt',
+	                align:'center'
+	            },
+	            {
+	                header: '유통기한',
+	                name: 'distbTerm',
+	                align:'center'
+	            },
+	            {
+	                header: '출고량',
+	                name: 'edctsOustCnt',
+	                editor : 'text',
+	                align:'center'
+	            },
 	        ]
 	    });
 	      
@@ -161,16 +201,84 @@
 	  	})
 	  }
 	  
-	  //진행중 주문서 체크박스 클릭 -> 완제품 재고 목록 모달 띄우기
-	  grid.on("click", e => {
-	  	const {columnName} = e;
+	  //출고현황 목록 불러오기
+	  function findOust() {
+	  	$.ajax({
+	  		url:"findOust",
+	  		method:"get",
+	  		dataType:"json",
+	  		success:function(result) {
+	  			grid2.resetData(result);
+	  		} 
+	  	})
+	  }
+	  
+	  //진행중 주문서 주문번호 칸 클릭 -> 완제품 재고 목록 모달 띄우기
+	  grid.on("click", (e) => {
+	  	const { columnName } = e;
 	  	OustRowKey = e.rowKey;
-	  	let orderNoResult = grid.getValue(OustRowKey, 'orderNo');
-	  	console.log(orderNoResult);
 	  	if(columnName == 'orderNo') {
-	  		console.log('a');
+	  		let edctsCd = grid.getValue(OustRowKey,'edctsCd');
+	  		console.log(edctsCd);
+	  		$("#StcGridModal").modal('show');
+	  		$.ajax({
+	  			url:"salesStcList",
+	  			dataType:"json",
+	  			method:"get",
+	  			success:function(result) {
+	  				setTimeout(function () {
+						StcGrid.refreshLayout()
+						}, 300);
+	  				StcGrid.resetData(result);
+	  			}
+	  		})
 	  	}
 	  })
+	  
+	  //더블클릭 하면 체크박스 체크
+	  StcGrid.on('dblclick', (e) => {
+    				var rowKey = e.rowKey;
+    				StcGrid.check(rowKey);
+				});
+	  
+	  //완제품 재고 목록 모달에서 출고량 입력하여 완제품 출고 테이블에 저장
+	  	
+	  		StcGrid.on("click",(e) => {
+	  			const {columnName} = e;
+	  			cntRow = e.rowKey;
+	  			if(columnName == 'edctsOustCnt') {
+	  				console.log('a');
+	  				//출고수량
+	  				let cnt =  StcGrid.getValue(cntRow,'edctsOustCnt');
+	  				console.log(cnt);
+	  				//완제품LOT번호
+	  				let lotNo = StcGrid.getValue(cntRow, 'edctsLotNo');
+	  				console.log(lotNo);
+	  			}
+	  		})
+	  		grid.on("click", (ev) => {
+	  			const { columnName } = ev;
+	  			OustRowKey = ev.rowKey;
+	  			if(columnName == 'orderNo') {
+	  				//제품코드
+	  				let edctsCd = grid.getValue(OustRowKey,'edctsCd');
+	  				console.log(edctsCd);
+	  			}
+	  		})
+	  	
+	  $("#addBtn").click(ev => {
+	  	$.ajax({
+	 		url:"saveSalesOust",
+	  		dataType:"json",
+	  		method:"post",
+	  		data:{"cnt":cnt, "lotNo":lotNo, "edctsCd":edctsCd},
+	  		success:function() {
+	  			console.log('a');
+	  		}
+	  	})
+	  })
+	  
+	  
 </script>
 </body>
 </html>
