@@ -51,9 +51,9 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
-	public void grid5Insert(List<PlanVO> list) {
+	public void grid5Update(List<PlanVO> list) {
 		for(PlanVO vo : list) {
-			mapper.grid5Insert(vo);
+			mapper.grid5Update(vo);
 		}
 	}
 

@@ -28,8 +28,8 @@ public class ProgVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date wkToDttm;
-	int inferCnt;
-	int prodCnt;
+	Integer inferCnt;
+	Integer prodCnt;
 	String nowSt;
 	String edctsLotNo;
 	String planCd;

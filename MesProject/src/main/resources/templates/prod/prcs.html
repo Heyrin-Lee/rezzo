@@ -102,6 +102,23 @@ body {
           rowHeaders: ['checkbox'],
           columns: [
             {
+              header: '공정구분',
+              name: 'prcsFg',
+              editor: {
+	              type: 'select',
+	              options: {
+	                listItems: [
+	                  { text: 'CAP', value: 'CAP' },
+	                  { text: 'CLN', value: 'CLN' },
+	                  { text: 'FLN', value: 'FLN' },
+	                  { text: 'HTN', value: 'HTN' },
+	                  { text: 'MDT', value: 'MDT' },
+	                  { text: 'OPK', value: 'OPK' }
+	                ]
+	              }
+	            }
+            },
+             {
               header: '공정코드',
               name: 'prcsCd',
               editor: 'text'
@@ -110,20 +127,6 @@ body {
               header: '공정명',
               name: 'prcsNm',
               editor: 'text'
-            },
-            {
-              header: '공정구분',
-              name: 'prcsFg',
-              editor: {
-	              type: 'select',
-	              options: {
-	                listItems: [
-	                  { text: 'Deluxe', value: '1' },
-	                  { text: 'EP', value: '2' },
-	                  { text: 'Single', value: '3' }
-	                ]
-	              }
-	            }
             },
             {
               header: '공정설명',

@@ -16,6 +16,6 @@ public interface PlanMapper {
 	public void planInsert(PlanVO vo);
 	public void grid1Insert(PlanVO vo);
 	public void grid2Insert(PlanVO vo);
-	public void grid5Insert(PlanVO vo);
+	public void grid5Update(PlanVO vo);
 	public void orderUpdate(PlanVO vo);
 }

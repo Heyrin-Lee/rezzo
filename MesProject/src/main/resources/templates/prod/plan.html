@@ -252,28 +252,7 @@
                 data: gridData2,
                 scrollX: false,
                 scrollY: false,
-                columns: [{
-                        header: '제품코드',
-                        name: 'edctsCd',
-                        editor: {
-                            type: 'select',
-                            options: {
-                                listItems: [{
-                                        text: '100',
-                                        value: '100'
-                                    },
-                                    {
-                                        text: '200',
-                                        value: '200'
-                                    },
-                                    {
-                                        text: '300',
-                                        value: '300'
-                                    }
-                                ]
-                            }
-                        }
-                    },
+                columns: [
                     {
                         header: '제품명',
                         name: 'prdtNm',
@@ -299,16 +278,16 @@
                             type: 'select',
                             options: {
                                 listItems: [{
-                                        text: 'Deluxe',
-                                        value: '1'
+                                        text: 'LNE001',
+                                        value: 'LNE001'
                                     },
                                     {
-                                        text: 'EP',
-                                        value: '2'
+                                        text: 'LNE002',
+                                        value: 'LNE001'
                                     },
                                     {
-                                        text: 'Single',
-                                        value: '3'
+                                        text: 'LNE003',
+                                        value: 'LNE003'
                                     }
                                 ]
                             }
@@ -386,15 +365,15 @@
                     },
                     {
                         header: '자재LOT',
-                        name: 'rscLotNo'
+                        name: 'lotCd'
                     },
                     {
                         header: '사용가능수량',
-                        name: 'rscCnt'
+                        name: 'lotRmnCnt'
                     },
                     {
                         header: '출고수량',
-                        name: 'rscUse',
+                        name: 'holdCnt',
                         editor : 'text'
                     },
                     {
@@ -409,7 +388,7 @@
            	$("#grid4").on("keyup", function(key) {
            		if(key.keyCode == 13) {
 	           		let data = grid4.getCheckedRows()
-	           
+	           		console.log(data)
 	           		grid5.resetData(data)
            		}
            	})
@@ -430,7 +409,7 @@
                     },
                     {
                         header: '출고수량',
-                        name: 'rscUse'
+                        name: 'holdCnt'
                     },
                     {
                         header: '계획코드',
@@ -488,11 +467,11 @@
              	
              	let grid5Data = grid5.getData()
              	$.each(grid5Data, function(index, item) {
-		            	item.rscUse = grid4.getCheckedRows()[index].rscUse;
+		            	item.holdCnt = grid4.getCheckedRows()[index].holdCnt;
 		            	console.log(item)
 		         }) 
 		         
-		        let orderNo = grid.getData() 
+		        let orderNo = grid.getData()[0].orderNo
              	
              	let arr = []
              	
@@ -509,7 +488,7 @@
             	})
             	
             	$.ajax({
-            		url : 'plan5Insert',
+            		url : 'grid5Update',
             		method: 'POST',
             		contentType:'application/json',
             		data : JSON.stringify(grid5Data),
@@ -517,10 +496,10 @@
             	
             	$.ajax({
             		url : 'orderUpdate',
-            		data : {"orderNo" : orderNO }
+            		data : {"orderNo" : orderNo }
             	})
             	
-            	window.location.reload()
+            	//window.location.reload()
             })
             
             function makeDate(idt) {
