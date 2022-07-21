@@ -11,7 +11,7 @@
     </select>
 
     <select id="getResources" resultType="RscVO">
-        select RSC_CD, RSC_NM
+        select RSC_CD, RSC_NM, MNG_UNIT
         from RSC
         where RSC_NM like '%${rscNm}%'
           and RSC_CD like '%${rscCd}%'
@@ -24,9 +24,8 @@
         where ro.ORDR_CD = rod.ORDR_CD
           and ro.VEND_CD = #{vendCd}
           and rod.RMN_CNT != 0
-          and
         <![CDATA[
-            PAPRD_CMND_DT >= #{startDt}
+          and PAPRD_CMND_DT >= #{startDt}
           and PAPRD_CMND_DT <= #{endDt}
         ]]>
         order by PAPRD_CMND_DT
@@ -34,18 +33,41 @@
 
     <select id="genRscInspCd" resultType="String">
         select 'RMI' || to_char(sysdate, 'YYYYMMDD') || lpad(NVL(max(substr(rsc_insp_cd, 14, 3)), 0) + 1, 3, '0')
-        from rsc_insp_dtl where substr(rsc_insp_cd, 4, 8) = to_char(sysdate, 'yyyymmdd')
+        from rsc_insp_dtl
+        where substr(rsc_insp_cd, 4, 8) = to_char(sysdate, 'yyyymmdd')
     </select>
 
     <insert id="setRscInspList" parameterType="RscInspVO">
-        insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT, PRE_IST_CNT)
-        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt}, #{preIstCnt})
+        insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, INSP_FAIL_CNT, PRE_IST_CNT,
+                                  INSP_DT)
+        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, #{inspPassCnt}, #{inspFailCnt}, #{preIstCnt}, #{inspDt})
     </insert>
 
     <update id="updRscOrdrRmnCnt" parameterType="RscInspVO">
         update RSC_ORDR_DTL
         set RMN_CNT = RMN_CNT - #{preIstCnt}
-        where ORDR_CD = #{ordrCd} and RSC_CD = #{rscCd}
+        where ORDR_CD = #{ordrCd}
+          and RSC_CD = #{rscCd}
     </update>
+
+    <select id="getRscInspHist" parameterType="RscInspVO" resultType="RscInspVO">
+        select rid.RSC_CD, rid.RSC_INSP_CD, rid.ORDR_CD, to_char(rid.INSP_DT, 'yyyy-mm-dd') inspDt,
+        ro.VEND_CD, rsc.RSC_NM, rid.INSP_CNT, rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT, rsc.MNG_UNIT,
+        rsc.RSC_TYP, rsc.RSC_SPEC
+        from RSC_INSP_DTL rid, RSC_ORDR ro, RSC
+        where ro.ORDR_CD = rid.ORDR_CD
+        and rsc.RSC_CD = rid.RSC_CD
+        and rid.BOOL != 1
+        <![CDATA[
+          and rid.INSP_DT >= #{startDt}
+          and rid.INSP_DT <= #{endDt}
+        ]]>
+        <if test="vendCd != ''">and ro.VEND_CD = #{vendCd}</if>
+        <if test="rscCd != '' and rscCd != null">and rid.RSC_CD = #{rscCd}</if>
+    </select>
+
+    <select id="schRscInspHist" parameterType="RscInspVO" resultType="RscInspVO">
+
+    </select>
 
 </mapper>

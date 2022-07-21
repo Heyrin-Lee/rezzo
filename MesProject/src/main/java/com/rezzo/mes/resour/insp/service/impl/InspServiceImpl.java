@@ -9,6 +9,7 @@ import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,6 +33,7 @@ public class InspServiceImpl implements InspService {
     public void setRscInspList(List<RscInspVO> rscInspVOS) {
         String rscInspCd = mapper.genRscInspCd();
         for(RscInspVO rscInspVO : rscInspVOS) {
+            String inspDt = rscInspVO.getInspDt(); // get insp date
             rscInspVO.setRscInspCd(rscInspCd);
             mapper.setRscInspList(rscInspVO);
             mapper.updRscOrdrRmnCnt(rscInspVO);
@@ -40,7 +42,12 @@ public class InspServiceImpl implements InspService {
 
     // 입고검사조회
     @Override
-    public List<RscVO> getResource(RscVO rscVO) {
-        return null;
+    public List<RscVO> getResources(RscVO rscVO) {
+        return mapper.getResources(rscVO);
+    }
+
+    @Override
+    public List<RscInspVO> getRscInspHist(RscInspVO rscInspVO) {
+        return mapper.getRscInspHist(rscInspVO);
     }
 }

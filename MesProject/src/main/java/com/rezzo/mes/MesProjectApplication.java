@@ -15,7 +15,6 @@ public class MesProjectApplication {
 
 	@Bean
 	public String saveDir() {
-
 		return "c://imgfile/";
 	}
 }

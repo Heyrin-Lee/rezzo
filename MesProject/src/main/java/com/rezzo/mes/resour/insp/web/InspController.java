@@ -27,6 +27,7 @@ public class InspController {
     public String rscInsp() {
         return "resour/rscInsp";
     }
+
     @RequestMapping("rscInspList")
     public String rscInspList() {
         return "resour/rscInspList";
@@ -38,10 +39,11 @@ public class InspController {
     public List<VendVO> getRscVendList(@ModelAttribute VendVO vendVO) {
         return sv.getRscVendList(vendVO);
     }
-    @RequestMapping("getResource")
+
+    @RequestMapping("getResources")
     @ResponseBody
-    public List<RscVO> getResource(RscVO rscVO) {
-        return sv.getResource(rscVO);
+    public List<RscVO> getResources(@ModelAttribute RscVO rscVO) {
+        return sv.getResources(rscVO);
     }
 
     // 검사내역 저장
@@ -57,5 +59,15 @@ public class InspController {
         return sv.getRscOrdrList(rscOrdrVO);
     }
 
+    @RequestMapping("getRscInspHist")
+    @ResponseBody
+    public List<RscInspVO> getRscInspHist(@ModelAttribute RscInspVO rscInspVO) {
+        return sv.getRscInspHist(rscInspVO);
+    }
 
+//    @RequestMapping("schRscInspHist")
+//    @ResponseBody
+//    public List<RscInspVO> schRscInspHist(@ModelAttribute RscInspVO rscInspVO) {
+//        return
+//    }
 }

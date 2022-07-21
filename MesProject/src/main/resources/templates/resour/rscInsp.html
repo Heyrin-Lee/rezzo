@@ -115,12 +115,52 @@
 
 
     <script>
-        ///////////////////////////// init ////////////////////////////////
+        ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit();
         })
 
-        ///////////////////////////// grid section ////////////////////////////////
+        let startDt = document.getElementById('startpicker-input');
+        let endDt = document.getElementById('endpicker-input');
+        let vendCd = document.getElementById('vendCd');
+        let inspDt = document.getElementById('inspDt');
+        ///////////////////////////// date picker ////////////////////////////////
+        let today = new Date();
+        let rangepicker = tui.DatePicker.createRangePicker({
+            startpicker: {
+                date: today,
+                input: '#startpicker-input',
+                container: '#startpicker-container'
+            },
+            endpicker: {
+                date: today,
+                input: '#endpicker-input',
+                container: '#endpicker-container'
+            }
+        });
+
+        let rangepickerMdfy = tui.DatePicker.createRangePicker({
+            startpicker: {
+                date: today,
+                input: '#startpicker-input-mod',
+                container: '#startpicker-container-mod'
+            },
+            endpicker: {
+                date: today,
+                input: '#endpicker-input-mod',
+                container: '#endpicker-container-mod'
+            }
+        });
+
+        let datepicker = new tui.DatePicker('#wrapper', {
+            date: today,
+            input: {
+                element: '#inspDt',
+                format: 'yyyy-MM-dd'
+            }
+        });
+
+        ///////////////////////////// main grid section ////////////////////////////////
         // custom input renderers
         class inputPreIstCnt {
             constructor(props) {
@@ -329,44 +369,7 @@
         });
 
 
-        ///////////////////////////// date picker ////////////////////////////////
-        let today = new Date();
-        let rangepicker = tui.DatePicker.createRangePicker({
-            startpicker: {
-                date: today,
-                input: '#startpicker-input',
-                container: '#startpicker-container'
-            },
-            endpicker: {
-                date: today,
-                input: '#endpicker-input',
-                container: '#endpicker-container'
-            }
-        });
 
-        let rangepickerMod = tui.DatePicker.createRangePicker({
-            startpicker: {
-                date: today,
-                input: '#startpicker-input-mod',
-                container: '#startpicker-container-mod'
-            },
-            endpicker: {
-                date: today,
-                input: '#endpicker-input-mod',
-                container: '#endpicker-container-mod'
-            }
-        });
-
-        let datepicker = new tui.DatePicker('#wrapper', {
-            date: today,
-            input: {
-                element: '#inspDt',
-                format: 'yyyy-MM-dd'
-            }
-        });
-
-        //////////////////////////// flag ////////////////////////////////
-        let modFlag; // 0 = 등록, 1 = 수정
 
         ///////////////////////////// vendor ////////////////////////////////
         // declare vendor modal
@@ -438,16 +441,12 @@
                 .then(res => vendGrid.resetData(res))
         }
 
-        ///////////////////////////// get list ////////////////////////////////
+        ///////////////////////////// get ordr list ////////////////////////////////
         // get order list
         let getOrdrListBtn = document.getElementById('getOrdrList');
         getOrdrListBtn.addEventListener('click', getOrdrList);
 
         function getOrdrList() {
-            let startDt = document.getElementById('startpicker-input');
-            let endDt = document.getElementById('endpicker-input');
-            let vendCd = document.getElementById('vendCd');
-
             if (startDt.value === '' || endDt.value === '') {
                 alert('기간을 입력하세요')
             } else if (vendCd.value === '') {
@@ -476,20 +475,17 @@
             })
         }
 
-        function updateRscInspList(data) {
-            let url = 'updateInspList'
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            })
-        }
-
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
+            let ary = [];
+            let obj = {inspDt:inspDt.value};
             let gridVal = grid.getCheckedRows();
-            setRscInspList(gridVal)
 
+            ary.push(gridVal);
+            ary.push(obj);
+
+            console.log(ary)
+            // setRscInspList(gridVal);
         })
 
         /////////////////////////// inspection history  ////////////////////////////////////
@@ -536,7 +532,7 @@
         let inspHistSchBtn = document.getElementById('inspHistSchBtn')
         inspHistSchBtn.addEventListener('click', function () {
             let data = new FormData(inspDtRngFrm);
-            let url = 'getRscInspListByDt'
+            let url = 'schRscInspHist'
             fetch(url, {
                 method: 'POST',
                 body: data

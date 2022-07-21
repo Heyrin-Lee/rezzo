@@ -19,6 +19,7 @@ public interface InspMapper {
     String genRscInspCd();
 
     // 입고검사조회
-    List<RscVO> getResource(RscVO rscVO);
+    List<RscVO> getResources(RscVO rscVO);
+    List<RscInspVO> getRscInspHist(RscInspVO rscInspVO);
 
 }
