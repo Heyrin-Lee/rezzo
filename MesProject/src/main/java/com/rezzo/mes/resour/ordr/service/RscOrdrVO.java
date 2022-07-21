@@ -17,9 +17,17 @@ public class RscOrdrVO {
 	private int rmnCnt;
 	
 	//자재발주 테이블
+	String ordrNo;
 	private String vendCd;
 	private Date paprdCmndDt;
 	private Date ordrReqDt;
+	
+	// 자재발주 코드 카운트
+	String ordrSCnt;
+	
+	String rscStc;
+	String safStc;
+	
 	
 	// misc
 	Date startDt;

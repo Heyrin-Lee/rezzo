@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style>
+		body {
+			background: #eee
+		}
+
+		uploadResult {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+		}
+
+		.image {
+			display: block;
+			width: 100%;
+		}
+
+		.image-label {
+			position: relative;
+			bottom: 22px;
+			left: 5px;
+			color: white;
+			text-shadow: 2px 2px 2px black;
+		}
+
+		.c_btn {
+			color: #fff;
+			font-size: 13px;
+			background: #333;
+			border: none;
+			padding: 6px;
+			border-radius: 4px
+		}
+
+		.c_btn:hover {
+			background: #555;
+		}
+
+		.linelist {
+			display: inline-block;
+			margin-top: 0px;
+		}
+
+		#grid {
+			width: 100%
+		}
+
+		label {
+			width: 100px;
+			float: left;
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<!-- 본문내용 -->
+	<th:block layout:fragment="main">
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">자재발주</h1>
+			<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+				<li class="breadcrumb-item">> 자재관리</li>
+				<li class="breadcrumb-item active">> 자재발주관리</li>
+			</ol>
+
+			<div class="card mb-4">
+				<div class="card-body">
+
+					<tr>
+						<th>원자재명</th>
+						<td><input class="form-control" type="text" id="keyword3" name="eqmNm" style="width: 150px"></td>
+						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i
+								class="fas fa-search"></i></button>
+						&nbsp&nbsp
+					</tr>
+
+
+					<br><br>
+					<div id="grid"></div>
+				</div>
+			</div>
+
+			<div class="card mb-4">
+				<div class="card-body">
+
+					<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="plusBtn"><i class="fas fa-plus"></i> 추가</button>
+						<button class="btn btn-primary" id="minusBtn"><i class="fas fa-minus"></i> 삭제</button>
+						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 발주</button>
+						<br> <br>
+					</div>
+
+					<br><br>
+					<div id="grid2"></div>
+				</div>
+			</div>
+
+
+
+			<script>
+				// 년월일 구하기
+				let today = new Date();
+				let year = today.getFullYear(); // 년도
+				let month = today.getMonth() + 1; // 월
+				let date = today.getDate(); // 날짜
+				let format = year + (("00" + month.toString()).slice(-2)) + (("00" + date.toString()).slice(-2));
+
+				console.log(format)
+
+				$("#plusBtn").on("click", function (e) {
+					grid2.appendRow()
+					let date = format;
+					$.ajax({
+						url: 'rscOrdrCd',
+						method: 'POST',
+						dataType: 'json',
+						contentType: 'application/text',
+						data: {
+							ordrSCnt: date
+						},
+						success: function (result) {
+							if (result.ordrSCnt == null) {
+								index = "001";
+							} else {
+								index = result.ordrScnt
+							}
+
+							function makeCd() {
+								return 'ORD'+format + index
+							}
+							code = makeCd()
+							console.log(code)
+							for (let i=0; i<grid2.getRowCount(); i++) {
+								grid2.setValue(i,'ordrCd', code)
+							}						
+						}
+					})
+				})
+
+				//
+
+				const gridData = [];
+
+				const grid = new tui.Grid({
+					el: document.getElementById('grid'),
+					scrollX: false,
+					bodyHeight: 150,
+					rowHeight: 35,
+					rowHeaders: ['rowNum'],
+					header: {
+						height: 40
+					},
+					columns: [{
+						header: '자재코드',
+						name: 'c1'
+					}, {
+						header: '자재명',
+						defaultValue: 2,
+						name: 'c2'
+					}, {
+						header: '현재재고',
+						defaultValue: 2,
+						name: 'c2'
+					}],
+					data: gridData
+				});
+
+		
+
+
+
+				const grid2 = new tui.Grid({
+					el: document.getElementById('grid2'),
+					bodyHeight: 200,
+					rowHeight: 35,
+					rowHeaders: ['checkbox'],
+					header: {
+						height: 40
+					},
+					columns: [{
+						header: '자재코드',
+						align: 'center',
+						name: 'vendCd'
+					}, {
+						header: '자재명',
+						align: 'center',
+						name: 'vendNm'
+					},{
+						header: '발주코드',
+						align: 'center',
+						name: 'ordrCd'
+					},  {
+						header: '발주수량',
+						align: 'center',
+						name: 'ordrCnt'
+					}, {
+						header: '업체코드',
+						align: 'center',
+						name: 'vendCd'
+					}, {
+						header: '업체명',
+						align: 'center',
+						name: 'vendNm'
+					}, {
+						header: '현재재고',
+						align: 'center',
+						name: 'ordrCnt'
+					}, {
+						header: '납기요청일',
+						align: 'center',
+						name: 'paprdCmndDt'
+					}],
+				});
+				
+				
+		$.ajax({
+			url:"rscCOrdrList",
+			method : 'GET',
+			dataType: 'JSON',
+			success:function(result){
+				grid.resetData(result);
+			}
+		})
+				
+		$('#minusBtn').on('click',function(ev){
+			grid2.removeCheckedRows()
+			toastr.success('정상적으로 삭제되었습니다.');
+		})
+				
+				
+			</script>
+	</th:block>
+</body>
+
+</html>
