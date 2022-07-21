@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rezzo.mes.resour.ordr.mapper.RscOrdrMapper">
+	
+	
+	<select id="rscOrdrCd" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+		select LPAD(count(*), 3,0) as "ordrSCnt" 
+		from rsc_ordr where ordr_cd like '%'||#{ordrSCnt}||'%'
+	</select>
+	
+	<select id="rscCOrdrList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+		select * from vw_ordr_list;
+	</select>
+	
+</mapper>
