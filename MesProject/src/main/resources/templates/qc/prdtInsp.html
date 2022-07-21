@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>ccds.html</title>
+</head>
+<body>
+	<!-- 본문내용 -->
+	<th:block layout:fragment="main">
+		<div class="container-fluid px-4">
+			<h1 class="mt-4">제품검사관리</h1>
+			<ol class="breadcrumb mb-4">
+				<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 품질관리</li>
+				<li class="breadcrumb-item active">> 제품검사관리</li>
+			</ol>
+			<!-- 탭 메뉴 -->
+			<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					<button class="nav-link active" id="nav-codes-tab" data-bs-toggle="tab" data-bs-target="#nav-codes" type="button"
+						role="tab" aria-controls="nav-codes" aria-selected="true">제품검사 등록</button>
+					<button class="nav-link" id="nav-cdInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-cdInfo"
+						type="button" role="tab" aria-controls="nav-cdInfo" aria-selected="false">제품검사 조회</button>
+				</div>
+			</nav>
+			<div class="tab-content" id="nav-tabContent">
+				<!-- 검사등록 탭 -->
+				<div class="tab-pane fade show active" id="nav-codes" role="tabpanel" aria-labelledby="nav-codes-tab">
+					<!-- 내용 -->
+					<div class="card mb-4">
+            <div class="card-body">
+            	<div class="linelist" style="float: right;">
+								<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
+								<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
+								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+								<br> <br>
+							</div>
+							<form id="dataForm" name="dataForm" action="#" method="post">
+								<table class="table" style="vertical-align : middle;">
+									<colgroup>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>구분 <strong class="blue">*</strong></th>
+											<td>
+												<select class="dataTable-selector" name="vendTyp" id="vendTyp" style="width: 250px">
+													<option selected value="">==등록시필수선택==</option>  
+													
+												</select></td>
+											<th>거래처코드 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="vendCd" name="vendCd" style="width: 250px" maxlength="20"
+												placeholder="등록시 자동부여됩니다." readonly />
+											<th>거래처명 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="vendNm" name="vendNm" style="width: 250px" maxlength="50" /></td>
+										</tr>
+										<tr>
+											<th>사업자등록번호</th>
+											<td><input class="form-control" type="text" id="bizno" name="bizno" style="width: 250px" maxlength="50" /></td>
+											<th>전화번호</th>
+											<td><input class="form-control" type="text" id="telno" name="telno" style="width: 250px" maxlength="50" /></td>
+											<th>비고</th>
+											<td><input type="text" id="remk" name="remk" class="form-control" maxlength="50" style="width: 250px" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+            </div>
+        	</div>
+        	<div class="card mb-4">
+            <div class="card-body">
+            	<h1>검사등록 그리드 영역</h1> 
+            </div>
+        	</div>
+				</div>
+				<!-- 검사조회 탭 -->
+				<div class="tab-pane fade" id="nav-cdInfo" role="tabpanel" aria-labelledby="nav-cdInfo-tab">
+					<!-- 내용 -->
+					<div class="card mb-4">
+            <div class="card-body">
+            	<div class="linelist" style="float: right;">
+								<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
+								<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
+								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+								<br> <br>
+							</div>
+							<form id="dataForm" name="dataForm" action="#" method="post">
+								<table class="table" style="vertical-align : middle;">
+									<colgroup>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>구분 <strong class="blue">*</strong></th>
+											<td>
+												<select class="dataTable-selector" name="vendTyp" id="vendTyp" style="width: 250px">
+													<option selected value="">==등록시필수선택==</option>
+												</select></td>
+											<th>거래처코드 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="vendCd" name="vendCd" style="width: 250px" maxlength="20"
+												placeholder="등록시 자동부여됩니다." readonly />
+											<th>거래처명 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="vendNm" name="vendNm" style="width: 250px" maxlength="50" /></td>
+										</tr>
+										<tr>
+											<th>사업자등록번호</th>
+											<td><input class="form-control" type="text" id="bizno" name="bizno" style="width: 250px" maxlength="50" /></td>
+											<th>전화번호</th>
+											<td><input class="form-control" type="text" id="telno" name="telno" style="width: 250px" maxlength="50" /></td>
+											<th>비고</th>
+											<td><input type="text" id="remk" name="remk" class="form-control" maxlength="50" style="width: 250px" /></td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
+            </div>
+        	</div>
+        	<div class="card mb-4">
+            <div class="card-body">
+            	<h1>검사조회 그리드 영역</h1> 
+            </div>
+        	</div>
+				</div><!-- nav-tabContent -->
+			</div>
+		</div>
+	</th:block>
+</body>
+</html>

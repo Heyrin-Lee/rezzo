@@ -256,7 +256,7 @@ const grid = new tui.Grid({
  $('#minusBtn').click(ev => {
  		var check = grid.getCheckedRows();
  		check.forEach(obj => {
- 		 if(grid.getValue(obj.rowKey,"rscCd") != null || grid.getValue(obj.rowKey,"rscCd") != '') {
+ 		 if(grid.getValue(obj.rowKey,"bomCd") != '') {
  		 		$.ajax({
 				 	url: "delBomGrid",
 				  method: "POST",
@@ -267,7 +267,7 @@ const grid = new tui.Grid({
 			    	toastr.success('정상적으로 삭제되었습니다.');
 		    	}
 				})
- 		 } else { 			 
+ 		 } else { 
  			grid.removeRow(obj.rowKey);
  		 }
  		})
