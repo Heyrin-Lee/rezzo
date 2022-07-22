@@ -16,11 +16,13 @@ public class IstServiceImpl implements RscIstService {
     private final RscIstMapper mapper;
 
     @Override
-    public void saveRscIst(List<RscIstVO> rscIstVOS) {
+    public void saveRscIstLot(List<RscIstVO> rscIstVOS) {
         for(RscIstVO rscIstVO : rscIstVOS) {
-            String rscIstCd = mapper.getRscIstCd(rscIstVO);
-            rscIstVO.setIstCd(rscIstCd);
-            mapper.saveRscIst(rscIstVO);
+            String key = mapper.getRscIstCd(rscIstVO);
+            rscIstVO.setLotCd(key); // lot key 발급
+            mapper.saveRscIstLotEach(rscIstVO); // lot 입고 등록
+            mapper.updRscInspBool(rscIstVO); // 입고검사마감
         }
     }
+
 }

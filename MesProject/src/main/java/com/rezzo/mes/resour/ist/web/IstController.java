@@ -22,10 +22,10 @@ public class IstController {
         return "resour/rscIst";
     }
 
-    @RequestMapping("saveRscIst")
+    @RequestMapping("saveRscIstLot")
     @ResponseBody
-    public void saveRscIst(@RequestBody List<RscIstVO> rscIstVOS) {
-        System.out.println("rscInspVO = " + rscIstVOS);
-        ris.saveRscIst(rscIstVOS);
+    public void saveRscIstLot(@RequestBody List<RscIstVO> rscIstVOS) {
+        System.out.println("rscIstVOS = " + rscIstVOS);
+        ris.saveRscIstLot(rscIstVOS);
     }
 }

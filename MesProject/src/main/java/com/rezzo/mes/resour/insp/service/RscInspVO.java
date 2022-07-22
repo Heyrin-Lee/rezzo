@@ -4,11 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class RscInspVO {
+
+    String startDt;
+    String endDt;
 
     String rscCd; //자재코드
     String rscNm; // 자재품명
@@ -23,9 +25,8 @@ public class RscInspVO {
     int preIstCnt; // 가입고수량
 
     String rscInspCd; // 검사코드
-    Date inspDt; // 검사일자
+    String inspDt; // 검사일자
     int inspCnt; //검사수량
     int inspPassCnt; // 합격수량
     int inspFailCnt; // 불량수량
-
 }

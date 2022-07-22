@@ -19,6 +19,7 @@
                 <input type="button" value="조회/수정" id="modiBtn">
                 <input type="button" value="다시작성">
                 <input type="button" value="삭제">
+                <input type="hidden" id="rscInspCdTemp">
                 <hr>
 
                 <form id="getInspListFrm">
@@ -49,7 +50,6 @@
                         <span class="tui-ico-date"></span>
                     </div>
                     <div id="wrapper" style="margin-top: -1px;"></div>
-                    <hr>
                 </form>
             </div>
         </div>
@@ -115,12 +115,55 @@
 
 
     <script>
-        ///////////////////////////// init ////////////////////////////////
+        ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit();
         })
 
-        ///////////////////////////// grid section ////////////////////////////////
+        let startDt = document.getElementById('startpicker-input');
+        let endDt = document.getElementById('endpicker-input');
+        let vendCd = document.getElementById('vendCd');
+        let inspDt = document.getElementById('inspDt');
+        let rscInspCdTemp = document.getElementById('rscInspCdTemp');
+
+        let saveFlag = 0 // 0 : 저장, 1 : 수정저장
+        ///////////////////////////// date picker ////////////////////////////////
+        let today = new Date();
+        let rangepicker = tui.DatePicker.createRangePicker({
+            startpicker: {
+                date: today,
+                input: '#startpicker-input',
+                container: '#startpicker-container'
+            },
+            endpicker: {
+                date: today,
+                input: '#endpicker-input',
+                container: '#endpicker-container'
+            }
+        });
+
+        let rangepickerMdfy = tui.DatePicker.createRangePicker({
+            startpicker: {
+                date: today,
+                input: '#startpicker-input-mod',
+                container: '#startpicker-container-mod'
+            },
+            endpicker: {
+                date: today,
+                input: '#endpicker-input-mod',
+                container: '#endpicker-container-mod'
+            }
+        });
+
+        let datepicker = new tui.DatePicker('#wrapper', {
+            date: today,
+            input: {
+                element: '#inspDt',
+                format: 'yyyy-MM-dd'
+            }
+        });
+
+        ///////////////////////////// main grid section ////////////////////////////////
         // custom input renderers
         class inputPreIstCnt {
             constructor(props) {
@@ -329,44 +372,7 @@
         });
 
 
-        ///////////////////////////// date picker ////////////////////////////////
-        let today = new Date();
-        let rangepicker = tui.DatePicker.createRangePicker({
-            startpicker: {
-                date: today,
-                input: '#startpicker-input',
-                container: '#startpicker-container'
-            },
-            endpicker: {
-                date: today,
-                input: '#endpicker-input',
-                container: '#endpicker-container'
-            }
-        });
 
-        let rangepickerMod = tui.DatePicker.createRangePicker({
-            startpicker: {
-                date: today,
-                input: '#startpicker-input-mod',
-                container: '#startpicker-container-mod'
-            },
-            endpicker: {
-                date: today,
-                input: '#endpicker-input-mod',
-                container: '#endpicker-container-mod'
-            }
-        });
-
-        let datepicker = new tui.DatePicker('#wrapper', {
-            date: today,
-            input: {
-                element: '#inspDt',
-                format: 'yyyy-MM-dd'
-            }
-        });
-
-        //////////////////////////// flag ////////////////////////////////
-        let modFlag; // 0 = 등록, 1 = 수정
 
         ///////////////////////////// vendor ////////////////////////////////
         // declare vendor modal
@@ -438,15 +444,15 @@
                 .then(res => vendGrid.resetData(res))
         }
 
-        ///////////////////////////// get list ////////////////////////////////
+        ///////////////////////////// get ordr list ////////////////////////////////
         // get order list
         let getOrdrListBtn = document.getElementById('getOrdrList');
         getOrdrListBtn.addEventListener('click', getOrdrList);
 
         function getOrdrList() {
-            let startDt = document.getElementById('startpicker-input');
-            let endDt = document.getElementById('endpicker-input');
-            let vendCd = document.getElementById('vendCd');
+            // init conditions
+            saveFlag = 0;
+            grid.showColumn('rmnCnt');
 
             if (startDt.value === '' || endDt.value === '') {
                 alert('기간을 입력하세요')
@@ -464,7 +470,7 @@
             }
         }
 
-        ///////////////////////////// insert inspection result ////////////////////////////////
+        ///////////////////////////// insert or update inspection result ////////////////////////////////
         function setRscInspList(data) {
             let url = 'setRscInspList';
             fetch(url, {
@@ -476,8 +482,9 @@
             })
         }
 
-        function updateRscInspList(data) {
-            let url = 'updateInspList'
+
+        function updRscInspHist (data) {
+            let url = 'updRscInspHist';
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
@@ -488,8 +495,16 @@
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
             let gridVal = grid.getCheckedRows();
-            setRscInspList(gridVal)
-
+            if (saveFlag == 0) {
+                gridVal[0].inspDt = inspDt.value
+                setRscInspList(gridVal);
+            } else {
+                gridVal.forEach(element => {
+                    element.rscInspCd = rscInspCdTemp;
+                })
+                console.log(gridVal)
+                updRscInspHist(gridVal);
+            }
         })
 
         /////////////////////////// inspection history  ////////////////////////////////////
@@ -504,11 +519,11 @@
         // modal cation
         let modiModal = document.getElementById('modiModal');
         modiModal.addEventListener('shown.bs.modal', e => {
-            modiGrid.refreshLayout();
+            mdfyGrid.refreshLayout();
         })
 
         // search grid
-        let modiGrid = new tui.Grid({
+        let mdfyGrid = new tui.Grid({
             el: document.getElementById('modi-grid'),
             scrollX: false,
             scrollY: false,
@@ -536,32 +551,34 @@
         let inspHistSchBtn = document.getElementById('inspHistSchBtn')
         inspHistSchBtn.addEventListener('click', function () {
             let data = new FormData(inspDtRngFrm);
-            let url = 'getRscInspListByDt'
+            let url = 'schRscInspHist'
             fetch(url, {
                 method: 'POST',
                 body: data
             }).then(res => res.json()).then(res => {
-                modiGrid.resetData(res);
+                mdfyGrid.resetData(res);
             })
         });
 
         // select
-        modiGrid.on('dblclick', e => {
-            modFlag = 1;
-            let rowInfo = modiGrid.getRow(e.rowKey)
-            gridRowInfo = rowInfo;
-            grid.setColumn
-            let data = {rscInspCd: rowInfo.rscInspCd}
-            let url = 'getRscInspHist'
+        mdfyGrid.on('dblclick', e => {
+            let rowInfo = mdfyGrid.getRow(e.rowKey)
+            let data = {rscInspCd: rowInfo.rscInspCd, startDt:startDt.value, endDt:endDt.value}
+            rscInspCdTemp = rowInfo.rscInspCd
+            let url = 'getRscInspHistByCd'
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
+                grid.hideColumn('rmnCnt')
                 grid.resetData(res);
             })
+            saveFlag = 1;
             mModal.hide(modiModal);
+
         })
+
 
         ///////////////////////////// action on grid ////////////////////////////////
         let gridEle = document.getElementById('grid')
