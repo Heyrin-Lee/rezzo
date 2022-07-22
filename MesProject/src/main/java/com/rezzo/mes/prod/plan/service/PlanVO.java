@@ -38,15 +38,15 @@ public class PlanVO{
 	
 	// 자재코드, 자재lot, 자재재고, 
 	String rscCd;
-	int rscCnt;
-	String rscLotNo;
+	String lotCd;
+	int lotRmnCnt;
 	
 	// bom  
 	int useCnt;
 	String prcsCd;
 	
-	// holding 출고수량
-	int rscUse;
+	// hold필드
+	int holdCnt;
 	
 	String index;
 	

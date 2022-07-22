@@ -115,14 +115,14 @@ body {
      
      
    	//grid2에 내용 띄우기 grid에서 엔터(keyCode=13) 누르면 넘어감
-   	//grid에서 유저가 입력한 내용은 여기서 field value로 -> setValue 
    	$("#grid").on("keyup", function(key) {
+   		let edctsCd = grid.getData()[0].edctsCd;
+   		
    		if(key.keyCode == 13) {
-   			
    			$.ajax({
    				url : 'getRsc',
    				method : 'GET',
-   				dataType: "JSON",
+   				data : {"edctsCd" : edctsCd},
    				success: function (result) {
    					grid2.resetData(result); 
    					grid3.resetData(result);
@@ -145,7 +145,7 @@ body {
 		gridData[0].indicaDt = indicaDt
    		console.log(JSON.stringify(gridData))
    		
-   		let planCd = grid.getData();
+   		let planCd = grid.getData()[0].planCd;
    		
    		$.ajax({
    			url : 'indInsert',
@@ -255,7 +255,7 @@ body {
 	      el: document.getElementById('grid2'),
 	      data: gridData2,
 	      scrollX: false,
-	      scrollY: false,
+	      scrollY: true,
 	      columns: [
 	        {
 	          header: '공정코드',
@@ -269,17 +269,17 @@ body {
 	        },
 	        {
 	          header: 'LOT번호',
-	          name: 'rscLotNo',
+	          name: 'lotCd',
 	          align : 'center'
 	        },
 	        {
 	          header: '출고수량',
-	          name: 'rscUse',
+	          name: 'holdCnt',
 	          align : 'center'
 	        },
 	        {
 	          header: '재고수량',
-	          name: 'rscCnt',
+	          name: 'lotRmnCnt',
 	          align : 'center'
 	        },
 	        {
@@ -307,12 +307,12 @@ body {
 	        },
 	        {
 	          header: 'LOT번호',
-	          name: 'rscLotNo',
+	          name: 'lotCd',
 	          align : 'center'
 	        },
 	        {
 	          header: '출고수량',
-	          name: 'rscUse',
+	          name: 'holdCnt',
 	          align : 'center'
 	        }
 	      ]

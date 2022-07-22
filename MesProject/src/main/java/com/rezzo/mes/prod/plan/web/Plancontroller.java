@@ -73,13 +73,14 @@ public class Plancontroller {
 		service.orderUpdate(null);
 	}
 	 
-	@PostMapping("plan5Insert")
+	@PostMapping("grid5Update")
 	@ResponseBody
-	public void plan5Insert(@RequestBody List<PlanVO> list) {
-		service.grid5Insert(list); 
+	public void grid5Update(@RequestBody List<PlanVO> list) {
+		service.grid5Update(list); 
 	}  
  	
 	@RequestMapping("orderUpdate")
+	@ResponseBody
 	public void orderUpdate(PlanVO vo) {
 		service.orderUpdate(vo);
 	}

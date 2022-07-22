@@ -37,10 +37,10 @@ public class IndicaVO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date indicaDt3;
 	String rscCd;
-	int rscCnt;
+	String lotCd;
 	int useCnt;
-	int rscUse;
-	String rscLotNo;
+	int holdCnt;
+	int lotRmnCnt;
 	
 	String linePsch;
 	

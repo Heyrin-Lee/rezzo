@@ -38,6 +38,7 @@ public class IndicaController {
 	}
 	
 	@RequestMapping("updatePlan")
+	@ResponseBody
 	public void updatePlan(IndicaVO vo) {
 		service.updatePlan(vo);
 	}

@@ -10,30 +10,31 @@ JOIN EDCTS E
 ON D.EDCTS_CD = E.EDCTS_CD
 JOIN BOM B
 ON B.EDCTS_CD = E.EDCTS_CD 
+WHERE P.NOW_ST = '미진행'
 </select>
 
 <select id="getRsc" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
-SELECT DISTINCT B.PRCS_CD, B.RSC_CD, I.RSC_LOT_NO, H.RSC_USE, D.RSC_CNT, B.USE_CNT
+SELECT B.PRCS_CD, B.RSC_CD, L.LOT_CD, L.LOT_RMN_CNT, L.HOLD_CNT, B.USE_CNT
 FROM  BOM B
-JOIN  RSC_ORDR_DTL D
-ON B.RSC_CD = d.rsc_cd
-JOIN HOLDING H
-ON B.RSC_CD = H.RSC_CD
-JOIN RSC_IST I
-ON I.RSC_CD = D.RSC_CD
+JOIN  RSC_LOT L
+ON B.RSC_CD = L.RSC_CD
+WHERE B.EDCTS_CD = #{edctsCd}
 </select>
 
 <insert id="indicaDtlInsert" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO">
 INSERT INTO INDICA_DTL 
-VALUES (SEQINDICA.nextval, 
+VALUES ( 
 		#{indicaDt}, 
-		#{edctsCd}, 
+		#{planCd}, 
 		#{orderCnt}, 
 		#{wkFrDt}, 
-		#{bomCd}, 
-		#{lineCd}, 
-		#{prcsPsch},
-		#{indicaCnt})
+		#{lineCd},
+		#{linePsch},
+		#{indicaCnt},
+		#{edctsCd},
+		#{bomCd}
+		
+		)
 </insert>
 <insert id="indicaInsert" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO">
 INSERT INTO INDICA
