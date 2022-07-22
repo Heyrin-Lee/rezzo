@@ -6,6 +6,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Data
 public class SalesOustVO {
 
 	String edctsOustNo;
@@ -27,5 +32,6 @@ public class SalesOustVO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date distbTerm;
 	String edctsLotNo;
+	
 	
 }

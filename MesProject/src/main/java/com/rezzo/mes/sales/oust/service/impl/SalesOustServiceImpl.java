@@ -40,4 +40,10 @@ public class SalesOustServiceImpl implements SalesOustService{
 		return mapper.findOust(vo);
 	}
 
+	//출고등록 후 출고완료로 변경
+	@Override
+	public void updateProg(OrderVO vo) {
+		mapper.updateProg(vo);
+	}
+
 }

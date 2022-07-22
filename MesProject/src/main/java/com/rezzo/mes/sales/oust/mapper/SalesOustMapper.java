@@ -14,6 +14,8 @@ public interface SalesOustMapper {
 	public List<SalesStcVO> salesStcList(SalesStcVO vo);
 	//완제품 재고현황 모달에서 출고량 이력 후 출고등록
 	public void saveSalesOust(SalesOustVO vo);
+	//출고등록 후 출고완료로 변경
+	public void updateProg(OrderVO vo);
 	//출고현황 조회
 	public List<SalesOustVO> findOust(SalesOustVO vo);
 }

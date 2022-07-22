@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>제품출고 조회</title>
+<style>
+	.c_btn {
+   color: #fff;
+   font-size: 13px;
+   background: #333;
+   border: none;
+   padding: 6px;
+   border-radius: 4px
+}
+</style>
+</head>
+<body>
+<!-- 본문내용 -->
+<th:block layout:fragment="main">  
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">영업관리</h1>
+		<ol class="breadcrumb mb-4">
+			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+			<li class="breadcrumb-item">> 제품 출고 관리</li>
+			<li class="breadcrumb-item active">> 제품 출고 조회</li>
+		</ol>
+		
+		<div class="card mb-4">
+      <div id="cont" style="padding-bottom:0px">
+         <section id="r_section">
+            <div class="col">
+               <div class="card mb-4">
+                  <div class="card-header">
+                     <i class="fas fa-tachometer-alt"></i> 제품 출고 조회
+                  </div>
+				<div class="card-body" id="vendModal">
+                     <form name="submitFrm" id="submitFrm">
+                      <div class="r_input">
+                        <div class="mb-3">
+                           <label for="edctsIstNo" class="form-label">제품명</label>
+    						<input type="text" class="form-control" id="prdtNm" name="prdtNm">
+    						<!-- 모달버튼 -->
+    						<button type="button" class="btn btn-primary" id="prdtSearchBtn" data-bs-toggle="modal" data-bs-target="#proModal"><i class="fas fa-search"></i></button>	
+                        </div>
+                        <div class="mb-3">
+                           <label for="edctsLotNo" class="form-label">출고일자</label>
+    						<input type="date" id="searchDt1" name="searchDt1"> - <input type="date" id="searchDt2" name="searchDt2">
+    						<!-- 모달버튼 -->
+    						<button type="button" class="btn btn-primary" id="dtSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
+                        </div>
+                        <div class="mb-3">
+                           <label for="edctsCd" class="form-label">거래처</label>
+    						<input type="text" class="form-control" id="vendNm" name="vendNm">
+    						<!-- 모달버튼 -->
+    						<button type="button" class="btn btn-primary" id="vendSearchBtn" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-search"></i></button>	
+                        </div>
+                        
+                           <button class="c_btn" id="saveBtn" data-bs-target="" form="">등록</button>
+                           <button class="c_btn" id="dtSearchBtn" data-bs-target="" form="">조회</button>
+                        </div>
+                       </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </section>
+          <div id="grid"></div>
+          
+          <!-- 제품명 모달 -->
+	    <div class="modal fade" id="proModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">제품 목록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                	<div id="proGrid"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 제품명 모달 끝 -->
+         </div>
+     <script>
+     	const grid = new tui.Grid({
+	      el: document.getElementById('grid'),
+	      scrollX: false,
+	      bodyHeight: 300,
+	      rowHeight: 35,
+	      rowHeaders: ['rowNum'],
+	      header: {
+	        height: 40
+	      },
+	      columns: [
+	        {
+	          header: '거래처',
+	          name: 'edctsIstNo',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '완제품LOT번호',
+	          name: 'edctsIstDt',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '제품코드',
+	          name: 'edctsIstCnt',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '제품명',
+	          name: 'edctsCd',
+	          editor: 'text',
+	          align:'center'
+	        },
+	        {
+	          header: '주문번호',
+	          name: 'edctsLotNo',
+	          editor: 'datePicker',
+	          align:'center'
+	        },
+	        {
+	          header: '출고일자',
+	          name: 'edctsLotNo',
+	          editor: 'datePicker',
+	          align:'center'
+	        },
+	        {
+	          header: '출고수량',
+	          name: 'edctsLotNo',
+	          editor: 'datePicker',
+	          align:'center'
+	        }
+		  ]   
+	    });
+	    
+	    // 제품명 모달 그리드(조회)    
+	    const proGrid = new tui.Grid({
+	        el: document.getElementById('proGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	            {
+	                header: '완제품코드',
+	                name: 'edctsCd',
+	                width: 200,
+	                align:'center'
+	            },
+	            {
+	                header: '제품명',
+	                name: 'prdtNm',
+	                width: 200,
+	                align:'center'
+	            }
+	        ]
+	    });
+	    
+	    $("#prdtSearchBtn").on("click",function(list) {
+	    	setTimeout(function () {
+					proGrid.refreshLayout()
+				}, 300);
+				$.ajax({
+					url:"proSearch",
+					method:"get",
+					dataType:"json",
+					success:function(list) {
+						proGrid.resetData(list);
+					}
+				})
+	    })
+     </script>
+     
+</body>
+</html>
