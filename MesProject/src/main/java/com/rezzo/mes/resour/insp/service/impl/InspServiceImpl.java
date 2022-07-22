@@ -9,6 +9,7 @@ import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -31,10 +32,15 @@ public class InspServiceImpl implements InspService {
     }
 
     @Override
+    @Transactional
     public void setRscInspList(List<RscInspVO> rscInspVOS) {
+        // rsc_ordr insert
         String rscInspCd = mapper.genRscInspCd();
         String inspDt = rscInspVOS.get(0).getInspDt();
-        mapper.setRscInsp(rscInspCd, inspDt);
+        String inspTstr = rscInspVOS.get(0).getInspTstr();
+        mapper.setRscInsp(rscInspCd, inspDt, inspTstr);
+
+        // rsc_ordr_dtl insert
         for(RscInspVO rscInspVO : rscInspVOS) {
             rscInspVO.setRscInspCd(rscInspCd);
             mapper.setRscInspList(rscInspVO);
@@ -54,12 +60,12 @@ public class InspServiceImpl implements InspService {
     }
 
     @Override
+    @Transactional
     public void updRscInspHist(List<RscInspVO> rscInspVOS) {
         for (RscInspVO rscInspVO : rscInspVOS) {
             mapper.updRscInspHist(rscInspVO);
         }
     }
-
 
     // 입고검사조회
     @Override

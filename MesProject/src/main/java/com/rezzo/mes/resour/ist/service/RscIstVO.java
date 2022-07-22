@@ -12,9 +12,10 @@ public class RscIstVO {
 
     //
     String rscInspCd; // 검사코드
+    String ordrCd;
 
     // lot 관리
-    String lotCd; // lot 코드
+    String rscLotCd; // lot 코드
     String rscCd; // 자재코드
     String rscTyp; // 자재유형
     int lotCnt; // lot 수량
@@ -24,9 +25,8 @@ public class RscIstVO {
     Date expDt; // 유통기한
 
     // 자재 입고관리
-    String ordrCd; // 발주코드
-    String istCd; // 입고일자
-    Date istDt; // 입고일자
+    String rscIstCd; // 입고코드
+    String istDt; // 입고일자
     int istCnt; // 입고수량
     int inspPassCnt; // 합격-입고량
 }

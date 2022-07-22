@@ -50,6 +50,10 @@
                         <span class="tui-ico-date"></span>
                     </div>
                     <div id="wrapper" style="margin-top: -1px;"></div>
+
+                    <b>검사자</b>
+                    <input type="text" id="inspTstr">
+                    <hr>
                 </form>
             </div>
         </div>
@@ -125,6 +129,7 @@
         let vendCd = document.getElementById('vendCd');
         let inspDt = document.getElementById('inspDt');
         let rscInspCdTemp = document.getElementById('rscInspCdTemp');
+        let inspTstr = document.getElementById('inspTstr');
 
         let saveFlag = 0 // 0 : 저장, 1 : 수정저장
         ///////////////////////////// date picker ////////////////////////////////
@@ -372,8 +377,6 @@
         });
 
 
-
-
         ///////////////////////////// vendor ////////////////////////////////
         // declare vendor modal
         let vModal
@@ -456,8 +459,8 @@
 
             if (startDt.value === '' || endDt.value === '') {
                 alert('기간을 입력하세요')
-            } else if (vendCd.value === '') {
-                alert('공급업체를 입력하세요')
+            // } else if (vendCd.value === '') {
+            //     alert('공급업체를 입력하세요')
             } else {
                 let data = new FormData(getInspListFrm)
                 let url = 'getRscOrdrList';
@@ -483,7 +486,7 @@
         }
 
 
-        function updRscInspHist (data) {
+        function updRscInspHist(data) {
             let url = 'updRscInspHist';
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
@@ -496,13 +499,13 @@
         saveBtn.addEventListener('click', function () {
             let gridVal = grid.getCheckedRows();
             if (saveFlag == 0) {
-                gridVal[0].inspDt = inspDt.value
+                gridVal[0].inspDt = inspDt.value;
+                gridVal[0].inspTstr = inspTstr.value;
                 setRscInspList(gridVal);
             } else {
                 gridVal.forEach(element => {
                     element.rscInspCd = rscInspCdTemp;
                 })
-                console.log(gridVal)
                 updRscInspHist(gridVal);
             }
         })
@@ -563,7 +566,7 @@
         // select
         mdfyGrid.on('dblclick', e => {
             let rowInfo = mdfyGrid.getRow(e.rowKey)
-            let data = {rscInspCd: rowInfo.rscInspCd, startDt:startDt.value, endDt:endDt.value}
+            let data = {rscInspCd: rowInfo.rscInspCd, startDt: startDt.value, endDt: endDt.value}
             rscInspCdTemp = rowInfo.rscInspCd
             let url = 'getRscInspHistByCd'
             fetch(url, {

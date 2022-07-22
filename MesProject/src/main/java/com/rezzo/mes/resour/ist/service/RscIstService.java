@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface RscIstService {
 
-    void saveRscIstLot(List<RscIstVO> rscIstVO);
-
+    void setRscIstLot(List<RscIstVO> rscIstVO);
 }

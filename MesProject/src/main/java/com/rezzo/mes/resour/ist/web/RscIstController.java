@@ -1,6 +1,5 @@
 package com.rezzo.mes.resour.ist.web;
 
-import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ist.service.RscIstService;
 import com.rezzo.mes.resour.ist.service.RscIstVO;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-public class IstController {
+public class RscIstController {
 
     private final RscIstService ris;
 
@@ -22,10 +21,10 @@ public class IstController {
         return "resour/rscIst";
     }
 
-    @RequestMapping("saveRscIstLot")
+    @RequestMapping("setRscIstLot")
     @ResponseBody
-    public void saveRscIstLot(@RequestBody List<RscIstVO> rscIstVOS) {
+    public void setRscIstLot(@RequestBody List<RscIstVO> rscIstVOS) {
         System.out.println("rscIstVOS = " + rscIstVOS);
-        ris.saveRscIstLot(rscIstVOS);
+        ris.setRscIstLot(rscIstVOS);
     }
 }

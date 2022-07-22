@@ -9,6 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class RscInspVO {
 
+    // condtions
     String startDt;
     String endDt;
 
@@ -26,6 +27,7 @@ public class RscInspVO {
 
     String rscInspCd; // 검사코드
     String inspDt; // 검사일자
+    String inspTstr; // 검사자
     int inspCnt; //검사수량
     int inspPassCnt; // 합격수량
     int inspFailCnt; // 불량수량

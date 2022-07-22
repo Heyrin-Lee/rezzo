@@ -93,6 +93,7 @@
 
         let addRow = document.getElementById('addRow')
         let delRow = document.getElementById('delRow')
+        let istDt = document.getElementById('istDt')
         ///////////////////////////// !date picker ////////////////////////////////
         // range date picker
         let today = new Date();
@@ -274,8 +275,8 @@
 
             if (startDt.value === '' || endDt.value === '') {
                 alert('기간을 입력하세요')
-            } else if (vendCd.value === '') {
-                alert('공급업체를 입력하세요')
+            // } else if (vendCd.value === '') {
+            //     alert('공급업체를 입력하세요')
             } else {
                 let data = new FormData(getIstListFrm)
                 let url = 'getRscInspHist';
@@ -291,7 +292,8 @@
         ///////////////////////////// !save main grid data ////////////////////////////////
         saveBtn.addEventListener('click', function () {
             let data = grid.getCheckedRows();
-            let url = 'saveRscIstLot'
+            data[0].istDt = istDt.value;
+            let url = 'setRscIstLot'
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
