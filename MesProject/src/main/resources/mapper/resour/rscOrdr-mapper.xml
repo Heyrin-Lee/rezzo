@@ -9,7 +9,28 @@
 	</select>
 	
 	<select id="rscCOrdrList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
-		select * from vw_ordr_list;
+			select r.rsc_cd, r.rsc_nm, v.vend_cd, v.vend_nm, s.rsc_stc, s.saf_stc
+			from rsc r join vend v
+			on v.vend_cd=r.vend_cd 
+			join rsc_stc s on 1=1
+	</select>
+	
+	<select id="rscSOrdrList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+			select r.rsc_cd, r.rsc_nm, v.vend_cd, v.vend_nm, s.rsc_stc, s.saf_stc
+			from rsc r join vend v
+			on v.vend_cd=r.vend_cd 
+			join rsc_stc s on 1=1
+			where r.rsc_nm LIKE '%'||#{rscNm}||'%'
+		
+		
+	</select>
+	
+	<select id = "rscRowSelectList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+			select r.rsc_cd, r.rsc_nm, v.vend_cd, v.vend_nm, s.rsc_stc, s.saf_stc
+			from rsc r join vend v
+			on v.vend_cd=r.vend_cd 
+			join rsc_stc s on 1=1
+			where r.rsc_cd = #{rscCd}
 	</select>
 	
 </mapper>

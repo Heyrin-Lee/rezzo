@@ -24,8 +24,8 @@
 		insert into eqm (eqm_cd, line_cd, prcs_cd, eqm_nm, eqm_ist_dt, min_temp,
 		max_temp, chck_perd, use_yn, prcs_nm, eqm_fg)
 		values (<![CDATA[cre_code(#{eqmFg})]]>,
-		#{lineCd}, #{prcsCd}, #{eqmNm}, #{eqmIstDt}, #{minTemp}, 
-		#{maxTemp}, #{chckPerd}, #{useYN}, #{prcsNm},#{eqmFg})
+		#{lineCd}, #{prcsCd}, #{eqmNm}, #{eqmIstDt}, 
+		#{minTemp},#{maxTemp},#{chckPerd}, #{useYN}, #{prcsNm},#{eqmFg})
 	
 	</insert>
 	

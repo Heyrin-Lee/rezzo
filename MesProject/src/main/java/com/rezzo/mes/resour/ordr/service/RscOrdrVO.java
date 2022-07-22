@@ -24,10 +24,9 @@ public class RscOrdrVO {
 	
 	// 자재발주 코드 카운트
 	String ordrSCnt;
-	
 	String rscStc;
 	String safStc;
-	
+	String vendNm;
 	
 	// misc
 	Date startDt;

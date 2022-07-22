@@ -381,6 +381,11 @@
 				for (let a of formData.entries()) {
 					console.log(a)
 				}
+				
+				if($('#minTemp').val()==''){
+					$('#minTemp').val('')
+				}
+				
 				$.ajax({
 					url: "/eqmInsert",
 					method: 'POST',
@@ -388,6 +393,10 @@
 					contentType: false,
 					processData: false
 				}).done(function (xhr) {
+					toastr.success('정상적으로 저장되었습니다.');
+					$('#dataForm').each(function () {
+					this.reset()
+						})
 					$.ajax({
 						url: "eqmList",
 						method: "GET",
@@ -411,6 +420,10 @@
 					processData: false
 				}).done(function (xhr) {
 					toastr.success('정상적으로 저장되었습니다.');
+					$('#preview').attr('src','')
+					$('#dataForm').each(function () {
+					this.reset()
+						})
 					$.ajax({
 						url: "eqmList",
 						method: "GET",

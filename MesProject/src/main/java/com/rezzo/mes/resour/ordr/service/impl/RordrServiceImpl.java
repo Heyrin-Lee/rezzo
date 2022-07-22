@@ -28,5 +28,15 @@ public class RordrServiceImpl implements RscOrdrService {
 	public List<RscOrdrVO> rscCOrdrList(RscOrdrVO vo) {
 		return mapper.rscCOrdrList(vo);
 	}
+
+	@Override
+	public List<RscOrdrVO> rscSOrdrList(RscOrdrVO vo) {
+		return mapper.rscSOrdrList(vo);
+	}
+
+	@Override
+	public List<RscOrdrVO> rscRowSelectList(RscOrdrVO vo) {
+		return mapper.rscRowSelectList(vo);
+	}
 	
 }

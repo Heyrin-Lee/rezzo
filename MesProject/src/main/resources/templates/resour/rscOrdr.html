@@ -75,10 +75,13 @@
 
 					<tr>
 						<th>원자재명</th>
-						<td><input class="form-control" type="text" id="keyword3" name="eqmNm" style="width: 150px"></td>
+						<td><input class="form-control" type="text" id="rscNm" name="rscNm" style="width: 150px"></td>
 						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i
 								class="fas fa-search"></i></button>
 						&nbsp&nbsp
+						<!--			<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="plusBtn"><i class="fas fa-plus"></i> 추가</button>
+						</div>-->
 					</tr>
 
 
@@ -91,7 +94,6 @@
 				<div class="card-body">
 
 					<div class="linelist" style="float: right;">
-						<button class="btn btn-primary" id="plusBtn"><i class="fas fa-plus"></i> 추가</button>
 						<button class="btn btn-primary" id="minusBtn"><i class="fas fa-minus"></i> 삭제</button>
 						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 발주</button>
 						<br> <br>
@@ -114,8 +116,93 @@
 
 				console.log(format)
 
-				$("#plusBtn").on("click", function (e) {
-					grid2.appendRow()
+
+
+
+				// 상단 그리드 출력 
+				const gridData = [];
+
+				const grid = new tui.Grid({
+					el: document.getElementById('grid'),
+					scrollX: false,
+					bodyHeight: 150,
+					rowHeight: 35,
+					rowHeaders: ['rowNum'],
+					header: {
+						height: 40
+					},
+					columns: [{
+						header: '자재코드',
+						align: 'center',
+						name: 'rscCd'
+					}, {
+						header: '자재명',
+						align: 'center',
+						name: 'rscNm'
+					}, {
+						header: '현재재고',
+						align: 'center',
+						name: 'rscStc'
+					}, {
+						header: '안전재고',
+						align: 'center',
+						name: 'safStc'
+					}],
+					data: gridData
+				});
+
+
+				$.ajax({
+					url: "rscCOrdrList",
+					method: 'GET',
+					dataType: 'JSON',
+					success: function (result) {
+						grid.resetData(result);
+					}
+				})
+
+
+				grid.on('dblclick', ev => {
+					var rscCd = grid.getValue(ev.rowKey, 'rscCd')
+					var rscNm = grid.getValue(ev.rowKey, 'rscNm')
+					var rscStc = grid.getValue(ev.rowKey, 'rscStc')
+					var safStc = grid.getValue(ev.rowKey, 'safStc')
+					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
+					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
+					var rscCd2 = grid2.getColumnValues('rscCd');
+					
+					console.log(rscCd2)
+					console.log(rscCd)
+					var isValid = true;
+					rscCd2.forEach(ele => {
+						if (ele == rscCd) {
+							toastr.warning('동일 항목의 발주가 진행중입니다.');
+							isValid = false;
+							return false;
+						} 
+					})
+					
+					if(!isValid){
+						return;
+					}
+					console.log("hello")
+					grid2.appendRow({
+						"rscCd": rscCd,
+						"rscNm": rscNm,
+						"rscStc": rscStc,
+						"safStc": safStc,
+						"vendCd": vendCd,
+						"vendNm": vendNm
+					})
+					$.ajax({
+						url: "rscRowSelectList",
+						method: 'POST',
+						data: {
+							rscCd: rscCd
+						},
+						success: function (result) {}
+					})
+
 					let date = format;
 					$.ajax({
 						url: 'rscOrdrCd',
@@ -133,46 +220,34 @@
 							}
 
 							function makeCd() {
-								return 'ORD'+format + index
+								return 'ORD' + format + index
 							}
 							code = makeCd()
 							console.log(code)
-							for (let i=0; i<grid2.getRowCount(); i++) {
-								grid2.setValue(i,'ordrCd', code)
-							}						
+							for (let i = 0; i < grid2.getRowCount(); i++) {
+								grid2.setValue(i, 'ordrCd', code)
+							}
 						}
 					})
 				})
 
-				//
 
-				const gridData = [];
 
-				const grid = new tui.Grid({
-					el: document.getElementById('grid'),
-					scrollX: false,
-					bodyHeight: 150,
-					rowHeight: 35,
-					rowHeaders: ['rowNum'],
-					header: {
-						height: 40
-					},
-					columns: [{
-						header: '자재코드',
-						name: 'c1'
-					}, {
-						header: '자재명',
-						defaultValue: 2,
-						name: 'c2'
-					}, {
-						header: '현재재고',
-						defaultValue: 2,
-						name: 'c2'
-					}],
-					data: gridData
-				});
+				// 상단 그리드 검색
 
-		
+				$('#rscSearchBtn').on('click', function () {
+					let rscNm = $('#rscNm').val()
+					$.ajax({
+						url: "rscSOrdrList",
+						method: 'POST',
+						data: {
+							rscNm: rscNm
+						},
+						success: function (result) {
+							grid.resetData(result);
+						}
+					})
+				})
 
 
 
@@ -187,19 +262,11 @@
 					columns: [{
 						header: '자재코드',
 						align: 'center',
-						name: 'vendCd'
+						name: 'rscCd'
 					}, {
 						header: '자재명',
 						align: 'center',
-						name: 'vendNm'
-					},{
-						header: '발주코드',
-						align: 'center',
-						name: 'ordrCd'
-					},  {
-						header: '발주수량',
-						align: 'center',
-						name: 'ordrCnt'
+						name: 'rscNm'
 					}, {
 						header: '업체코드',
 						align: 'center',
@@ -209,33 +276,44 @@
 						align: 'center',
 						name: 'vendNm'
 					}, {
+						header: '발주코드',
+						align: 'center',
+						name: 'ordrCd'
+					}, {
+						header: '발주수량',
+						align: 'center',
+						name: 'ordrCnt',
+						editor: 'text'
+					}, {
 						header: '현재재고',
 						align: 'center',
-						name: 'ordrCnt'
+						name: 'rscStc'
+					}, {
+						header: '안전재고',
+						align: 'center',
+						name: 'safStc'
+					}, {
+						header: '합계재고량',
+						align: 'center',
+						name: 'allStc'
+						//value : 
 					}, {
 						header: '납기요청일',
 						align: 'center',
-						name: 'paprdCmndDt'
+						name: 'paprdCmndDt',
+						editor: 'datePicker'
+
 					}],
 				});
-				
-				
-		$.ajax({
-			url:"rscCOrdrList",
-			method : 'GET',
-			dataType: 'JSON',
-			success:function(result){
-				grid.resetData(result);
-			}
-		})
-				
-		$('#minusBtn').on('click',function(ev){
-			grid2.removeCheckedRows()
-			toastr.success('정상적으로 삭제되었습니다.');
-		})
-				
-				
+
+
+
+				$('#minusBtn').on('click', function (ev) {
+					grid2.removeCheckedRows()
+					toastr.success('정상적으로 삭제되었습니다.');
+				})
 			</script>
+
 	</th:block>
 </body>
 

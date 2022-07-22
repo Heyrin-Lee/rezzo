@@ -456,14 +456,15 @@
 						},
 						dataType: "JSON",
 						success: function (result) {
-							$('#GFrmEqmCd').val(result[0].FTEqmCd);
-							$('#GFrmEqmNm').val(result[0].FTEqmNm);
-							$('#GFrmPsch').val(result[0].FTEqmPsch);
-							$('[name="GFrmUseYN"]').val(result[0].FTUseYn);
-							$('#GFrDt').val(result[0].FTFrDt);
-							$('#GToDt').val(result[0].FTToDt);
-							$('#GOpertCtnt').val(result[0].FTOpertCtnt);
-							$('#GFrmNoprCd').val(result[0].FnoprCd);
+						console.log(result)
+							$('#GFrmEqmCd').val(result[0].eqmCd);
+							$('#GFrmEqmNm').val(result[0].eqmNm);
+							$('#GFrmPsch').val(result[0].eqmPsch);
+							$('[name="GFrmUseYN"]').val(result[0].useYn);
+							$('#GFrDt').val(result[0].frDt);
+							$('#GToDt').val(result[0].toDt);
+							$('#GOpertCtnt').val(result[0].opertCtnt);
+							$('#GFrmNoprCd').val(result[0].noprCd);
 						}
 					})
 				}

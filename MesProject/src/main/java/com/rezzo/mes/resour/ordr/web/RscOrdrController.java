@@ -6,6 +6,7 @@ import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,11 +41,25 @@ public class RscOrdrController {
 		return ordrCd;		
 	}
 	
-	@GetMapping("rscOrdrList")
+	@GetMapping("rscCOrdrList")
 	@ResponseBody
 	public List<RscOrdrVO> rscOrdrList(RscOrdrVO vo){
-		List<RscOrdrVO> rscOrdrList = service.RscOrdrList(vo);
-		return rscOrdrList;
+		List<RscOrdrVO> rscCOrdrList = service.rscCOrdrList(vo);
+		return rscCOrdrList;
+	}
+	
+	@PostMapping("rscSOrdrList")
+	@ResponseBody
+	public List<RscOrdrVO> rscSOrdrList(RscOrdrVO vo){
+		List<RscOrdrVO> rscSOrdrList = service.rscSOrdrList(vo);
+		return rscSOrdrList;
+	}
+	
+	@PostMapping("rscRowSelectList")
+	@ResponseBody
+	public List<RscOrdrVO> rscRowSelectList(@Param("rscCd") RscOrdrVO vo){
+		List<RscOrdrVO> rscRowSelectList = service.rscRowSelectList(vo);
+		return rscRowSelectList;
 	}
 	
 }
