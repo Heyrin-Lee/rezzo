@@ -344,9 +344,9 @@ $('#delBtn').click(ev => {
 			})
 	} else if($('#nav-flow').hasClass("active")) {
 		//흐름도 체크된 셀 삭제
-		var check = grid.getCheckedRows();
+		var check = grid2.getCheckedRows();
  		check.forEach(obj => {
- 		 if(grid2.getValue(obj.edctsCd) != null || grid2.getValue(obj.edctsCd) != '') {
+ 		 if(grid2.getValue(obj.edctsCd) != null) {
  		 		$.ajax({
 				 	url: "delFlow",
 				  method: "POST",
@@ -358,19 +358,21 @@ $('#delBtn').click(ev => {
 		    	}
 				})
  		 } else { 			 
- 			grid.removeRow(obj.rowKey);
+ 			grid2.removeRow(obj.rowKey);
  		 }
  		})
 	}
  });
  
+ 	//체크
+ grid2.on('editingStart', ev => {
+	grid2.check(gridRowKey);
+ })
+ 
 //클릭시 자재 모달 오픈 & 리스트 출력
 let gridRowKey = 0;
 grid2.on('click', ev => {
 	gridRowKey = ev.rowKey;
-	
-	//체크
-	grid2.check(gridRowKey);
 	
 	//공정모달그리드 출력
 	if (ev.columnName == 'prcsCd' || ev.columnName == 'prcsNm') {
