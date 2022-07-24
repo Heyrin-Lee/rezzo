@@ -80,7 +80,7 @@ display:inline-block;
 	   <div id="grid3" style="width: 400px;">공정가동관리<br>
 	   <br>
 	   	<div class="linelist">
-	       <button id="btnModal" class="c_btn" form="">시작</button>
+	       <button id="startBtn" class="c_btn" form="">시작</button>
 	       <button class="c_btn" form="">긴급중지</button>
 	       <button class="c_btn" form="">재시작</button>
 	     </div>
@@ -151,7 +151,6 @@ display:inline-block;
    //grid에 모달 내용 띄우기
    $("#confirmBtn").on("click", function(){
    		let result = modGrid.getCheckedRows();
-        	console.log(result)
         	grid.resetData(result);
    })
    
@@ -192,7 +191,6 @@ display:inline-block;
 	    });
 	    
    //grid2에 grid1에 있는 완제품 코드를 통해서 그 제품 만드는 공정들 띄우기
-   //각 공정마다 코드 부여해야 함 PRG+생산시작날짜(wkFrDt)+index 
    $("#grid").on("dblclick", function(){
    		let edctsCd = grid.getData()[0].edctsCd
    		$.ajax({
@@ -204,6 +202,89 @@ display:inline-block;
    			}
    		})
    })
+   
+   
+   $("#startBtn").on("click", function(){
+	  let interval 
+	  for(i=0; i<grid2.getRowCount(); i++) {
+		   (function (i) {
+			   let eqmCd = grid2.getValue(i, 'eqmCd')
+			   let indicaCnt = grid.getData()[0].indicaCnt
+			   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
+			   grid2.setValue(i, 'nowSt', '대기중')
+				 $.ajax({
+					 url : 'insertEqmCd',
+					 data : {"eqmCd" : eqmCd},
+					 success : function(){
+					 	interval = setInterval(function () {
+				             $.ajax({
+				            	 url : 'selectEqm',
+				            	 data : {"eqmCd" : eqmCd},
+				            	 success : function(result){
+				            		if (result.wkFrDttm != null && result.wkToDttm == null) {
+				            			grid2.setValue(i, 'wkFrDttm', result.wkFrDttm)
+				            			 grid2.setValue(i, 'nowSt', '진행중')
+				            			 if (i < 3) {
+				            				 grid2.setValue(i, 'indicaCnt', indicaCnt)
+				            			 } else {
+				            				 let value = grid2.getValue(i-1, 'prodCnt')
+				            				 grid2.setValue(i, 'indicaCnt', value)
+				            			 }
+				            		} else if (result.wkToDttm != null){
+				            			if(i == 0) {
+				            				//그리드에 띄우기
+				            				grid2.setValue(i, 'wkToDttm', result.wkToDttm)
+					            			grid2.setValue(i, 'inferCnt', 0)
+					            			grid2.setValue(i, 'prodCnt', indicaCnt)
+					            			grid2.setValue(i, 'nowSt', '완료')
+					            			
+					            			//insert를 위해서 object에 값 지정 
+					            			result.lineCd=grid.getData()[i].lineCd
+					            			result.indicaDt=grid.getData()[i].indicaDt
+					            			result.prefRank=grid.getData()[i].prefRank
+					            			result.indicaCnt=grid.getData()[i].indicaCnt
+					            			result.prcsPsch=grid2.getValue(i, 'prcsPsch')
+					            			result.prcsCd=grid2.getData()[i].prcsCd
+					            			result.inferCnt=grid2.getData()[i].inferCnt
+					            			result.prodCnt=grid2.getData()[i].prodCnt
+				            			} else{
+				            				indicaCnt = grid2.getValue(i-1, 'prodCnt')
+				            				if(i < 3) {
+					            				grid2.setValue(i, 'wkToDttm', result.wkToDttm)
+						            			grid2.setValue(i, 'inferCnt', 0)
+						            			grid2.setValue(i, 'prodCnt', indicaCnt)
+						            			grid2.setValue(i, 'nowSt', '완료')
+						            			
+				            				} else if(i < 5) {
+				            					grid2.setValue(i, 'wkToDttm', result.wkToDttm)
+						            			grid2.setValue(i, 'inferCnt', inferCnt )
+						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
+						            			grid2.setValue(i, 'nowSt', '완료')
+							            		
+				            				} else {
+				            					grid2.setValue(i, 'wkToDttm', result.wkToDttm)
+						            			grid2.setValue(i, 'inferCnt', inferCnt )
+						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
+						            			grid2.setValue(i, 'nowSt', '완료')
+						            			
+				            				}
+				            			}
+				            			
+				            		} else {
+				            			console.log("ajax 호출중")
+				            		}
+				            	 }
+				             })
+				          }, 5000);
+					  }		  	
+				   })
+		   })(i)
+	  clearInterval(interval)
+	   }
+	  
+	  
+   })	   
+   
       
    const gridData2 = [];
   
@@ -227,7 +308,7 @@ display:inline-block;
 	        },
 	        {
 	        	header : '설비명',
-	        	name : 'empNm'
+	        	name : 'eqmNm'
 	        },
 	        {
 	          header: '공정담당자',
@@ -273,8 +354,8 @@ display:inline-block;
 	        },
 	        {
 	          header: '투입량',
-	          name: 'holdCnt'
-	        },
+	          name: 'indicaCnt'
+	        }, 
 	        {
 	          header: '불량량',
 	          name: 'inferCnt'

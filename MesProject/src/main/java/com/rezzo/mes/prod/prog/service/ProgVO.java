@@ -15,7 +15,7 @@ public class ProgVO {
 	Date indicaDt;
 	String prdtNm;
 	String edctsCd;
-	int indicaCnt;
+	Integer indicaCnt;
 	String lineCd;
 	int prefRank;
 	String progCd;
@@ -33,5 +33,13 @@ public class ProgVO {
 	String nowSt;
 	String edctsLotNo;
 	String planCd;
-	
+	String eqmCd;
+	String eqmNm;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date startTime;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date endTime;
+	String yn;
 }
