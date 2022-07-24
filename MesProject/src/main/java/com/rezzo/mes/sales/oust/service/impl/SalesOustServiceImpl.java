@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.sales.order.service.OrderVO;
 import com.rezzo.mes.sales.oust.mapper.SalesOustMapper;
 import com.rezzo.mes.sales.oust.service.SalesOustService;
@@ -44,6 +45,19 @@ public class SalesOustServiceImpl implements SalesOustService{
 	@Override
 	public void updateProg(OrderVO vo) {
 		mapper.updateProg(vo);
+	}
+
+	//출고 조회 페이지
+	//제품명 목록 조회 모달창
+	@Override
+	public List<SalesStcVO> getProd(SalesStcVO vo) {
+		return mapper.getProd(vo);
+	}
+
+	//조건별 조회
+	@Override
+	public List<SalesOustVO> optionSearch(SalesOustVO vo) {
+		return mapper.optionSearch(vo);
 	}
 
 }

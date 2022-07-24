@@ -49,12 +49,12 @@
                         <div class="mb-3">
                            <label for="vendNm" class="form-label">거래처명</label>
     						<input type="text" class="form-control" id="vendNm" name="vendNm">
-                            <button class="c_btn" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal" form="">검색</button>
+                            <button type="button" class="btn btn-primary" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-3">
                            <label for="prdtNm" class="form-label">제품명</label> 
                            <input type="text" class="form-control" id="prdtNm" name="prdtNm">
-                           <button class="c_btn" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal" form="">검색</button>
+                           <button type="button" class="btn btn-primary" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-4">
                            <label for="email" class="form-label">주문일자</label> 
@@ -68,13 +68,19 @@
          </section>
       </div>
        <div class="linelist">
-   		<button class="c_btn" id="addBtn" form="">추가</button>
-   		<button class="c_btn" id="okBtn" form="">저장</button>
-   		<button class="c_btn" id="delBtn" form="">삭제</button>
-   		<button class="c_btn" id="ordrBtn">주문서 조회</button>
+   		<button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> 추가</button>
+   		<button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
+   		<button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
+   		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 검색</button>
    </div>
    </div>
-   <div id="grid"></div>
+   
+   <div class="card mb-4">
+   	<div class="card-body">
+   		<div id="grid"></div>   		
+   	</div>
+   </div>
+   
    <!-- 제품코드 모달(등록) -->
    <div class="modal fade" id="edctsCdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
