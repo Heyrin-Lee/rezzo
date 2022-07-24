@@ -7,4 +7,6 @@ import com.rezzo.mes.prod.prog.service.ProgVO;
 public interface ProgMapper {
 	public List<ProgVO> indicaListModal(ProgVO vo);
 	public List<ProgVO> getPrcsProg(ProgVO vo);
+	public void insertEqmCd(ProgVO vo);
+	public ProgVO selectEqm(ProgVO vo);
 }

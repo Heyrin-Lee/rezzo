@@ -24,4 +24,16 @@ public class ProgServiceImpl implements ProgService {
 		return mapper.getPrcsProg(vo);
 	}
 
+	@Override
+	public void insertEqmCd(ProgVO vo) {
+		mapper.insertEqmCd(vo);
+	}
+
+	@Override
+	public ProgVO selectEqm(ProgVO vo) {
+		return mapper.selectEqm(vo);
+	}
+
+
+
 }
