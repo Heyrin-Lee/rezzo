@@ -117,33 +117,27 @@
 							<form id="dataForm" name="dataForm" action="#" method="post">
 								<table class="table" style="vertical-align : middle;">
 									<colgroup>
-										<col style="width: 150px">
+										<col style="width: 90px">
 										<col>
-										<col style="width: 150px">
+										<col style="width: 90px">
 										<col>
-										<col style="width: 150px">
+										<col style="width: 90px">
 										<col>
 									</colgroup>
 									<tbody>
 										<tr>
-											<th>구분 <strong class="blue">*</strong></th>
-											<td>
-												<select class="dataTable-selector" name="vendTyp" id="vendTyp" style="width: 250px">
-													<option selected value="">==등록시필수선택==</option>
-												</select></td>
-											<th>거래처코드 <strong class="blue">*</strong></th>
-											<td><input class="form-control" type="text" id="vendCd" name="vendCd" style="width: 250px" maxlength="20"
-												placeholder="등록시 자동부여됩니다." readonly />
-											<th>거래처명 <strong class="blue">*</strong></th>
-											<td><input class="form-control" type="text" id="vendNm" name="vendNm" style="width: 250px" maxlength="50" /></td>
+											<th>검사일자 <strong class="blue">*</strong></th>
+											<td colspan="5">
+												<input class="form-control" type="date" id="vendCd" name="vendCd" style="width: 250px" maxlength="20" /> ~
+												<input class="form-control" type="date" id="vendCd" name="vendCd" style="width: 250px" maxlength="20" /></td>
 										</tr>
 										<tr>
-											<th>사업자등록번호</th>
+											<th>LOT</th>
 											<td><input class="form-control" type="text" id="bizno" name="bizno" style="width: 250px" maxlength="50" /></td>
-											<th>전화번호</th>
+											<th>제품명</th>
 											<td><input class="form-control" type="text" id="telno" name="telno" style="width: 250px" maxlength="50" /></td>
-											<th>비고</th>
-											<td><input type="text" id="remk" name="remk" class="form-control" maxlength="50" style="width: 250px" /></td>
+											<th>제품명</th>
+											<td><input class="form-control" type="text" id="telno" name="telno" style="width: 250px" maxlength="50" /></td>
 										</tr>
 									</tbody>
 								</table>
@@ -155,10 +149,11 @@
             	<h1>검사조회 그리드 영역</h1> 
             </div>
         	</div>
-				</div><!-- nav-tabContent -->
+				</div><!-- end nav-tabContent -->
 			</div>
 		</div>
 		<script>
+<<<<<<< HEAD
 		 const grid = new tui.Grid({
 		     el: document.getElementById('grid'),
 		     scrollX: false,
@@ -230,6 +225,9 @@
 	    }
 		})
 		
+=======
+			document.getElementById('now_date').valueAsDate = new Date();
+>>>>>>> refs/remotes/origin/gayoung
 		</script>
 	</th:block>
 </body>
