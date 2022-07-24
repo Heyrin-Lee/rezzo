@@ -4,20 +4,26 @@
 
 <mapper namespace="com.rezzo.mes.resour.ist.mapper.RscIstMapper">
 
-    <select id="getRscIstCd" parameterType="RscIstVO" resultType="String">
+    <select id="getRscIstLotCd" parameterType="RscIstVO" resultType="String">
         <if test="rscTyp == '원자재'">
-            select 'RMR-L'||to_char(#{expDt}, 'YYYYMMDD')||lpad(NVL(max(substr(LOT_CD, 14, 3)), 0) + 1, 3, '0')
-            from RSC_LOT where 'RMR' = substr(RSC_CD, 0, 3) and substr(LOT_CD, 6, 8) = to_char(#{expDt}, 'YYYYMMDD')
+            select 'RMR-L'||to_char(#{expDt}, 'YYYYMMDD')||lpad(NVL(max(substr(RSC_LOT_CD, 14, 3)), 0) + 1, 3, '0')
+            from RSC_LOT where 'RMR' = substr(RSC_CD, 0, 3) and substr(RSC_LOT_CD, 6, 8) = to_char(#{expDt}, 'YYYYMMDD')
         </if>
         <if test="rscTyp == '부자재'">
-            select 'SMR-L'||to_char(sysdate, 'YYYYMMDD')||lpad(NVL(max(substr(LOT_CD, 14, 3)), 0) + 1, 3, '0')
-            from RSC_LOT where 'SMR' = substr(RSC_CD, 0, 3) and substr(LOT_CD, 6, 8) = to_char(sysdate, 'YYYYMMDD')
+            select 'SMR-L'||to_char(sysdate, 'YYYYMMDD')||lpad(NVL(max(substr(RSC_LOT_CD, 14, 3)), 0) + 1, 3, '0')
+            from RSC_LOT where 'SMR' = substr(RSC_CD, 0, 3) and substr(RSC_LOT_CD, 6, 8) = to_char(sysdate, 'YYYYMMDD')
         </if>
     </select>
 
-    <insert id="saveRscIstLotEach" parameterType="RscIstVO">
-        insert into RSC_LOT (LOT_CD, ORDR_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT)
-        values (#{lotCd}, #{ordrCd}, #{rscCd}, #{inspPassCnt}, #{inspPassCnt})
+    <select id="getRscIstCd" resultType="String">
+        select 'RIN' || to_char(sysdate, 'YYYYMMDD') || lpad(NVL(max(substr(rsc_ist_cd, 12, 3)), 0) + 1, 3, '0')
+        from rsc_lot
+        where substr(rsc_ist_cd, 4, 8) = to_char(sysdate, 'yyyymmdd')
+    </select>
+
+    <insert id="setRscIstLotEach" parameterType="RscIstVO">
+        insert into RSC_LOT (RSC_LOT_CD, ORDR_CD, RSC_INSP_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT, RSC_IST_CD)
+        values (#{rscLotCd}, #{ordrCd}, #{rscInspCd}, #{rscCd}, #{inspPassCnt}, #{inspPassCnt}, #{rscIstCd})
     </insert>
 
     <update id="updRscInspBool" parameterType="RscIstVO">
@@ -27,4 +33,42 @@
           and RSC_INSP_CD = #{rscInspCd}
           and ORDR_CD = #{ordrCd}
     </update>
+
+    <insert id="setRscIst" parameterType="String">
+        declare
+            v_values rsc_ist%rowtype;
+        begin
+            for v_values in (
+                select rsc_cd, sum(lot_cnt) as ist_cnt
+                from rsc_lot
+                where rsc_ist_cd = #{rscIstCd}
+                group by rsc_cd)
+
+                loop
+                    insert into RSC_IST (rsc_ist_cd, ist_dt, rsc_cd, ist_cnt)
+                    values (#{rscIstCd}, #{istDt}, v_values.RSC_CD, v_values.IST_CNT);
+                end loop;
+        end;
+    </insert>
+
+    <select id="getRscIstHist" parameterType="RscIstVO" resultType="RscIstVO">
+        select rl.rsc_lot_cd,
+               rl.rsc_cd,
+               rl.lot_cnt,
+               rl.rsc_ist_cd,
+               rl.ordr_cd,
+               ri.ist_dt,
+               vend.vend_nm,
+               rsc.rsc_nm
+        from rsc_lot rl,
+             rsc_ist ri,
+             rsc_ordr ro,
+             vend,
+             RSC
+        where rl.rsc_ist_cd = ri.rsc_ist_cd
+          and rl.rsc_cd = ri.rsc_cd
+          and ro.ordr_cd = rl.ordr_cd
+          and ro.vend_cd = vend.vend_cd
+          and rl.rsc_cd = rsc.RSC_CD
+    </select>
 </mapper>
