@@ -14,4 +14,13 @@ public interface RscOrdrMapper {
 	
 	// 그리드 상단 조회
 	List<RscOrdrVO> rscCOrdrList(RscOrdrVO vo);
+	
+	// 그리드 상단 이름 검색
+	List<RscOrdrVO> rscSOrdrList(RscOrdrVO vo);
+	
+	List<RscOrdrVO> rscRowSelectList(RscOrdrVO vo);
+	
+	void rscOrdrInsert(List<RscOrdrVO> ordrList);
+	
+	void rscOrdrFInsert(List<RscOrdrVO> ordrFList);
 }

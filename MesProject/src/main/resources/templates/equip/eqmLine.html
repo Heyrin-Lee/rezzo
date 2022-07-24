@@ -192,14 +192,11 @@
 
 			$('#delBtn').on('click', function () {
 
-				if (lineCd == null || lineCd == "") {
+				if ($('#lineCd').val()== null || $('#lineCd').val()=='') {
 					toastr.warning('삭제할 라인을 선택해주세요.');
 				} else {
-
 					var result = confirm("라인코드를 정말 삭제할까요?")
 					var lineCd = $('#lineCd').val()
-
-
 					if (!result)
 						return;
 
@@ -213,6 +210,7 @@
 							method: "GET",
 							dataType: "JSON",
 							success: function (result) {
+							toastr.success('라인코드가 정상 삭제되었습니다.');
 								grid.resetData(result);
 								$('#lineCd').removeAttr("readonly");
 								$('#form1')[0].reset();

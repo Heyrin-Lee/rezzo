@@ -1,6 +1,7 @@
 package com.rezzo.mes.equip.eqm.service;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class EqmVO {
 	String eqmNm;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date eqmIstDt;
+	public Date eqmIstDt;
 	int minTemp;
 	int maxTemp;
 	String chckPerd;
@@ -29,6 +30,6 @@ public class EqmVO {
 	String eqmImg;
 	String eqmFgNm;
 	String frmUseYN;
-
+	
 	
 }

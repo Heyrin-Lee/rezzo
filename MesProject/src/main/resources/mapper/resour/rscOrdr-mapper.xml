@@ -9,7 +9,32 @@
 	</select>
 	
 	<select id="rscCOrdrList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
-		select * from vw_ordr_list;
+	select * from vw_ordr_list
 	</select>
 	
+	<select id="rscSOrdrList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+	select * from vw_ordr_list where 1=1
+	<if test="#{rscNm}!=null "> and rsc_nm LIKE '%'||#{rscNm}||'%'</if>
+	<if test="#{vendNm}!=null "> and rsc_nm LIKE '%'||#{vendNm}||'%'</if>
+		
+		
+	</select>
+	
+	<select id = "rscRowSelectList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+			select r.rsc_cd, r.rsc_nm, v.vend_cd, v.vend_nm, s.rsc_stc, s.saf_stc
+			from rsc r join vend v
+			on v.vend_cd=r.vend_cd 
+			join rsc_stc s on 1=1
+			where r.rsc_cd = #{rscCd}
+	</select>
+	
+	<!-- 발주 테이블 등록(1회)  -->
+	<insert id="rscOrdrFInsert" parameterType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+		insert into rsc_ordr values(#{ordrCd}, sysdate, #{vendCD})
+	</insert>
+	
+	<!-- 발주 세부 테이블 등록 -->
+	<insert id="rscOrdrInsert" parameterType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
+		insert rsc_ordr_dtl values(#{ordrCd}, #{rscCd}, #{ordrCnt}, #{rmnCnt}, #{paprdCmndDt})
+	</insert>
 </mapper>

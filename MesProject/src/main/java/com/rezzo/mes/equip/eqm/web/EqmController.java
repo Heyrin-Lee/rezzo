@@ -69,7 +69,6 @@ public class EqmController {
 	
 	@GetMapping("eqmList")
 	@ResponseBody
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public List<EqmVO> EqmList(EqmVO vo, Model model) {
 		List<EqmVO> eqmList = eqmService.eqmList(vo);
 		return eqmList;

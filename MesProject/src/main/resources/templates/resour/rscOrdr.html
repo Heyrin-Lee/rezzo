@@ -75,10 +75,15 @@
 
 					<tr>
 						<th>원자재명</th>
-						<td><input class="form-control" type="text" id="keyword3" name="eqmNm" style="width: 150px"></td>
+						<td><input class="form-control" type="text" id="rscNm" name="rscNm" style="width: 150px"></td>
+						<th>업체명</th>
+						<td><input class="form-control" type="text" id="vendNm" name="vendNm" style="width: 150px"></td>
 						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i
 								class="fas fa-search"></i></button>
 						&nbsp&nbsp
+						<!--			<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="plusBtn"><i class="fas fa-plus"></i> 추가</button>
+						</div>-->
 					</tr>
 
 
@@ -91,7 +96,6 @@
 				<div class="card-body">
 
 					<div class="linelist" style="float: right;">
-						<button class="btn btn-primary" id="plusBtn"><i class="fas fa-plus"></i> 추가</button>
 						<button class="btn btn-primary" id="minusBtn"><i class="fas fa-minus"></i> 삭제</button>
 						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 발주</button>
 						<br> <br>
@@ -114,38 +118,10 @@
 
 				console.log(format)
 
-				$("#plusBtn").on("click", function (e) {
-					grid2.appendRow()
-					let date = format;
-					$.ajax({
-						url: 'rscOrdrCd',
-						method: 'POST',
-						dataType: 'json',
-						contentType: 'application/text',
-						data: {
-							ordrSCnt: date
-						},
-						success: function (result) {
-							if (result.ordrSCnt == null) {
-								index = "001";
-							} else {
-								index = result.ordrScnt
-							}
 
-							function makeCd() {
-								return 'ORD'+format + index
-							}
-							code = makeCd()
-							console.log(code)
-							for (let i=0; i<grid2.getRowCount(); i++) {
-								grid2.setValue(i,'ordrCd', code)
-							}						
-						}
-					})
-				})
 
-				//
 
+				// 상단 그리드 출력 
 				const gridData = [];
 
 				const grid = new tui.Grid({
@@ -159,21 +135,132 @@
 					},
 					columns: [{
 						header: '자재코드',
-						name: 'c1'
+						align: 'center',
+						name: 'rscCd'
 					}, {
 						header: '자재명',
-						defaultValue: 2,
-						name: 'c2'
+						align: 'center',
+						name: 'rscNm'
 					}, {
+						header: '업체코드',
+						align: 'center',
+						name: 'vendCd'
+					}, {
+						header: '업체명',
+						align: 'center',
+						name: 'vendNm'
+					},{
 						header: '현재재고',
-						defaultValue: 2,
-						name: 'c2'
+						align: 'center',
+						name: 'rscStc'
+					}, {
+						header: '안전재고',
+						align: 'center',
+						name: 'safStc'
 					}],
 					data: gridData
 				});
 
-		
 
+				$.ajax({
+					url: "rscCOrdrList",
+					method: 'GET',
+					dataType: 'JSON',
+					success: function (result) {
+						grid.resetData(result);
+					}
+				})
+
+
+				grid.on('dblclick', ev => {
+					var rscCd = grid.getValue(ev.rowKey, 'rscCd')
+					var rscNm = grid.getValue(ev.rowKey, 'rscNm')
+					var rscStc = grid.getValue(ev.rowKey, 'rscStc')
+					var safStc = grid.getValue(ev.rowKey, 'safStc')
+					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
+					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
+					
+					var rscCd2 = grid2.getColumnValues('rscCd');
+					var vendCd2 = grid2.getColumnValues('vendCd');
+					console.log(rscCd2)
+					console.log(rscCd)
+					
+					var isValid = true;
+					for (i=0; i<rscCd2.length; i++){
+						if (rscCd2[i]==rscCd ) {
+							toastr.warning('동일 항목의 발주가 진행중입니다.');
+							isValid = false;
+							return false;
+						}	else if (vendCd2[i]!=vendCd){
+							toastr.warning('동일 업체의 발주만 가능합니다.');
+							isValid = false;
+							return false;
+						}
+						
+					}
+							
+					grid2.appendRow({
+						"rscCd": rscCd,
+						"rscNm": rscNm,
+						"rscStc": rscStc,
+						"safStc": safStc,
+						"vendCd": vendCd,
+						"vendNm": vendNm
+					})
+					$.ajax({
+						url: "rscRowSelectList",
+						method: 'POST',
+						data: {
+							rscCd: rscCd
+						},
+						success: function (result) {}
+					})
+
+					let date = format;
+					$.ajax({
+						url: 'rscOrdrCd',
+						method: 'POST',
+						dataType: 'json',
+						contentType: 'application/text',
+						data: {
+							ordrSCnt: format
+						},
+						success: function (result) {
+							if (result.ordrSCnt == null) {
+								index = "001";
+							} else {
+								index = result.ordrScnt
+							}
+
+							function makeCd() {
+							console.log('--'+String((Number(index)+1)).padStart(3,'0'))
+								return 'ORD' + format + String((Number(index)+1)).padStart(3,'0')
+							}
+							code = makeCd()
+							for (let i = 0; i < grid2.getRowCount(); i++) {
+								grid2.setValue(i, 'ordrCd', code)
+							}
+						}
+					})
+				})
+
+
+
+				// 상단 그리드 검색
+
+				$('#rscSearchBtn').on('click', function () {
+					let rscNm = $('#rscNm').val()
+					$.ajax({
+						url: "rscSOrdrList",
+						method: 'POST',
+						data: {
+							rscNm: rscNm
+						},
+						success: function (result) {
+							grid.resetData(result);
+						}
+					})
+				})
 
 
 				const grid2 = new tui.Grid({
@@ -187,19 +274,11 @@
 					columns: [{
 						header: '자재코드',
 						align: 'center',
-						name: 'vendCd'
+						name: 'rscCd'
 					}, {
 						header: '자재명',
 						align: 'center',
-						name: 'vendNm'
-					},{
-						header: '발주코드',
-						align: 'center',
-						name: 'ordrCd'
-					},  {
-						header: '발주수량',
-						align: 'center',
-						name: 'ordrCnt'
+						name: 'rscNm'
 					}, {
 						header: '업체코드',
 						align: 'center',
@@ -209,33 +288,81 @@
 						align: 'center',
 						name: 'vendNm'
 					}, {
+						header: '발주코드',
+						align: 'center',
+						name: 'ordrCd'
+					}, {
+						header: '발주수량',
+						align: 'center',
+						name: 'ordrCnt',
+						editor: 'text'
+					}, {
 						header: '현재재고',
 						align: 'center',
-						name: 'ordrCnt'
+						name: 'rscStc'
+					}, {
+						header: '안전재고',
+						align: 'center',
+						name: 'safStc'
+					}, {
+						header: '예상재고량',
+						align: 'center',
+						name: 'allStc'
 					}, {
 						header: '납기요청일',
 						align: 'center',
-						name: 'paprdCmndDt'
+						name: 'paprdCmndDt',
+					    editor: {
+					        type: 'datePicker',
+					        options: {
+					        datetimeFormat: "yyyy-MM-dd"
+					        }
+					      }
 					}],
 				});
 				
+				grid2.on('editingFinish',function (ev){
+					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
+					var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
+					ordrCnt = Number(ordrCnt);
+					rscStc = Number(rscStc);
+					var allStc = ordrCnt+rscStc
+					grid2.setValue(ev.rowKey, 'allStc', allStc)
+					
+				})
 				
-		$.ajax({
-			url:"rscCOrdrList",
-			method : 'GET',
-			dataType: 'JSON',
-			success:function(result){
-				grid.resetData(result);
-			}
-		})
+
+				// 삭제 버튼
 				
-		$('#minusBtn').on('click',function(ev){
-			grid2.removeCheckedRows()
-			toastr.success('정상적으로 삭제되었습니다.');
-		})
+				$('#minusBtn').on('click', function (ev) {	
+					grid2.removeCheckedRows()
+					toastr.success('정상적으로 삭제되었습니다.');
+				})
+				
+				// 발주 버튼
+				
+				$('#saveBtn').click(ev =>{
+					var data = grid2.getCheckedRows();
+						for(i=0; i<data.length; i++){
+						if(data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null){
+							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
+					} else{
+						$.ajax({
+							url : 'rscOrdrInsert',
+							method:'POST',
+							data : JSON.stringify(data),
+							contentType : 'application/json'
+						}).done(function (result){
+							toastr.success('발주 신청이 완료되었습니다.');
+							grid2.refreshLayout(
+							grid2.uncheckAll())
+						})
+					}
+				}})
 				
 				
 			</script>
+
 	</th:block>
 </body>
 
