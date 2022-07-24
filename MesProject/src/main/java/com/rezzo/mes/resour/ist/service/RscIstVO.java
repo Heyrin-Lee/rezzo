@@ -10,23 +10,27 @@ import java.util.Date;
 @NoArgsConstructor
 public class RscIstVO {
 
-    //
-    String rscInspCd; // 검사코드
-    String ordrCd;
+    // code
+    private String rscInspCd; // 검사코드
+    private String ordrCd; // 발주코드
 
     // lot 관리
-    String rscLotCd; // lot 코드
-    String rscCd; // 자재코드
-    String rscTyp; // 자재유형
-    int lotCnt; // lot 수량
-    int lotRmnCnt; // lot 잔여수량
-    int holdCnt; // 생산홀딩
-    Date regDt; // lot등록일자
-    Date expDt; // 유통기한
+    private String rscLotCd; // lot 코드
+    private String rscCd; // 자재코드
+    private String rscTyp; // 자재유형
+    private int lotCnt; // lot 수량
+    private int lotRmnCnt; // lot 잔여수량
+    private int holdCnt; // 생산홀딩
+    private Date regDt; // lot등록일자
+    private Date expDt; // 유통기한
 
     // 자재 입고관리
-    String rscIstCd; // 입고코드
-    String istDt; // 입고일자
-    int istCnt; // 입고수량
-    int inspPassCnt; // 합격-입고량
+    private String rscIstCd; // 입고코드
+    private String istDt; // 입고일자
+    private int istCnt; // 입고수량
+    private int inspPassCnt; // 합격-입고량
+
+    // misc
+    private String vendNm;
+    private String rscNm;
 }

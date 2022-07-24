@@ -27,8 +27,8 @@
           and rod.RMN_CNT != 0
         <if test="vendCd != ''">and ro.VEND_CD = #{vendCd}</if>
         <![CDATA[
-          and PAPRD_CMND_DT >= #{startDt}
-          and PAPRD_CMND_DT <= #{endDt}
+          and rod.PAPRD_CMND_DT >= #{startDt}
+          and rod.PAPRD_CMND_DT <= #{endDt}
         ]]>
         order by PAPRD_CMND_DT
     </select>

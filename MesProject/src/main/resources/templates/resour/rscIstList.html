@@ -1,169 +1,323 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- TUI -->
-    <link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-    <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-
-    <style>
-        .tui-datepicker {
-            z-index: 100;
-        }
-    </style>
-
     <title>자재입고조회</title>
-
-
 </head>
 
 <body>
-    <h3>자재입고조회</h3>
-    <hr>
+<th:block layout:fragment="main">
+    <div class="container-fluid px-4">
+        <h3>자재입고조회</h3>
+        <hr>
+        <div class="card">
+            <div class="card-body">
+                <input type="button" value="조회" id="schBtn">
+                <input type="button" value="새로고침">
+                <input type="button" value="엑셀">
+                <input type="button" value="인쇄">
+                <hr>
 
-    <input type="button" value="조회">
-    <input type="button" value="새로고침">
-    <input type="button" value="엑셀">
-    <input type="button" value="인쇄">
-    <hr>
+                <form id="schParam">
+                    <b>검사일자</b>
+                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                        <input id="startpicker-input" type="text" aria-label="Date" name="startDt">
+                        <span class="tui-ico-date"></span>
+                        <div id="startpicker-container" style="margin-left: -1px;"></div>
+                    </div>
+                    <span></span>
+                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                        <input id="endpicker-input" type="text" aria-label="Date" name="endDt">
+                        <span class="tui-ico-date"></span>
+                        <div id="endpicker-container" style="margin-left: -1px;"></div>
+                    </div>
+                    <hr>
 
-    <!-- 입고기간 -->
-    <label for="inspDt"><b>입고기간</b></label>
-    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-        <input id="startpicker-input" type="text" aria-label="Date">
-        <span class="tui-ico-date"></span>
-        <div id="startpicker-container" style="margin-left: -1px;"></div>
+                    <label for="vendNm"><b>업체명</b></label>
+                    <input id="vendNm" type="text" placeholder="검색버튼을 이용하세요" required readonly>
+                    <input id="vendCd" type="hidden" name="vendCd">
+                    <button id="vendModBtn" type="button">검색</button>
+                    <hr>
+
+                    <label for="rscNm"><b>자재명</b></label>
+                    <input id="rscNm" type="text" placeholder="검색버튼을 이용하세요" required readonly>
+                    <input id="rscCd" type="hidden" name="rscCd">
+                    <button id="rscModBtn" type="button">검색</button>
+                    <hr>
+
+                    <div id="sortBtn">
+                        <b>정렬기준</b>
+                        <label>일자<input type="radio" name="ordrBy" id="odByDt" value="date" checked></label>
+                        <label>업체<input type="radio" name="ordrBy" id="odByVd" value="vend"></label>
+                        <label>자재<input type="radio" name="ordrBy" id="odByRs" value="rsc"></label>
+                    </div>
+                    <hr>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div id="grid"></div>
+            </div>
+        </div>
     </div>
-    <span></span>
-    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-        <input id="endpicker-input" type="text" aria-label="Date">
-        <span class="tui-ico-date"></span>
-        <div id="endpicker-container" style="margin-left: -1px;"></div>
+
+    <!-- Modal for vend search -->
+    <div class="modal fade" id="rscModal" tabindex="-1" aria-labelledby="rscModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b class="modal-title">자재검색</b>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="rscSchForm">
+                        <label>자재명<input type="text" name="rscNm" style="width:100px;"></label>
+                        <label>자재코드<input type="text" name="rscCd" style="width:100px;"></label>
+                        <input id="rscSch" type="button" value="검색">
+                    </form>
+                    <hr>
+                    <div id="rsc-grid"></div>
+                    <p>선택 : 더블클릭</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <input type="button" value="가져오기">
-    <hr>
 
-    <label for="vend"><b>공급업체</b></label>
-    <input id="vend" type="text">
-    <input id="vendSch" type="button" value="검색">
-    <hr>
+    <!-- Modal for resource search -->
+    <div class="modal fade" id="vendModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b class="modal-title">업체검색</b>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="vendSchForm">
+                        <label>업체명<input type="text" name="vendNm" style="width:100px;"></label>
+                        <label>업체코드<input type="text" name="vendCd" style="width:100px;"></label>
+                        <input id="vendSch" type="button" value="검색">
+                    </form>
+                    <hr>
+                    <div id="vend-grid"></div>
+                    <p>선택 : 더블클릭</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        ///////////////////////////// init ////////////////////////////////
+        window.addEventListener('load', function () {
+            getVendListInit();
+            getRscListInit();
+        })
 
-    <label for="mat"><b>자재코드</b></label>
-    <input id="mat" type="text">
-    <input id="mat" type="button" value="검색">
-    <hr>
+        ///////////////////////////// grid ////////////////////////////////
+        // vend grid
+        let vendGrid = new tui.Grid({
+            el: document.getElementById('vend-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '업체코드',
+                    name: 'vendCd'
+                },
+                {
+                    header: '업체이름',
+                    name: 'vendNm'
+                },
+                {
+                    header: '사업자번호',
+                    name: 'bizno'
+                },
+                {
+                    header: '전화번호',
+                    name: 'telno'
+                }
+            ]
+        })
 
-    <div id="grid"></div>
+        // rsc grid
+        let rscGrid = new tui.Grid({
+            el: document.getElementById('rsc-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '자재코드',
+                    name: 'rscCd'
+                },
+                {
+                    header: '자재명',
+                    name: 'rscNm'
+                },
+                {
+                    header: '자재단위',
+                    name: 'mngUnit'
+                }
+            ]
+        })
 
+        // main grid
+        const grid = new tui.Grid({
+            el: document.getElementById('grid'),
+            scrollX: false,
+            scrollY: false,
+            rowHeaders: ['checkbox'],
+            columns: [
+                {
+                    header: '입고일자',
+                    name: 'istDt'
+                },
+                {
+                    header: '입고번호',
+                    name: 'rscIstCd'
+                },
+                {
+                    header: '자재코드',
+                    name: 'rscCd'
+                },
+                {
+                    header: '자재명',
+                    name: 'rscNm'
+                },
+                {
+                    header: '업체명',
+                    name: 'vendNm'
+                },
+                {
+                    header: '입고량',
+                    name: 'lotCnt'
+                },
+                {
+                    header: 'LOT번호',
+                    name: 'rscLotCd'
+                }
+            ]
+        });
+
+        ///////////////////////////// date picker ////////////////////////////////
+        let today = new Date();
+        let picker = tui.DatePicker.createRangePicker({
+            startpicker: {
+                date: today,
+                input: '#startpicker-input',
+                container: '#startpicker-container'
+            },
+            endpicker: {
+                date: today,
+                input: '#endpicker-input',
+                container: '#endpicker-container'
+            },
+            type: 'date',
+            format: 'yyyy-MM-dd'
+        });
+
+        ///////////////////////////// vendor ////////////////////////////////
+        // declare vendor modal
+        let vModal;
+        vendModBtn.addEventListener('click', function () {
+            vModal = new bootstrap.Modal(document.getElementById('vendModal'), {})
+            vModal.show('vendModal');
+        })
+
+        // when vendor modal shown => refresh
+        let vendModal = document.getElementById('vendModal');
+        vendModal.addEventListener('shown.bs.modal', e => {
+            vendGrid.refreshLayout();
+        })
+
+        // search vendors
+        let vendSch = document.getElementById('vendSch');
+        vendSch.addEventListener('click', function () {
+            let data = new FormData(vendSchForm);
+            let url = 'getVendors'
+
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                vendGrid.innerHTML = '';
+                vendGrid.resetData(res);
+            })
+        });
+
+        // action in vendor modal
+        vendGrid.on('dblclick', e => {
+            let rowInfo = vendGrid.getRow(e.rowKey)
+            vendNm.value = rowInfo.vendNm;
+            vendCd.value = rowInfo.vendCd;
+            vModal.hide(vendModal);
+        })
+
+        // get vendor grid data
+        function getVendListInit() {
+            let url = 'getVendors'
+            fetch(url).then(res => res.json())
+                .then(res => vendGrid.resetData(res))
+        }
+
+        ///////////////////////////// resource ////////////////////////////////
+        let rModal;
+        rscModBtn.addEventListener('click', function () {
+            rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
+            rModal.show('rscModal');
+        })
+
+        // when rsc modal shown => refresh
+        let rscModal = document.getElementById('rscModal');
+        rscModal.addEventListener('shown.bs.modal', e => {
+            rscGrid.refreshLayout();
+        })
+
+        // search rsc
+        let rscSch = document.getElementById('rscSch');
+        rscSch.addEventListener('click', function () {
+            let data = new FormData(rscSchForm);
+            let url = 'getResources'
+
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                rscGrid.innerHTML = '';
+                rscGrid.resetData(res);
+            })
+        });
+
+        // action in rsc modal
+        rscGrid.on('dblclick', e => {
+            let rowInfo = rscGrid.getRow(e.rowKey)
+            rscNm.value = rowInfo.rscNm;
+            rscCd.value = rowInfo.rscCd;
+            rModal.hide(rscModal);
+        })
+
+        // get rsc grid data
+        function getRscListInit() {
+            let url = 'getResources'
+            fetch(url).then(res => res.json())
+                .then(res => rscGrid.resetData(res))
+        }
+
+        ///////////////////////////// main search ////////////////////////////////
+        let schBtn = document.getElementById('schBtn');
+        schBtn.addEventListener('click', function () {
+            let url = 'getRscIstHist'
+            let data = new FormData(schParam)
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                grid.resetData(res);
+            })
+        });
+    </script>
+
+</th:block>
 </body>
-
-<script>
-
-    window.addEventListener('onload', function () {
-
-    })
-
-    let today = new Date();
-    let picker = tui.DatePicker.createRangePicker({
-        startpicker: {
-            date: today,
-            input: '#startpicker-input',
-            container: '#startpicker-container'
-        },
-        endpicker: {
-            date: today,
-            input: '#endpicker-input',
-            container: '#endpicker-container'
-        },
-        selectableRanges: [
-            [today, new Date(today.getFullYear() + 1, today.getMonth(), today.getDate())]
-        ]
-    });
-
-    // grid section
-    class CustomTextEditor {
-        constructor(props) {
-            const el = document.createElement('input');
-            const { maxLength } = props.columnInfo.editor.options;
-
-            el.type = 'text';
-            el.maxLength = maxLength;
-            el.value = String(props.value);
-
-            this.el = el;
-        }
-
-        getElement() {
-            return this.el;
-        }
-
-        getValue() {
-            return this.el.value;
-        }
-
-        mounted() {
-            this.el.select();
-        }
-    }
-
-    const grid = new tui.Grid({
-        el: document.getElementById('grid'),
-        scrollX: false,
-        scrollY: false,
-        rowHeaders: ['checkbox'],
-        columns: [
-            {
-                header: '입고일자',
-                name: 'instDt'
-            },
-            {
-                header: '입고번호',
-                name: 'instCd'
-            },
-            {
-                header: '자재코드',
-                name: 'matCd'
-            },
-            {
-                header: '품명',
-                name: 'matName'
-            },
-            {
-                header: '공급업체',
-                name: 'matSup'
-            },
-            {
-                header: '입고수량',
-                name: 'instCnt'
-            }
-            ,
-            {
-                header: 'LOT번호',
-                name: 'matLot'
-            }
-
-        ],
-        data: [
-            {
-                matCd: '12312',
-                matName: '감귤',
-                matSt: 'ea',
-                matSi: '12312',
-                matSi: '2',
-                ordrCd: '3',
-                instCnt: '3',
-                matLot: '3'
-            }
-        ]
-    });
-
-</script>
-
 </html>

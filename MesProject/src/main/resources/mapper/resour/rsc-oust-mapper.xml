@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rezzo.mes.resour.oust.mapper.RscOustMapper">
+    <select id="getRscOustCd" resultType="String">
+        select 'ROT' || to_char(sysdate, 'YYYYMMDD') || lpad(NVL(max(substr(RSC_OUST_CD, 12, 3)), 0) + 1, 3, '0')
+        from RSC_OUST
+        where substr(RSC_OUST_CD, 4, 8) = to_char(sysdate, 'yyyymmdd')
+    </select>
+
+    <update id="letHoldOust" parameterType="RscOustVO">
+        declare
+            v_hold_cnt number;
+            v_rsc_cd varchar2(50);
+        begin
+            select HOLD_CNT, RSC_CD
+            into v_hold_cnt, v_rsc_cd
+            from RSC_LOT
+            where RSC_LOT_CD = #{rscLotCd};
+
+            update rsc_lot
+            set HOLD_CNT    = HOLD_CNT - v_hold_cnt,
+                LOT_RMN_CNT = LOT_RMN_CNT - v_hold_cnt
+            where RSC_LOT_CD = #{rscLotCd};
+
+            insert into RSC_OUST (RSC_OUST_CD, RSC_CD, RSC_LOT_CD, OUST_CNT, OUST_DT, OUST_TYP)
+            values (#{rscOustCd}, v_rsc_cd, #{rscLotCd}, v_hold_cnt, #{oustDt}, #{oustTyp});
+        end;
+    </update>
+</mapper>

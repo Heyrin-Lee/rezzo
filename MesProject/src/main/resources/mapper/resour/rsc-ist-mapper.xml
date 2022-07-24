@@ -22,8 +22,8 @@
     </select>
 
     <insert id="setRscIstLotEach" parameterType="RscIstVO">
-        insert into RSC_LOT (RSC_LOT_CD, RSC_INSP_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT, RSC_IST_CD)
-        values (#{rscLotCd}, #{rscInspCd}, #{rscCd}, #{inspPassCnt}, #{inspPassCnt}, #{rscIstCd})
+        insert into RSC_LOT (RSC_LOT_CD, ORDR_CD, RSC_INSP_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT, RSC_IST_CD)
+        values (#{rscLotCd}, #{ordrCd}, #{rscInspCd}, #{rscCd}, #{inspPassCnt}, #{inspPassCnt}, #{rscIstCd})
     </insert>
 
     <update id="updRscInspBool" parameterType="RscIstVO">
@@ -38,16 +38,37 @@
         declare
             v_values rsc_ist%rowtype;
         begin
-            select rsc_cd, sum(lot_cnt) as ist_cnt
-            into v_values
-            from rsc_lot
-            where rsc_ist_cd = #{rscIstCd}
-            group by rsc_cd;
+            for v_values in (
+                select rsc_cd, sum(lot_cnt) as ist_cnt
+                from rsc_lot
+                where rsc_ist_cd = #{rscIstCd}
+                group by rsc_cd)
 
-            loop
-                insert into RSC_IST (rsc_ist_cd, ist_dt, rsc_cd, ist_cnt)
-                values (#{rscIstCd}, #{istDt}, v_values.RSC_CD, v_values.IST_CNT);
-            end loop;
+                loop
+                    insert into RSC_IST (rsc_ist_cd, ist_dt, rsc_cd, ist_cnt)
+                    values (#{rscIstCd}, #{istDt}, v_values.RSC_CD, v_values.IST_CNT);
+                end loop;
         end;
     </insert>
+
+    <select id="getRscIstHist" parameterType="RscIstVO" resultType="RscIstVO">
+        select rl.rsc_lot_cd,
+               rl.rsc_cd,
+               rl.lot_cnt,
+               rl.rsc_ist_cd,
+               rl.ordr_cd,
+               ri.ist_dt,
+               vend.vend_nm,
+               rsc.rsc_nm
+        from rsc_lot rl,
+             rsc_ist ri,
+             rsc_ordr ro,
+             vend,
+             RSC
+        where rl.rsc_ist_cd = ri.rsc_ist_cd
+          and rl.rsc_cd = ri.rsc_cd
+          and ro.ordr_cd = rl.ordr_cd
+          and ro.vend_cd = vend.vend_cd
+          and rl.rsc_cd = rsc.RSC_CD
+    </select>
 </mapper>

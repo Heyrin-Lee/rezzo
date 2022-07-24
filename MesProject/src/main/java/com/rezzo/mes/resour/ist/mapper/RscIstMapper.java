@@ -14,4 +14,7 @@ public interface RscIstMapper {
     void setRscIstLotEach(RscIstVO rscIstVO);
     void setRscIst(@Param("rscIstCd") String rscIstcd, @Param("istDt") String istDt);
     void updRscInspBool(RscIstVO rscIstVO); // 입고마감
+
+    // 조회
+    List<RscIstVO> getRscIstHist(RscIstVO rscIstVO);
 }

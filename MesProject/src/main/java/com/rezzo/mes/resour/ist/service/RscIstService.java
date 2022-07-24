@@ -7,4 +7,5 @@ import java.util.List;
 public interface RscIstService {
 
     void setRscIstLot(List<RscIstVO> rscIstVO);
+    List<RscIstVO> getRscIstHist(RscIstVO rscIstVO);
 }

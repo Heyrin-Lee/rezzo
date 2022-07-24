@@ -117,11 +117,30 @@
         </div>
     </div>
 
+    <!--inspection detail modal-->
+    <div class="modal fade" id="infModal" tabindex="-1" aria-labelledby="infModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b class="modal-title">검사상세</b>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="inf-grid"></div>
+                </div>
+                <div>
+                    <input type="button" id="calInfCnt" value="입력">
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit();
+            getInfList();
         })
 
         let startDt = document.getElementById('startpicker-input');
@@ -272,6 +291,30 @@
             }
         }
 
+        let iModal;
+
+        class rscInfBtn {
+            constructor(props) {
+                let {rowKey, value} = props;
+                let btn = document.createElement('button');
+                let text = document.createTextNode(value);
+                btn.appendChild(text);
+                btn.innerHTML = '검사'
+                btn.className = 'insp-btn';
+                btn.addEventListener('click', function (e) {
+                    let modDiv = document.getElementById('infModal');
+                    modDiv.dataset.rowKey = rowKey;
+                    iModal = new bootstrap.Modal(modDiv, {});
+                    iModal.show('infModal');
+                })
+                this.el = btn;
+            }
+
+            getElement() {
+                return this.el;
+            }
+        }
+
         // grid theme
         let gridOption = {
             row: {
@@ -351,6 +394,13 @@
                         }
                     }
                 },
+                // {
+                //     header: '검사',
+                //     name: 'rscInfBtn',
+                //     align: 'center',
+                //     renderer: {type: rscInfBtn},
+                //     width: 50
+                // },
                 {
                     header: '합격량',
                     name: 'inspPassCnt',
@@ -375,6 +425,100 @@
                 }
             ]
         });
+
+        ///////////////////////////// inferiority /////////////////////////////
+        // inf grid
+        class inputInfCnt {
+            constructor(props) {
+                const el = document.createElement('input');
+                el.type = 'text';
+                el.value = String(props.value);
+                this.el = el;
+            }
+
+            getElement() {
+                this.el.value = '';
+                return this.el;
+            }
+
+            getValue() {
+                let val = this.el.value.replace(/[^0-9]/g, '')
+                if (val === '') {
+                    return val;
+                } else {
+                    return parseInt(val);
+                }
+            }
+
+            mounted() {
+                this.el.select();
+            }
+        }
+
+        let infGrid = new tui.Grid({
+            el: document.getElementById('inf-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '불량코드',
+                    name: 'ccdDtl'
+                },
+                {
+                    header: '불량명',
+                    name: 'ccdDtlNm'
+                },
+                {
+                    header: '불량수량',
+                    name: 'infCnt',
+                    editor: {
+                        type: inputInfCnt,
+                        options: {
+                            maxLength: 10
+                        }
+                    }
+                },
+                {
+                    header: '비고',
+                    name: 'infDesc'
+                }
+            ]
+        })
+
+        let infModal = document.getElementById('infModal');
+        infModal.addEventListener('shown.bs.modal', e => {
+            infGrid.refreshLayout();
+        })
+
+        let calInfCnt = document.getElementById('calInfCnt');
+        calInfCnt.addEventListener('click', function () {
+            let rowKey = infModal.dataset.rowKey;
+            let colVal = infGrid.getColumnValues('infCnt')
+            let infSum = colVal.reduce((a, b) => (a + b));
+            let inspCnt = grid.getValue(rowKey, 'inspCnt')
+
+            if (infSum > parseInt(inspCnt) || inspCnt === null || inspCnt === '') {
+                alert("불량수량이 검사량 보다 많습니다.")
+            } else {
+                grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
+                grid.setValue(rowKey, 'inspFailCnt', infSum)
+            }
+            iModal.hide(infModal);
+        })
+
+
+        function getInfList() {
+            let url = 'getCodeList'
+            let data = {ccd: 'INF'}
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json())
+                .then(res => {
+                    infGrid.resetData(res)
+                });
+        }
 
 
         ///////////////////////////// vendor ////////////////////////////////
@@ -459,8 +603,8 @@
 
             if (startDt.value === '' || endDt.value === '') {
                 alert('기간을 입력하세요')
-            // } else if (vendCd.value === '') {
-            //     alert('공급업체를 입력하세요')
+                // } else if (vendCd.value === '') {
+                //     alert('공급업체를 입력하세요')
             } else {
                 let data = new FormData(getInspListFrm)
                 let url = 'getRscOrdrList';

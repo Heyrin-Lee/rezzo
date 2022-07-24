@@ -32,4 +32,9 @@ public class IstServiceImpl implements RscIstService {
         mapper.setRscIst(rscIstCd, istDt);
     }
 
+    @Override
+    public List<RscIstVO> getRscIstHist(RscIstVO rscIstVO) {
+        return mapper.getRscIstHist(rscIstVO);
+    }
+
 }
