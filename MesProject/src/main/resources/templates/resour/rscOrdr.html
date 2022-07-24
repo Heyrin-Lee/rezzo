@@ -76,6 +76,8 @@
 					<tr>
 						<th>원자재명</th>
 						<td><input class="form-control" type="text" id="rscNm" name="rscNm" style="width: 150px"></td>
+						<th>업체명</th>
+						<td><input class="form-control" type="text" id="vendNm" name="vendNm" style="width: 150px"></td>
 						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i
 								class="fas fa-search"></i></button>
 						&nbsp&nbsp
@@ -140,6 +142,14 @@
 						align: 'center',
 						name: 'rscNm'
 					}, {
+						header: '업체코드',
+						align: 'center',
+						name: 'vendCd'
+					}, {
+						header: '업체명',
+						align: 'center',
+						name: 'vendNm'
+					},{
 						header: '현재재고',
 						align: 'center',
 						name: 'rscStc'
@@ -169,23 +179,26 @@
 					var safStc = grid.getValue(ev.rowKey, 'safStc')
 					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
 					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
-					var rscCd2 = grid2.getColumnValues('rscCd');
 					
+					var rscCd2 = grid2.getColumnValues('rscCd');
+					var vendCd2 = grid2.getColumnValues('vendCd');
 					console.log(rscCd2)
 					console.log(rscCd)
+					
 					var isValid = true;
-					rscCd2.forEach(ele => {
-						if (ele == rscCd) {
+					for (i=0; i<rscCd2.length; i++){
+						if (rscCd2[i]==rscCd ) {
 							toastr.warning('동일 항목의 발주가 진행중입니다.');
 							isValid = false;
 							return false;
-						} 
-					})
-					
-					if(!isValid){
-						return;
+						}	else if (vendCd2[i]!=vendCd){
+							toastr.warning('동일 업체의 발주만 가능합니다.');
+							isValid = false;
+							return false;
+						}
+						
 					}
-					console.log("hello")
+							
 					grid2.appendRow({
 						"rscCd": rscCd,
 						"rscNm": rscNm,
@@ -210,7 +223,7 @@
 						dataType: 'json',
 						contentType: 'application/text',
 						data: {
-							ordrSCnt: date
+							ordrSCnt: format
 						},
 						success: function (result) {
 							if (result.ordrSCnt == null) {
@@ -220,10 +233,10 @@
 							}
 
 							function makeCd() {
-								return 'ORD' + format + index
+							console.log('--'+String((Number(index)+1)).padStart(3,'0'))
+								return 'ORD' + format + String((Number(index)+1)).padStart(3,'0')
 							}
 							code = makeCd()
-							console.log(code)
 							for (let i = 0; i < grid2.getRowCount(); i++) {
 								grid2.setValue(i, 'ordrCd', code)
 							}
@@ -248,7 +261,6 @@
 						}
 					})
 				})
-
 
 
 				const grid2 = new tui.Grid({
@@ -293,25 +305,62 @@
 						align: 'center',
 						name: 'safStc'
 					}, {
-						header: '합계재고량',
+						header: '예상재고량',
 						align: 'center',
 						name: 'allStc'
-						//value : 
 					}, {
 						header: '납기요청일',
 						align: 'center',
 						name: 'paprdCmndDt',
-						editor: 'datePicker'
-
+					    editor: {
+					        type: 'datePicker',
+					        options: {
+					        datetimeFormat: "yyyy-MM-dd"
+					        }
+					      }
 					}],
 				});
+				
+				grid2.on('editingFinish',function (ev){
+					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
+					var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
+					ordrCnt = Number(ordrCnt);
+					rscStc = Number(rscStc);
+					var allStc = ordrCnt+rscStc
+					grid2.setValue(ev.rowKey, 'allStc', allStc)
+					
+				})
+				
 
-
-
-				$('#minusBtn').on('click', function (ev) {
+				// 삭제 버튼
+				
+				$('#minusBtn').on('click', function (ev) {	
 					grid2.removeCheckedRows()
 					toastr.success('정상적으로 삭제되었습니다.');
 				})
+				
+				// 발주 버튼
+				
+				$('#saveBtn').click(ev =>{
+					var data = grid2.getCheckedRows();
+						for(i=0; i<data.length; i++){
+						if(data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null){
+							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
+					} else{
+						$.ajax({
+							url : 'rscOrdrInsert',
+							method:'POST',
+							data : JSON.stringify(data),
+							contentType : 'application/json'
+						}).done(function (result){
+							toastr.success('발주 신청이 완료되었습니다.');
+							grid2.refreshLayout(
+							grid2.uncheckAll())
+						})
+					}
+				}})
+				
+				
 			</script>
 
 	</th:block>

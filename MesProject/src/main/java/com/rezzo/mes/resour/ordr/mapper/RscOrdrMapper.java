@@ -19,4 +19,8 @@ public interface RscOrdrMapper {
 	List<RscOrdrVO> rscSOrdrList(RscOrdrVO vo);
 	
 	List<RscOrdrVO> rscRowSelectList(RscOrdrVO vo);
+	
+	void rscOrdrInsert(List<RscOrdrVO> ordrList);
+	
+	void rscOrdrFInsert(List<RscOrdrVO> ordrFList);
 }

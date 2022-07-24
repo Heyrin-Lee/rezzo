@@ -20,5 +20,11 @@ public interface RscOrdrService {
 	// 그리드 선택 데이터 이동
 	List<RscOrdrVO> rscRowSelectList(RscOrdrVO vo);
 	
+	//추가 (1회)
+	void rscOrdrFInsert(List<RscOrdrVO> ordrFList);
+	
+	//추가 (세부정보)
+	void rscOrdrInsert(List<RscOrdrVO> ordrList);
+	
 	
 }
