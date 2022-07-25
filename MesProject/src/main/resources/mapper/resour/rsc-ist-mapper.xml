@@ -71,4 +71,12 @@
           and ro.vend_cd = vend.vend_cd
           and rl.rsc_cd = rsc.RSC_CD
     </select>
+
+    <select id="getRscSingle" parameterType="RscVO" resultType="RscVO">
+        select rownum, rsc.*
+        from RSC
+        where (RSC_NM like '%${rscNm}%'
+            and RSC_CD like '%${rscCd}%')
+          and rownum = 1
+    </select>
 </mapper>

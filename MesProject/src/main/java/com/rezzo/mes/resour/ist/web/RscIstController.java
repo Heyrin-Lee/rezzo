@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.ist.web;
 
+import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.resour.ist.service.RscIstService;
 import com.rezzo.mes.resour.ist.service.RscIstVO;
 import lombok.AllArgsConstructor;
@@ -37,5 +38,11 @@ public class RscIstController {
     @ResponseBody
     public List<RscIstVO> getRscIstHist(@ModelAttribute RscIstVO rscIstVO) {
         return ris.getRscIstHist(rscIstVO);
+    }
+
+    @RequestMapping("getRscSingle")
+    @ResponseBody
+    public RscVO getRscSingle(@RequestBody RscVO rscVO) {
+        return ris.getRscSingle(rscVO);
     }
 }
