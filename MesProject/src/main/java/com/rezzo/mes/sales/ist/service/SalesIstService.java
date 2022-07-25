@@ -10,4 +10,6 @@ public interface SalesIstService {
 	public void saveIst(SalesIstVO vo);
 	//제품 입고 전체 목록 - 현재 날짜 기준으로
 	public List<SalesIstVO> salesIstList(SalesIstVO vo);
+	//완제품LOT번호 모달 조회
+	//public List<Sales>
 }

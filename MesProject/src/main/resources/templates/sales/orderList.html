@@ -391,6 +391,7 @@
 		   			console.log(row);
 		   			console.log(no);
 		   			grid.setValue(row,'orderNo',result);
+		   			
 		   		}
 		   	})
 		   	//거래처코드 칸 클릭 -> 거래처 목록 모달창 띄우기
@@ -509,7 +510,6 @@
 				data:JSON.stringify(data),
 				contentType:"application/json",
 				success:function(result) {
-					console.log(result);
 					search();
 				}
 			})
@@ -526,8 +526,13 @@
 				dataType:"json",
 				data:JSON.stringify(data),
 				contentType:"application/json",
-				success:function() {
-					grid.uncheckAll();
+				success:function(result) {
+					setTimeout(function () {
+						grid.refreshLayout()
+						grid.uncheckAll()
+					}, 300);
+					grid.resetData(result);
+					toastr.warning('주문서가 등록되었습니다.');
 				}
 			})
 			})
