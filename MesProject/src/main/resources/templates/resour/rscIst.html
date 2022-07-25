@@ -143,23 +143,7 @@
         });
 
         ///////////////////////////////// !main grid ///////////////////////////////
-        function getRscSingle(val, rowKey) {
-            let url = 'getRscSingle'
-            let data = {rscCd: val.rscCd, rscNm: val.rscNm}
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => res.json()).then(res => {
-                    grid.setRow(rowKey, res)
-            }).catch(err => {
-                toastr.error('해당하는 자재가 없습니다.');
-            })
-        }
-
-
-
-        let rModal;
+       let rModal;
         class customInput {
             constructor(props) {
                 const el = document.createElement('input');
@@ -175,12 +159,12 @@
             }
 
             getElement() {
+
                 return this.el;
             }
 
             getValue() {
-                let rowInfo = grid.getRow(this.rowKey)
-                getRscSingle(rowInfo, this.rowKey)
+                getRscSingle(this.el.value, this.rowKey)
                 return this.el.value;
             }
 
@@ -347,8 +331,6 @@
             ]
         })
 
-
-
         // when rsc modal shown => refresh
         let rscModal = document.getElementById('rscModal');
         rscModal.addEventListener('shown.bs.modal', e => {
@@ -385,6 +367,19 @@
                 .then(res => rscGrid.resetData(res))
         }
 
+        function getRscSingle(val, rowKey) {
+            let url = 'getRscSingle'
+            let data = {rscCd: val.rscCd, rscNm: val.rscNm}
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(res => {
+                grid.setRow(rowKey, res)
+            }).catch(err => {
+                toastr.error('해당하는 자재가 없습니다.');
+            })
+        }
         ///////////////////////////// !get main grid data ////////////////////////////////
         // get order list
         let getInspList = document.getElementById('getInspList');
