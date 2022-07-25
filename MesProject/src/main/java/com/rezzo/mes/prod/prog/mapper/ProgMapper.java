@@ -12,4 +12,6 @@ public interface ProgMapper {
 	public ProgVO selectEqm(ProgVO vo);
 	public void updateOrderStatus(ProgVO vo);
 	public void updateEqm2(ProgVO vo);
+	public void insertProgPrcs(ProgVO vo);
+	public void insertInfer(ProgVO vo);
 }

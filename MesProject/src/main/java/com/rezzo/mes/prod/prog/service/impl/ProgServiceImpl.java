@@ -50,6 +50,20 @@ public class ProgServiceImpl implements ProgService {
 	public void updateEqm2(ProgVO vo) {
 		mapper.updateEqm2(vo);
 	}
+
+	@Override
+	public void insertProgPrcs(List<ProgVO> list) {
+		for(ProgVO vo : list) {
+			mapper.insertProgPrcs(vo);
+		}
+	}
+
+	@Override
+	public void insertInfer(List<ProgVO> list) {
+		for(ProgVO vo : list) {
+			mapper.insertInfer(vo);
+		}
+	}
 	
 
 

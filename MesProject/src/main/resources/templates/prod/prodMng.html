@@ -209,15 +209,32 @@ display:inline-block;
   interval2=setInterval(function(){
    	if(value == '완료') {
 		clearInterval(interval2)
-		//ajax
-		//주문서 상태 업데이트, 설비 비가동으로 업데이트, 자재 재고 업데이트, 공정에 insert
+		
 		let orderNo = grid.getData()[0].orderNo
-		let data = grid2.getData()
-		console.log(data)
+		let lineCd = grid.getData()[0].lineCd
+		
+		//주문서 생산완료로 업데이트, 설비 사용여부 N으로 업데이트
 		$.ajax({
 			url : 'afterProd',
-			data : {"orderNo" : orderNo, "lineCd" : lindCd}
+			data : {"orderNo" : orderNo, "lineCd" : lineCd}
 		})
+		
+		//자재 재고 업데이트
+		
+		//진행공정, 불량상세, 진행공정상세 인서트
+		let data = grid2.getData()
+		$.each(data, function(index, item) {
+            	item.indicaDt = grid.getData()[0].indicaDt
+            	item.lineCd = grid.getData()[0].lineCd
+		 }) 
+		$.ajax({
+			url : 'insertProgPrcs',
+			method : 'post',
+			data : JSON.stringify(data),
+			contentType : 'application/json'
+		})
+	
+		
    	} 
    }, 1000)
    
@@ -285,6 +302,7 @@ display:inline-block;
 						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
 						            			
+						            			console
 						            			value = grid2.getValue(i, 'nowSt')
 				            				}
 				            			}
@@ -295,7 +313,7 @@ display:inline-block;
 				            	 }
 				             })
 				          //clearInterval(interval) interval은 계속 진행되고 grid 마지막행에 setValue는안됨
-				          }, 5000);
+				          }, 3000);
 					  }		  	
 				   })
 		   })(i)

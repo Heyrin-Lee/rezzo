@@ -99,11 +99,13 @@ body {
           data: gridData,
           scrollX: false,
           scrollY: false,
+          align : 'center',
           rowHeaders: ['checkbox'],
           columns: [
             {
-              header: '공정구분',
+              header: '공정구분코드',
               name: 'prcsFg',
+              align : 'center',
               editor: {
 	              type: 'select',
 	              options: {
@@ -121,16 +123,19 @@ body {
              {
               header: '공정코드',
               name: 'prcsCd',
+              align : 'center',
               editor: 'text'
             },
             {
               header: '공정명',
               name: 'prcsNm',
+              align : 'center',
               editor: 'text'
             },
             {
               header: '공정설명',
               name: 'prcsCtnt',
+              align : 'center',
               editor: 'text'
             }
           ]

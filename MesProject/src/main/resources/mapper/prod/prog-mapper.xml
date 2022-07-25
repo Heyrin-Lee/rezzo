@@ -39,5 +39,38 @@
 <update id="updateEqm2" parameterType="com.rezzo.mes.prod.prog.service.ProgVO">
 	UPDATE EQM SET USE_YN = 'N' WHERE LINE_CD =#{lineCd}
 </update>
+<insert id="insertProgPrcs" parameterType="com.rezzo.mes.prod.prog.service.ProgVO">
+	INSERT INTO PRCS_PROG VALUES (
+				#{indicaDt},
+				#{lineCd},
+				#{prcsCd},
+				#{wkFrDttm},
+				#{wkToDttm},
+				#{prcsPsch},
+				#{inferCnt},
+				#{prodCnt},
+				#{prefRank},
+				#{indicaCnt}
+				)
+</insert>
+
+<insert id="insertInfer" parameterType="com.rezzo.mes.prod.prog.service.ProgVO">
+<!-- 캡핑 불량일 때 -->
+<!-- 냉각 불량일 때 -->	
+<!-- 외포장 불량일 때 -->
+
+<choose>
+<when test='prcsCd.equals("CAP001") and inferCnt > 0 '>
+	INSERT INTO PRCS_PROG_INFER VALUES( #{lineCd}, #{inferCnt}, #{inferNm}, #{indicaDt}, 'CAP001', '불량1')
+</when>
+<when test='prcsCd.equals("CLN001") and inferCnt > 0'>
+	INSERT INTO PRCS_PROG_INFER VALUES( #{lineCd}, #{inferCnt}, #{inferNm}, #{indicaDt}, 'CLN001', '불량2')
+</when>
+<when test='prcsCd.equals("OPK001") and inferCnt > 0'>
+	INSERT INTO PRCS_PROG_INFER VALUES( #{lineCd}, #{inferCnt}, #{inferNm}, #{indicaDt}, 'OPK001', '불량3')
+</when>
+</choose>
+
+</insert>
 
 </mapper>	

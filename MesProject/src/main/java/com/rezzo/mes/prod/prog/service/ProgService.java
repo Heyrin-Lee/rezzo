@@ -10,4 +10,6 @@ public interface ProgService {
 	public ProgVO selectEqm(ProgVO vo);
 	public void updateOrderStatus(ProgVO vo);
 	public void updateEqm2(ProgVO vo);
+	public void insertProgPrcs(List<ProgVO> list);
+	public void insertInfer(List<ProgVO> list);
 }

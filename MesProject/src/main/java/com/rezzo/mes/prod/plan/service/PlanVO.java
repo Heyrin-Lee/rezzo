@@ -38,7 +38,7 @@ public class PlanVO{
 	
 	// 자재코드, 자재lot, 자재재고, 
 	String rscCd;
-	String lotCd;
+	String rscLotCd;
 	int lotRmnCnt;
 	
 	// bom  
