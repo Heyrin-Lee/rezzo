@@ -8,5 +8,19 @@
 		WHERE CCD = 'PQC'
 		ORDER BY CCD
 	</select>
+	
+	<select id="prdtInspOrder" resultType="OrderVO">
+ 		SELECT ORDER_NO, VEND_NM, EDCTS_CD, PRDT_NM, ORDER_CNT, PAPRD_DT
+		FROM ORDER_SHEET
+		WHERE PROG_APPE = '생산완료'
+ 	</select>
+ 	
+ 	<delete id="delPrdtInsp" parameterType="PrdtInspVO">
+ 		DELETE FROM PRDT_INSP 
+ 		WHERE EDCTS_LOT_NO = #{edctsLotNo}
+ 		
+ 		DELETE FROM PRDT_INSP_DTL 
+ 		WHERE EDCTS_LOT_NO = #{edctsLotNo}
+ 	</delete>
 
 </mapper>

@@ -153,11 +153,11 @@
 			</div>
 		</div>
 		<script>
-<<<<<<< HEAD
+		
 		 const grid = new tui.Grid({
 		     el: document.getElementById('grid'),
 		     scrollX: false,
-		     bodyHeight: 350,
+		     bodyHeight: 300,
 		     rowHeaders: ['checkbox'],
 		     columns: [{
 		         header: '검사코드',
@@ -211,23 +211,117 @@
 		//날짜 오늘날짜로 셋팅
 		//$('#inspDt').valueAsDate = new Date();
 		document.getElementById('inspDt').valueAsDate = new Date();
-		 
-		//검사항목 로드 
- 		$.ajax({
-	    url: "getInspCode",
-	    method: "POST",
-	    dataType: "JSON",
-	    success: function (result) {
-	    	setTimeout(function () {
-	    		grid.refreshLayout()
-	    		}, 300);
-	    	grid.resetData(result);
-	    }
+		
+		//생산완료 주문서 모달 그리드
+    const modalGrid = new tui.Grid({
+      el: document.getElementById('modalGrid'),
+      scrollX: false,
+      bodyHeight: 300,
+      rowHeight: 35,
+      rowHeaders: ['checkbox'],
+      header: {
+        height: 40
+      },
+      columns: [
+        {
+          header: '주문번호',
+          name: 'orderNo'
+        },
+        {
+          header: '거래처',
+          name: 'vendNm'
+        },
+        {
+          header: '제품코드',
+          name: 'edctsCd'
+        },
+        {
+	      header: '제품명',
+	      name: 'prdtNm'
+	     },
+	     {
+			  header: '주문수량',
+			  name: 'orderCnt'
+		  }]
+    });
+	
+		//모달창 버튼 클릭
+		$('#modalBtn').click( ev => {
+			$.ajax({
+		    url: "prdtInspOrder",
+		    method: "POST",
+		    dataType: "JSON",
+		    success: function (result) {
+		    	setTimeout(function () {
+		    		modalGrid.refreshLayout()
+		    		}, 300);
+		    	modalGrid.resetData(result);
+		    }
+			})
 		})
 		
-=======
-			document.getElementById('now_date').valueAsDate = new Date();
->>>>>>> refs/remotes/origin/gayoung
+		//체크된 셀 하이라이팅
+		modalGrid.on('check', (ev) => {
+			 modalGrid.addRowClassName(ev.rowKey, 'highlight2');
+		 });
+		
+		modalGrid.on('uncheck', (ev) => {
+			modalGrid.removeRowClassName(ev.rowKey, 'highlight2');
+		 });
+		 
+		//주문서 모달 확인버튼
+		$('#modalSelBtn').click(ev => {
+			var inspSelect = modalGrid.getCheckedRows()[0]
+			insertModalGrid(inspSelect);
+		})
+		
+		//주문서 모달 더블클릭
+		modalGrid.on('dblclick', (ev) => {
+			var orderGetRow = modalGrid.getRow(ev.rowKey);
+			insertModalGrid(orderGetRow);
+		})
+		
+		//주문서 모달 그리드에 출력
+		function insertModalGrid(row) {
+			$('#orderCd').val(modalGrid.getValue(row.rowKey, "orderNo"));
+			$('#edctsCd').val(modalGrid.getValue(row.rowKey, "edctsCd"));
+			$('#edctsNm').val(modalGrid.getValue(row.rowKey, "prdtNm"));
+			$('#exampleModal').modal('hide');
+			//검사항목 로드 
+	 		$.ajax({
+		    url: "getInspCode",
+		    method: "POST",
+		    dataType: "JSON",
+		    success: function (result) {
+		    	setTimeout(function () {
+		    		grid.refreshLayout()
+		    		}, 300);
+		    	grid.resetData(result);
+		    }
+			});
+		}
+		
+		//초기화버튼
+		$('#newBtn').click(ev => {
+			$('#dataForm')[0].reset();
+			grid.clear();
+		})
+		
+		//전체 삭제
+		$('#delBtn').click(ev => {
+		  $.ajax({
+			 	url: "delVend",
+			  method: "POST",
+	      data: $('#dataForm').serialize(),
+	      dataType: 'json',
+			    success: function (result) {
+			    	toastr.success('정상적으로 삭제되었습니다.');
+			    	grid.resetData(result);
+			    }
+			})
+ 		});
+ 		
+ 		//수정&저장
 		</script>
 	</th:block>
 </body>

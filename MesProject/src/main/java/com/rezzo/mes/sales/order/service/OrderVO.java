@@ -38,5 +38,6 @@ public class OrderVO{
 	
 	String index;
 	String defaultValue;
+	String edctsLotNo;
 	
 }

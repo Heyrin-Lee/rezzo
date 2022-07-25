@@ -164,7 +164,7 @@ $('#searchBtn').click(ev => {
  let selectedRowKey = null;
  grid.on('focusChange', (ev) => {
 
-	   //하이라이팅
+	 //하이라이팅
    if (selectedRowKey != ev.rowKey) {
        grid.removeRowClassName(selectedRowKey, 'highlight');
    }
