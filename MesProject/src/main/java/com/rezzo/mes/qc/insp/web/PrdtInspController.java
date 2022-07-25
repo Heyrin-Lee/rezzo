@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rezzo.mes.qc.insp.service.PrdtInspService;
 import com.rezzo.mes.qc.insp.service.PrdtInspVO;
+import com.rezzo.mes.sales.order.service.OrderVO;
 
 @Controller
 public class PrdtInspController {
@@ -26,4 +27,14 @@ public class PrdtInspController {
 		return service.getInspCode();
 	}
 
+	@RequestMapping("prdtInspOrder")
+	@ResponseBody
+	public List<OrderVO> prdtInspOrder() {
+		return service.prdtInspOrder();
+	}
+	
+	@RequestMapping("delPrdtInsp")
+	public void delPrdtInsp(PrdtInspVO prdtInspVO) {
+		service.delPrdtInsp(prdtInspVO);
+	}
 }
