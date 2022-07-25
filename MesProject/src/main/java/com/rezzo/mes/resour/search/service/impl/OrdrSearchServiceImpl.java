@@ -22,7 +22,7 @@ public class OrdrSearchServiceImpl implements OrdrSearchService {
 
 	@Override
 	public List<OrdrSearchVO> ordrSearchOneList(OrdrSearchVO vo) {
-		return null;
+		return mapper.ordrSearchList(vo);
 	}
 	
 	

@@ -12,19 +12,30 @@ import lombok.Data;
 public class OrdrSearchVO {
 	
 	String ordrCd;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	Date ordrReqDt;
 	String vendCd;
 	String vendNm;
-	int ordrCnt;
-	int rmnCnt;
 	String rscCd;
 	String rscNm;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	Date paprdCmndDt;
 	String ordrSCnt;
 	String rscStc;
 	String safStc;
+	
+	int ordrCnt;
+	int rmnCnt;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	Date toDt;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	Date frDt;	
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	Date paprdCmndDt;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	Date ordrReqDt;
 }

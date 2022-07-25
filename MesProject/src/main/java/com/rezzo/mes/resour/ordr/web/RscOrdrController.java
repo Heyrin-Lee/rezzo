@@ -67,7 +67,7 @@ public class RscOrdrController {
 	public List<RscOrdrVO> rscOrdrInsert(@RequestBody List<RscOrdrVO> OrdrList, RscOrdrVO vo){
 		service.rscOrdrFInsert(OrdrList);
 		service.rscOrdrInsert(OrdrList);
-		return service.RscOrdrList(vo);
+		return service.rscCOrdrList(vo);
 	}
 	
 }
