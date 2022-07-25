@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.sales.order.service.OrderVO;
 import com.rezzo.mes.sales.oust.service.SalesOustService;
 import com.rezzo.mes.sales.oust.service.SalesOustVO;
@@ -23,6 +25,12 @@ public class SalesOustController {
 	public String salesOust() {
 		return "sales/salesOust";
 	}
+	
+	//출고 조회 페이지 불러오기
+		@RequestMapping("salesOustSearch")
+		public String salesOustSearch() {
+			return "sales/salesOustSearch";
+		}
 	
 	//진행중 주문서 현황 목록 조회
 	@RequestMapping("findOrder")
@@ -40,9 +48,18 @@ public class SalesOustController {
 	
 	//완제품 재고현황 모달에서 출고량 입력 후 출고등록
 	@PostMapping("saveSalesOust")
+	@ResponseBody	
 	public List<SalesOustVO> saveSalesOust(SalesOustVO vo) {
 		service.saveSalesOust(vo);
 		return service.findOust(vo);
+	}
+	
+	//출고등록 후 출고완료로 변경
+	@PutMapping("updateProg")
+	@ResponseBody
+	public OrderVO updateProg(OrderVO vo) {
+		service.updateProg(vo);
+		return vo;
 	}
 	
 	//출고현황 목록 불러오기
@@ -50,5 +67,20 @@ public class SalesOustController {
 	@ResponseBody
 	public List<SalesOustVO> findOust(SalesOustVO vo) {
 		return service.findOust(vo);
+	}
+	
+	//출고 조회 페이지
+	//제품명 목록 조회 모달창
+	@RequestMapping("getProd")
+	@ResponseBody
+	public List<SalesStcVO> getProd(SalesStcVO vo) {
+		return service.getProd(vo);
+	}
+	
+	//조건별 조회
+	@RequestMapping("optionSearch")
+	@ResponseBody
+	public List<SalesOustVO> optionSearch(SalesOustVO vo) {
+		return service.optionSearch(vo);
 	}
 }

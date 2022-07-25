@@ -48,7 +48,6 @@
 				<div class="card mb-4">
 					<div class="card-header">
 						<i class="fas fa-chart-pie me-1"></i> 출고 등록 현황
-					<button class="c_btn">확인</button>
 						
 					</div>
 					<div class="card-body">
@@ -73,7 +72,7 @@
                 	<div id="StcGrid"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="c_btn" id="addBtn" data-bs-dismiss="modal">등록</button>
+                    <button class="btn btn-primary" id="addBtn"><i class="fas fa-save"></i> 등록</button>
                 </div>
             </div>
         </div>
@@ -219,7 +218,7 @@
 	  	OustRowKey = e.rowKey;
 	  	if(columnName == 'orderNo') {
 	  		let edctsCd = grid.getValue(OustRowKey,'edctsCd');
-	  		console.log(edctsCd);
+	  		//console.log(edctsCd);
 	  		$("#StcGridModal").modal('show');
 	  		$.ajax({
 	  			url:"salesStcList",
@@ -241,44 +240,44 @@
     				StcGrid.check(rowKey);
 				});
 	  
+	   grid.on("click",(e) => {
+	   	const {columnName} = e;
+	   	ordrRowKey = e.rowKey;
+	   	console.log(ordrRowKey);
+	   	if(columnName == 'orderNo') {
+	   		edctsCd = grid.getValue(ordrRowKey,'edctsCd');
+	   		orderNo = grid.getValue(ordrRowKey,'orderNo');
+	   		console.log(edctsCd);
+	   		}
+	   	})
+	   	
+	  
 	  //완제품 재고 목록 모달에서 출고량 입력하여 완제품 출고 테이블에 저장
+		$("#addBtn").click(ev => {
+			var ordrData = StcGrid.getCheckedRows();
+			var edctsLotNo = ordrData[0].edctsLotNo;
+			var edctsOustCnt = ordrData[0].edctsOustCnt;
+			$.ajax({
+				url:"saveSalesOust",
+				method:"post",
+				dataType:"json",
+				data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsOustCnt":edctsOustCnt,"orderNo":orderNo},
+				success:function(list) {
+					grid2.resetData(list);
+				}
+			})
+			$.ajax({
+				url:"updateProg",
+				method:"put",
+				dataType:"json",
+				data:{"orderNo":orderNo},
+				error:console.log('r'),
+				success:function(result) {
+					
+				}
+			})
+		})
 	  	
-	  		StcGrid.on("click",(e) => {
-	  			const {columnName} = e;
-	  			cntRow = e.rowKey;
-	  			if(columnName == 'edctsOustCnt') {
-	  				console.log('a');
-	  				//출고수량
-	  				let cnt =  StcGrid.getValue(cntRow,'edctsOustCnt');
-	  				console.log(cnt);
-	  				//완제품LOT번호
-	  				let lotNo = StcGrid.getValue(cntRow, 'edctsLotNo');
-	  				console.log(lotNo);
-	  			}
-	  		})
-	  		grid.on("click", (ev) => {
-	  			const { columnName } = ev;
-	  			OustRowKey = ev.rowKey;
-	  			if(columnName == 'orderNo') {
-	  				//제품코드
-	  				let edctsCd = grid.getValue(OustRowKey,'edctsCd');
-	  				console.log(edctsCd);
-	  			}
-	  		})
-	  	
-	  $("#addBtn").click(ev => {
-	  	$.ajax({
-	 		url:"saveSalesOust",
-	  		dataType:"json",
-	  		method:"post",
-	  		data:{"cnt":cnt, "lotNo":lotNo, "edctsCd":edctsCd},
-	  		success:function() {
-	  			console.log('a');
-	  		}
-	  	})
-	  })
-	  
-	  
 </script>
 </body>
 </html>
