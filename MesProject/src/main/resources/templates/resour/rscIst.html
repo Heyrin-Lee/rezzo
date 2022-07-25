@@ -111,7 +111,7 @@
         ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit()
-            // getRscListInit()
+            getRscListInit()
         })
 
         let addRow = document.getElementById('addRow')
@@ -143,20 +143,28 @@
         });
 
         ///////////////////////////////// !main grid ///////////////////////////////
+       let rModal;
         class customInput {
             constructor(props) {
                 const el = document.createElement('input');
+                let {rowKey} = props;
+                this.rowKey = rowKey
                 el.type = 'text';
                 el.value = String(props.value);
-
+                el.addEventListener('dblclick', function () {
+                    rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
+                    rModal.show('rscModal');
+                })
                 this.el = el;
             }
 
             getElement() {
+
                 return this.el;
             }
 
             getValue() {
+                getRscSingle(this.el.value, this.rowKey)
                 return this.el.value;
             }
 
@@ -174,11 +182,16 @@
                 {
                     header: '자재코드',
                     name: 'rscCd',
-                    editor: 'text'
+                    editor: {
+                        type: customInput
+                    }
                 },
                 {
                     header: '품명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    editor: {
+                        type: customInput
+                    }
                 },
                 {
                     header: '규격',
@@ -201,6 +214,11 @@
                     name: 'inspPassCnt'
                 },
                 {
+                    header: '입고수량',
+                    name: 'istCnt',
+                    editor: 'text'
+                },
+                {
                     header: '유통기한',
                     name: 'expDt',
                     editor: {
@@ -211,7 +229,7 @@
                     }
                 }
             ]
-            ,editingEvent : 'click'
+            , editingEvent: 'click'
         });
 
         grid.on('editingStart', (ev) => {
@@ -291,70 +309,77 @@
                 .then(res => vendGrid.resetData(res))
         }
 
-        // ///////////////////////////// resource ////////////////////////////////
-        // // rsc grid
-        // let rscGrid = new tui.Grid({
-        //     el: document.getElementById('rsc-grid'),
-        //     scrollX: false,
-        //     scrollY: false,
-        //     columns: [
-        //         {
-        //             header: '자재코드',
-        //             name: 'rscCd'
-        //         },
-        //         {
-        //             header: '자재명',
-        //             name: 'rscNm'
-        //         },
-        //         {
-        //             header: '자재단위',
-        //             name: 'mngUnit'
-        //         }
-        //     ]
-        // })
-        //
-        // let rModal;
-        // rscModBtn.addEventListener('click', function () {
-        //     rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
-        //     rModal.show('rscModal');
-        // })
-        //
-        // // when rsc modal shown => refresh
-        // let rscModal = document.getElementById('rscModal');
-        // rscModal.addEventListener('shown.bs.modal', e => {
-        //     rscGrid.refreshLayout();
-        // })
-        //
-        // // search rsc
-        // let rscSch = document.getElementById('rscSch');
-        // rscSch.addEventListener('click', function () {
-        //     let data = new FormData(rscSchForm);
-        //     let url = 'getResources'
-        //
-        //     fetch(url, {
-        //         method: 'POST',
-        //         body: data
-        //     }).then(res => res.json()).then(res => {
-        //         rscGrid.innerHTML = '';
-        //         rscGrid.resetData(res);
-        //     })
-        // });
-        //
-        // // action in rsc modal
-        // rscGrid.on('dblclick', e => {
-        //     let rowInfo = rscGrid.getRow(e.rowKey)
-        //     rscNm.value = rowInfo.rscNm;
-        //     rscCd.value = rowInfo.rscCd;
-        //     rModal.hide(rscModal);
-        // })
-        //
-        // // get rsc grid data
-        // function getRscListInit() {
-        //     let url = 'getResources'
-        //     fetch(url).then(res => res.json())
-        //         .then(res => rscGrid.resetData(res))
-        // }
+        ///////////////////////////// resource ////////////////////////////////
+        // rsc grid
+        let rscGrid = new tui.Grid({
+            el: document.getElementById('rsc-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '자재코드',
+                    name: 'rscCd'
+                },
+                {
+                    header: '자재명',
+                    name: 'rscNm'
+                },
+                {
+                    header: '자재단위',
+                    name: 'mngUnit'
+                }
+            ]
+        })
 
+        // when rsc modal shown => refresh
+        let rscModal = document.getElementById('rscModal');
+        rscModal.addEventListener('shown.bs.modal', e => {
+            rscGrid.refreshLayout();
+        })
+
+        // search rsc
+        let rscSch = document.getElementById('rscSch');
+        rscSch.addEventListener('click', function () {
+            let data = new FormData(rscSchForm);
+            let url = 'getResources'
+
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                rscGrid.innerHTML = '';
+                rscGrid.resetData(res);
+            })
+        });
+
+        // action in rsc modal
+        rscGrid.on('dblclick', e => {
+            grid.finishEditing();
+            let rowInfo = rscGrid.getRow(e.rowKey)
+            getRscSingle(rowInfo ,e.rowKey)
+            rModal.hide(rscModal);
+        })
+
+        // get rsc grid data
+        function getRscListInit() {
+            let url = 'getResources'
+            fetch(url).then(res => res.json())
+                .then(res => rscGrid.resetData(res))
+        }
+
+        function getRscSingle(val, rowKey) {
+            let url = 'getRscSingle'
+            let data = {rscCd: val.rscCd, rscNm: val.rscNm}
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(res => {
+                grid.setRow(rowKey, res)
+            }).catch(err => {
+                toastr.error('해당하는 자재가 없습니다.');
+            })
+        }
         ///////////////////////////// !get main grid data ////////////////////////////////
         // get order list
         let getInspList = document.getElementById('getInspList');
@@ -367,8 +392,8 @@
 
             if (startDt.value === '' || endDt.value === '') {
                 alert('기간을 입력하세요')
-            // } else if (vendCd.value === '') {
-            //     alert('공급업체를 입력하세요')
+                // } else if (vendCd.value === '') {
+                //     alert('공급업체를 입력하세요')
             } else {
                 let data = new FormData(getIstListFrm)
                 let url = 'getRscInspHist';

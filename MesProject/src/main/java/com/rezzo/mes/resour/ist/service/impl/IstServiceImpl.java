@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.ist.service.impl;
 
+import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ist.mapper.RscIstMapper;
 import com.rezzo.mes.resour.ist.service.RscIstService;
@@ -7,6 +8,7 @@ import com.rezzo.mes.resour.ist.service.RscIstVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +24,7 @@ public class IstServiceImpl implements RscIstService {
     public void setRscIstLot(List<RscIstVO> rscIstVOS) {
         String istDt = rscIstVOS.get(0).getIstDt(); // 입고날짜
         String rscIstCd = mapper.getRscIstCd(); // 입고코드
-        for(RscIstVO rscIstVO : rscIstVOS) {
+        for (RscIstVO rscIstVO : rscIstVOS) {
             String lotKey = mapper.getRscIstLotCd(rscIstVO);
             rscIstVO.setRscLotCd(lotKey); // lot key set
             rscIstVO.setRscIstCd(rscIstCd); // ist key set
@@ -35,6 +37,11 @@ public class IstServiceImpl implements RscIstService {
     @Override
     public List<RscIstVO> getRscIstHist(RscIstVO rscIstVO) {
         return mapper.getRscIstHist(rscIstVO);
+    }
+
+    @Override
+    public RscVO getRscSingle(RscVO rscVO) throws NullPointerException {
+        return mapper.getRscSingle(rscVO);
     }
 
 }

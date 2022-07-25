@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.ist.mapper;
 
+import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.resour.ist.service.RscIstVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,6 +15,9 @@ public interface RscIstMapper {
     void setRscIstLotEach(RscIstVO rscIstVO);
     void setRscIst(@Param("rscIstCd") String rscIstcd, @Param("istDt") String istDt);
     void updRscInspBool(RscIstVO rscIstVO); // 입고마감
+
+    // grid search
+    RscVO getRscSingle(RscVO rscVO);
 
     // 조회
     List<RscIstVO> getRscIstHist(RscIstVO rscIstVO);
