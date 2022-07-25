@@ -33,12 +33,21 @@ public class ProgController {
 	@ResponseBody
 	public void insertEqmCd(ProgVO vo) {
 		service.insertEqmCd(vo);
+		service.updateEqm1(vo);
 	}
 	
 	@RequestMapping("selectEqm")
 	@ResponseBody
 	public ProgVO selectEqm(ProgVO vo) {
 		return service.selectEqm(vo);
+	}
+	
+	// 주문서 상태 업데이트, 자재 재고 업데이트, 설비 업데이트, 공정 insert
+	@RequestMapping("afterProd")
+	@ResponseBody
+	public void afterProd(ProgVO vo) {
+		service.updateOrderStatus(vo);
+		service.updateEqm2(vo);
 	}
 	
 
