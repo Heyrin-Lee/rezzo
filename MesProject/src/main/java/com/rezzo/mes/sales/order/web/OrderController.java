@@ -67,6 +67,7 @@ public class OrderController {
 	
 	//주문서 수정저장
 	@PostMapping("saveOrdr")
+	@ResponseBody
 	public String saveOrdr(@RequestBody List<OrderVO> ordList) {
 		service.saveOrdr(ordList);
 		return "sales/orderList";

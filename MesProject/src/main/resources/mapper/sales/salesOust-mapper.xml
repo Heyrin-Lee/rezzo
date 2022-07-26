@@ -29,7 +29,7 @@
  	<select id="salesStcList" resultMap="SalesStcVO">
  		SELECT S.EDCTS_LOT_NO, S.PRDT_NM, S.STC_CNT, S.MAKE_DT, S.DISTB_TERM,O.ORDER_CNT
 		FROM EDCTS_STC S JOIN ORDER_SHEET O
-		ON(S.PRDT_NM = O.PRDT_NM AND O.PROG_APPE='생산완료')
+		ON(S.PRDT_NM = O.PRDT_NM AND O.PROG_APPE='검사완료')
  	</select>
  	
  	<!-- 완제품 재고 모달에서 출고량 입력하여 출고테이블에 저장 -->

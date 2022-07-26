@@ -23,13 +23,16 @@
 	
 	<!-- 조건별 주문서 조회 -->
 	<select id="findOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
-		SELECT * 
+	SELECT * FROM ORDER_SHEET
+	WHERE ORDER_DT BETWEEN #{start} AND #{end}
+	<if test="vendNm != null and vendNm != ''">and VEND_NM = #{vendNm}</if>
+	<if test="prdtNm != null and prdtNm != ''">and PRDT_NM = #{prdtNm}</if>
+		<!-- SELECT * 
 		FROM ORDER_SHEET
 		WHERE 1=1
-		<if test="progAppe != null">and PROG_APPE = #{progAppe}</if>
-		<if test="vendNm != null and vendNm !='' ">and VEND_NM = #{vendNm}</if>
-		<if test="prdtNm != null and vendNm !='' ">and PRDT_NM = #{prdtNm}</if>
-		<if test="start != null">and ORDER_DT BETWEEN #{start} AND #{end}+1</if>
+		<if test="vendNm != null and vendNm != ''">and VEND_NM = #{vendNm}</if>
+		<if test="prdtNm != null and vendNm != ''">and PRDT_NM = #{prdtNm}</if>
+		<if test="start != null">and ORDER_DT BETWEEN #{start} AND #{end}+1</if> -->
 	</select>
 	
 	<!-- 주문서 삭제 -->

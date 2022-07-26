@@ -73,6 +73,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" id="addBtn"><i class="fas fa-save"></i> 등록</button>
+                    <!-- <button type="button" class="btn-close" id="addBtn"aria-label="Close"><i class="fas fa-save"></i>등록</button> -->
                 </div>
             </div>
         </div>
@@ -170,12 +171,7 @@
 	                align:'center'
 	            },
 	            {
-	                header: '제조일자',
-	                name: 'makeDt',
-	                align:'center'
-	            },
-	            {
-	                header: '유통기한',
+	                header: '주문수량',
 	                name: 'distbTerm',
 	                align:'center'
 	            },
@@ -263,6 +259,9 @@
 				dataType:"json",
 				data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsOustCnt":edctsOustCnt,"orderNo":orderNo},
 				success:function(list) {
+					$("#addBtn").on("click",(e) => {
+						$("#StcGridModal").modal('hide');
+					})
 					grid2.resetData(list);
 				}
 			})
@@ -273,7 +272,7 @@
 				data:{"orderNo":orderNo},
 				error:console.log('r'),
 				success:function(result) {
-					
+					findOrder();
 				}
 			})
 		})
