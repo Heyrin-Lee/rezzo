@@ -10,4 +10,8 @@ public interface RscIstService {
     void setRscIstLot(List<RscIstVO> rscIstVO);
     List<RscIstVO> getRscIstHist(RscIstVO rscIstVO);
     RscVO getRscSingle(RscVO rscVO);
+
+    // 수정
+    List<RscIstVO> getRscIstHistList(RscIstVO rscIstVO); // in modal
+    List<RscIstVO> getRscIstHistMdfy(RscIstVO rscIstVO); // in main grid
 }

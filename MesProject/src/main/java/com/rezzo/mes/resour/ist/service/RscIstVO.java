@@ -1,10 +1,12 @@
 package com.rezzo.mes.resour.ist.service;
 
+import com.rezzo.mes.resour.insp.service.RscInspVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +19,8 @@ public class RscIstVO {
     // lot 관리
     private String rscLotCd; // lot 코드
     private String rscCd; // 자재코드
+    private String rscSpec; // 자재규격
+    private String mngUnit; // 관리단위
     private String rscTyp; // 자재유형
     private int lotCnt; // lot 수량
     private int lotRmnCnt; // lot 잔여수량
@@ -28,9 +32,12 @@ public class RscIstVO {
     private String rscIstCd; // 입고코드
     private String istDt; // 입고일자
     private int istCnt; // 입고수량
-    private int inspPassCnt; // 합격-입고량
+    private int passRmnCnt; //
 
     // misc
     private String vendNm;
     private String rscNm;
+    private String startDt;
+    private String endDt;
+
 }

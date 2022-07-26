@@ -29,7 +29,6 @@ public class IstServiceImpl implements RscIstService {
             rscIstVO.setRscLotCd(lotKey); // lot key set
             rscIstVO.setRscIstCd(rscIstCd); // ist key set
             mapper.setRscIstLotEach(rscIstVO); // lot 입고 등록
-            mapper.updRscInspBool(rscIstVO); // 입고검사마감
         }
         mapper.setRscIst(rscIstCd, istDt);
     }
@@ -44,4 +43,13 @@ public class IstServiceImpl implements RscIstService {
         return mapper.getRscSingle(rscVO);
     }
 
+    @Override
+    public List<RscIstVO> getRscIstHistList(RscIstVO rscIstVO) {
+        return mapper.getRscIstHistList(rscIstVO);
+    }
+
+    @Override
+    public List<RscIstVO> getRscIstHistMdfy(RscIstVO rscIstVO) {
+        return mapper.getRscIstHistMdfy(rscIstVO);
+    }
 }
