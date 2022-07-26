@@ -10,9 +10,10 @@
 	</select>
 	
 	<select id="prdtInspOrder" resultType="OrderVO">
- 		SELECT ORDER_NO, VEND_NM, EDCTS_CD, PRDT_NM, ORDER_CNT, PAPRD_DT
-		FROM ORDER_SHEET
-		WHERE PROG_APPE = '생산완료'
+		SELECT p.EDCTS_LOT_NO, o.ORDER_NO, o.VEND_NM, o.EDCTS_CD, o.PRDT_NM, o.ORDER_CNT, o.PAPRD_DT
+		FROM PRDT_INSP p, ORDER_SHEET o
+		WHERE p.EDCTS_CD = o.EDCTS_CD
+		AND o.PROG_APPE = '생산완료'
  	</select>
  	
  	<delete id="delPrdtInsp" parameterType="PrdtInspVO">
@@ -22,5 +23,24 @@
  		DELETE FROM PRDT_INSP_DTL 
  		WHERE EDCTS_LOT_NO = #{edctsLotNo}
  	</delete>
+ 	
+ 	<insert id="savePrdtInsp" parameterType="prdtInspVO">
+		INSERT INTO PRDT_INSP (EDCTS_LOT_NO, ORDER_NO, EDCTS_CD, INSP_PSCH, INSP_DT, INSP_CNT, INSP_JM)
+		VALUES (#{edctsLotNo}, #{orderNo}, #{edctsCd}, #{inspPsch}, #{inspDt}, #{inspCnt}, #{inspJm})
+	</insert>
+	
+	<insert id="savePrdtInspDtl" parameterType="prdtInspVO">
+		INSERT INTO PRDT_INSP_DTL (EDCTS_LOT_NO, INSP_CD, INSP_NM, INSP_SD, INSP_RSLT_DTL, INSP_JM_DTL)
+		VALUES (#{edctsLotNo}, #{inspCd}, #{inspNm}, #{inspSd}, #{inspRsltDtl}, #{inspJmDtl})
+	</insert>
 
+	<select id="getPrdtInsp" resultType="PrdtInspVO">
+		SELECT *
+		FROM PRDT_INSP
+		WHERE 1=1
+		<if test="edctsLotNo != null and edctsLotNo !=''">and EDCTS_LOT_NO LIKE '%'||#{edctsLotNo}||'%'</if>
+		<if test="startDt != null and startDt !=''"><![CDATA[and INSP_DT <= #{wrhousCd}||'%']]></if>
+		<if test="endDt != null and endDt !=''"><![CDATA[and INSP_DT >= #{wrhousCd}||'%']]></if>
+		ORDER BY EDCTS_LOT_NO
+	</select>
 </mapper>

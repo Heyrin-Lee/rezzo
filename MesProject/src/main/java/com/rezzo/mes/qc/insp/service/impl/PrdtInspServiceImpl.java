@@ -12,9 +12,10 @@ import com.rezzo.mes.sales.order.service.OrderVO;
 
 @Service
 public class PrdtInspServiceImpl implements PrdtInspService {
-	
-	@Autowired PrdtInspMapper mapper;
-	
+
+	@Autowired
+	PrdtInspMapper mapper;
+
 	@Override
 	public List<PrdtInspVO> getInspCode() {
 		return mapper.getInspCode();
@@ -28,6 +29,23 @@ public class PrdtInspServiceImpl implements PrdtInspService {
 	@Override
 	public void delPrdtInsp(PrdtInspVO prdtInspVO) {
 		mapper.delPrdtInsp(prdtInspVO);
+	}
+
+	@Override
+	public void savePrdtInsp(List<PrdtInspVO> prdtInspList) {
+		
+		for (int i = 0; i < prdtInspList.size(); i++) {
+			if (i == 0) {
+				mapper.savePrdtInsp(prdtInspList.get(0));
+			} else {
+				mapper.savePrdtInspDtl(prdtInspList.get(i));
+			}
+		}
+	}
+
+	@Override
+	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO) {
+		return mapper.getPrdtInsp(prdtInspVO);
 	}
 
 }

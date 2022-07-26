@@ -12,4 +12,9 @@ public interface PrdtInspService {
 	public List<OrderVO> prdtInspOrder();
 	//전체 삭제
 	public void delPrdtInsp(PrdtInspVO prdtInspVO);
+	//검사 저장
+	public void savePrdtInsp(List<PrdtInspVO> prdtInspList);
+	//검사테이블 데이터 불러오기
+	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO);
+	
 }

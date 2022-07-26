@@ -96,9 +96,14 @@
  });
 
  //데이터 편집 후 체크박스
- grid2.on('editingFinish', (ev) => {
-     const { rowKey } = ev;
-     grid2.check(rowKey);
+ grid2.on('editingStart', (ev) => {
+     const { columnName, rowKey } = ev;
+     if (columnName == 'ccdDtl' && rowKey < rowCount) {
+         toastr.warning('이미 저장된 코드ID는 변경할 수 없습니다.');
+         ev.stop();
+     } else {
+     	grid2.check(rowKey);
+     }
  });
  
  //체크된 셀 하이라이팅
