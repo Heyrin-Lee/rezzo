@@ -8,28 +8,32 @@
 	
 	<select id="eqmLineSelectList" resultType="com.rezzo.mes.equip.line.service.EqmLineVO">
 		select * from eqm_line
-		where use_yn = 'Y'
 	</select>
 	
 	<delete id="eqmLineDelete" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
 		delete from eqm_line
 		where line_cd = #{lineCd} 
 	</delete>
-
+<!-- 
  	<insert id="eqmLineInsert" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
 		insert into eqm_line(line_cd, uph_cnt, eqm_psch, use_yn, line_nm)
 		values (<![CDATA[CRE_LINE_CD('LNE')]]>, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
 		
 	</insert>
-	
+	 -->
 	<update id="eqmLineUpdate" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
-		update eqm_line set
-		line_cd = #{lineCd},
-		uph_cnt = #{uphCnt},
-		eqm_psch = #{eqmPsch},
-		use_Yn = #{useYn},
-		line_nm = #{lineNm}
-		where line_cd = #{lineCd} 
+		MERGE INTO eqm_line e
+			USING dual ON (e.line_cd = #{lineCd})
+		WHEN MATCHED THEN
+			update set
+			uph_cnt = #{uphCnt},
+			eqm_psch = #{eqmPsch},
+			use_Yn = #{useYn},
+			line_nm = #{lineNm}
+			where line_cd = #{lineCd}
+		WHEN NOT MATCHED THEN
+			insert (line_cd, uph_cnt, eqm_psch, use_yn, line_nm)
+			values (<![CDATA[CRE_LINE_CD('LNE')]]>, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
 	</update>
 	
 

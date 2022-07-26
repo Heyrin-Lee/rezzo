@@ -22,7 +22,19 @@ public class OrdrSearchServiceImpl implements OrdrSearchService {
 
 	@Override
 	public List<OrdrSearchVO> ordrSearchOneList(OrdrSearchVO vo) {
-		return mapper.ordrSearchList(vo);
+		return mapper.ordrSearchOneList(vo);
+	}
+
+	@Override
+	public List<OrdrSearchVO> ordrDtlList(OrdrSearchVO vo) {
+		return mapper.ordrDtlList(vo);
+	}
+
+	@Override
+	public void ordrDtlUpdate(List<OrdrSearchVO> ordrDtlUpdate) {
+		for(OrdrSearchVO vo : ordrDtlUpdate) {
+			mapper.ordrDtlUpdate(vo);
+		}
 	}
 	
 	

@@ -54,6 +54,7 @@
 			width: 100px;
 			float: left;
 		}
+		
 	</style>
 </head>
 
@@ -66,29 +67,30 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">설비관리</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item active">설비</li>
+				<li class="breadcrumb-item"><a href="home.do"><i
+						class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 설비관리</li>
+				<li class="breadcrumb-item active">> 설비관리</li>
 			</ol>
-		</div>
+		<div>
 		<!-- 헤더부분 -->
 		<div class="container-fluid px-4">
 			<div class="row">
-				<div class="col-7 ">
+				<div class="col-12">
 
 					<div class="card mr-4">
 
-						<div class="card-header">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-table me-1"></i> 설비목록
-							</div>
-						</div>
 						<div class="card-body">
 							<div>
-
-								<label for="" autofocus="autofocus">설비명</label>
-								<input type="text" id="keyword" name="keyword" placeholder="설비명"></input>
-								<input type="button" data-bs-toggle="modal" class="btn-dark btn-primary btn-sm" id="modalBtn"
-									data-bs-target="#exampleModal" value="설비검색"></input>
-								<button type="button" onclick="eqmSelect()" class="btn-dark btn-primary btn-sm">조회</button>
+	<tbody>
+										<tr>
+											<th>설비코드</th>
+											<td>
+								<input class="form-control"  type="text" id="keyword" name="keyword" placeholder="설비명" style="width:250px"></input>
+								<button type="button" style="margin-bottom:3px" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="modalBtn" name="modalBtn"><i class="fas fa-search"></i></button>
+								<button type="button" onclick="eqmSelect()" class="btn btn-primary" style="margin-bottom:3px"><i class="fas fa-search"></i> 검색</button>
+							</td>
+							</tr>
 							</div>
 
 							<br>
@@ -98,102 +100,99 @@
 
 
 				</div>
-				<div class="col-5 ms-auto">
+				
+				</div>
+<br>
+
+
+
+				<div class="col-12">
 					<div class="card mb-4">
-						<div class="card-header">
-
-							<i class="fas fa-tachometer-alt"></i> 설비등록
-						</div>
-
 						<div class="card-body">
-							<form id="dataForm" name="dataForm">
-								<img id="preview" style="width:180px;" /><br><br>
-								<input type="file" id="eqmImg" name="file" onchange="readURL(this);">
-
-								<br>
-								<br>
-								<div class="row">
-									<div class="mb-3">
-										<label for="form-select" class="form-label">설비구분</label>
-										<select class="form-select" aria-label="Default select example" style="width: 180px" name="eqmFg">
-											<option selected disabled>설비구분 선택</option>
-											<option th:each="value : ${ccds.EQM}" th:value="${value.ccdDtl}" th:text="${value.ccdDtlNm}">
-											</option>
-										</select>
-									</div>
-									<div class="col-6">
-										<div class="mb-3">
-											<label class="form-label">설비명</label> <input type="text" class="form-control" id="eqmNm"
-												name="eqmNm" style="width: 180px">
-										</div>
-
-										<input type="hidden" name="eqmCd" id="eqmCd"></input>
-
-										<div class="mb-3">
-											<label for="form-select" class="form-label">공정명</label>
-
-											<select class="form-select" name="prcsNm" aria-label="Default select example" style="width: 180px"
-												id='prcsNm'>
-												<option selected disabled>공정명 선택</option>
-												<option th:each="value : ${prcsList}" th:value="${value.prcsCd}" th:text="${value.prcsNm}">
-												</option>
-											</select>
-										</div>
-										<div class="mb-4">
-											<label for="" class="form-label">공정코드</label> <input type="text" readonly="readonly"
-												class="form-control" id="prcsCd" name="prcsCd" style="width: 180px">
-										</div>
-										<div class="mb-4">
-											<label for="" class="form-label">설비입고날짜</label> <input type="date" class="form-control"
-												id="eqmIstDt" name="eqmIstDt" style="width: 180px">
-										</div>
-									</div>
-									<br>
-									<div class="col-5">
-
-										<div class="mb-4">
-											<label for="" class="form-label">온도</label>
-											<div class="row">
-												<input type="text" class="form-control" id="minTemp" name="minTemp" style="width: 50px">&nbsp; -
-												&nbsp; <input type="text" class="form-control" id="maxTemp" name="maxTemp" style="width: 50px">
-												&nbsp;°C
-											</div>
-											<br> <label>사용여부</label>
-											<div class="form-check form-check-inline" style="margin-bottom: 3px">
-												<input class="form-check-input" value="Y" type="radio" name="useYN">
-												<label class="form-check-label">사용</label>
-												<input class="form-check-input" value="N" type="radio" name="useYN">
-												<label class="form-check-label">미사용</label>
-											</div>
-											<br> <br>
-											<div class="mb-4">
-												<label for="" class="form-label">점검주기(일)</label> <input type="text" class="form-control"
-													id="chckPerd" name="chckPerd" style="width: 150px">
-											</div>
-											<div class="mb-4">
-												<label for="form-select" class="form-label">라인명</label>
-												<select class="form-select" aria-label="Default select example" style="width: 180px"
-													name="lineCd">
-													<option disabled selected>라인명 선택</option>
-													<option th:each="value : ${opList}" th:value="${value.lineCd}" th:text="${value.lineNm}">
-													</option>
-												</select>
-											</div>
-										</div>
-									</div>
-								</div>
-							</form>
-							<div class="linelist">
-								<button type="button" id="insertBtn" class="c_btn">등록</button>
-								<button type="button" id="modBtn" class="c_btn">수정</button>
-								<button type="button" id="delBtn" class="c_btn">삭제</button>
-								<button type="reset" id="initBtn" class="c_btn">취소</button>
+							<div class="linelist" style="float: right;">
+								<button class="btn btn-primary" id="initBtn"><i class="fas fa-file"></i> 새자료</button>
+								<button class="btn btn-primary" id="modBtn"><i class="fa-solid fa-paintbrush"></i> 수정</button>
+								<button class="btn btn-primary" id="insertBtn"><i class="fas fa-save"></i> 등록</button>
+								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 							</div>
+							<form id="dataForm" name="dataForm" action="#" method="post">
+							<input type="file" style = "display:none" id="eqmImg" name="file" onchange="readURL(this);">
+							<img id="preview" style="width:150px; " /><br><br>
+							<label class="btn btn-primary" for="eqmImg" style="width:110px"><i class="fa-solid fa-file-arrow-up"></i> 첨부파일</label><br><br>
+								<table class="table" style="vertical-align : middle;">
+									<colgroup>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+										<col style="width: 150px">
+										<col>
+									</colgroup>
+									<tbody>
+										<tr>
+											<th>설비코드</th>
+											<td>
+												<input class="form-control" name="eqmCd" id="eqmCd" style="width: 250px" readonly>
+											</td>
+											<th>설비명</th>
+											<td><input class="form-control" type="text" id="eqmNm" name="eqmNm" style="width: 250px">
+											<th>입고일자</th>
+											<td><input class="form-control" type="date" id="eqmIstDt" name="eqmIstDt" style="width: 250px" /></td>
+										</tr>
+										<tr>
+											<th>라인명</th>
+											<td>
+												<select class="dataTable-selector" name="lineNm" id="lineNm" style="width: 250px">
+													<option selected value="">==등록시필수선택==</option>
+													<option th:each="value : ${opList}" th:value="${value.lineCd}" th:text="${value.lineNm}"></option>
+												</select>
+											<th>라인코드</th>
+											<td>
+												<input class="form-control" name="lineCd" id="lineCd" style="width: 250px" readonly>
+											</td>
+											<th>점검주기(일)</th>
+											<td>
+												<input type="number" class="form-control" name="chckPerd" id="chckPerd" style="width: 250px">
+											</td>
+										</tr>
+										<tr>
+											<th>공정명</th>
+											<td>
+												<select name="prcsNm" aria-label="Default select example" style="width: 250px"
+												id='prcsNm' class="dataTable-selector">
+													<option selected value="">==등록시필수선택==</option>
+													<option th:each="value : ${prcsList}" th:value="${value.prcsCd}" th:text="${value.prcsNm}"></option>
+												</select>
+											</td>
+											<th>공정코드</th>
+											<td>
+												<input class="form-control" name="prcsCd" id="prcsCd" style="width: 250px" readonly>
+											</td>
+											<th >온도</th>
+											<td>
+												<input type="number" class="form-control" name="minTemp" id="minTemp" style="width: 115px"> ~
+												<input type="number" class="form-control" name="maxTemp" id="maxTemp" style="width: 115px"> 
+											</td>
+										</tr>
+										<tr>
+										<th>가동여부</th>
+										<td>
+											<select class="dataTable-selector" name="useYN" id="useYN" style="width: 250px">
+													<option selected value="">==등록시필수선택==</option>
+													<option value="Y">가동</option>
+													<option value="N">미가동</option>
+											</select>
+										</td>
+										</tr>
+									</tbody>
+								</table>
+							</form>
 						</div>
+
 					</div>
+
 				</div>
 			</div>
-		</div>
 
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -223,6 +222,7 @@
 		<br>
 
 		<script>
+		$('#preview').attr('src',"imgfile/add-image.png").css('width','150px')
 			function readURL(input) {
 				if (input.files && input.files[0]) {
 					var reader = new FileReader();
@@ -248,6 +248,7 @@
 			const grid = new tui.Grid({
 				el: document.getElementById('grid'),
 				scrollX: false,
+				bodyHeight: 150,
 				rowHeaders: ['rowNum'],
 				columns: [{
 					header: '설비명',
@@ -299,6 +300,8 @@
 					console.log(result);
 				}
 			});
+			
+			
 
 
 
@@ -370,24 +373,33 @@
 
 			//취소버튼
 			$('#initBtn').on('click', function () {
-				$('#form').each(function () {
+				$('#dataForm').each(function () {
 					this.reset()
+					$('#preview').attr('src',"imgfile/add-image.png");
 				})
 			})
 
 			//등록버튼
 			$('#insertBtn').on('click', function () {
+			var isValid = true;
+			var eqmCd = $('#eqmCd').val()
+			console.log(eqmCd)
+			if(eqmCd!=''){
+				toastr.warning('설비 수정 버튼을 이용해주세요.');
+				isValid = false;
+				return false;
+			} 
 				var formData = new FormData(document.getElementById('dataForm'))
-				for (let a of formData.entries()) {
-					console.log(a)
-				}
-				
-				if($('#minTemp').val()==''){
-					$('#minTemp').val('')
-				}
+			
+
+				var lineNm = $('#lineNm option:checked').text()
+				formData.set('lineNm',lineNm)
+
+				var prcsNm = $('#prcsNm option:checked').text()
+				formData.set('prcsNm',prcsNm)
 				
 				$.ajax({
-					url: "/eqmInsert",
+					url: "eqmInsert",
 					method: 'POST',
 					data: formData,
 					contentType: false,
@@ -403,6 +415,10 @@
 						dataType: "JSON",
 						success: function (result) {
 							grid.resetData(result)
+							$('#dataForm').each(function () {
+							this.reset()
+							$('#preview').attr('src',"imgfile/add-image.png");
+						})
 						}
 					})
 				})
@@ -410,8 +426,24 @@
 
 			//수정버튼
 			$('#modBtn').on('click', function () {
+			var isValid = true;
+			var eqmCd = $('#eqmCd').val()
+			console.log(eqmCd)
+			if(eqmCd==null || eqmCd==''){
+				toastr.warning('설비등록시 등록버튼을 이용해주세요.');
+				isValid = false;
+				return false;
+			} 
 				var formData = new FormData(document.getElementById('dataForm'))
 
+				var lineNm = $('#lineNm option:checked').text()
+				formData.set('lineNm',lineNm)
+
+				var prcsNm = $('#prcsNm option:checked').text()
+				formData.set('prcsNm',prcsNm)
+				console.log('-----')
+				console.log(formData.get('lineNm'))
+				console.log(formData.get('prcsNm'))
 				$.ajax({
 					url: "/eqmUpdate",
 					method: 'POST',
@@ -420,7 +452,6 @@
 					processData: false
 				}).done(function (xhr) {
 					toastr.success('정상적으로 저장되었습니다.');
-					$('#preview').attr('src','')
 					$('#dataForm').each(function () {
 					this.reset()
 						})
@@ -430,6 +461,10 @@
 						dataType: "JSON",
 						success: function (result) {
 							grid.resetData(result)
+							$('#dataForm').each(function () {
+								this.reset()
+								$('#preview').attr('src',"imgfile/add-image.png");
+							})
 						}
 					})
 				})
@@ -457,13 +492,13 @@
 
 			//삭제버튼
 			$('#delBtn').on('click', function () {
-				var result = confirm("해당 설비를 정말 삭제할까요?")
-				var eqmCd = $('#eqmCd').val()
-
-
+					
+				if ($('#eqmCd').val() == null || $('#eqmCd').val() == '') {
+					toastr.warning('삭제할 설비를 선택해주세요.');
+				} else{
+					var result = confirm("해당 설비를 정말 삭제할까요?")
 				if (!result)
 					return;
-
 				$.ajax({
 					url: "eqmDelete/" + eqmCd,
 					type: 'POST',
@@ -478,7 +513,7 @@
 						}
 					})
 				})
-			})
+			}})
 
 
 
@@ -507,7 +542,8 @@
 						$('[name="useYN"]').val([result[0].useYN]);
 						$('#minTemp').val(result[0].minTemp);
 						$('[name="lineCd"]').val(result[0].lineCd);
-						$('[name="prcsNm"]').val(result[0].prcsNm);
+						$('[name="lineNm"]').val(result[0].lineCd);
+						$('[name="prcsNm"]').val(result[0].prcsCd);
 						$('#maxTemp').val(result[0].maxTemp);
 						$('#chckPerd').val(result[0].chckPerd);
 						$('#eqmIstDt').val(result[0].eqmIstDt);
@@ -516,10 +552,22 @@
 					}
 				})
 			});
+			
+			// 그리드 더블클릭
+			modGrid.on('dblclick', (ev) => {
+				var eqmNm = modGrid.getValue(ev.rowKey, 'eqmNm');
+				$('#keyword').val(eqmNm)
+				$('#exampleModal').modal('hide');
+			});
 
 			// 공정명 change event
 			$('#prcsNm').on('change', function () {
 				$('#prcsCd').val($(this).val())
+			})
+			
+			// 라인명 change event
+			$('#lineNm').on('change', function () {
+				$('#lineCd').val($(this).val())
 			})
 		</script>
 	</th:block>

@@ -20,11 +20,9 @@ public class EqmLineServiceImpl implements EqmLineService {
 		return map.eqmLineList(vo);
 	}
 
-	@Override
-	public void eqmLineInsert(EqmLineVO vo) {
-		map.eqmLineInsert(vo);
-	}
-
+	/*
+	 * @Override public void eqmLineInsert(EqmLineVO vo) { map.eqmLineInsert(vo); }
+	 */
 	@Override
 	public void eqmLineUpdate(EqmLineVO vo) {
 		map.eqmLineUpdate(vo);

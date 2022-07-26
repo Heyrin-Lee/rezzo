@@ -38,13 +38,12 @@ public class EqmLineController {
 		service.eqmLineDelete(vo);
 		return vo;
 	}
-
-	@PostMapping("eqmLineInsert")
-	@ResponseBody
-	public EqmLineVO eqmLineInsert(EqmLineVO vo) {
-		service.eqmLineInsert(vo);
-		return vo;
-	}
+	/*
+	 * @PostMapping("eqmLineInsert")
+	 * 
+	 * @ResponseBody public EqmLineVO eqmLineInsert(EqmLineVO vo) {
+	 * service.eqmLineInsert(vo); return vo; }
+	 */
 
 	@PostMapping("eqmLineUpdate")
 	@ResponseBody
