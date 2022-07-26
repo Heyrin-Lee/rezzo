@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rezzo.mes.prod.prog.mapper.ProgMapper">
 <select id="indicaListModal" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
-	SELECT D.LINE_CD, D.EDCTS_CD, D.INDICA_CNT, D.ORDER_CNT, D.WK_FR_DT, E.PRDT_NM, I.INDICA_DT, I.PREF_RANK, I.PLAN_CD, P.ORDER_NO
+	SELECT D.LINE_CD, D.EDCTS_CD, D.INDICA_CNT, D.ORDER_CNT, D.WK_FR_DT, E.PRDT_NM, I.INDICA_DT, I.PREF_RANK, I.PLAN_CD, P.ORDER_NO,D.WK_FR_DT
 	FROM INDICA_DTL D
 	JOIN EDCTS E
 	ON D.EDCTS_CD = E.EDCTS_CD
@@ -44,8 +44,8 @@
 				#{indicaDt},
 				#{lineCd},
 				#{prcsCd},
-				#{wkFrDttm},
-				#{wkToDttm},
+				#{wkFrTm},
+				#{wkToTm},
 				#{prcsPsch},
 				#{inferCnt},
 				#{prodCnt},
@@ -55,22 +55,25 @@
 </insert>
 
 <insert id="insertInfer" parameterType="com.rezzo.mes.prod.prog.service.ProgVO">
-<!-- 캡핑 불량일 때 -->
-<!-- 냉각 불량일 때 -->	
-<!-- 외포장 불량일 때 -->
+<!-- 외포장 불량인 경우만 고려하면 됨 -->
+<!-- case : prcsCd = OPK001 and inferCnt > 0 -->
+<!-- CCDS_DTL 테이블에서 WHERE CCD = 'PNF' 를 랜덤으로 -->
 
-<choose>
-<when test='prcsCd.equals("CAP001") and inferCnt > 0 '>
-	INSERT INTO PRCS_PROG_INFER VALUES( #{lineCd}, #{inferCnt}, #{inferNm}, #{indicaDt}, 'CAP001', '불량1')
-</when>
-<when test='prcsCd.equals("CLN001") and inferCnt > 0'>
-	INSERT INTO PRCS_PROG_INFER VALUES( #{lineCd}, #{inferCnt}, #{inferNm}, #{indicaDt}, 'CLN001', '불량2')
-</when>
-<when test='prcsCd.equals("OPK001") and inferCnt > 0'>
-	INSERT INTO PRCS_PROG_INFER VALUES( #{lineCd}, #{inferCnt}, #{inferNm}, #{indicaDt}, 'OPK001', '불량3')
-</when>
-</choose>
-
+	INSERT INTO PRCS_PROG_INFER VALUES (
+								#{lineCd},
+								#{inferCnt},
+								(select ccd_dtl from 
+    									(select * from ccds_dtl where ccd='PNF' order by DBMS_RANDOM.RANDOM)
+								where rownum = 1),
+								#{indicaDt},
+								#{prcsCd},
+								#{prefRank}
+										)
 </insert>
+
+<insert id="insertEdctsInfo" parameterType="com.rezzo.mes.prod.prog.service.ProgVO">
+<![CDATA[{call PROC_PROD_INSERT(#{edctsCd},#{prodCnt})}]]>
+</insert>
+
 
 </mapper>	
