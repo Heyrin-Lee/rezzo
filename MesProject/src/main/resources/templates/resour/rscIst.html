@@ -106,12 +106,43 @@
         </div>
     </div>
 
+    <!-- Modal for mdfy -->
+    <div class="modal fade" id="mdfyModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b class="modal-title">자재검색</b>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="dateRngFrm">
+                        <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                            <input id="startpicker-input-mdfy" name="startDt" type="text" aria-label="Date" required>
+                            <span class="tui-ico-date"></span>
+                            <div id="startpicker-container-mdfy" style="margin-left: -1px;"></div>
+                        </div>
+                        <span></span>
+                        <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                            <input id="endpicker-input-mdfy" name="endDt" type="text" aria-label="Date" required>
+                            <span class="tui-ico-date"></span>
+                            <div id="endpicker-container-mdfy" style="margin-left: -1px;"></div>
+                        </div>
+                    </form>
+                    <input id="schByDateRng" type="button" value="검색"/>
+                    <hr>
+                    <div id="mdfy-grid"></div>
+                    <p>선택 : 더블클릭</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit()
             getRscListInit()
+            getRscIstHistList()
         })
 
         let addRow = document.getElementById('addRow')
@@ -133,6 +164,19 @@
             }
         });
 
+        let rangepickerMdfy = tui.DatePicker.createRangePicker({
+            startpicker: {
+                date: today,
+                input: '#startpicker-input-mdfy',
+                container: '#startpicker-container-mdfy'
+            },
+            endpicker: {
+                date: today,
+                input: '#endpicker-input-mdfy',
+                container: '#endpicker-container-mdfy'
+            }
+        });
+
         // ist date picker
         let datepicker = new tui.DatePicker('#wrapper', {
             date: today,
@@ -143,7 +187,9 @@
         });
 
         ///////////////////////////////// !main grid ///////////////////////////////
-       let rModal;
+        let rModal;
+        let modalState = 0;
+
         class customInput {
             constructor(props) {
                 const el = document.createElement('input');
@@ -154,17 +200,20 @@
                 el.addEventListener('dblclick', function () {
                     rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
                     rModal.show('rscModal');
+                    rscModal.dataset.rowKey = rowKey;
+                    modalState = 1;
                 })
                 this.el = el;
             }
 
             getElement() {
-
                 return this.el;
             }
 
             getValue() {
-                getRscSingle(this.el.value, this.rowKey)
+                if (modalState === 0) {
+                    getRscSingle(this.el.value, this.rowKey)
+                }
                 return this.el.value;
             }
 
@@ -188,10 +237,7 @@
                 },
                 {
                     header: '품명',
-                    name: 'rscNm',
-                    editor: {
-                        type: customInput
-                    }
+                    name: 'rscNm'
                 },
                 {
                     header: '규격',
@@ -211,7 +257,7 @@
                 },
                 {
                     header: '검사합격수량',
-                    name: 'inspPassCnt'
+                    name: 'passRmnCnt'
                 },
                 {
                     header: '입고수량',
@@ -240,6 +286,7 @@
                 }
             }
         })
+
         ///////////////////////////// !vendor ////////////////////////////////
         // vendor modal grid section
         let vendGrid = new tui.Grid({
@@ -337,6 +384,10 @@
             rscGrid.refreshLayout();
         })
 
+        rscModal.addEventListener('hidden.bs.modal', e => {
+            modalState = 0;
+        })
+
         // search rsc
         let rscSch = document.getElementById('rscSch');
         rscSch.addEventListener('click', function () {
@@ -355,8 +406,8 @@
         // action in rsc modal
         rscGrid.on('dblclick', e => {
             grid.finishEditing();
-            let rowInfo = rscGrid.getRow(e.rowKey)
-            getRscSingle(rowInfo ,e.rowKey)
+            let info = rscGrid.getRow(e.rowKey);
+            getRscSingle(info.rscCd, rscModal.dataset.rowKey);
             rModal.hide(rscModal);
         })
 
@@ -369,7 +420,7 @@
 
         function getRscSingle(val, rowKey) {
             let url = 'getRscSingle'
-            let data = {rscCd: val.rscCd, rscNm: val.rscNm}
+            let data = {rscCd: val}
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
@@ -380,6 +431,7 @@
                 toastr.error('해당하는 자재가 없습니다.');
             })
         }
+
         ///////////////////////////// !get main grid data ////////////////////////////////
         // get order list
         let getInspList = document.getElementById('getInspList');
@@ -413,7 +465,6 @@
         saveBtn.addEventListener('click', function () {
             let data = grid.getCheckedRows();
             data[0].istDt = istDt.value;
-            console.log(data)
             let url = 'setRscIstLot'
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
@@ -433,6 +484,67 @@
             let rowKeys = grid.getCheckedRowKeys()
             grid.removeRows(rowKeys)
         })
+
+        ////////////////////////////// mdfy /////////////////////////////////////
+        let mModal;
+        modiBtn.addEventListener('click', function () {
+            mModal = new bootstrap.Modal(document.getElementById('mdfyModal'), {})
+            mModal.show('mdfyModal');
+        })
+
+        // modal cation
+        let mdfyModal = document.getElementById('mdfyModal');
+        mdfyModal.addEventListener('shown.bs.modal', e => {
+            mdfyGrid.refreshLayout();
+        })
+
+        // search grid
+        let mdfyGrid = new tui.Grid({
+            el: document.getElementById('mdfy-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '입고코드',
+                    name: 'rscIstCd'
+                },
+                {
+                    header: '입고일자',
+                    name: 'istDt'
+                }
+            ]
+        })
+
+        let schByDateRng = document.getElementById('schByDateRng');
+        schByDateRng.addEventListener('click', getRscIstHistList)
+
+        function getRscIstHistList() {
+            let url = 'getRscIstHistList'
+            let data = new FormData(dateRngFrm)
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                mdfyGrid.resetData(res);
+            })
+        }
+
+        mdfyGrid.on('dblclick', e => {
+            let data = mdfyGrid.getRow(e.rowKey);
+            getRscIstHistMdfy(data)
+            mModal.hide(mdfyModal);
+        })
+
+        function getRscIstHistMdfy(data) {
+            let url = 'getRscIstHistMdfy'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(res => {
+                grid.resetData(res);
+            })
+        }
     </script>
 </th:block>
 </body>

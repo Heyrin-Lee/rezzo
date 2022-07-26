@@ -31,4 +31,6 @@ public class RscInspVO {
     private int inspCnt; //검사수량
     private int inspPassCnt; // 합격수량
     private int inspFailCnt; // 불량수량
+
+    private int passRmnCnt; // 합격잔여수량
 }

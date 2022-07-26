@@ -45,4 +45,17 @@ public class RscIstController {
     public RscVO getRscSingle(@RequestBody RscVO rscVO) {
         return ris.getRscSingle(rscVO);
     }
+
+    // mdfy
+    @RequestMapping("getRscIstHistList")
+    @ResponseBody
+    public List<RscIstVO> getRscIstHistList(@ModelAttribute RscIstVO rscIstVO) {
+        return ris.getRscIstHistList(rscIstVO);
+    }
+
+    @RequestMapping("getRscIstHistMdfy")
+    @ResponseBody
+    public List<RscIstVO> getRscIstHistMdfy(@RequestBody RscIstVO rscIstVO) {
+        return ris.getRscIstHistMdfy(rscIstVO);
+    }
 }

@@ -22,16 +22,48 @@
     </select>
 
     <insert id="setRscIstLotEach" parameterType="RscIstVO">
-        insert into RSC_LOT (RSC_LOT_CD, ORDR_CD, RSC_INSP_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT, RSC_IST_CD)
-        values (#{rscLotCd}, #{ordrCd}, #{rscInspCd}, #{rscCd}, #{inspPassCnt}, #{inspPassCnt}, #{rscIstCd})
+        begin
+            insert into RSC_LOT (RSC_LOT_CD, ORDR_CD, RSC_INSP_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT, RSC_IST_CD)
+            values (#{rscLotCd}, #{ordrCd}, #{rscInspCd}, #{rscCd}, #{istCnt}, #{istCnt}, #{rscIstCd});
+
+            update RSC_INSP_DTL
+            set PASS_RMN_CNT = PASS_RMN_CNT - #{istCnt}
+            where RSC_CD = #{rscCd}
+              and RSC_INSP_CD = #{rscInspCd}
+              and ORDR_CD = #{ordrCd};
+        end;
     </insert>
 
-    <update id="updRscInspBool" parameterType="RscIstVO">
-        update RSC_INSP_DTL
-        set BOOL = 1
-        where RSC_CD = #{rscCd}
-          and RSC_INSP_CD = #{rscInspCd}
-          and ORDR_CD = #{ordrCd}
+    <update id="updRscIstHist" parameterType="RscIstVO">
+        declare
+            v_ist_cnt     number(35);
+            v_lot_rmn_cnt number(35);
+        begin
+            select LOT_RMN_CNT
+            into v_lot_rmn_cnt
+            from RSC_LOT
+            where RSC_LOT_CD = #{rscLotCd};
+
+            if #{istCnt} > v_lot_rmn_cnt then
+                raise_application_error(-90001, '재고부족');
+            else
+                update rsc_lot
+                set LOT_CNT     = #{istCnt},
+                    LOT_RMN_CNT = #{istCnt}
+                where RSC_LOT_CD = #{rscLotCd};
+
+                select lot_cnt
+                into v_ist_cnt
+                from RSC_LOT
+                where RSC_LOT_CD = #{rscLotCd};
+
+                update RSC_INSP_DTL
+                set PASS_RMN_CNT = INSP_PASS_CNT - v_ist_cnt
+                where RSC_INSP_CD = #{rscInspCd}
+                  and RSC_CD = #{rscCd}
+                  and ORDR_CD = #{ordrCd};
+            end if;
+        end;
     </update>
 
     <insert id="setRscIst" parameterType="String">
@@ -78,5 +110,27 @@
         where (RSC_NM like '%${rscNm}%'
             and RSC_CD like '%${rscCd}%')
           and rownum = 1
+    </select>
+
+    <select id="getRscIstHistList" parameterType="RscIstVO" resultType="RscIstVO">
+        select rsc_ist_cd, ist_dt
+        from rsc_ist
+        <if test="startDt != '' and startDt != null">
+            where
+            <![CDATA[IST_DT >= #{startDt} and IST_DT <= #{endDt}]]>
+        </if>
+        group by rsc_ist_cd, ist_dt
+    </select>
+
+    <select id="getRscIstHistMdfy" parameterType="RscIstVO" resultType="RscIstVO">
+        select ri.RSC_CD, rsc.RSC_NM, rsc.RSC_SPEC, rsc.MNG_UNIT, RSC_TYP,
+               rl.ordr_cd, rl.LOT_CNT as istCnt
+        from rsc_lot rl,
+             rsc_ist ri,
+             rsc
+        where rsc.RSC_CD = ri.RSC_CD
+          and rl.RSC_IST_CD = ri.RSC_IST_CD
+          and rl.rsc_cd = ri.rsc_cd
+          and rl.rsc_ist_cd = #{rscIstCd}
     </select>
 </mapper>

@@ -10,22 +10,14 @@
     </select>
 
     <update id="letHoldOust" parameterType="RscOustVO">
-        declare
-            v_hold_cnt number;
-            v_rsc_cd varchar2(50);
         begin
-            select HOLD_CNT, RSC_CD
-            into v_hold_cnt, v_rsc_cd
-            from RSC_LOT
-            where RSC_LOT_CD = #{rscLotCd};
-
             update rsc_lot
-            set HOLD_CNT    = HOLD_CNT - v_hold_cnt,
-                LOT_RMN_CNT = LOT_RMN_CNT - v_hold_cnt
+            set HOLD_CNT    = HOLD_CNT - #{oustCnt},
+                LOT_RMN_CNT = LOT_RMN_CNT - #{oustCnt}
             where RSC_LOT_CD = #{rscLotCd};
 
             insert into RSC_OUST (RSC_OUST_CD, RSC_CD, RSC_LOT_CD, OUST_CNT, OUST_DT, OUST_TYP)
-            values (#{rscOustCd}, v_rsc_cd, #{rscLotCd}, v_hold_cnt, #{oustDt}, #{oustTyp});
+            values (#{rscOustCd}, #{rscCd}, #{rscLotCd}, #{oustCnt}, #{oustDt}, #{oustTyp});
         end;
     </update>
 </mapper>

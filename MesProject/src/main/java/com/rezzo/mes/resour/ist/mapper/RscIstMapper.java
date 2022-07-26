@@ -14,11 +14,14 @@ public interface RscIstMapper {
     String getRscIstLotCd(RscIstVO rscIstVO); // lot key 발급
     void setRscIstLotEach(RscIstVO rscIstVO);
     void setRscIst(@Param("rscIstCd") String rscIstcd, @Param("istDt") String istDt);
-    void updRscInspBool(RscIstVO rscIstVO); // 입고마감
 
     // grid search
     RscVO getRscSingle(RscVO rscVO);
 
     // 조회
     List<RscIstVO> getRscIstHist(RscIstVO rscIstVO);
+
+    // 수정
+    List<RscIstVO> getRscIstHistList(RscIstVO rscIstVO);
+    List<RscIstVO> getRscIstHistMdfy(RscIstVO rscIstVO);
 }
