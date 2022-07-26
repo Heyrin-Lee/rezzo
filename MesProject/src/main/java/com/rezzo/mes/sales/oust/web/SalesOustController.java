@@ -40,7 +40,7 @@ public class SalesOustController {
 	}
 	
 	//완제품 재고 목록 모달로 조회
-	@RequestMapping("salesStcList")
+	@PostMapping("salesStcList")
 	@ResponseBody
 	public List<SalesStcVO> salesStcList(SalesStcVO vo) {
 		return service.salesStcList(vo);
@@ -83,4 +83,12 @@ public class SalesOustController {
 	public List<SalesOustVO> optionSearch(SalesOustVO vo) {
 		return service.optionSearch(vo);
 	}
+	
+	//제품명 검색 시 조회
+	@PostMapping("getProduct")
+	@ResponseBody
+	public List<SalesOustVO> getProduct(SalesOustVO vo) {
+		return service.getProduct(vo);
+	}
+	
 }

@@ -40,6 +40,7 @@ public class SalesOustVO {
 	String edctsLotNo;
 	String bizNo;
 	String telNo;
+	int lotCnt;
 	
 	
 }

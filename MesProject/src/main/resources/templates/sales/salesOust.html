@@ -66,14 +66,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">완제품 재고</h5>
+                    
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                 	<div id="StcGrid"></div>
                 </div>
                 <div class="modal-footer">
+                	주문수량<input type="text" id="orderCntOut" name="orderCntOut" class="form-control" style="width: 150px" disabled>
+                	<input type="text" id="edctsOustCntOut" class="form-control" placeholder="출고수량 입력" style="width: 150px">
                     <button class="btn btn-primary" id="addBtn"><i class="fas fa-save"></i> 등록</button>
-                    <!-- <button type="button" class="btn-close" id="addBtn"aria-label="Close"><i class="fas fa-save"></i>등록</button> -->
                 </div>
             </div>
         </div>
@@ -134,8 +136,7 @@
 	          },
 	          {
 	            header: '완제품LOT번호',
-	            name: 'edctsLotNo',
-	            width: 100
+	            name: 'edctsLotNo'
 	          },
 	          {
 	            header: '출고일자',
@@ -155,6 +156,11 @@
 	        scrollY: false,
 	        rowHeaders: ['checkbox'],
 	        columns: [
+	        	{
+	                header: '제품코드',
+	                name: 'edctsCd',
+	                align:'center'
+	            },
 	            {
 	                header: '완제품LOT번호',
 	                name: 'edctsLotNo',
@@ -167,20 +173,9 @@
 	            },
 	            {
 	                header: '완제품 재고량',
-	                name: 'stcCnt',
+	                name: 'lotCnt',
 	                align:'center'
-	            },
-	            {
-	                header: '주문수량',
-	                name: 'distbTerm',
-	                align:'center'
-	            },
-	            {
-	                header: '출고량',
-	                name: 'edctsOustCnt',
-	                editor : 'text',
-	                align:'center'
-	            },
+	            }
 	        ]
 	    });
 	      
@@ -214,17 +209,23 @@
 	  	OustRowKey = e.rowKey;
 	  	if(columnName == 'orderNo') {
 	  		let edctsCd = grid.getValue(OustRowKey,'edctsCd');
-	  		//console.log(edctsCd);
+	  		let orderCnt = grid.getValue(OustRowKey, 'orderCnt');
+	  		console.log(orderCnt);
+	  		console.log(edctsCd);
 	  		$("#StcGridModal").modal('show');
 	  		$.ajax({
 	  			url:"salesStcList",
 	  			dataType:"json",
-	  			method:"get",
+	  			method:"post",
+	  			data:{"edctsCd":edctsCd},
 	  			success:function(result) {
 	  				setTimeout(function () {
 						StcGrid.refreshLayout()
 						}, 300);
+						console.log(edctsCd);
 	  				StcGrid.resetData(result);
+	  				//$("input[name=rderCntOut]").val(orderCnt);
+	  				$("#orderCntOut").val(orderCnt);
 	  			}
 	  		})
 	  	}
@@ -252,19 +253,22 @@
 		$("#addBtn").click(ev => {
 			var ordrData = StcGrid.getCheckedRows();
 			var edctsLotNo = ordrData[0].edctsLotNo;
-			var edctsOustCnt = ordrData[0].edctsOustCnt;
+			//var edctsOustCnt = ordrData[0].edctsOustCnt;
+			var edctsOustCnt = $("#edctsOustCntOut").val();
+			console.log(edctsCd);
+			console.log(edctsLotNo);
+			console.log(edctsOustCnt);
 			$.ajax({
 				url:"saveSalesOust",
 				method:"post",
 				dataType:"json",
 				data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsOustCnt":edctsOustCnt,"orderNo":orderNo},
 				success:function(list) {
-					$("#addBtn").on("click",(e) => {
-						$("#StcGridModal").modal('hide');
-					})
+					$("#StcGridModal").modal('hide');
 					grid2.resetData(list);
 				}
 			})
+			//주문서 진행상황 출고완료로 변경
 			$.ajax({
 				url:"updateProg",
 				method:"put",

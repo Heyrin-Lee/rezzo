@@ -30,4 +30,6 @@ public class SalesStcVO {
 	String orderNo;
 	String progAppe;
 	int orderCnt;
+	int lotCnt;
+	String edctsCd;
 }

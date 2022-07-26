@@ -8,7 +8,7 @@
  	<select id="findOrder" resultType="OrderVO">
  		SELECT ORDER_NO, VEND_NM, EDCTS_CD, PRDT_NM, ORDER_CNT, PAPRD_DT
 		FROM ORDER_SHEET
-		WHERE PROG_APPE = '생산완료'
+		WHERE PROG_APPE = '검사완료'
  	</select>
  	
  	<resultMap type="SalesStcVO" id="SalesStcVO">
@@ -23,18 +23,30 @@
  		<result column="PRDT_NM" property="prdtNm"/>
  		<result column="PROG_APPE" property="progAppe"/>
  		<result column="ORDER_CNT" property="orderCnt"/>
+ 		<result column="VEND_NM" property="vendNm"/>
+ 		<result column="ORDER_NO" property="orderNo"/>
+ 	</resultMap>
+ 	
+ 	<resultMap type="SalesOustVO" id="SalesOustVO">
+ 		<result column="EDCTS_OUST_NO" property="edctsOustNo"/>
+ 		<result column="EDCTS_LOT_NO" property="edctsLotNo"/>
+ 		<result column="EDCTS_CD" property="edctsCd"/>
+ 		<result column="EDCTS_OUST_DT" property="edctsOustDt"/>
+ 		<result column="EDCTS_OUST_CNT" property="edctsOustCnt"/>
  	</resultMap>
  	
  	<!-- 완제품 재고 현황 모달로 조회(주문서에 해당하는 제품의 재고만 조회하도록 함)-->
  	<select id="salesStcList" resultMap="SalesStcVO">
- 		SELECT S.EDCTS_LOT_NO, S.PRDT_NM, S.STC_CNT, S.MAKE_DT, S.DISTB_TERM,O.ORDER_CNT
-		FROM EDCTS_STC S JOIN ORDER_SHEET O
-		ON(S.PRDT_NM = O.PRDT_NM AND O.PROG_APPE='검사완료')
+		SELECT E.EDCTS_CD, S.EDCTS_LOT_NO, E.PRDT_NM, S.LOT_CNT
+		FROM EDCTS E JOIN EDCTS_STC S
+		ON E.EDCTS_CD = S.EDCTS_CD
+		WHERE E.EDCTS_CD = #{edctsCd} AND S.LOT_CNT != 0
+		
  	</select>
  	
  	<!-- 완제품 재고 모달에서 출고량 입력하여 출고테이블에 저장 -->
  	<insert id="saveSalesOust" parameterType="SalesOustVO" statementType="CALLABLE">
- 		<![CDATA[call proc_edctsOust_save(#{edctsOustNo},#{edctsOustDt},#{edctsOustCnt},#{edctsCd},#{edctsLotNo})]]>
+ 		<![CDATA[call proc_edctsOust_save(#{edctsOustNo}, #{edctsOustCnt}, #{edctsCd}, #{edctsLotNo})]]>
  	</insert>
  	
  	<!-- 출고등록 후 출고완료로 변경 -->
@@ -55,12 +67,26 @@
  		SELECT * FROM EDCTS_STC
  	</select>
  	
+ 	<!-- 조건별 조회 -->
  	<select id="optionSearch" resultType="SalesOustVO">
- 		SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
+ 	<!-- SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
 		FROM EDCTS_OUST E JOIN ORDER_SHEET O
 		ON(E.EDCTS_CD = O.EDCTS_CD AND O.PROG_APPE = '출고완료' AND EDCTS_OUST_DT BETWEEN #{oustStart} AND #{oustEnd})
-		<if test="prdtNm != null and prdtNm != ''">and PRDT_NM = #{prdtNm}</if>
-		<if test="vendNm != null and vendNm != ''">and VEND_NM = #{vendNm}</if>
+		<if test="prdtNm != null and prdtNm != ''">and O.PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
+		<if test="vendNm != null and vendNm != ''">and VEND_NM = #{vendNm}</if> -->
+ 		SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
+		FROM EDCTS_OUST E JOIN ORDER_SHEET O
+		ON 
+		WHERE E.EDCTS_OUST_DT BETWEEN #{oustStart} AND #{oustEnd}
+		WHERE 1=1
+		<if test="prdtNm != null and prdtNm != ''">AND O.PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
  	</select>
  	
+ 	<!-- 제품명 검색시 조회 -->
+ 	<select id="getProduct" resultType="SalesOustVO">
+ 		SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
+		FROM EDCTS_OUST E JOIN ORDER_SHEET O
+		ON O.PRDT_NM LIKE '%'||#{prdtNm}||'%'
+		WHERE O.PROG_APPE = '출고완료'
+ 	</select>
  </mapper>
