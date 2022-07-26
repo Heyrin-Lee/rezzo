@@ -144,7 +144,7 @@ display:inline-block;
             name: 'indicaCnt',
             align: 'center'
         },
-        
+         
         ]
      })
    	
@@ -203,18 +203,52 @@ display:inline-block;
    		})
    })
    
+  let interval;
+  let value
+   
+  interval2=setInterval(function(){
+   	if(value == '완료') {
+		clearInterval(interval2)
+		
+		let orderNo = grid.getData()[0].orderNo
+		let lineCd = grid.getData()[0].lineCd
+		
+		//주문서 생산완료로 업데이트, 설비 사용여부 N으로 업데이트
+		$.ajax({
+			url : 'afterProd',
+			data : {"orderNo" : orderNo, "lineCd" : lineCd}
+		})
+		
+		//자재 재고 업데이트
+		
+		//진행공정, 불량상세, 진행공정상세 인서트
+		let data = grid2.getData()
+		$.each(data, function(index, item) {
+            	item.indicaDt = grid.getData()[0].indicaDt
+            	item.lineCd = grid.getData()[0].lineCd
+		 }) 
+		$.ajax({
+			url : 'insertProgPrcs',
+			method : 'post',
+			data : JSON.stringify(data),
+			contentType : 'application/json'
+		})
+	
+		
+   	} 
+   }, 1000)
    
    $("#startBtn").on("click", function(){
-	  let interval 
 	  for(i=0; i<grid2.getRowCount(); i++) {
 		   (function (i) {
 			   let eqmCd = grid2.getValue(i, 'eqmCd')
 			   let indicaCnt = grid.getData()[0].indicaCnt
 			   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
+			   let lineCd = grid.getData()[0].lineCd
 			   grid2.setValue(i, 'nowSt', '대기중')
 				 $.ajax({
 					 url : 'insertEqmCd',
-					 data : {"eqmCd" : eqmCd},
+					 data : {"eqmCd" : eqmCd, "lineCd" : lineCd},
 					 success : function(){
 					 	interval = setInterval(function () {
 				             $.ajax({
@@ -246,7 +280,8 @@ display:inline-block;
 					            			result.prcsPsch=grid2.getValue(i, 'prcsPsch')
 					            			result.prcsCd=grid2.getData()[i].prcsCd
 					            			result.inferCnt=grid2.getData()[i].inferCnt
-					            			result.prodCnt=grid2.getData()[i].prodCnt
+					            			result.prodCnt=grid2.getData()[i].prodCntd
+					            			result.orderNo=grid.getData()[i].orderNo
 				            			} else{
 				            				indicaCnt = grid2.getValue(i-1, 'prodCnt')
 				            				if(i < 3) {
@@ -260,13 +295,15 @@ display:inline-block;
 						            			grid2.setValue(i, 'inferCnt', inferCnt )
 						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
-							            		
+						 	            		
 				            				} else {
 				            					grid2.setValue(i, 'wkToDttm', result.wkToDttm)
 						            			grid2.setValue(i, 'inferCnt', inferCnt )
 						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
 						            			
+						            			console
+						            			value = grid2.getValue(i, 'nowSt')
 				            				}
 				            			}
 				            			
@@ -275,16 +312,18 @@ display:inline-block;
 				            		}
 				            	 }
 				             })
-				          }, 5000);
+				          //clearInterval(interval) interval은 계속 진행되고 grid 마지막행에 setValue는안됨
+				          }, 3000);
 					  }		  	
 				   })
 		   })(i)
-	  clearInterval(interval)
+	
 	   }
 	  
 	  
    })	   
    
+
       
    const gridData2 = [];
   

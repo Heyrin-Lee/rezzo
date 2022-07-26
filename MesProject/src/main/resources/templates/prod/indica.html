@@ -80,7 +80,7 @@ body {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">생산지시조회</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
                         <br> <br>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
@@ -225,7 +225,24 @@ body {
 	          header: '라인책임자',
 	          name: 'linePsch',
 	          align : 'center',
-	          editor : 'text'
+	          editor: {
+                  type: 'select',
+                  options: {
+                      listItems: [{
+                              text: '이마크',
+                              value: '이마크'
+                          },
+                          {
+                              text: '이동혁',
+                              value: '이동혁'
+                          },
+                          {
+                              text: '치타리',
+                              value: '치타리'
+                          }
+                      ]
+                  }
+              }
 	        },
 	        {
 	          header: '필요수량',
@@ -269,7 +286,7 @@ body {
 	        },
 	        {
 	          header: 'LOT번호',
-	          name: 'lotCd',
+	          name: 'rscLotCd',
 	          align : 'center'
 	        },
 	        {
@@ -307,7 +324,7 @@ body {
 	        },
 	        {
 	          header: 'LOT번호',
-	          name: 'lotCd',
+	          name: 'rscLotCd',
 	          align : 'center'
 	        },
 	        {
