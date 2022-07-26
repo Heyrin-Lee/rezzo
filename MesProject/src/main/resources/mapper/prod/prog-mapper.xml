@@ -50,7 +50,8 @@
 				#{inferCnt},
 				#{prodCnt},
 				#{prefRank},
-				#{indicaCnt}
+				#{indicaCnt},
+				#{plan_cd}
 				)
 </insert>
 
@@ -60,14 +61,13 @@
 <!-- CCDS_DTL 테이블에서 WHERE CCD = 'PNF' 를 랜덤으로 -->
 
 	INSERT INTO PRCS_PROG_INFER VALUES (
-								#{lineCd},
 								#{inferCnt},
 								(select ccd_dtl from 
     									(select * from ccds_dtl where ccd='PNF' order by DBMS_RANDOM.RANDOM)
 								where rownum = 1),
 								#{indicaDt},
 								#{prcsCd},
-								#{prefRank}
+								#{planCd}
 										)
 </insert>
 

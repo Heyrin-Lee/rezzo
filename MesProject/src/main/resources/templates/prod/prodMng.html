@@ -233,7 +233,7 @@ display:inline-block;
             	item.indicaDt = grid.getData()[0].indicaDt
             	item.lineCd = grid.getData()[0].lineCd
             	item.prefRank = grid.getData()[0].prefRank
-            	item.wkFrDt = grid.getData()[0]
+            	item.planCd = grid.getData()[0].planCd
 		 }) 
 		$.ajax({
 			url : 'insertProgPrcs',
@@ -250,6 +250,7 @@ display:inline-block;
         	iGrid.indicaDt = grid.getData()[0].indicaDt
         	iGrid.lineCd = grid.getData()[0].lineCd
         	iGrid.prefRank = grid.getData()[0].prefRank
+        	iGrid.planCd = grid.getData()[0].planCd
         	
 			
 			console.log(iGrid)
