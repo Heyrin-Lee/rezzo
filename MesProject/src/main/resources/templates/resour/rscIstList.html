@@ -313,6 +313,7 @@
                 method: 'POST',
                 body: data
             }).then(res => res.json()).then(res => {
+                console.log('hello')
                 grid.resetData(res);
             })
         });
