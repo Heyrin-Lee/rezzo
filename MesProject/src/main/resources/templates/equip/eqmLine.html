@@ -6,9 +6,6 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<style>
-		body {
-			background: #eee
-		}
 
 		#cont {
 			display: flex;
@@ -57,52 +54,47 @@
 <body>
 	<!-- 본문내용 -->
 	<th:block layout:fragment="main">
-
-		<!-- 헤더부분 -->
 		<div class="container-fluid px-4">
-			<h1 class="mt-4">설비관리</h1>
+			<h1 class="mt-4">라인관리</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item active">라인관리</li>
+				<li class="breadcrumb-item"><a href="home.do"><i
+						class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 설비관리</li>
+				<li class="breadcrumb-item active">> 라인관리</li>
 			</ol>
-		</div>
-		<!-- 헤더부분 -->
 
-		<div class="card mb-4">
-			<div id="cont">
-				<section id="l_section">
+			<div class="row">
+				<div class="col-lg-6" style="width: 4%"></div>
+				<div class="col-lg-6" style="width: 60%">
 					<div class="card mb-4">
-						<div class="card-header">
-							<div class="sb-nav-link-icon">
-								<i class="fas fa-table me-1"></i> 라인목록
-							</div>
-						</div>
-						<br>
 						<div class="card-body">
-							<div id="grid" style="width: 600px;"></div>
+						<br>
+							<div id="grid"></div>
 						</div>
 					</div>
-				</section>
-
-				<section id="r_section">
-					<div class="col">
-						<div class="card mb-4">
-							<div class="card-header">
-								<i class="fas fa-tachometer-alt"></i> 라인정보
-							</div>
-
-							<div class="card-body">
-								<div class="linelist">
-									<button type="button" id="insertBtn" class="c_btn">등록</button>
-									<button type="button" id="modBtn" class="c_btn">수정</button>
-									<button type="button" id="delBtn" class="c_btn">삭제</button>
-									<button type="button" id="initBtn" class="c_btn">새자료</button>
-								</div>
-								<br> <br>
-								<form id="form1" action="lineInsert">
-									<input type="hidden" class="form-control" id="lineCd" name="lineCd">
+				</div>
+				<div class="col-lg-6" style="width: 1%"></div>
+	<div class="col-lg-5" style="width: 30%">
+					<div class="card mb-4">
+						<div class="card-body">
+					<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="initBtn"><i class="fas fa-file"></i> 새자료</button>
+						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+						<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+					</div>
+					<br>
+								<br>
+								<hr>
+								<form id="dataForm" action="#">
 									<div class="mb-3">
-										<label for="no" class="form-label">라인명</label> <input type="text" class="form-control" id="lineNm"
-											name="lineNm">
+										<label for="no" class="form-label">라인코드</label> <input type="text" placeholder="등록시 자동부여됩니다." readonly class="form-control" id="lineCd"
+											name="lineCd">
+									</div>
+									<div class="mb-3">
+									</div>
+									<div class="mb-3">
+										<label for="id" class="form-label">라인명</label> <input type="text" class="form-control"
+											id="lineNm" name="lineNm">
 									</div>
 									<div class="mb-3">
 										<label for="id" class="form-label">UPH생산량</label> <input type="text" class="form-control"
@@ -113,26 +105,23 @@
 											id="eqmPsch" name="eqmPsch">
 									</div>
 									<div class="mb-4">
-										<label for="email" class="form-label">사용여부</label>
-										<input type="checkbox" id="useYn" name="useYn" value="Y">
+										<label for="email" class="form-label">사용여부</label><br>
+										<select class="dataTable-selector" name="useYn" id="useYn" style="width: 150px">
+											<option value="Y">사용</option>  
+											<option value="N">미사용</option>
+										</select>
+
 									</div>
 								</form>
 							</div>
 						</div>
 					</div>
-				</section>
-			</div>
-		</div>
 
-
-
-		<br>
 
 		<script>
 			//취소
 			$('#initBtn').on('click', function () {
-				$('#lineCd').removeAttr("readonly");
-				$('#form1')[0].reset();
+				$('#dataForm')[0].reset();
 			})
 
 
@@ -192,7 +181,7 @@
 
 			$('#delBtn').on('click', function () {
 
-				if ($('#lineCd').val()== null || $('#lineCd').val()=='') {
+				if ($('#lineCd').val() == null || $('#lineCd').val() == '') {
 					toastr.warning('삭제할 라인을 선택해주세요.');
 				} else {
 					var result = confirm("라인코드를 정말 삭제할까요?")
@@ -210,94 +199,51 @@
 							method: "GET",
 							dataType: "JSON",
 							success: function (result) {
-							toastr.success('라인코드가 정상 삭제되었습니다.');
+								toastr.success('라인코드가 정상 삭제되었습니다.');
+								$('#dataForm')[0].reset();
 								grid.resetData(result);
-								$('#lineCd').removeAttr("readonly");
-								$('#form1')[0].reset();
 							}
 						});
 					})
 				}
 			})
 
-			// 추가
+
+			// 저장
 
 
-			$('#insertBtn').on('click', function () {
-
-				var lineCd = $('#lineCd').val();
+			$('#saveBtn').on('click', function () {
 				var lineNm = $('#lineNm').val();
 				var uphCnt = $('#uphCnt').val();
 				var eqmPsch = $('#eqmPsch').val();
-				if ($('#useYn').is(':checked')) {
-					$('#useYn').val("Y");
-				} else {
-					$('#useYn').val("N");
-				}
 				var useYn = $('#useYn').val();
-
-				$.ajax({
-					url: 'eqmLineInsert',
-					type: 'POST',
-					data: {
-						lineCd,
-						lineNm,
-						uphCnt,
-						eqmPsch,
-						useYn
-					},
-					dataType: 'json'
-				}).done(function (xhr) {
-					toastr.success('정상적으로 등록되었습니다.');
-					$.ajax({
-						url: "eqmLineList",
-						method: "GET",
-						dataType: "JSON",
-						success: function (result) {
-							grid.resetData(result);
-						}
-					});
-				})
-			})
-
-			//수정
-			$('#modBtn').on('click', function () {
-				var lineCd = $('#lineCd').val();
-				var lineNm = $('#lineNm').val();
-				var uphCnt = $('#uphCnt').val();
-				var eqmPsch = $('#eqmPsch').val();
-				if ($('#useYn').is(':checked')) {
-					$('#useYn').val("Y");
-				} else {
-					$('#useYn').val("N");
-				}
-				var useYn = $('#useYn').val();
-
+			if ($('#uphCnt').val() == null || $('#uphCnt').val() == ''||$('#lineNm').val() == null || $('#lineNm').val() == '' 
+			|| $('#eqmPsch').val() == null || $('#eqmPsch').val() == '' ||$('#useYn').val() == '' ||$('#useYn').val() == '') {
+					toastr.warning('공란 없이 작성해주세요.');
+					return;
+				} else{
+				var formData = new FormData(dataForm);					
 				$.ajax({
 					url: 'eqmLineUpdate',
 					type: 'POST',
-					data: {
-						lineNm,
-						lineCd,
-						uphCnt,
-						eqmPsch,
-						useYn
-					},
-					dataType: 'json'
+					data: formData,
+					contentType: false,
+					processData: false
 				}).done(function (xhr) {
-					toastr.success('정상적으로 수정되었습니다.');
 					$.ajax({
 						url: "eqmLineList",
 						method: "GET",
 						dataType: "JSON",
 						success: function (result) {
-							grid.resetData(result);
-							$('#lineCd').removeAttr("readonly");
-							$('#form1')[0].reset();
+								grid.resetData(result);
+								$('#dataForm')[0].reset();
+								toastr.success('정상적으로 저장되었습니다.')
 						}
 					});
-				})
-			})
+				})}}
+				
+			)
+
 		</script>
 	</th:block>
 </body>

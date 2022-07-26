@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,8 +35,23 @@ public class OrdrSearchController {
 	@ResponseBody
 	List<OrdrSearchVO> ordrSearchOneList (OrdrSearchVO vo){
 		System.out.println(vo);
-		List<OrdrSearchVO> ordrSearchOneList = service.ordrSearchOneList(vo);
-		return ordrSearchOneList;
+		return service.ordrSearchOneList(vo);
+	}
+	
+	@PostMapping("ordrDtlList")
+	@ResponseBody
+	List<OrdrSearchVO> ordrDtlList (OrdrSearchVO vo){
+		System.out.println(vo);
+		return service.ordrDtlList(vo);
+	}
+	
+	@PostMapping("ordrDtlUpdate")
+	@ResponseBody
+	public List<OrdrSearchVO> ordrDtlUpdate(@RequestBody List<OrdrSearchVO> ordrSearchList, OrdrSearchVO vo){
+		
+		service.ordrDtlUpdate(ordrSearchList);
+		return ordrSearchList;
+		
 	}
 	
 }

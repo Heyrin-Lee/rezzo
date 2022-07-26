@@ -15,4 +15,10 @@ public interface OrdrSearchMapper {
 	// 상단 그리드 검색
 	List<OrdrSearchVO> ordrSearchOneList (OrdrSearchVO vo);
 	
+	List<OrdrSearchVO> ordrDtlList (OrdrSearchVO vo);
+
+	// 업데이트
+	
+	void ordrDtlUpdate (OrdrSearchVO vo);
+	
 }

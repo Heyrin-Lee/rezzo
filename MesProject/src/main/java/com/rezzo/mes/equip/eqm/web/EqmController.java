@@ -112,7 +112,8 @@ public class EqmController {
 	
 	@PostMapping("eqmInsert")
 	@ResponseBody
-	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {	
+	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {
+		System.out.println(vo);
 		String fileName = file.getOriginalFilename();
 		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
 			String uid = UUID.randomUUID().toString();

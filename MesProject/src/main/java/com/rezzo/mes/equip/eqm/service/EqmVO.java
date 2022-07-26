@@ -30,6 +30,7 @@ public class EqmVO {
 	String eqmImg;
 	String eqmFgNm;
 	String frmUseYN;
+	String lineNm;
 	
 	
 }

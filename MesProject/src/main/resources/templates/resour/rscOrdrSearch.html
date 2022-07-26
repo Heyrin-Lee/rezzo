@@ -80,8 +80,7 @@
 						<th>발주신청일</th>
 						<td><input class="form-control" type="date" id="frDt" name="frDt" style="width: 150px"> ~</td>
 						<td><input class="form-control" type="date" id="toDt" name="toDt" style="width: 150px"></td>
-						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i
-								class="fas fa-search"></i></button>
+						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i class="fas fa-search"></i></button>
 						&nbsp&nbsp
 					</tr>
 
@@ -94,7 +93,11 @@
 			<div class="card mb-4">
 				<div class="card-body">
 
-					<br><br>
+						<div class="linelist" style="float: right;">
+						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 수정</button>
+						<br> <br>
+
+					</div>
 					<div id="grid2"></div>
 				</div>
 			</div>
@@ -129,7 +132,7 @@
 					}, {
 						header: '발주신청일',
 						align: 'center',
-						name: 'paprdCmndDt'
+						name: 'ordrReqDt'
 					}]
 				});
 
@@ -164,82 +167,28 @@
 				})
 
 
-
-
-				/* 		grid.on('dblclick', ev => {
-							var rscCd = grid.getValue(ev.rowKey, 'rscCd')
-							var rscNm = grid.getValue(ev.rowKey, 'rscNm')
-							var rscStc = grid.getValue(ev.rowKey, 'rscStc')
-							var safStc = grid.getValue(ev.rowKey, 'safStc')
-							var vendCd = grid.getValue(ev.rowKey, 'vendCd')
-							var vendNm = grid.getValue(ev.rowKey, 'vendNm')
-							
-							var rscCd2 = grid2.getColumnValues('rscCd');
-							var vendCd2 = grid2.getColumnValues('vendCd');
-							console.log(rscCd2)
-							console.log(rscCd)
-							
-							var isValid = true;
-							for (i=0; i<rscCd2.length; i++){
-								if (rscCd2[i]==rscCd ) {
-									toastr.warning('동일 항목의 발주가 진행중입니다.');
-									isValid = false;
-									return false;
-								}	else if (vendCd2[i]!=vendCd){
-									toastr.warning('동일 업체의 발주만 가능합니다.');
-									isValid = false;
-									return false;
-								}
-								
-							}
-									
-							grid2.appendRow({
-								"rscCd": rscCd,
-								"rscNm": rscNm,
-								"rscStc": rscStc,
-								"safStc": safStc,
-								"vendCd": vendCd,
-								"vendNm": vendNm
-							})
-							$.ajax({
-								url: "rscRowSelectList",
-								method: 'POST',
-								data: {
-									rscCd: rscCd
-								},
-								success: function (result) {}
-							})
-
-							let date = format;
-							$.ajax({
-								url: 'rscOrdrCd',
-								method: 'POST',
-								dataType: 'json',
-								contentType: 'application/text',
-								data: {
-									ordrSCnt: format
-								},
-								success: function (result) {
-									if (result.ordrSCnt == null) {
-										index = "001";
-									} else {
-										index = result.ordrScnt
-									}
-
-									function makeCd() {
-									console.log('--'+String((Number(index)+1)).padStart(3,'0'))
-										return 'ORD' + format + String((Number(index)+1)).padStart(3,'0')
-									}
-									code = makeCd()
-									for (let i = 0; i < grid2.getRowCount(); i++) {
-										grid2.setValue(i, 'ordrCd', code)
-									}
-								}
-							})
-						})
-
-
-
+			grid.on('dblclick', ev => {
+				var ordrCd = grid.getValue(ev.rowKey, 'ordrCd')
+				var vendCd = grid.getValue(ev.rowKey,'vendCd')
+				var vendNm = grid.getValue(ev.rowKey,'vendNm')
+					$.ajax({
+					url: "ordrDtlList",
+					method: 'Post',
+					dataType: 'JSON',
+					data : {ordrCd:ordrCd,
+							vendCd : vendCd,
+							vendNm : vendNm
+							},
+					success: function (result) {
+						grid2.resetData(result)
+						for (var all of result){
+							var allStc = Number(all.ordrCnt)+Number(all.rscStc)
+							console.log(allStc)
+							grid2.setValue(all.rowKey, 'allStc', allStc)
+						}
+						}
+				})
+			})
 
 						const grid2 = new tui.Grid({
 							el: document.getElementById('grid2'),
@@ -299,7 +248,7 @@
 							}],
 						});
 						
-						grid2.on('editingFinish',function (ev){
+					grid2.on('editingFinish',function (ev){
 							var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
 							var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
 							ordrCnt = Number(ordrCnt);
@@ -309,8 +258,32 @@
 							
 						})
 						
+				// 수정 버튼
 
-						 */
+				$('#saveBtn').click(ev => {
+					var data = grid2.getCheckedRows();
+					var isValid = true;
+					for (i = 0; i < data.length; i++) {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null) {
+							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
+							isValid = false;
+							return false;
+
+						} else {
+							console.log(data)
+							$.ajax({
+								url: 'ordrDtlUpdate',
+								method: 'POST',
+								data: JSON.stringify(data),
+								contentType: 'application/json'
+							}).done(function (result) {
+								toastr.success('발주내역 수정이 완료되었습니다.');
+								grid2.uncheckAll()
+							})
+						}
+					}
+				})
+						
 			</script>
 
 	</th:block>

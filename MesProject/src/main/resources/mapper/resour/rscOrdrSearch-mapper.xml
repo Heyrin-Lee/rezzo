@@ -3,16 +3,37 @@
 <mapper namespace="com.rezzo.mes.resour.search.mapper.OrdrSearchMapper">
 
 <select id="ordrSearchList" resultType="com.rezzo.mes.resour.search.service.OrdrSearchVO">
-	select * from vw_ordr_detale
+select r.ordr_cd, r.ordr_req_dt, v.vend_cd, v.vend_nm 
+from rsc_ordr r 
+join vend v on r.vend_cd = v.vend_cd
 </select>
 
 <select id="ordrSearchOneList" resultType="com.rezzo.mes.resour.search.service.OrdrSearchVO">
 	select * from vw_ordr_detale
 	where 1=1
-	<if test="#{vendNm} != null"> AND vend_nm LIKE '%'||#{vendNm}||'%'</if>
-	<if test="#{frDt} != null"><![CDATA[ AND paprd_cmnd_dt >= #{frDt}]]></if>
-	<if test="#{toDt} != null"><![CDATA[ AND paprd_cmnd_dt < #{toDt}]]></if>
+	<if test="vendNm != null"> AND VEND_NM LIKE '%'||#{vendNm}||'%'</if>
+	<if test="frDt != null"><![CDATA[ AND PAPRD_CMND_DT >= #{frDt}]]></if>
+	<if test="toDt != null"><![CDATA[ AND PAPRD_CMND_DT < #{toDt}]]></if>
 </select>
+
+<select id="ordrDtlList" resultType="com.rezzo.mes.resour.search.service.OrdrSearchVO">
+
+select dt.ordr_cd, dt.rsc_cd, dt.ordr_cnt, dt.paprd_cmnd_dt, ord.ordr_req_dt, ord.vend_cd, v.vend_nm, r.rsc_nm, rsc.rsc_stc, rsc.saf_stc
+from rsc_ordr_dtl dt 
+join rsc_ordr ord on dt.ordr_cd=ord.ordr_cd
+join vend v on ord.vend_cd = v.vend_cd
+join rsc r on dt.rsc_cd = r.rsc_cd
+FULL join rsc_stc rsc on r.rsc_cd = rsc.rsc_cd
+where dt.ordr_cd = #{ordrCd}
+</select>
+
+<update id = "ordrDtlUpdate" parameterType="com.rezzo.mes.resour.search.service.OrdrSearchVO">
+
+update rsc_ordr_dtl 
+set ordr_cnt = #{ordrCnt}, paprd_cmnd_dt = #{paprdCmndDt}
+WHERE ordr_cd = #{ordrCd} and rsc_cd = #{rscCd}
+
+</update>
 
 
 </mapper>

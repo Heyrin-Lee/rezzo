@@ -4,13 +4,16 @@
 
     
 	<select id="eqmList" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
-		select * from eqm ORDER BY eqm_cd
+		select l.line_cd, l.line_nm, e.eqm_cd, e.line_cd, e.prcs_cd, e.eqm_fg, e.eqm_nm, e.min_temp, e.max_temp, e.eqm_ist_dt, e.chck_perd, e.use_yn, e.prcs_nm, m.img_path, m.eqm_img
+			from eqm e join eqm_line l on e.line_cd = l.line_cd
+			join eqm_img m on e.eqm_cd = m.eqm_cd
 	</select>
 
 	
 	<select id="eqmSelect" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">
-		select * from eqm e join eqm_img i
-		on e.eqm_cd = i.eqm_cd
+		select l.line_cd, l.line_nm, e.eqm_cd, e.line_cd, e.prcs_cd, e.eqm_fg, e.eqm_nm, e.min_temp, e.max_temp, e.eqm_ist_dt, e.chck_perd, e.use_yn, e.prcs_nm, m.img_path, m.eqm_img
+			from eqm e join eqm_line l on e.line_cd = l.line_cd
+			join eqm_img m on e.eqm_cd = m.eqm_cd
 		where e.eqm_nm Like '%'||#{keyword}||'%'
 	</select>
 	

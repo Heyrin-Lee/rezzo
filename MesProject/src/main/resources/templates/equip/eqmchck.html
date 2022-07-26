@@ -63,13 +63,10 @@
 						<div class="card-body">
 							<div class="linelist" style="float: right;">
 								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
-								<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="searchBtn"><i
-										class="fas fa-search"></i> 설비검색</button>
 								<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
 								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 							</div>
 							<br><br>
-
 							<form id="dataForm" name="dataForm" action="#" method="post">
 								<table class="table" style="vertical-align : middle;">
 									<colgroup>
@@ -85,6 +82,9 @@
 											<th>설비코드</th>
 											<td>
 												<input class="form-control" name="eqmCd" id="eqmCd" style="width: 250px" readonly>
+												<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="searchBtn" name="searchBtn">
+													<i class="fas fa-search"></i>
+												</button>
 											</td>
 											<th>설비명</th>
 											<td><input class="form-control" type="text" id="eqmNm" name="eqmNm" style="width: 250px"
@@ -147,10 +147,7 @@
 
 					<tr>
 						<th>설비명</th>
-						<td><input class="form-control" type="text" id="keyword3" name="eqmNm" style="width: 150px"></td>
-						<!-- <button style="margin-bottom:3px" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gridModal"
-							id="mSearchBtn"><i class="fas fa-search"></i></button>
-						-->&nbsp&nbsp
+						<td><input class="form-control" type="text" id="keyword3" name="eqmNm" style="width: 150px"></td>&nbsp&nbsp
 						<th>해당일자</th>
 						<td>
 							<input type="date" class="form-control" id="stDt" name="stDt" style="width: 150px;"> ~
@@ -192,33 +189,10 @@
 				</div>
 			</div>
 
-			<!-- 그리드 설비 검색 Modal 
-			<div class="modal fade" id="gridModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">설비명 검색</h5>
-							<br> <br>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-						</div><br>
-						<div class="ms-3">
-							<label style="width:60px">설비명</label>
-							<input type="text" id="keyword" name="keyword" placeholder="설비명"></input>
-							
-							<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
-						</div>
-						<div id="gridModalDiv" class="modal-body"></div>
-
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-						</div>
-					</div>
-				</div>
-			</div> -->
-
+		
 
 			<script>
+			
 				// 로딩 시 점검 리스트 그리드 데이터 실행
 
 				$.ajax({
@@ -321,7 +295,6 @@
 					dataType: "JSON",
 					success: function (result) {
 						modGrid.resetData(result);
-						console.log(result);
 					}
 				});
 
@@ -352,7 +325,6 @@
 				})
 
 				searchBtn.addEventListener('click', function () {
-
 					setTimeout(function () {
 						modGrid.refreshLayout()
 					}, 300);
@@ -425,56 +397,9 @@
 				})
 
 
-				const gridModalDiv = new tui.Grid({
-					el: document.getElementById('gridModalDiv'),
-					rowHeaders: ['rowNum'],
-					columns: [{
-						header: '설비명',
-						name: 'eqmNm',
-						align: 'center',
-					}, {
-						header: '설비코드',
-						name: 'eqmCd',
-						align: 'center'
-					}, {
-						header: '공정코드',
-						name: 'prcsCd',
-						align: 'center',
-					}, {
-						header: '공정명',
-						name: 'prcsNm',
-						align: 'center',
-					}, {
-						header: '사용여부',
-						name: 'useYN',
-						align: 'center',
-					}]
-				})
 
-				$.ajax({
-					url: "eqmList",
-					method: "GET",
-					dataType: "JSON",
-					success: function (result) {
-						gridModalDiv.resetData(result);
-						console.log(result);
-					}
-				});
-/*
-				// 설비 조건 검색 - 설비명 검색
-				$('#mSearchBtn').on('click', function () {
-					setTimeout(function () {
-						gridModalDiv.refreshLayout()
-					}, 300);
-				})
+			
 
-				gridModalDiv.on('dblclick', (ev) => {
-					var eqmNm = modGrid.getValue(ev.rowKey, 'eqmNm');
-					var eqmCd = modGrid.getValue(ev.rowKey, 'eqmCd');
-					$('#keyword').val(eqmNm);
-					$('#gridModal').modal('hide');
-				});
-*/
 				// 설비조건검색 - 세부 내용 검색
 				$('#bSearchBtn').on('click', function () {
 					var eqmNm = $('#keyword3').val()
