@@ -19,22 +19,22 @@
 			<!-- 탭 메뉴 -->
 			<nav>
 				<div class="nav nav-tabs" id="nav-tab" role="tablist">
-					<button class="nav-link active" id="nav-codes-tab" data-bs-toggle="tab" data-bs-target="#nav-codes" type="button"
-						role="tab" aria-controls="nav-codes" aria-selected="true">제품검사 등록</button>
-					<button class="nav-link" id="nav-cdInfo-tab" data-bs-toggle="tab" data-bs-target="#nav-cdInfo"
-						type="button" role="tab" aria-controls="nav-cdInfo" aria-selected="false">제품검사 조회</button>
+					<button class="nav-link active" id="nav-insp-tab" data-bs-toggle="tab" data-bs-target="#nav-insp" type="button"
+						role="tab" aria-controls="nav-insp" aria-selected="true">제품검사 등록</button>
+					<button class="nav-link" id="nav-info-tab" data-bs-toggle="tab" data-bs-target="#nav-info"
+						type="button" role="tab" aria-controls="nav-info" aria-selected="false">제품검사 조회</button>
 				</div>
 			</nav>
 			<div class="tab-content" id="nav-tabContent">
 				<!-- 검사등록 탭 -->
-				<div class="tab-pane fade show active" id="nav-codes" role="tabpanel" aria-labelledby="nav-codes-tab">
+				<div class="tab-pane fade show active" id="nav-insp" role="tabpanel" aria-labelledby="nav-insp-tab">
 					<!-- 내용 -->
 					<div class="card mb-4">
             <div class="card-body">
             	<div class="linelist" style="float: right;">
 								<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
 								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
-								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+								<!--/* <button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button> */-->
 								<br> <br>
 							</div>
 							<form id="dataForm" name="dataForm" action="#" method="post">
@@ -49,24 +49,35 @@
 									</colgroup>
 									<tbody>
 										<tr>
-											<th>주문코드 <strong class="blue">*</strong></th>
-											<td><input class="form-control" type="text" id="orderCd" name="orderCd" style="width: 250px" maxlength="20"
+											<th>주문번호 <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" id="orderNo" name="orderNo" style="width: 250px" maxlength="20"
 												placeholder="주문서를 조회해주세요" readonly />
 												<!-- Button trigger modal -->
 												<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="modalBtn"><i class="fas fa-search"></i></button>
 												</td>
 											<th>완제품코드 <strong class="blue">*</strong></th>
 											<td><input class="form-control" type="text" id="edctsCd" name="edctsCd" style="width: 250px" maxlength="20" readonly /></td>
-											<th>완제품명 <strong class="blue">*</strong></th>
+											<th>완제품명 </th>
 											<td><input class="form-control" type="text" id="edctsNm" name="edctsNm" style="width: 250px" maxlength="50" readonly /></td>
 										</tr>
 										<tr>
 											<th>완제품LOT <strong class="blue">*</strong></th>
 											<td><input class="form-control" type="text" id="edctsLotNo" name="edctsLotNo" style="width: 250px" maxlength="50" readonly /></td>
+											<th>검사수량</th>
+											<td><input class="form-control" type="text" id="inspCnt" name="inspCnt" style="width: 250px" maxlength="50" readonly /></td>
+											<th></th>
+											<td></td>
+										</tr>
+										<tr>
 											<th>검사일자</th>
 											<td><input class="form-control" type="date" id="inspDt" name="inspDt" style="width: 250px" maxlength="50" /></td>
 											<th>검사담당자</th>
 											<td><input type="text" id="inspPsch" name="inspPsch" class="form-control" maxlength="50" style="width: 250px" /></td>
+											<th>최종판정 <strong class="blue">*</strong></th>
+											<td><select class="dataTable-selector" name="inspJm" id="inspJm" style="width: 250px">
+													<option selected value="">==선택==</option>  
+													<option value="적합">적합</option>
+													<option value="적합">부적합</option></td>
 										</tr>
 									</tbody>
 								</table>
@@ -103,41 +114,43 @@
         	</div>
 				</div>
 				<!-- 검사조회 탭 -->
-				<div class="tab-pane fade" id="nav-cdInfo" role="tabpanel" aria-labelledby="nav-cdInfo-tab">
+				<div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
 					<!-- 내용 -->
 					<div class="card mb-4">
             <div class="card-body">
             	<div class="linelist" style="float: right;">
 								<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
-								<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 새자료</button>
-								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-download"></i> PDF</button>
 								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 								<br> <br>
 							</div>
-							<form id="dataForm" name="dataForm" action="#" method="post">
+							<form id="dataForm2" name="dataForm2" action="#" method="post">
 								<table class="table" style="vertical-align : middle;">
 									<colgroup>
-										<col style="width: 90px">
+										<col style="width: 150px">
 										<col>
-										<col style="width: 90px">
+										<col style="width: 150px">
 										<col>
-										<col style="width: 90px">
+										<col style="width: 150px">
 										<col>
 									</colgroup>
 									<tbody>
 										<tr>
 											<th>검사일자 <strong class="blue">*</strong></th>
-											<td colspan="5">
-												<input class="form-control" type="date" id="vendCd" name="vendCd" style="width: 250px" maxlength="20" /> ~
-												<input class="form-control" type="date" id="vendCd" name="vendCd" style="width: 250px" maxlength="20" /></td>
+											<td colspan="3">
+												<input class="form-control" type="date" id="startDt" name="startDt" style="width: 250px" maxlength="20" /> &nbsp; ~ &nbsp;
+												<input class="form-control" type="date" id="endDt" name="endDt" style="width: 250px" maxlength="20" /></td>
+											<th><td></td></th>
 										</tr>
 										<tr>
-											<th>LOT</th>
-											<td><input class="form-control" type="text" id="bizno" name="bizno" style="width: 250px" maxlength="50" /></td>
-											<th>제품명</th>
-											<td><input class="form-control" type="text" id="telno" name="telno" style="width: 250px" maxlength="50" /></td>
-											<th>제품명</th>
-											<td><input class="form-control" type="text" id="telno" name="telno" style="width: 250px" maxlength="50" /></td>
+											<th>완제품LOT <strong class="blue">*</strong></th>
+											<td><input class="form-control" type="text" list="browserdata" id="edctsLotNo" name="edctsLotNo" style="width: 250px" maxlength="50" autocomplete="off" />
+													<datalist id="browserdata" style="width: 250px">
+													<option th:each="lot : ${lots}" th:value="${lot.edctsLotNo}" th:text="${lot.edctsLotNo}"></option>
+													</datalist>
+											</td>
+											<th><td></td></th>
+											<th><td></td></th>	
 										</tr>
 									</tbody>
 								</table>
@@ -146,7 +159,7 @@
         	</div>
         	<div class="card mb-4">
             <div class="card-body">
-            	<h1>검사조회 그리드 영역</h1> 
+            	<div id="grid2"></div>
             </div>
         	</div>
 				</div><!-- end nav-tabContent -->
@@ -157,7 +170,7 @@
 		 const grid = new tui.Grid({
 		     el: document.getElementById('grid'),
 		     scrollX: false,
-		     bodyHeight: 300,
+		     bodyHeight: 250,
 		     rowHeaders: ['checkbox'],
 		     columns: [{
 		         header: '검사코드',
@@ -281,12 +294,15 @@
 			insertModalGrid(orderGetRow);
 		})
 		
-		//주문서 모달 그리드에 출력
+		//주문서 모달 폼에 출력
 		function insertModalGrid(row) {
-			$('#orderCd').val(modalGrid.getValue(row.rowKey, "orderNo"));
+			$('#orderNo').val(modalGrid.getValue(row.rowKey, "orderNo"));
 			$('#edctsCd').val(modalGrid.getValue(row.rowKey, "edctsCd"));
 			$('#edctsNm').val(modalGrid.getValue(row.rowKey, "prdtNm"));
+			$('#edctsLotNo').val(modalGrid.getValue(row.rowKey, "edctsLotNo"));
+			$('#inspCnt').val(modalGrid.getValue(row.rowKey, "orderCnt"));
 			$('#exampleModal').modal('hide');
+			
 			//검사항목 로드 
 	 		$.ajax({
 		    url: "getInspCode",
@@ -301,6 +317,12 @@
 			});
 		}
 		
+		//체크
+	 grid.on('editingStart', ev => {
+			grid.check(ev.rowKey);
+			grid.setValue(ev.rowKey, "edctsLotNo", $('#edctsLotNo').val());
+	 })
+		
 		//초기화버튼
 		$('#newBtn').click(ev => {
 			$('#dataForm')[0].reset();
@@ -308,7 +330,7 @@
 		})
 		
 		//전체 삭제
-		$('#delBtn').click(ev => {
+		/* $('#delBtn').click(ev => {
 		  $.ajax({
 			 	url: "delVend",
 			  method: "POST",
@@ -319,9 +341,117 @@
 			    	grid.resetData(result);
 			    }
 			})
- 		});
+ 		}); */
  		
- 		//수정&저장
+ 		
+ 		//form 데이터 obj로 만들기
+ 		$.fn.serializeObject = function() {
+    var obj = null;
+    try {
+        if ( this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) {
+            var arr = this.serializeArray();
+            if ( arr ) {
+                obj = {};
+                jQuery.each(arr, function() {
+                    obj[this.name] = this.value;
+                });            
+            }
+        }
+    }
+    catch(e) {alert(e.message);}
+    finally  {}
+    return obj;
+		};
+
+		var datas = grid.getCheckedRows();
+		datas.unshift($('#dataForm').serializeObject());
+ 		
+ 		//저장
+ 		$('#saveBtn').click(ev => {
+ 			$.ajax({
+			 	url: "savePrdtInsp",
+			  method: "POST",
+	      data: JSON.stringify(datas),
+	      dataType: 'json',
+	      contentType: 'application/json',
+			    success: function (result) {
+			    	toastr.success('정상적으로 삭제되었습니다.');
+			    	grid.resetData(result);
+			    }
+			})
+ 		})
+ 		
+ 		
+ 		//조회 그리드
+ 		const grid2 = new tui.Grid({
+	     el: document.getElementById('grid2'),
+	     scrollX: false,
+	     bodyHeight: 300,
+	     rowHeaders: ['checkbox'],
+	     columns: [{
+	         header: '완제품LOT번호',
+	         name: 'edctsLotNo',
+	         align: 'center',
+	         sortable: true,
+	         sortingType: 'desc'
+	     }, {
+	         header: '제품코드',
+	         name: 'edctsCd',
+	         align: 'center',
+	         sortable: true,
+	         sortingType: 'desc'
+	     }, {
+	         header: '제품명',
+	         name: 'edctsNm',
+	         align: 'center',
+	         sortable: true,
+	         sortingType: 'desc'
+	     }, {
+	         header: '최종판정',
+	         name: 'inspJm',
+	         align: 'center',
+	         editor: 'text',
+	         sortable: true,
+	         sortingType: 'desc'
+	     }, {
+	         header: '검사날짜',
+	         name: 'inspDt',
+	         align: 'center',
+	         sortable: true,
+	         sortingType: 'desc'
+	     }, {
+	         header: '검사자',
+	         name: 'inspPsch',
+	         align: 'center',
+	         sortable: true,
+	         sortingType: 'desc'
+	     }]
+		 });
+		 
+		  //레이아웃 재배치
+		 $('#nav-info-tab').click(ev => {
+			 setTimeout(function () {
+		   		grid2.refreshLayout()
+		   }, 200);
+		 });
+		 
+		 //조회결과 로드
+		 $('#searchBtn').click( ev => {
+			 $.ajax({
+			    url: "getInspCode",
+			    method: "POST",
+			    data : $('#dataForm2').serialize(),
+			    dataType: "JSON",
+			    success: function (result) {
+			    	setTimeout(function () {
+			    		grid.refreshLayout()
+			    		}, 300);
+			    	grid2.resetData(result);
+			    }
+				})	 
+		 });
+		 
+		 
 		</script>
 	</th:block>
 </body>

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,7 +19,8 @@ public class PrdtInspController {
 	@Autowired PrdtInspService service;
 	
 	@RequestMapping("prdtInsp")
-	public String prdtInsp() {
+	public String prdtInsp(Model model) {
+		model.addAttribute("lots", service.getPrdtInsp(null));
 		return "qc/prdtInsp";
 	}
 	
@@ -36,5 +39,16 @@ public class PrdtInspController {
 	@RequestMapping("delPrdtInsp")
 	public void delPrdtInsp(PrdtInspVO prdtInspVO) {
 		service.delPrdtInsp(prdtInspVO);
+	}
+	
+	@RequestMapping("savePrdtInsp")
+	public void savePrdtInsp(@RequestBody List<PrdtInspVO> prdtInspList) {
+		service.savePrdtInsp(prdtInspList);
+	}
+	
+	@RequestMapping("getPrdtInsp")
+	@ResponseBody
+	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO) {
+		return service.getPrdtInsp(prdtInspVO);
 	}
 }

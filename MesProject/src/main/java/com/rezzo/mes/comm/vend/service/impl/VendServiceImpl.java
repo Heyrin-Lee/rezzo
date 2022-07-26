@@ -1,6 +1,7 @@
 package com.rezzo.mes.comm.vend.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,11 @@ public class VendServiceImpl implements VendService {
 	@Override
 	public void delVend(VendVO vendVO) {
 		mapper.delVend(vendVO);
+	}
+
+	@Override
+	public List<Map<String, Object>> getVendListMap(VendVO vendVO) {
+		return mapper.getVendListMap(vendVO);
 	}
 
 }

@@ -13,21 +13,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PrdtInspVO {
 	
-	String edctsLotNo;       
-	String edctsCd;  
-	String edctsNm;
-	String orderCd;
-	String inspRslt;
+	String edctsLotNo; 
+	String edctsCd;
+	String orderNo;
 	String inspPsch;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date inspDt;
+	Integer inspCnt;
+	String inspJm;
 	
 	
 	String inspCd;	
 	String inspNm;
 	String inspSd;	
 	String inspRsltDtl;
-	String inspJm;
-
+	String inspJmDtl;
+	
+	String edctsNm;
 }
