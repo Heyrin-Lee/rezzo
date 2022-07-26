@@ -24,4 +24,6 @@ public interface SalesOustService {
 	public List<SalesStcVO> getProd(SalesStcVO vo);
 	//조건별 조회
 	public List<SalesOustVO> optionSearch(SalesOustVO vo);
+	//제품명 검색 시 조회
+	public List<SalesOustVO> getProduct(SalesOustVO vo);
 }

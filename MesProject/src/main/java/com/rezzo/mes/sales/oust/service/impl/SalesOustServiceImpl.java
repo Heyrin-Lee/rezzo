@@ -60,4 +60,10 @@ public class SalesOustServiceImpl implements SalesOustService{
 		return mapper.optionSearch(vo);
 	}
 
+	//제품명 검색 시 조회
+	@Override
+	public List<SalesOustVO> getProduct(SalesOustVO vo) {
+		return mapper.getProduct(vo);
+	}
+
 }
