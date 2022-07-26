@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,6 +28,14 @@ public class OrdrSearchController {
 	public List<OrdrSearchVO> ordrSearchList(OrdrSearchVO vo) {
 		List<OrdrSearchVO> ordrSearchList = service.ordrSearchList(vo);
 		return ordrSearchList;
+	}
+	
+	@PostMapping("ordrSearchOneList")
+	@ResponseBody
+	List<OrdrSearchVO> ordrSearchOneList (OrdrSearchVO vo){
+		System.out.println(vo);
+		List<OrdrSearchVO> ordrSearchOneList = service.ordrSearchOneList(vo);
+		return ordrSearchOneList;
 	}
 	
 }

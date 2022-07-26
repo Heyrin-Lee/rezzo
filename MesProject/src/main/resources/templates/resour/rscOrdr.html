@@ -115,7 +115,6 @@
 				let month = today.getMonth() + 1; // 월
 				let date = today.getDate(); // 날짜
 				let format = year + (("00" + month.toString()).slice(-2)) + (("00" + date.toString()).slice(-2));
-
 				console.log(format)
 
 
@@ -149,7 +148,7 @@
 						header: '업체명',
 						align: 'center',
 						name: 'vendNm'
-					},{
+					}, {
 						header: '현재재고',
 						align: 'center',
 						name: 'rscStc'
@@ -157,8 +156,7 @@
 						header: '안전재고',
 						align: 'center',
 						name: 'safStc'
-					}],
-					data: gridData
+					}]
 				});
 
 
@@ -179,26 +177,24 @@
 					var safStc = grid.getValue(ev.rowKey, 'safStc')
 					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
 					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
-					
+
 					var rscCd2 = grid2.getColumnValues('rscCd');
 					var vendCd2 = grid2.getColumnValues('vendCd');
-					console.log(rscCd2)
-					console.log(rscCd)
-					
+
 					var isValid = true;
-					for (i=0; i<rscCd2.length; i++){
-						if (rscCd2[i]==rscCd ) {
+					for (i = 0; i < rscCd2.length; i++) {
+						if (rscCd2[i] == rscCd) {
 							toastr.warning('동일 항목의 발주가 진행중입니다.');
 							isValid = false;
 							return false;
-						}	else if (vendCd2[i]!=vendCd){
+						} else if (vendCd2[i] != vendCd) {
 							toastr.warning('동일 업체의 발주만 가능합니다.');
 							isValid = false;
 							return false;
 						}
-						
+
 					}
-							
+
 					grid2.appendRow({
 						"rscCd": rscCd,
 						"rscNm": rscNm,
@@ -216,25 +212,23 @@
 						success: function (result) {}
 					})
 
-					let date = format;
+					let ordrSCnt = format;
 					$.ajax({
 						url: 'rscOrdrCd',
 						method: 'POST',
-						dataType: 'json',
-						contentType: 'application/text',
 						data: {
-							ordrSCnt: format
+							ordrSCnt: ordrSCnt
 						},
 						success: function (result) {
-							if (result.ordrSCnt == null) {
-								index = "001";
-							} else {
-								index = result.ordrScnt
-							}
+							console.log(ordrSCnt + '----')
+							console.log(result[0].ordrSCnt);
+							index = result[0].ordrSCnt;
+							console.log(index);
 
 							function makeCd() {
-							console.log('--'+String((Number(index)+1)).padStart(3,'0'))
-								return 'ORD' + format + String((Number(index)+1)).padStart(3,'0')
+								var reCd = 'ORD' + ordrSCnt + String(Number(index) + 1).padStart(3, '0');
+								console.log(reCd)
+								return reCd
 							}
 							code = makeCd()
 							for (let i = 0; i < grid2.getRowCount(); i++) {
@@ -250,11 +244,13 @@
 
 				$('#rscSearchBtn').on('click', function () {
 					let rscNm = $('#rscNm').val()
+					let vendNm = $('#vendNm').val()
 					$.ajax({
 						url: "rscSOrdrList",
 						method: 'POST',
 						data: {
-							rscNm: rscNm
+							rscNm: rscNm,
+							vendNm: vendNm
 						},
 						success: function (result) {
 							grid.resetData(result);
@@ -312,55 +308,59 @@
 						header: '납기요청일',
 						align: 'center',
 						name: 'paprdCmndDt',
-					    editor: {
-					        type: 'datePicker',
-					        options: {
-					        datetimeFormat: "yyyy-MM-dd"
-					        }
-					      }
+						editor: {
+							type: 'datePicker',
+							options: {
+								datetimeFormat: "yyyy-MM-dd"
+							}
+						}
 					}],
 				});
-				
-				grid2.on('editingFinish',function (ev){
+
+				grid2.on('editingFinish', function (ev) {
 					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
 					var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
 					ordrCnt = Number(ordrCnt);
 					rscStc = Number(rscStc);
-					var allStc = ordrCnt+rscStc
+					var allStc = ordrCnt + rscStc
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
-					
+
 				})
-				
+
 
 				// 삭제 버튼
-				
-				$('#minusBtn').on('click', function (ev) {	
+
+				$('#minusBtn').on('click', function (ev) {
 					grid2.removeCheckedRows()
 					toastr.success('정상적으로 삭제되었습니다.');
 				})
-				
+
 				// 발주 버튼
-				
-				$('#saveBtn').click(ev =>{
+
+				$('#saveBtn').click(ev => {
 					var data = grid2.getCheckedRows();
-						for(i=0; i<data.length; i++){
-						if(data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null){
+					var isValid = true;
+					for (i = 0; i < data.length; i++) {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null) {
 							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
-					} else{
-						$.ajax({
-							url : 'rscOrdrInsert',
-							method:'POST',
-							data : JSON.stringify(data),
-							contentType : 'application/json'
-						}).done(function (result){
-							toastr.success('발주 신청이 완료되었습니다.');
-							grid2.refreshLayout(
-							grid2.uncheckAll())
-						})
+							isValid = false;
+							return false;
+
+						} else {
+							console.log(data)
+							$.ajax({
+								url: 'rscOrdrInsert',
+								method: 'POST',
+								data: JSON.stringify(data),
+								contentType: 'application/json'
+							}).done(function (result) {
+								toastr.success('발주 신청이 완료되었습니다.');
+								grid2.removeCheckedRows()
+								grid2.uncheckAll()
+							})
+						}
 					}
-				}})
-				
-				
+				})
 			</script>
 
 	</th:block>

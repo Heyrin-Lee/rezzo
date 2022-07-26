@@ -6,4 +6,13 @@
 	select * from vw_ordr_detale
 </select>
 
+<select id="ordrSearchOneList" resultType="com.rezzo.mes.resour.search.service.OrdrSearchVO">
+	select * from vw_ordr_detale
+	where 1=1
+	<if test="#{vendNm} != null"> AND vend_nm LIKE '%'||#{vendNm}||'%'</if>
+	<if test="#{frDt} != null"><![CDATA[ AND paprd_cmnd_dt >= #{frDt}]]></if>
+	<if test="#{toDt} != null"><![CDATA[ AND paprd_cmnd_dt < #{toDt}]]></if>
+</select>
+
+
 </mapper>

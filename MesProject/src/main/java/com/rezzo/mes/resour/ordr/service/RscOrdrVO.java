@@ -18,7 +18,7 @@ public class RscOrdrVO {
 	
 	//자재발주 테이블
 	String ordrNo;
-	private String vendCd;
+	String vendCd;
 	private Date paprdCmndDt;
 	private Date ordrReqDt;
 	
