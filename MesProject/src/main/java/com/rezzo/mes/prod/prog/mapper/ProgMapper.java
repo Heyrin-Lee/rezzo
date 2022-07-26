@@ -14,4 +14,5 @@ public interface ProgMapper {
 	public void updateEqm2(ProgVO vo);
 	public void insertProgPrcs(ProgVO vo);
 	public void insertInfer(ProgVO vo);
+	public void insertEdctsInfo(ProgVO vo);
 }

@@ -212,20 +212,28 @@ display:inline-block;
 		
 		let orderNo = grid.getData()[0].orderNo
 		let lineCd = grid.getData()[0].lineCd
+		let edctsCd = grid.getData()[0].edctsCd
+		let prodCnt = grid2.getRow(5).prodCnt
 		
 		//주문서 생산완료로 업데이트, 설비 사용여부 N으로 업데이트
+		//완제품 lot(db에서 만들어서 바로 insert), 제품코드 (grid edctsCd), 생산 수량(grid2 prodCnt)
 		$.ajax({
 			url : 'afterProd',
-			data : {"orderNo" : orderNo, "lineCd" : lineCd}
+			data : {"orderNo" : orderNo, "lineCd" : lineCd, "edctsCd" : edctsCd, "prodCnt" : prodCnt}
 		})
 		
 		//자재 재고 업데이트
+		
+		
+		//제품 검사 관리 인서트
 		
 		//진행공정, 불량상세, 진행공정상세 인서트
 		let data = grid2.getData()
 		$.each(data, function(index, item) {
             	item.indicaDt = grid.getData()[0].indicaDt
             	item.lineCd = grid.getData()[0].lineCd
+            	item.prefRank = grid.getData()[0].prefRank
+            	item.planCd = grid.getData()[0].planCd
 		 }) 
 		$.ajax({
 			url : 'insertProgPrcs',
@@ -233,6 +241,27 @@ display:inline-block;
 			data : JSON.stringify(data),
 			contentType : 'application/json'
 		})
+		
+		let iCnt = grid2.getRow(5).inferCnt
+		
+		if(iCnt > 0 ) {
+			let iGrid = grid2.getRow(5)
+        	
+        	iGrid.indicaDt = grid.getData()[0].indicaDt
+        	iGrid.lineCd = grid.getData()[0].lineCd
+        	iGrid.prefRank = grid.getData()[0].prefRank
+        	iGrid.planCd = grid.getData()[0].planCd
+        	
+			
+			console.log(iGrid)
+			
+			$.ajax({
+				url : 'insertInfer',
+				method : 'post',
+				data : iGrid
+			})
+			
+		}
 	
 		
    	} 
@@ -255,8 +284,8 @@ display:inline-block;
 				            	 url : 'selectEqm',
 				            	 data : {"eqmCd" : eqmCd},
 				            	 success : function(result){
-				            		if (result.wkFrDttm != null && result.wkToDttm == null) {
-				            			grid2.setValue(i, 'wkFrDttm', result.wkFrDttm)
+				            		if (result.wkFrTm != null && result.wkToTm == null) {
+				            			grid2.setValue(i, 'wkFrTm', result.wkFrTm)
 				            			 grid2.setValue(i, 'nowSt', '진행중')
 				            			 if (i < 3) {
 				            				 grid2.setValue(i, 'indicaCnt', indicaCnt)
@@ -264,10 +293,10 @@ display:inline-block;
 				            				 let value = grid2.getValue(i-1, 'prodCnt')
 				            				 grid2.setValue(i, 'indicaCnt', value)
 				            			 }
-				            		} else if (result.wkToDttm != null){
+				            		} else if (result.wkToTm != null){
 				            			if(i == 0) {
 				            				//그리드에 띄우기
-				            				grid2.setValue(i, 'wkToDttm', result.wkToDttm)
+				            				grid2.setValue(i, 'wkToTm', result.wkToTm)
 					            			grid2.setValue(i, 'inferCnt', 0)
 					            			grid2.setValue(i, 'prodCnt', indicaCnt)
 					            			grid2.setValue(i, 'nowSt', '완료')
@@ -284,25 +313,18 @@ display:inline-block;
 					            			result.orderNo=grid.getData()[i].orderNo
 				            			} else{
 				            				indicaCnt = grid2.getValue(i-1, 'prodCnt')
-				            				if(i < 3) {
-					            				grid2.setValue(i, 'wkToDttm', result.wkToDttm)
+				            				if(i < 5) {
+					            				grid2.setValue(i, 'wkToTm', result.wkToTm)
 						            			grid2.setValue(i, 'inferCnt', 0)
 						            			grid2.setValue(i, 'prodCnt', indicaCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
 						            			
-				            				} else if(i < 5) {
-				            					grid2.setValue(i, 'wkToDttm', result.wkToDttm)
-						            			grid2.setValue(i, 'inferCnt', inferCnt )
-						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
-						            			grid2.setValue(i, 'nowSt', '완료')
-						 	            		
 				            				} else {
-				            					grid2.setValue(i, 'wkToDttm', result.wkToDttm)
-						            			grid2.setValue(i, 'inferCnt', inferCnt )
+				            					grid2.setValue(i, 'wkToTm', result.wkToTm)
+						            			grid2.setValue(i, 'inferCnt', 1 )
 						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
 						            			
-						            			console
 						            			value = grid2.getValue(i, 'nowSt')
 				            				}
 				            			}
@@ -312,7 +334,6 @@ display:inline-block;
 				            		}
 				            	 }
 				             })
-				          //clearInterval(interval) interval은 계속 진행되고 grid 마지막행에 setValue는안됨
 				          }, 3000);
 					  }		  	
 				   })
@@ -389,7 +410,7 @@ display:inline-block;
 	        },
 	        {
 	          header: '시작시간',
-	          name: 'wkFrDttm'
+	          name: 'wkFrTm'
 	        },
 	        {
 	          header: '투입량',
@@ -405,7 +426,7 @@ display:inline-block;
 	        },
 	        {
 	          header: '종료시간',
-	          name: 'wkToDttm'
+	          name: 'wkToTm'
 	        },
 	        {
 	          header: '현재상태',

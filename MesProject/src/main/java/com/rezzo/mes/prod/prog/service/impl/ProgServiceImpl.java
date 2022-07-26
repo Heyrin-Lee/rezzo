@@ -59,10 +59,13 @@ public class ProgServiceImpl implements ProgService {
 	}
 
 	@Override
-	public void insertInfer(List<ProgVO> list) {
-		for(ProgVO vo : list) {
-			mapper.insertInfer(vo);
-		}
+	public void insertInfer(ProgVO vo) {
+		mapper.insertInfer(vo);
+	}
+
+	@Override
+	public void insertEdctsInfo(ProgVO vo) {
+		mapper.insertEdctsInfo(vo);
 	}
 	
 

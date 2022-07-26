@@ -24,11 +24,12 @@ public class ProgVO {
 	String prcsPsch;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkFrDttm;
+	Date wkFrTm;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkToDttm;
+	Date wkToTm;
 	Integer inferCnt;
+	String inferCd;
 	Integer prodCnt;
 	String nowSt;
 	String edctsLotNo;
@@ -43,4 +44,5 @@ public class ProgVO {
 	Date endTime;
 	String yn;
 	String orderNo;
+
 }
