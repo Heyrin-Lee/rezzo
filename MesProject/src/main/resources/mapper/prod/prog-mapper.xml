@@ -23,7 +23,7 @@
 	ORDER BY B.BOM_SQ
 </select>
 <insert id="insertEqmCd">
-	INSERT INTO DUM VALUES (#{eqmCd}, NULL, NULL, NULL)
+	INSERT INTO DUM VALUES (#{eqmCd}, NULL, NULL, 'Y', #{seqNo})
 </insert>
 <select id="selectEqm" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
 	SELECT * FROM DUM WHERE EQM_CD = #{eqmCd}
@@ -69,11 +69,25 @@
 								#{prcsCd},
 								#{planCd}
 										)
-</insert>
-
-<insert id="insertEdctsInfo" parameterType="com.rezzo.mes.prod.prog.service.ProgVO">
+</insert> 
+ 
+<insert id="insertEdctsInfo" parameterType="com.rezzo.mes.prod.prog.service.ProgVO" statementType="CALLABLE">
 <![CDATA[{call PROC_PROD_INSERT(#{edctsCd},#{prodCnt})}]]>
 </insert>
+
+<update id="schedule" statementType="CALLABLE">
+<![CDATA[{call proc_prod_mng
+			(#{param1}, 
+			#{param2}
+			)
+			}]]>
+</update>
+
+<update id="updateIndica">
+UPDATE INDICA 
+SET NOW_ST = '지시'
+WHERE PLAN_CD = #{planCd} 
+</update>
 
 
 </mapper>	

@@ -214,12 +214,13 @@ display:inline-block;
 		let lineCd = grid.getData()[0].lineCd
 		let edctsCd = grid.getData()[0].edctsCd
 		let prodCnt = grid2.getRow(5).prodCnt
+		let planCd = grid.getData()[0].planCd
 		
 		//주문서 생산완료로 업데이트, 설비 사용여부 N으로 업데이트
 		//완제품 lot(db에서 만들어서 바로 insert), 제품코드 (grid edctsCd), 생산 수량(grid2 prodCnt)
 		$.ajax({
 			url : 'afterProd',
-			data : {"orderNo" : orderNo, "lineCd" : lineCd, "edctsCd" : edctsCd, "prodCnt" : prodCnt}
+			data : {"orderNo" : orderNo, "lineCd" : lineCd, "edctsCd" : edctsCd, "prodCnt" : prodCnt, "planCd" : planCd}
 		})
 		
 		//자재 재고 업데이트
@@ -275,9 +276,10 @@ display:inline-block;
 			   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
 			   let lineCd = grid.getData()[0].lineCd
 			   grid2.setValue(i, 'nowSt', '대기중')
+			   console.log(i)
 				 $.ajax({
 					 url : 'insertEqmCd',
-					 data : {"eqmCd" : eqmCd, "lineCd" : lineCd},
+					 data : {"eqmCd" : eqmCd, "lineCd" : lineCd , "seqNo" : i+1},
 					 success : function(){
 					 	interval = setInterval(function () {
 				             $.ajax({

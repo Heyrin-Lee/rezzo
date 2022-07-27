@@ -2,6 +2,8 @@ package com.rezzo.mes.prod.prog.mapper;
 
 import java.util.List;
 
+import org.springframework.data.repository.query.Param;
+
 import com.rezzo.mes.prod.prog.service.ProgVO;
 
 public interface ProgMapper {
@@ -15,4 +17,6 @@ public interface ProgMapper {
 	public void insertProgPrcs(ProgVO vo);
 	public void insertInfer(ProgVO vo);
 	public void insertEdctsInfo(ProgVO vo);
+	public void schedule(String eqmCd, String eqmCd2);
+	public void updateIndica(ProgVO vo);
 }
