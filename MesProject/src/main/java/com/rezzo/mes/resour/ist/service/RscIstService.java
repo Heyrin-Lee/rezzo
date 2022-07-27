@@ -14,4 +14,5 @@ public interface RscIstService {
     // 수정
     List<RscIstVO> getRscIstHistList(RscIstVO rscIstVO); // in modal
     List<RscIstVO> getRscIstHistMdfy(RscIstVO rscIstVO); // in main grid
+    void updRscIstHist(List<RscIstVO> rscIstVOS);
 }

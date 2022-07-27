@@ -57,7 +57,9 @@
                 </form>
             </div>
         </div>
-        <hr>
+        <br>
+        <input type="button" value="추가" id="addRow">
+        <input type="button" value="삭제" id="delRow">
         <div class="card">
             <div class="card-body">
                 <div id="grid"></div>
@@ -117,19 +119,23 @@
         </div>
     </div>
 
-    <!--inspection detail modal-->
-    <div class="modal fade" id="infModal" tabindex="-1" aria-labelledby="infModal" aria-hidden="true">
+    <!-- Modal for resource search -->
+    <div class="modal fade" id="rscModal" tabindex="-1" aria-labelledby="rscModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <b class="modal-title">검사상세</b>
+                    <b class="modal-title">자재검색</b>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="inf-grid"></div>
-                </div>
-                <div>
-                    <input type="button" id="calInfCnt" value="입력">
+                    <form id="rscSchForm">
+                        <label>자재명<input type="text" name="rscNm" style="width:100px;"></label>
+                        <label>자재코드<input type="text" name="rscCd" style="width:100px;"></label>
+                        <input id="rscSch" type="button" value="검색">
+                    </form>
+                    <hr>
+                    <div id="rsc-grid"></div>
+                    <p>선택 : 더블클릭</p>
                 </div>
             </div>
         </div>
@@ -140,7 +146,7 @@
         ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit();
-            getInfList();
+            getRscListInit();
         })
 
         let startDt = document.getElementById('startpicker-input');
@@ -188,6 +194,41 @@
         });
 
         ///////////////////////////// main grid section ////////////////////////////////
+        let rModal;
+        let modalState = 0;
+
+        class customInput {
+            constructor(props) {
+                const el = document.createElement('input');
+                let {rowKey} = props;
+                this.rowKey = rowKey
+                el.type = 'text';
+                el.value = String(props.value);
+                el.addEventListener('dblclick', function () {
+                    rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
+                    rModal.show('rscModal');
+                    rscModal.dataset.rowKey = rowKey;
+                    modalState = 1;
+                })
+                this.el = el;
+            }
+
+            getElement() {
+                return this.el;
+            }
+
+            getValue() {
+                if (modalState === 0) {
+                    getRscSingle(this.el.value, this.rowKey)
+                }
+                return this.el.value;
+            }
+
+            mounted() {
+                this.el.select();
+            }
+        };
+
         // custom input renderers
         class inputPreIstCnt {
             constructor(props) {
@@ -332,11 +373,24 @@
             columns: [
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    editor: customInput
                 },
                 {
                     header: '품명',
                     name: 'rscNm'
+                },
+                {
+                    header: '규격',
+                    name: 'rscSpec'
+                },
+                {
+                    header: '단위',
+                    name: 'mngUnit'
+                },
+                {
+                    header: '공급업체',
+                    name: 'vendNm'
                 },
                 {
                     header: '발주번호',
@@ -424,102 +478,17 @@
                     }
                 }
             ]
+            , editingEvent: 'click'
         });
 
-        ///////////////////////////// inferiority /////////////////////////////
-        // inf grid
-        class inputInfCnt {
-            constructor(props) {
-                const el = document.createElement('input');
-                el.type = 'text';
-                el.value = String(props.value);
-                this.el = el;
-            }
-
-            getElement() {
-                this.el.value = '';
-                return this.el;
-            }
-
-            getValue() {
-                let val = this.el.value.replace(/[^0-9]/g, '')
-                if (val === '') {
-                    return val;
-                } else {
-                    return parseInt(val);
+        grid.on('editingStart', (ev) => {
+            grid.check(ev.rowKey);
+            if (grid.getValue(ev.rowKey, 'ordrCd') != null && grid.getValue(ev.rowKey, 'ordrCd') != '') {
+                if (ev.columnName == 'rscCd') {
+                    ev.stop();
                 }
             }
-
-            mounted() {
-                this.el.select();
-            }
-        }
-
-        let infGrid = new tui.Grid({
-            el: document.getElementById('inf-grid'),
-            scrollX: false,
-            scrollY: false,
-            columns: [
-                {
-                    header: '불량코드',
-                    name: 'ccdDtl'
-                },
-                {
-                    header: '불량명',
-                    name: 'ccdDtlNm'
-                },
-                {
-                    header: '불량수량',
-                    name: 'infCnt',
-                    editor: {
-                        type: inputInfCnt,
-                        options: {
-                            maxLength: 10
-                        }
-                    }
-                },
-                {
-                    header: '비고',
-                    name: 'infDesc'
-                }
-            ]
         })
-
-        let infModal = document.getElementById('infModal');
-        infModal.addEventListener('shown.bs.modal', e => {
-            infGrid.refreshLayout();
-        })
-
-        let calInfCnt = document.getElementById('calInfCnt');
-        calInfCnt.addEventListener('click', function () {
-            let rowKey = infModal.dataset.rowKey;
-            let colVal = infGrid.getColumnValues('infCnt')
-            let infSum = colVal.reduce((a, b) => (a + b));
-            let inspCnt = grid.getValue(rowKey, 'inspCnt')
-
-            if (infSum > parseInt(inspCnt) || inspCnt === null || inspCnt === '') {
-                alert("불량수량이 검사량 보다 많습니다.")
-            } else {
-                grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
-                grid.setValue(rowKey, 'inspFailCnt', infSum)
-            }
-            iModal.hide(infModal);
-        })
-
-
-        function getInfList() {
-            let url = 'getCodeList'
-            let data = {ccd: 'INF'}
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => res.json())
-                .then(res => {
-                    infGrid.resetData(res)
-                });
-        }
-
 
         ///////////////////////////// vendor ////////////////////////////////
         // declare vendor modal
@@ -680,10 +649,6 @@
                     name: 'inspDt'
                 },
                 {
-                    header: '공급업체',
-                    name: 'vendNm'
-                },
-                {
                     header: '건수',
                     name: 'inspCnt'
                 },
@@ -732,6 +697,92 @@
         gridEle.addEventListener('mouseleave', function () {
             grid.finishEditing();
         })
+
+        ////////////////////////////// add & delelte row ////////////////////////////
+        addRow.addEventListener('click', function () {
+            grid.appendRow()
+        })
+
+        delRow.addEventListener('click', function () {
+            let rowKeys = grid.getCheckedRowKeys()
+            grid.removeRows(rowKeys)
+        })
+
+        ///////////////////////////// resource ////////////////////////////////
+        // rsc grid
+        let rscGrid = new tui.Grid({
+            el: document.getElementById('rsc-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '자재코드',
+                    name: 'rscCd'
+                },
+                {
+                    header: '자재명',
+                    name: 'rscNm'
+                },
+                {
+                    header: '자재단위',
+                    name: 'mngUnit'
+                }
+            ]
+        })
+
+        // when rsc modal shown => refresh
+        let rscModal = document.getElementById('rscModal');
+        rscModal.addEventListener('shown.bs.modal', e => {
+            rscGrid.refreshLayout();
+        })
+
+        rscModal.addEventListener('hidden.bs.modal', e => {
+            modalState = 0;
+        })
+
+        // search rsc
+        let rscSch = document.getElementById('rscSch');
+        rscSch.addEventListener('click', function () {
+            let data = new FormData(rscSchForm);
+            let url = 'getResources'
+
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                rscGrid.innerHTML = '';
+                rscGrid.resetData(res);
+            })
+        });
+
+        // action in rsc modal
+        rscGrid.on('dblclick', e => {
+            grid.finishEditing();
+            let info = rscGrid.getRow(e.rowKey);
+            getRscSingle(info.rscCd, rscModal.dataset.rowKey);
+            rModal.hide(rscModal);
+        })
+
+        // get rsc grid data
+        function getRscListInit() {
+            let url = 'getResources'
+            fetch(url).then(res => res.json())
+                .then(res => rscGrid.resetData(res))
+        }
+
+        function getRscSingle(val, rowKey) {
+            let url = 'getRscSingle'
+            let data = {rscCd: val}
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(res => {
+                grid.setRow(rowKey, res)
+            }).catch(err => {
+                toastr.error('해당하는 자재가 없습니다.');
+            })
+        }
     </script>
 </th:block>
 </body>

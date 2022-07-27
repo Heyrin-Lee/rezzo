@@ -58,4 +58,10 @@ public class RscIstController {
     public List<RscIstVO> getRscIstHistMdfy(@RequestBody RscIstVO rscIstVO) {
         return ris.getRscIstHistMdfy(rscIstVO);
     }
+
+    @RequestMapping("updRscIstHist")
+    @ResponseBody
+    public void updRscIstHist(@RequestBody List<RscIstVO> rscIstVOS) {
+        ris.updRscIstHist(rscIstVOS);
+    }
 }

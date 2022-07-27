@@ -17,18 +17,21 @@ public class RscOrdrVO {
 	private int rmnCnt;
 	
 	//자재발주 테이블
-	String ordrNo;
-	String vendCd;
+	private String ordrNo;
+	private String vendCd;
 	private Date paprdCmndDt;
 	private Date ordrReqDt;
 	
 	// 자재발주 코드 카운트
-	String ordrSCnt;
-	String rscStc;
-	String safStc;
-	String vendNm;
+	private String ordrSCnt;
+	private String rscStc;
+	private String safStc;
+	private String vendNm;
 	
 	// misc
-	Date startDt;
-	Date endDt;
+	private Date startDt;
+	private Date endDt;
+
+	private String rscSpec; // 자재규격
+	private String mngUnit; // 관리단위
 }
