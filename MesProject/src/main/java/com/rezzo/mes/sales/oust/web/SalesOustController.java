@@ -83,12 +83,5 @@ public class SalesOustController {
 	public List<SalesOustVO> optionSearch(SalesOustVO vo) {
 		return service.optionSearch(vo);
 	}
-	
-	//제품명 검색 시 조회
-	@PostMapping("getProduct")
-	@ResponseBody
-	public List<SalesOustVO> getProduct(SalesOustVO vo) {
-		return service.getProduct(vo);
-	}
-	
+
 }

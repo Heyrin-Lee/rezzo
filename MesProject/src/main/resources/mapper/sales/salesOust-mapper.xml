@@ -62,31 +62,14 @@
  	</select>
  	
  	<!-- 출고 조회 페이지 -->
- 	<!-- 제품명 목록 조회 모달창 -->
- 	<select id="getProd" resultType="SalesStcVO">
- 		SELECT * FROM EDCTS_STC
- 	</select>
- 	
  	<!-- 조건별 조회 -->
  	<select id="optionSearch" resultType="SalesOustVO">
- 	<!-- SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
+ 		SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
 		FROM EDCTS_OUST E JOIN ORDER_SHEET O
-		ON(E.EDCTS_CD = O.EDCTS_CD AND O.PROG_APPE = '출고완료' AND EDCTS_OUST_DT BETWEEN #{oustStart} AND #{oustEnd})
+		ON O.EDCTS_CD = E.EDCTS_CD
+		WHERE E.EDCTS_OUST_DT BETWEEN #{oustStart} AND #{oustEnd} AND o.prog_appe = '출고완료'
 		<if test="prdtNm != null and prdtNm != ''">and O.PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
-		<if test="vendNm != null and vendNm != ''">and VEND_NM = #{vendNm}</if> -->
- 		SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
-		FROM EDCTS_OUST E JOIN ORDER_SHEET O
-		ON 
-		WHERE E.EDCTS_OUST_DT BETWEEN #{oustStart} AND #{oustEnd}
-		WHERE 1=1
-		<if test="prdtNm != null and prdtNm != ''">AND O.PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
+		<if test="vendNm != null and vendNm != ''">and O.VEND_NM LIKE '%'||#{vendNm}||'%'</if>
  	</select>
- 	
- 	<!-- 제품명 검색시 조회 -->
- 	<select id="getProduct" resultType="SalesOustVO">
- 		SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
-		FROM EDCTS_OUST E JOIN ORDER_SHEET O
-		ON O.PRDT_NM LIKE '%'||#{prdtNm}||'%'
-		WHERE O.PROG_APPE = '출고완료'
- 	</select>
+
  </mapper>
