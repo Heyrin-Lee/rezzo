@@ -51,4 +51,11 @@ public class PrdtInspController {
 	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO) {
 		return service.getPrdtInsp(prdtInspVO);
 	}
+	
+	@RequestMapping("pdftest")
+	public String pdftest() {
+		return "qc/pdftest";
+	}
+	
+	
 }

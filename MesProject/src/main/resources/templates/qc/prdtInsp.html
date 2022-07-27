@@ -4,7 +4,7 @@
 	layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
-<title>ccds.html</title>
+<title>prdtInsp.html</title>
 </head>
 <body>
 	<!-- 본문내용 -->
@@ -120,7 +120,7 @@
             <div class="card-body">
             	<div class="linelist" style="float: right;">
 								<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
-								<button class="btn btn-primary" id="saveBtn"><i class="fas fa-download"></i> PDF</button>
+								<button class="btn btn-primary" id="pdfBtn"><i class="fas fa-download"></i> PDF</button>
 								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 								<br> <br>
 							</div>
@@ -453,6 +453,20 @@
 		 
 		 
 		</script>
+		
+<script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type = "text/javascript" src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+$('#pdfBtn').click(function() {
+		//pdf_wrap을 canvas객체로 변환
+		html2canvas($("").load('pdfTest #pdf_wrap')).then(function(canvas) {
+			var doc = new jsPDF('p', 'mm', 'a4'); //jspdf객체 생성
+	    var imgData = canvas.toDataURL('image/png'); //캔버스를 이미지로 변환
+	    doc.addImage(imgData, 'PNG', 0, 0); //이미지를 기반으로 pdf생성
+	    doc.save('sample-file.pdf'); //pdf저장
+	  });
+});
+</script>
 	</th:block>
 </body>
 </html>

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -52,9 +51,8 @@ public class VendController {
 		return vendService.getVendList(null);
 	}
 	
-	//부서정보 엑셀 다운로드
-	@RequestMapping("vendExelView")
-	@ResponseBody
+	//거래처정보 엑셀 다운로드
+	@GetMapping(path="vendExelView", produces = "application/vnd.ms-excel")
 	public ModelAndView excelView(VendVO vendVO, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> list = vendService.getVendListMap(vendVO);
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -64,4 +62,5 @@ public class VendController {
 		map.put("datas", list);
 		return new ModelAndView("commonExcelView", map);
 	}
+	
 }
