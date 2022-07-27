@@ -21,8 +21,8 @@ public class EqmVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	public Date eqmIstDt;
-	int minTemp;
-	int maxTemp;
+	Integer minTemp;
+	Integer maxTemp;
 	String chckPerd;
 	String useYN;
 	String prcsNm;
