@@ -102,7 +102,7 @@ public class EqmController {
 	//이미지 파일
 	@GetMapping(value = "image/{imagename}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<byte[]> userSearch(@PathVariable("imagename") String imagename) throws IOException {
-		InputStream imageStream = new FileInputStream("/imgfile/" + imagename);
+		InputStream imageStream = new FileInputStream("imgfile/" + imagename);
 		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
 		imageStream.close();
 		return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);

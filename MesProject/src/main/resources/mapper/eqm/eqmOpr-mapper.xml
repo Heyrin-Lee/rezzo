@@ -45,12 +45,18 @@
 	</select>
 	
 	<select id = "OprKeyList" resultMap="eqmMap">
-			select * from eqm_opr
+			select 
+			e.eqm_cd, e.line_cd, e.prcs_cd, 
+			e.eqm_nm, e.use_yn, to_char(o.fr_dt, 'yyyy-mm-dd') as "fr_dt", to_char(o.to_dt, 'yyyy-mm-dd') as "to_dt", o.eqm_psch, 
+			o.opert_ctnt, o.nopr_cd
+			from eqm e 
+			join eqm_opr o 
+			on e.eqm_cd = o.eqm_cd
 			where 1=1
 			<if test="frDt != null"><![CDATA[ AND fr_dt <= #{frDt}]]></if>
-			<if test="toDt != null"><![CDATA[ AND to_dt < #{toDt}]]></if>
-			<if test="eqmNm != null and eqmNm !=''">and eqm_nm = #{eqmNm}</if>
-			<if test="eqmCd != null and eqmCd !=''">and eqm_cd = #{eqmCd}</if>
+			<if test="toDt != null"><![CDATA[ AND to_dt >= #{toDt}]]></if>
+			<if test="eqmNm != null and eqmNm !=''">and e.eqm_nm = #{eqmNm}</if>
+			<if test="eqmCd != null and eqmCd !=''">and e.eqm_cd = #{eqmCd}</if>
 	</select>
 	
 	<select id = "OprGetList" resultMap="eqmSMap">

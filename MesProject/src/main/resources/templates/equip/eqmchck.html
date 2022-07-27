@@ -49,11 +49,14 @@
 	<th:block layout:fragment="main">
 		<!-- 헤더부분 -->
 		<div class="container-fluid px-4">
-			<h1 class="mt-4">설비관리</h1>
+			<h1 class="mt-4">설비점검내역</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item active">설비점검내역</li>
+				<li class="breadcrumb-item"><a href="home.do"><i
+						class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 설비관리</li>
+				<li class="breadcrumb-item active">> 설비점검내역</li>
 			</ol>
-		</div>
+		<div>
 		<!-- 헤더부분 -->
 		<div class="container-fluid px-4">
 			<div class="row">
@@ -82,7 +85,8 @@
 											<th>설비코드</th>
 											<td>
 												<input class="form-control" name="eqmCd" id="eqmCd" style="width: 250px" readonly>
-												<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="searchBtn" name="searchBtn">
+												<button type="button" class="btn btn-primary" data-bs-toggle="modal" 
+												data-bs-target="#exampleModal" id="searchBtn" name="searchBtn">
 													<i class="fas fa-search"></i>
 												</button>
 											</td>
@@ -176,9 +180,11 @@
 
 						</div><br>
 						<div class="ms-3">
-							<label style="width:60px">설비명</label>
-							<input type="text" id="keyword2" name="keyword2" placeholder="설비명"></input>
-							<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
+							<th>설비명</th>
+						<td>
+							<input type="text" id="keyword2" name="keyword2" placeholder="설비명" class="form-control" style="width: 250px">
+							<button type="button" style="margin-bottom:3px" class="btn btn-primary" onclick="eqmSelect2()"><i class="fas fa-search"></i> 검색</button>
+						</td>
 						</div>
 						<div id="modGrid" class="modal-body"></div>
 
@@ -264,7 +270,30 @@
 				// 설비 점검내역 저장
 
 				$('#saveBtn').on('click', function () {
+					var isValid = true;
+					var eqmCd = $('#eqmCd').val()
+					var eqmNm = $('#eqmNm').val()
+					var chckDt = $('#chckDt').val()
+					var jdgmnt = $('[name="jdgmnt"]').val()
+					var dispoMatter = $('[name="dispoMatter"]').val()
+					var chckFg = $('[name="chckFg"]').val()
+					var dispoCtnt = $('#dispoCtnt').val()
+					var chckPsch = $('#chckPsch').val()
 					var formData = new FormData(dataForm)
+					
+					if (eqmCd == null||eqmCd == ''||
+						chckDt == null||chckDt == ''||
+						jdgmnt == null || jdgmnt == '' ||
+						dispoMatter == null ||dispoMatter==''||
+						chckFg == null || chckFg == ''||
+						dispoCtnt == null || dispoCtnt == ''||
+						chckPsch == null || chckPsch == ''
+						){
+						toastr.warning('모든 항목을 입력해주세요.');
+						isValid = false;
+						return false;
+						}
+					
 					$.ajax({
 						url: "eqmChckSave",
 						method: "post",
@@ -360,9 +389,17 @@
 				// 설비 점검 내역 삭제
 
 				$('#delBtn').on('click', function () {
-					var result = confirm("해당 설비를 정말 삭제할까요?")
+					var isValid = true;
 					var chckCd = $('#chckCd').val()
+					var eqmCd = $('#eqmCd').val()
+						
+					if(eqmCd ==null || eqmCd==''){
+						toastr.warning('설비를 선택해주세요.');
+						isValid = false;
+						return false;
+					}
 
+					var result = confirm("해당 내역을 삭제하시겠습니까?")
 					if (!result)
 						return;
 

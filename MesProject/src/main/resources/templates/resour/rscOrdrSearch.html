@@ -264,7 +264,7 @@
 					var data = grid2.getCheckedRows();
 					var isValid = true;
 					for (i = 0; i < data.length; i++) {
-						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null) {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].paprdCmndDt == null) {
 							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
 							isValid = false;
 							return false;
@@ -277,11 +277,11 @@
 								data: JSON.stringify(data),
 								contentType: 'application/json'
 							}).done(function (result) {
-								toastr.success('발주내역 수정이 완료되었습니다.');
 								grid2.uncheckAll()
 							})
 						}
 					}
+						toastr.success('발주내역 수정이 완료되었습니다.');
 				})
 						
 			</script>
