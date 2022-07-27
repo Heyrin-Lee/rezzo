@@ -52,9 +52,8 @@ public class VendController {
 		return vendService.getVendList(null);
 	}
 	
-	//부서정보 엑셀 다운로드
-	@RequestMapping("vendExelView")
-	@ResponseBody
+	//거래처정보 엑셀 다운로드
+	@GetMapping(path="vendExelView", produces = "application/vnd.ms-excel")
 	public ModelAndView excelView(VendVO vendVO, HttpServletResponse response) throws IOException {
 		List<Map<String, Object>> list = vendService.getVendListMap(vendVO);
 		HashMap<String, Object> map = new HashMap<String, Object>();
