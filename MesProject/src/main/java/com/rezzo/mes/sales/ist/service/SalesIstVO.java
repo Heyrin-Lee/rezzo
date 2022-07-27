@@ -17,10 +17,20 @@ public class SalesIstVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date edctsIstDt;
-	int edctsIstCnt;
+	Integer edctsIstCnt;
 	String edctsCd;
-	int edctsLotNo;
+	String edctsLotNo;
 	String index;
-	String edcts_cd;
-	String prdt_nm;
+	String prdtNm;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date edctsIstDtStart;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date edctsIstDtEnd;
+	
+	String orderNo;
+	int inspCnt;
+	String inspJm;
+	String inspPsch;
 }

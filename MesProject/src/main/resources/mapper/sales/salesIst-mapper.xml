@@ -9,14 +9,34 @@
 	<![CDATA[{call proc_edctsIst_save(#{edctsIstNo},#{edctsLotNo},#{edctsCd},#{edctsIstCnt},#{edctsIstDt})]]>
 	</update>
 	
-	<!-- 제품 전체 목록 - 현재 날짜 기준으로  -->
+	<!-- 입고 목록 조건별 조회  -->
 	<select id="salesIstList" resultType="SalesIstVO">
 	SELECT * FROM EDCTS_IST
-	WHERE EDCTS_IST_DT = #{edctsIstDt}
+	WHERE EDCTS_IST_DT BETWEEN #{edctsIstDtStart} AND #{edctsIstDtEnd}
+	<if test="edctsLotNo != null and edctsLotNo != ''">and EDCTS_LOT_NO = #{edctsLotNo}</if>
+	<if test="edctsIstCnt != null and edctsIstCnt != ''">and EDCTS_IST_CNT = #{edctsIstCnt}</if>
+	ORDER BY EDCTS_IST_NO
 	</select>
 	
-	<!-- 제품명 목록 조회 모달창 -->
-	<select id="edctsCdFind" resultType="com.rezzo.mes.comm.edcts.service.EdctsmVO">
-		SELECT EDCTS_CD, PRDT_NM FROM EDCTS
+	<resultMap type="PrdtInspVO" id="PrdtInspVO">
+		<result column="ORDER_NO" property="orderNo"/>
+		<result column="EDCTS_LOT_NO" property="edctsLotNo"/>
+		<result column="EDCTS_CD" property="edctsCd"/>
+		<result column="INSP_CNT" property="inspCnt"/>
+		<result column="INSP_JM" property="inspJm"/>
+		<result column="INSP_PSCH" property="inspPsch"/>
+	</resultMap>
+	
+	<resultMap type="OrderVO" id="OrderVO">
+		<result column="PRDT_NM" property="prdtNm"/>
+		<result column="ORDER_NO" property="orderNo"/>
+	</resultMap>
+	
+	<!-- 완제품LOT번호 모달 조회 -->
+	<select id="getLotList" resultType="PrdtInspVO">
+	SELECT P.ORDER_NO, P.EDCTS_LOT_NO, P.EDCTS_CD, O.PRDT_NM, P.INSP_CNT, P.INSP_JM, P.INSP_PSCH
+	FROM PRDT_INSP P JOIN ORDER_SHEET O
+	ON P.ORDER_NO = O.ORDER_NO
+	WHERE INSP_JM = '적합'
 	</select>
 </mapper>

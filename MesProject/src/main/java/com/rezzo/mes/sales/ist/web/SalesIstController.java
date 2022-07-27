@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.rezzo.mes.comm.edcts.service.EdctsmVO;
+import com.rezzo.mes.qc.insp.service.PrdtInspVO;
 import com.rezzo.mes.sales.ist.service.SalesIstService;
 import com.rezzo.mes.sales.ist.service.SalesIstVO;
-import com.rezzo.mes.sales.order.service.OrderVO;
 
 @Controller
 public class SalesIstController {
@@ -32,11 +32,18 @@ public class SalesIstController {
 		return service.salesIstList(vo);
 	}
 	
-	//제품 입고 전체 목록 - 현재 날짜 기준으로
+	//제품 입고 목록 조건별 조회
 	@PostMapping("salesIstList")
 	@ResponseBody
 	public List<SalesIstVO> salesIstList(SalesIstVO vo) {
 		return service.salesIstList(vo);
+	}
+	
+	//완제품LOT번호 모달 조회
+	@RequestMapping("getLotList")
+	@ResponseBody
+	public List<PrdtInspVO> getLotList(PrdtInspVO vo) {
+		return service.getLotList(vo);
 	}
 	
 }
