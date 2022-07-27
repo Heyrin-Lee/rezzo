@@ -13,4 +13,6 @@ public interface ProgService {
 	public void insertProgPrcs(List<ProgVO> list);
 	public void insertInfer(ProgVO vo);
 	public void insertEdctsInfo(ProgVO vo);
+	public void schedule(String eqmCd, String eqmCd2);
+	public void updateIndica(ProgVO vo);
 }

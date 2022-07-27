@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rezzo.mes.prod.prog.mapper.ProgMapper;
 import com.rezzo.mes.prod.prog.service.ProgService;
@@ -66,6 +67,16 @@ public class ProgServiceImpl implements ProgService {
 	@Override
 	public void insertEdctsInfo(ProgVO vo) {
 		mapper.insertEdctsInfo(vo);
+	}
+
+	@Override
+	public void schedule(String eqmCd, String eqmCd2) {
+		mapper.schedule(eqmCd, eqmCd2);
+	}
+
+	@Override
+	public void updateIndica(ProgVO vo) {
+		mapper.updateIndica(vo);
 	}
 	
 

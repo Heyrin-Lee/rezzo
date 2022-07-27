@@ -22,12 +22,14 @@ public class ProgVO {
 	String prcsCd;
 	String prcsNm;
 	String prcsPsch;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkFrTm;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkToTm;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date wkFrTm;
+	String wkFrTm;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date wkToTm;
+	String wkToTm;
 	Integer inferCnt;
 	String inferCd;
 	Integer prodCnt;
@@ -35,6 +37,7 @@ public class ProgVO {
 	String edctsLotNo;
 	String planCd;
 	String eqmCd;
+	String eqmCd2;
 	String eqmNm;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -44,5 +47,5 @@ public class ProgVO {
 	Date endTime;
 	String yn;
 	String orderNo;
-
+	Integer seqNo;
 }

@@ -40,6 +40,7 @@ public class ProgController {
 	@ResponseBody
 	@Transactional
 	public void insertEqmCd(ProgVO vo) {
+		System.out.println(vo);
 		service.insertEqmCd(vo);
 		service.updateEqm1(vo);
 	}
@@ -58,6 +59,7 @@ public class ProgController {
 		service.updateOrderStatus(vo);
 		service.updateEqm2(vo);
 		service.insertEdctsInfo(vo);
+		service.updateIndica(vo);
 	}
 	
 	// 공정 insert 공정상세, 불량상세
