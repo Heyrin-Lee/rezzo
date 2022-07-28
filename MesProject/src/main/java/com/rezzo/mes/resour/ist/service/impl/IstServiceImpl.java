@@ -52,4 +52,11 @@ public class IstServiceImpl implements RscIstService {
     public List<RscIstVO> getRscIstHistMdfy(RscIstVO rscIstVO) {
         return mapper.getRscIstHistMdfy(rscIstVO);
     }
+
+    @Override
+    public void updRscIstHist(List<RscIstVO> rscIstVOS) {
+        for(RscIstVO rscIstVO : rscIstVOS) {
+            mapper.updRscIstHist(rscIstVO);
+        }
+    }
 }

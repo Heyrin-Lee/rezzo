@@ -24,4 +24,5 @@ public interface RscIstMapper {
     // 수정
     List<RscIstVO> getRscIstHistList(RscIstVO rscIstVO);
     List<RscIstVO> getRscIstHistMdfy(RscIstVO rscIstVO);
+    void updRscIstHist(RscIstVO rscIstVO);
 }

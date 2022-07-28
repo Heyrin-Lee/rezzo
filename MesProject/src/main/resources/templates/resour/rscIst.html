@@ -148,6 +148,8 @@
         let addRow = document.getElementById('addRow')
         let delRow = document.getElementById('delRow')
         let istDt = document.getElementById('istDt')
+
+        let saveFlag = 0 // 0 : 저장, 1 : 수정저장
         ///////////////////////////// !date picker ////////////////////////////////
         // range date picker
         let today = new Date();
@@ -261,7 +263,7 @@
                 },
                 {
                     header: '입고수량',
-                    name: 'istCnt',
+                    name: 'lotCnt',
                     editor: 'text'
                 },
                 {
@@ -433,11 +435,11 @@
         }
 
         ///////////////////////////// !get main grid data ////////////////////////////////
-        // get order list
         let getInspList = document.getElementById('getInspList');
         getInspList.addEventListener('click', getRscInspHist)
 
         function getRscInspHist() {
+            saveFlag = 0;
             let startDt = document.getElementById('startpicker-input');
             let endDt = document.getElementById('endpicker-input');
             let vendCd = document.getElementById('vendCd');
@@ -464,15 +466,25 @@
         ///////////////////////////// !save main grid data ////////////////////////////////
         saveBtn.addEventListener('click', function () {
             let data = grid.getCheckedRows();
-            data[0].istDt = istDt.value;
-            let url = 'setRscIstLot'
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => {
-                getRscInspHist();
-            })
+            if (saveFlag == 0) {
+                data[0].istDt = istDt.value;
+                let url = 'setRscIstLot'
+                fetch(url, {
+                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                }).then(res => {
+                    getRscInspHist();
+                })
+            } else {
+                let url = 'updRscIstHist'
+                fetch(url, {
+                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                })
+            }
+
         });
 
         ////////////////////////////// add & delelte row ////////////////////////////
@@ -533,6 +545,7 @@
             let data = mdfyGrid.getRow(e.rowKey);
             getRscIstHistMdfy(data)
             mModal.hide(mdfyModal);
+            saveFlag = 1;
         })
 
         function getRscIstHistMdfy(data) {
@@ -542,9 +555,14 @@
                 method: 'POST',
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
+                console.log(res)
+                console.log('hello')
                 grid.resetData(res);
+
             })
         }
+
+
     </script>
 </th:block>
 </body>

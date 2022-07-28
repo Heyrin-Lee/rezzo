@@ -34,15 +34,16 @@ public class InspServiceImpl implements InspService {
     @Override
     @Transactional
     public void setRscInspList(List<RscInspVO> rscInspVOS) {
-        // rsc_ordr insert
+        // rsc_insp insert
         String rscInspCd = mapper.genRscInspCd();
         String inspDt = rscInspVOS.get(0).getInspDt();
         String inspTstr = rscInspVOS.get(0).getInspTstr();
         mapper.setRscInsp(rscInspCd, inspDt, inspTstr);
 
-        // rsc_ordr_dtl insert
+        // rsc_insp_dtl insert
         for(RscInspVO rscInspVO : rscInspVOS) {
             rscInspVO.setRscInspCd(rscInspCd);
+            System.out.println("rscInspVO = " + rscInspVO);
             mapper.setRscInspList(rscInspVO);
             mapper.updRscOrdrRmnCnt(rscInspVO);
         }
