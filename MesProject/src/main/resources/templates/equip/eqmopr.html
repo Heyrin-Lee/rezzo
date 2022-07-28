@@ -5,9 +5,6 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<style>
-		body {
-			background: #eee
-		}
 
 		.c_btn {
 			color: #fff;
@@ -40,11 +37,14 @@
 
 		<!-- 헤더부분 -->
 		<div class="container-fluid px-4">
-			<h1 class="mt-4">설비관리</h1>
+			<h1 class="mt-4">비가동관리</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item active">비가동관리</li>
+				<li class="breadcrumb-item"><a href="home.do"><i
+						class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 설비관리</li>
+				<li class="breadcrumb-item active">> 비가동관리</li>
 			</ol>
-		</div>
+		
 		<!-- 헤더부분 -->
 		<div class="container-fluid px-4 d-flex flex-row bd-highlight mb-3">
 			<div class="row">
@@ -59,7 +59,7 @@
 									<select class="dataTable-selector" name="getKeyword" id="getKeyword" style="width: 165px">
 										<option selected value="">전체</option>
 										<option value="Y">가동</option>
-										<option value="N">미가동</option>
+										<option value="N">비가동</option>
 									</select>
 								</td>
 								<button type="button" id="getBtn" style="margin-bottom:3px" class="btn btn-primary"
@@ -108,36 +108,31 @@
 
 
 				<br>
-							<!-- 검색 Modal -->
-							<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-								aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">설비명 검색</h5>
-											<br> <br>
-											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-<br>
-										<div class="ms-3">
-											<label style="width:60px">설비명</label>
-											<input type="text" id="keyword2" name="keyword2" placeholder="설비명"></input>
-											<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
-										</div>
-										<div id="modGrid" class="modal-body"></div>
+		<!-- 검색 Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">설비명 검색</h5>
+						<br> <br>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
-										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-										</div>
-									</div>
-								</div>
-							</div>
+					</div><br>
+					<div class="ms-3">
+						<th>설비명</th>
+						<td>
+						<input type="text" id="keyword2" name="keyword2" placeholder="설비명" class="form-control" style="width: 180px">
+						</td>
+						<button type="button" onclick="eqmSelect2()" class="btn btn-primary"><i class="fas fa-search"></i> 검색</button>
+					</div>
+					<div id="modGrid" class="modal-body"></div>
 
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-							</div>
-						</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 					</div>
 				</div>
+			</div>
+		</div>
 
 				<!-- 설비 비가동 등록 Modal -->
 				<div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -525,9 +520,10 @@
 								method: "GET",
 								dataType: "JSON",
 								success: function (result) {
-									console.log(result);
 									toastr.success('정상적으로 저장되었습니다.');
+									grid2.resetData(result)
 								}
+								
 							})
 
 						})
@@ -600,17 +596,15 @@
 
 					// 설비명 검색
 					function eqmSelect2() {
-						var keyword = keyword2.val()
+						var keyword = $('#keyword2').val()
 						$.ajax({
-							url: "OprSelectList",
+							url: "eqmSelect",
 							type: "post",
 							data: {
-								"keyword": keyword
+								keyword: keyword
 							},
-							contentType: false,
-							processData: false,
 							success: function (result) {
-								grid2.resetData(result);
+								modGrid.resetData(result);
 								console.log(result)
 							}
 						})

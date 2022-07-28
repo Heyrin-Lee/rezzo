@@ -62,15 +62,17 @@ display:inline-block;
    <!-- 헤더부분 -->
    <div class="container-fluid px-4">
       <h1 class="mt-4">생산관리</h1>
-      <ol class="breadcrumb mb-4">
-         <li class="breadcrumb-item active">생산</li>
-      </ol>
+       <ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+		<li class="breadcrumb-item">> 생산관리</li>
+		<li class="breadcrumb-item active">> 생산관리</li>
+	  </ol>
    </div>
    <!-- 헤더부분 -->
 <div id="container">   
-   <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
+   <input type="button" data-bs-toggle="modal"  class="btn btn-primary"  id="modalBtn" data-bs-target="#exampleModal"
                     value="지시조회"></input>
-   <button id="rbtn" name="rbtn" class="c_btn" form="">공정이동표</button>
+   <button id="rbtn" name="rbtn"  class="btn btn-primary"  form="">공정이동표</button>
    <br>
    <br>
    <div id="grid">진행생산지시</div>
@@ -80,9 +82,9 @@ display:inline-block;
 	   <div id="grid3" style="width: 400px;">공정가동관리<br>
 	   <br>
 	   	<div class="linelist">
-	       <button id="startBtn" class="c_btn" form="">시작</button>
-	       <button class="c_btn" form="">긴급중지</button>
-	       <button class="c_btn" form="">재시작</button>
+	       <button id="startBtn"  class="btn btn-primary"  form="">시작</button>
+	       <button  class="btn btn-primary"  form="">긴급중지</button>
+	       <button  class="btn btn-primary"  form="">재시작</button>
 	     </div>
 	   </div>
 	</div>	  
@@ -203,7 +205,6 @@ display:inline-block;
    		})
    })
    
-  let interval;
   let value
    
   interval2=setInterval(function(){
@@ -216,8 +217,7 @@ display:inline-block;
 		let prodCnt = grid2.getRow(5).prodCnt
 		let planCd = grid.getData()[0].planCd
 		
-		//주문서 생산완료로 업데이트, 설비 사용여부 N으로 업데이트
-		//완제품 lot(db에서 만들어서 바로 insert), 제품코드 (grid edctsCd), 생산 수량(grid2 prodCnt)
+		//주문서 업데이트, 설비 끄기, 완제품lot 입력, 지시 업데이트
 		$.ajax({
 			url : 'afterProd',
 			data : {"orderNo" : orderNo, "lineCd" : lineCd, "edctsCd" : edctsCd, "prodCnt" : prodCnt, "planCd" : planCd}
@@ -225,10 +225,7 @@ display:inline-block;
 		
 		//자재 재고 업데이트
 		
-		
-		//제품 검사 관리 인서트
-		
-		//진행공정, 불량상세, 진행공정상세 인서트
+		//진행공정 인서트
 		let data = grid2.getData()
 		$.each(data, function(index, item) {
             	item.indicaDt = grid.getData()[0].indicaDt
@@ -243,6 +240,26 @@ display:inline-block;
 			contentType : 'application/json'
 		})
 		
+		//자재 업데이트			
+		$.ajax({
+			url : 'getHolding',
+			method : 'post',
+			data : {"planCd" : planCd},
+			success : function(result) {
+					let today = new Date()
+					let obj = {oustDt:today, oustTyp:'공정출고'}
+					result.unshift(obj)
+				console.log(result)
+				//$.ajax({
+				//	url : 'letHoldOust',
+				//	method : 'post',
+				//	data : JSON.stringify(result),
+				//	contentType : 'application/json'
+				//})
+			}
+		})
+		
+		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt
 		
 		if(iCnt > 0 ) {
@@ -253,18 +270,16 @@ display:inline-block;
         	iGrid.prefRank = grid.getData()[0].prefRank
         	iGrid.planCd = grid.getData()[0].planCd
         	
-			
-			console.log(iGrid)
-			
 			$.ajax({
 				url : 'insertInfer',
 				method : 'post',
-				data : iGrid
+				data : iGrid,
+				success : function () {
+					//window.location.reload()
+				}
 			})
-			
-		}
-	
 		
+		}
    	} 
    }, 1000)
    
@@ -276,12 +291,15 @@ display:inline-block;
 			   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
 			   let lineCd = grid.getData()[0].lineCd
 			   grid2.setValue(i, 'nowSt', '대기중')
-			   console.log(i)
+				 
 				 $.ajax({
 					 url : 'insertEqmCd',
 					 data : {"eqmCd" : eqmCd, "lineCd" : lineCd , "seqNo" : i+1},
 					 success : function(){
-					 	interval = setInterval(function () {
+					 	let interval = setInterval(function () {
+					    let arr = []
+					   
+					    if(grid2.getRow(i).nowSt != '완료') {
 				             $.ajax({
 				            	 url : 'selectEqm',
 				            	 data : {"eqmCd" : eqmCd},
@@ -291,9 +309,13 @@ display:inline-block;
 				            			 grid2.setValue(i, 'nowSt', '진행중')
 				            			 if (i < 3) {
 				            				 grid2.setValue(i, 'indicaCnt', indicaCnt)
+				            				
+				            				 arr.push(interval)
 				            			 } else {
 				            				 let value = grid2.getValue(i-1, 'prodCnt')
 				            				 grid2.setValue(i, 'indicaCnt', value)
+				            				 
+				            				 arr.push(interval)
 				            			 }
 				            		} else if (result.wkToTm != null){
 				            			if(i == 0) {
@@ -313,6 +335,8 @@ display:inline-block;
 					            			result.inferCnt=grid2.getData()[i].inferCnt
 					            			result.prodCnt=grid2.getData()[i].prodCntd
 					            			result.orderNo=grid.getData()[i].orderNo
+					            			
+					            			arr.push(interval)
 				            			} else{
 				            				indicaCnt = grid2.getValue(i-1, 'prodCnt')
 				            				if(i < 5) {
@@ -321,22 +345,30 @@ display:inline-block;
 						            			grid2.setValue(i, 'prodCnt', indicaCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
 						            			
+						            			arr.push(interval)
+						            			
 				            				} else {
 				            					grid2.setValue(i, 'wkToTm', result.wkToTm)
-						            			grid2.setValue(i, 'inferCnt', 1 )
+						            			grid2.setValue(i, 'inferCnt', inferCnt )
 						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
 						            			
 						            			value = grid2.getValue(i, 'nowSt')
+						            			
+						            			arr.push(interval)
 				            				}
 				            			}
-				            			
 				            		} else {
 				            			console.log("ajax 호출중")
 				            		}
 				            	 }
 				             })
-				          }, 3000);
+				             } else {
+				               arr = []
+				             }
+				             arr.push(interval)
+				          }, 500);
+				          
 					  }		  	
 				   })
 		   })(i)

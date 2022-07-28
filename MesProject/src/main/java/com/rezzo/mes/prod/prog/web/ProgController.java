@@ -7,10 +7,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rezzo.mes.comm.ccds.service.CcdsService;
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.prod.prog.service.ProgService;
 import com.rezzo.mes.prod.prog.service.ProgVO;
 import com.rezzo.mes.resour.oust.web.RscOustController;
@@ -18,12 +22,14 @@ import com.rezzo.mes.resour.oust.web.RscOustController;
 @Controller
 public class ProgController {
 	@Autowired ProgService service;
-	@Autowired RscOustController controller;
+	@Autowired CcdsService ccdsService;
 	
-	//자재 관련 컨트롤autowired 해야함
-	//com.rezzo.mes.resour.oust.web
-	//letHoldOust 호출 
-		
+	@GetMapping("/prcsSearch")
+	public String vend(Model model, CcdsVO vo) {
+		model.addAttribute("ccds", ccdsService.getCodes("PRC", "PNF"));
+		return "prod/prcsSearch";
+	}
+	
 	@RequestMapping("indicaListModal")
 	@ResponseBody
 	public List<ProgVO> indicaListModal(ProgVO vo) {
@@ -40,7 +46,6 @@ public class ProgController {
 	@ResponseBody
 	@Transactional
 	public void insertEqmCd(ProgVO vo) {
-		System.out.println(vo);
 		service.insertEqmCd(vo);
 		service.updateEqm1(vo);
 	}
@@ -75,4 +80,15 @@ public class ProgController {
 		service.insertInfer(vo);
 	}
 	
+	@RequestMapping("getHolding")
+	@ResponseBody
+	public List<ProgVO> getHolding(ProgVO vo) {
+		return service.getHolding(vo);
+	}
+	
+	@RequestMapping("getProgPrcs")
+	@ResponseBody
+	public List<ProgVO> getProgPrcs(ProgVO vo) {
+		return service.getPrcsProg(vo);
+	}
 }
