@@ -60,9 +60,13 @@ SELECT NVL(LPAD(MAX(SUBSTR(PLAN_CD, 12))+1, 3, '0'), 0) as "index"
 </insert>
 
 <insert id="grid5Update" parameterType="PlanVO">
-	UPDATE RSC_LOT 
-	SET HOLD_CNT=#{holdCnt} 
-	WHERE RSC_LOT_CD = #{rscLotCd}
+INSERT INTO HOLDING
+	VALUES (
+			#{planCd},
+			#{rscCd},
+			#{holdCnt},
+			#{rscLotCd}
+			)	
 </insert>
 
 <update id="orderUpdate" parameterType="com.rezzo.mes.prod.plan.service.PlanVO">

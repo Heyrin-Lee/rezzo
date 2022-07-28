@@ -59,8 +59,10 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">생산계획</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">생산</li>
-            </ol>
+				<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item">> 생산관리</li>
+				<li class="breadcrumb-item active">> 생산계획</li>
+	  		</ol>
         </div>
         <!-- 헤더부분 -->
         <div id="container">
@@ -73,10 +75,10 @@
                 </div>
             </div>
             <div class="linelist">
-                <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
+                <input type="button" data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
                     value="주문서조회"></input>
-                <button class="c_btn" id="regiBtn">계획등록</button>
-                <button class="c_btn" id="osBtn">저장</button>
+                <button class="btn btn-primary" id="regiBtn">계획등록</button>
+                <button class="btn btn-primary"id="osBtn">저장</button>
             </div>
 
             <div id="grid"></div>
@@ -202,8 +204,8 @@
             });
             
             $("#grid2").on("keyup", function(key){
-            	// 지시수량이 주문량보다 많을 수 없음 작업종료일자가 작업시작일자보다 빠를 수 없음
-            	let oCnt = grid.getData()[0].orderCnt
+            	// 지시수량은 주문수량*1.05를 초과할 수 없음 
+            	let oCnt = grid.getData()[0].orderCnt*1.05
             	let iCnt = grid2.getData()[0].indicaCnt
             	
             	if(key.keyCode == 13) {
@@ -230,6 +232,7 @@
 		            				success : function(res) {
 		            					$.each(res, function(index, item) {
 		            						item.planCd = grid.getData()[0].planCd;
+		            						item.useCnt = item.useCnt * grid2.getData()[0].indicaCnt
 		            					})
 		            					grid4.resetData(res)
 		            				}
@@ -237,7 +240,7 @@
 		            			})
 		            			
 		            		} else {
-		            			alert ("생산 수량은 주문 수량을 초과할 수 없습니다.")
+		            			alert ("생산 수량이 초과되었습니다.")
 		            		}
 		           		}
 		           	})
@@ -348,10 +351,6 @@
             });
 
             const gridData4 = [];
-            
-            $("#grid3").on("dblclick", function(){
-            	
-            })
           
             const grid4 = new tui.Grid({
                 el: document.getElementById('grid4'),
@@ -468,7 +467,6 @@
              	let grid5Data = grid5.getData()
              	$.each(grid5Data, function(index, item) {
 		            	item.holdCnt = grid4.getCheckedRows()[index].holdCnt;
-		            	
 		         }) 
 		         
 		        let orderNo = grid.getData()[0].orderNo
@@ -499,7 +497,7 @@
             		data : {"orderNo" : orderNo }
             	})
             	
-            	//window.location.reload()
+            	window.location.reload()
             })
             
             function makeDate(idt) {
@@ -551,9 +549,6 @@
             		
             	}
             })
-   			
-            
-            
         </script>
     </th:block>
 </body>

@@ -1,8 +1,5 @@
 package com.rezzo.mes.prod.prog.web;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +13,7 @@ public class Scheduler {
 	@Autowired
 	ProgService service;
 
-	@Scheduled(cron = "*/7 * * * * *")
+	@Scheduled(fixedRate = 300000)
 	public void schedule() {
 		service.schedule(null, "QHT001");
 		service.schedule("QHT001", "MDC001");
@@ -25,6 +22,7 @@ public class Scheduler {
 		service.schedule("CPP001", "QCD001");
 		service.schedule("QCD001", "OPG001");
 	}
-
+	
+	
 	
 }

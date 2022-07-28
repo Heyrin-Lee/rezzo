@@ -78,6 +78,18 @@ public class ProgServiceImpl implements ProgService {
 	public void updateIndica(ProgVO vo) {
 		mapper.updateIndica(vo);
 	}
+
+	@Override
+	public List<ProgVO> getHolding(ProgVO vo) {
+		return mapper.getHolding(vo);
+	}
+
+	@Override
+	public List<ProgVO> getProgPrcs(ProgVO vo) {
+		return mapper.getPrcsProg(vo);
+	}
+	
+	
 	
 
 
