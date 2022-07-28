@@ -51,7 +51,7 @@
 				#{prodCnt},
 				#{prefRank},
 				#{indicaCnt},
-				#{plan_cd}
+				#{planCd}
 				)
 </insert>
 
@@ -89,5 +89,10 @@ SET NOW_ST = '지시'
 WHERE PLAN_CD = #{planCd} 
 </update>
 
+<select id="getHolding" resultType="com.rezzo.mes.resour.oust.service.RscOustVO">
+select rsc_cd, rsc_lot_cd, OUST_CNT
+from holding 
+where plan_cd = #{planCd}
+</select>
 
 </mapper>	

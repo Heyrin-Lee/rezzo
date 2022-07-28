@@ -18,12 +18,7 @@ import com.rezzo.mes.resour.oust.web.RscOustController;
 @Controller
 public class ProgController {
 	@Autowired ProgService service;
-	@Autowired RscOustController controller;
 	
-	//자재 관련 컨트롤autowired 해야함
-	//com.rezzo.mes.resour.oust.web
-	//letHoldOust 호출 
-		
 	@RequestMapping("indicaListModal")
 	@ResponseBody
 	public List<ProgVO> indicaListModal(ProgVO vo) {
@@ -40,7 +35,6 @@ public class ProgController {
 	@ResponseBody
 	@Transactional
 	public void insertEqmCd(ProgVO vo) {
-		System.out.println(vo);
 		service.insertEqmCd(vo);
 		service.updateEqm1(vo);
 	}
@@ -73,6 +67,12 @@ public class ProgController {
 	@ResponseBody
 	public void insertInfer(ProgVO vo) {
 		service.insertInfer(vo);
+	}
+	
+	@RequestMapping("getHolding")
+	@ResponseBody
+	public List<ProgVO> getHolding(ProgVO vo) {
+		return service.getHolding(vo);
 	}
 	
 }

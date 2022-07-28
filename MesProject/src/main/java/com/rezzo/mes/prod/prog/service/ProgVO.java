@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rezzo.mes.resour.oust.service.RscOustVO;
 
 import lombok.Data;
 
@@ -48,4 +49,9 @@ public class ProgVO {
 	String yn;
 	String orderNo;
 	Integer seqNo;
+	String rscCd;
+	Integer holdCnt;
+	String rscLotCd;
+	
+
 }

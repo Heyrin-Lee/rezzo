@@ -61,19 +61,22 @@ body {
                      
                      <form>
                         <div class="mb-3">
-                           <label for="name">생산지시코드</label> 
-               				<input type="text" id="name" name="name">
+                           <label for="name">생산계획</label> 
+               				<input type="text" class="form-control" id="planCd" name="planCd" style="width:150px;"></i>
+               				<button type="button" class="btn btn-primary" id="planBtn" data-bs-toggle="modal" data-bs-target="#planModal"><i class="fas fa-search"></i></button>
                         </div>
                         <div class="mb-3">
-                           <label for="prcsName">공정명</label> 
-                           <input type="text" id="prcsName" name="prcsName">
+                           <label for="prcsName">공정코드</label> 
+                           <input type="text" class="form-control" id="prcsCd" name="prcsCd" style="width:150px;"></i>
+                           <button type="button" class="btn btn-primary" id="prcsBtn" data-bs-toggle="modal" data-bs-target="#prcsModal"><i class="fas fa-search"></i></button>
                         </div>
                         <div class="mb-3">
-                           <label for="prcs">공정분류</label> 
-                           <input type="text" id="prcs" name="prcs">
+                           <label for="prcs">불량코드</label> 
+                           <input type="text" class="form-control" id="inferCd" name="inferCd" style="width:150px;">
+                           <button type="button" class="btn btn-primary" id="inferBtn" data-bs-toggle="modal" data-bs-target="#inferModal"><i class="fas fa-search"></i></button>
                         </div>
                         <div class="mb-3">
-                           <label for="prcs">계획일자</label> 
+                           <label for="prcs">생산일자</label> 
                            <input type="date" id="frDate" name="frDate" style="width: 200px">~<input type="date" id="toDate" name="toDate" style="width: 200px">
                         </div>
      					<div class="linelist">
@@ -140,10 +143,6 @@ body {
 	        },
 	        {
 	          header: '불량코드',
-	          name: 'frWkDt'
-	        },
-	        {
-	          header: '불량상세',
 	          name: 'frWkDt'
 	        },
 	        {
