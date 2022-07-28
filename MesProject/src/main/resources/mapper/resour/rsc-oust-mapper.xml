@@ -71,7 +71,18 @@
     </select>
 
     <select id="getRscOustHist" parameterType="RscOustVO" resultType="RscOustVo">
-
+        select rod.RSC_CD,
+               rod.OUST_CNT,
+               rod.RSC_LOT_CD,
+               rsc.RSC_NM,
+               rsc.RSC_SPEC,
+               rsc.MNG_UNIT,
+               rl.LOT_RMN_CNT
+        from RSC_LOT rl,
+             RSC_OUST_DTL rod,
+             rsc
+        where rl.RSC_LOT_CD = rod.RSC_LOT_CD
+          and rsc.RSC_CD = rod.RSC_CD
     </select>
 
 </mapper>
