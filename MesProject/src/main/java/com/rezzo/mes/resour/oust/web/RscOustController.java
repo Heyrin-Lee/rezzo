@@ -1,9 +1,11 @@
 package com.rezzo.mes.resour.oust.web;
 
+import com.rezzo.mes.resour.ist.service.RscIstVO;
 import com.rezzo.mes.resour.oust.service.RscOustService;
 import com.rezzo.mes.resour.oust.service.RscOustVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,10 +23,21 @@ public class RscOustController {
         return "resour/rscOust";
     }
 
-    @RequestMapping("letHoldOust")
+    @RequestMapping("getLotByRscCd")
     @ResponseBody
-    public void letHoldOust(@RequestBody List<RscOustVO> rscOustVOS) {
-        sv.letHoldOust(rscOustVOS);
+    public List<RscOustVO> getLotByRscCd(@RequestBody RscOustVO rscOustVO) {
+        return sv.getLotByRscCd(rscOustVO);
     }
 
+    @RequestMapping("setRscOust")
+    @ResponseBody
+    public void setRscOust(@RequestBody List<RscOustVO> rscOustVOS) {
+        sv.setRscOust(rscOustVOS);
+    }
+
+    @RequestMapping("schRscOustHist")
+    @ResponseBody
+    public List<RscOustVO> schRscOustHist(@ModelAttribute RscOustVO rscOustVO) {
+        return sv.schRscOustHist(rscOustVO);
+    }
 }

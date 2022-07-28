@@ -18,23 +18,27 @@
                 <input type="button" value="저장" id="saveBtn">
                 <input type="button" value="조회/수정" id="modiBtn">
                 <input type="button" value="다시작성">
-                <input type="button" value="삭제">
                 <hr>
 
-                <form id="getIstListFrm">
-                    <label for="vendNm"><b>업체명</b></label>
-                    <input id="vendNm" type="text" placeholder="검색버튼을 이용하세요" required readonly>
-                    <input id="vendCd" type="hidden" name="vendCd">
-                    <button id="modalBtn" type="button">검색</button>
+                <form id="setOustFrm">
+                    <b>출고일자</b>
+                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                        <input type="text" class="form-control" name="oustDt" id="oustDt" aria-label="Date-Time">
+                        <span class="tui-ico-date"></span>
+                    </div>
+                    <div id="wrapper" style="margin-top: -1px;"></div>
+                    <hr>
+
+                    <div id="sortBtn">
+                        <b>출고유형</b>
+                        <label>부서<input type="radio" name="oustTyp" id="dept" value="dept" checked></label>
+                        <label>협력사<input type="radio" name="oustTyp" id="partn" value="partn"></label>
+                    </div>
+                    <hr>
+
+                    <label for="note"><b>비고</b></label>
+                    <input type="text" name='note' id="note">
                 </form>
-                <hr>
-
-                <b>출고일자</b>
-                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                    <input type="text" id="istDt" aria-label="Date-Time">
-                    <span class="tui-ico-date"></span>
-                </div>
-                <div id="wrapper" style="margin-top: -1px;"></div>
             </div>
         </div>
         <br>
@@ -47,23 +51,31 @@
         </div>
     </div>
 
-    <!-- Modal for vend search -->
-    <div class="modal fade" id="vendModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
+    <!-- modification modal-->
+    <div class="modal fade" id="modiModal" tabindex="-1" aria-labelledby="modiModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <b class="modal-title">업체검색</b>
+                    <b class="modal-title">출고자료 조회</b>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form id="oustDtRngFrm">
+                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                        <input id="startpicker-input-mod" name="startDt" type="text" aria-label="Date" required>
+                        <span class="tui-ico-date"></span>
+                        <div id="startpicker-container-mod" style="margin-left: -1px;"></div>
+                    </div>
+                    <span></span>
+                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
+                        <input id="endpicker-input-mod" name="endDt" type="text" aria-label="Date" required>
+                        <span class="tui-ico-date"></span>
+                        <div id="endpicker-container-mod" style="margin-left: -1px;"></div>
+                    </div>
+                </form>
                 <div class="modal-body">
-                    <form id="vendSchForm">
-                        <label>업체명<input type="text" name="vendNm" style="width:100px;"></label>
-                        <label>업체코드<input type="text" name="vendCd" style="width:100px;"></label>
-                        <input id="vendSch" type="button" value="검색">
-                    </form>
+                    <input id="schBtnInMdfyMod" type="button" value="검색"/>
                     <hr>
-                    <div id="vend-grid"></div>
-                    <p>선택 : 더블클릭</p>
+                    <div id="modi-grid"></div>
                 </div>
             </div>
         </div>
@@ -91,36 +103,105 @@
         </div>
     </div>
 
+    <!-- Modal for lot search -->
+    <div class="modal fade" id="lotModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b class="modal-title">LOT선택</b>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="lot-grid"></div>
+                    <p>선택 : 더블클릭</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
-            getVendListInit()
-            // getRscListInit()
+            getRscListInit();
         })
 
-        let addRow = document.getElementById('addRow')
-        let delRow = document.getElementById('delRow')
-        let istDt = document.getElementById('istDt')
-        ///////////////////////////// !date picker ////////////////////////////////
-        // range date picker
+        let saveFlag = 0 // 0 : 저장, 1 : 수정저장
+        ///////////////////////////// date picker ////////////////////////////////
         let today = new Date();
-        // ist date picker
+        let rangepickerMdfy = tui.DatePicker.createRangePicker({
+            startpicker: {
+                date: today,
+                input: '#startpicker-input-mod',
+                container: '#startpicker-container-mod'
+            },
+            endpicker: {
+                date: today,
+                input: '#endpicker-input-mod',
+                container: '#endpicker-container-mod'
+            }
+        });
+
         let datepicker = new tui.DatePicker('#wrapper', {
             date: today,
             input: {
-                element: '#istDt',
+                element: '#oustDt',
                 format: 'yyyy-MM-dd'
             }
         });
 
-        ///////////////////////////////// !main grid //////////////////////////////
-        class customInput {
+        ///////////////////////////// main grid section ////////////////////////////////
+        let rModal;
+        let rscModalState = 0;
+
+        class rscInput {
             constructor(props) {
                 const el = document.createElement('input');
+                let {rowKey} = props;
+                this.rowKey = rowKey
                 el.type = 'text';
                 el.value = String(props.value);
+                el.addEventListener('dblclick', function () {
+                    rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
+                    rModal.show('rscModal');
+                    rscModal.dataset.rowKey = rowKey;
+                    rscModalState = 1;
+                })
+                this.el = el;
+            }
 
+            getElement() {
+                return this.el;
+            }
+
+            getValue() {
+                if (rscModalState === 0) {
+                    getRscSingle(this.el.value, this.rowKey)
+                }
+                return this.el.value;
+            }
+
+            mounted() {
+                this.el.select();
+            }
+        };
+
+        let lModal;
+        let lotModalState = 0;
+
+        class lotInput {
+            constructor(props) {
+                const el = document.createElement('input');
+                let {rowKey} = props;
+                this.rowKey = rowKey
+                el.type = 'text';
+                el.value = String(props.value);
+                el.addEventListener('dblclick', function () {
+                    lModal = new bootstrap.Modal(document.getElementById('lotModal'), {})
+                    lModal.show('lotModal');
+                    lotModal.dataset.rowKey = rowKey;
+                    lotModalState = 1;
+                })
                 this.el = el;
             }
 
@@ -137,6 +218,43 @@
             }
         };
 
+        class oustCntInput {
+            constructor(props) {
+                const el = document.createElement('input');
+                let {rowKey} = props;
+                this.rowKey = rowKey
+                el.type = 'text';
+                el.value = String(props.value);
+                this.el = el;
+            }
+
+            getElement() {
+                return this.el;
+            }
+
+            getValue() {
+                let cnt = grid.getValue(this.rowKey, 'lotRmnCnt')
+                if (this.el.value > cnt) {
+                    toastr.warning('출고수량은 LOT잔여수량을 초과할 수 없습니다.');
+                } else {
+                    return this.el.value;
+                }
+
+            }
+
+            mounted() {
+                this.el.select();
+            }
+        };
+
+        let gridOption = {
+            row: {
+                hover: {background: 'coral'}
+            }
+        }
+        tui.Grid.applyTheme('default', gridOption);
+
+        // main grid section
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
             scrollX: false,
@@ -146,7 +264,7 @@
                 {
                     header: '자재코드',
                     name: 'rscCd',
-                    editor: 'text'
+                    editor: rscInput
                 },
                 {
                     header: '자재명',
@@ -165,185 +283,264 @@
                     name: 'rscTyp'
                 },
                 {
-                    header: '출고량',
-                    name: 'oustCnt'
-                },
-                {
                     header: 'LOT번호',
-                    name: 'rscLotCd'
+                    name: 'rscLotCd',
+                    editor: lotInput
                 },
                 {
-                    header: '자재재고',
-                    name: 'rscStcCnt'
+                    header: 'LOT재고',
+                    name: 'lotRmnCnt'
+                },
+                {
+                    header: '출고량',
+                    name: 'oustCnt',
+                    editor: oustCntInput
                 }
             ]
-            ,editingEvent : 'click'
+            , editingEvent: 'click'
         });
 
         grid.on('editingStart', (ev) => {
             grid.check(ev.rowKey);
-            if (grid.getValue(ev.rowKey, 'ordrCd') != null && grid.getValue(ev.rowKey, 'ordrCd') != '') {
+            if (grid.getValue(ev.rowKey, 'ordrCd') != null
+                && grid.getValue(ev.rowKey, 'ordrCd') != '') {
                 if (ev.columnName == 'rscCd') {
                     ev.stop();
                 }
             }
         })
-        ///////////////////////////// !vendor ////////////////////////////////
-        // vendor modal grid section
-        let vendGrid = new tui.Grid({
-            el: document.getElementById('vend-grid'),
-            scrollX: false,
-            scrollY: false,
-            columns: [
-                {
-                    header: '업체코드',
-                    name: 'vendCd'
-                },
-                {
-                    header: '업체이름',
-                    name: 'vendNm'
-                },
-                {
-                    header: '사업자번호',
-                    name: 'bizno'
-                },
-                {
-                    header: '전화번호',
-                    name: 'telno'
-                }
-            ]
-        })
-
-        // declare vendor modal
-        let vModal;
-        modalBtn.addEventListener('click', function () {
-            vModal = new bootstrap.Modal(document.getElementById('vendModal'), {})
-            vModal.show('vendModal');
-        })
-
-        // when vendor modal shown => refresh
-        let vendModal = document.getElementById('vendModal');
-        vendModal.addEventListener('shown.bs.modal', e => {
-            vendGrid.refreshLayout();
-        })
-
-        // search vendors
-        let vendSch = document.getElementById('vendSch');
-        vendSch.addEventListener('click', function () {
-            let data = new FormData(vendSchForm);
-            let url = 'getVendors'
-
-            fetch(url, {
-                method: 'POST',
-                body: data
-            }).then(res => res.json()).then(res => {
-                vendGrid.innerHTML = '';
-                vendGrid.resetData(res);
-            })
-        });
-
-        // action in vendor modal
-        vendGrid.on('dblclick', e => {
-            let rowInfo = vendGrid.getRow(e.rowKey)
-            vendNm.value = rowInfo.vendNm;
-            vendCd.value = rowInfo.vendCd;
-            vModal.hide(vendModal);
-        })
-
-        // get vendor grid data
-        function getVendListInit() {
-            let url = 'getVendors'
-            fetch(url).then(res => res.json())
-                .then(res => vendGrid.resetData(res))
-        }
-
-        // ///////////////////////////// resource ////////////////////////////////
-        // // rsc grid
-        // let rscGrid = new tui.Grid({
-        //     el: document.getElementById('rsc-grid'),
-        //     scrollX: false,
-        //     scrollY: false,
-        //     columns: [
-        //         {
-        //             header: '자재코드',
-        //             name: 'rscCd'
-        //         },
-        //         {
-        //             header: '자재명',
-        //             name: 'rscNm'
-        //         },
-        //         {
-        //             header: '자재단위',
-        //             name: 'mngUnit'
-        //         }
-        //     ]
-        // })
-        //
-        // let rModal;
-        // rscModBtn.addEventListener('click', function () {
-        //     rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
-        //     rModal.show('rscModal');
-        // })
-        //
-        // // when rsc modal shown => refresh
-        // let rscModal = document.getElementById('rscModal');
-        // rscModal.addEventListener('shown.bs.modal', e => {
-        //     rscGrid.refreshLayout();
-        // })
-        //
-        // // search rsc
-        // let rscSch = document.getElementById('rscSch');
-        // rscSch.addEventListener('click', function () {
-        //     let data = new FormData(rscSchForm);
-        //     let url = 'getResources'
-        //
-        //     fetch(url, {
-        //         method: 'POST',
-        //         body: data
-        //     }).then(res => res.json()).then(res => {
-        //         rscGrid.innerHTML = '';
-        //         rscGrid.resetData(res);
-        //     })
-        // });
-        //
-        // // action in rsc modal
-        // rscGrid.on('dblclick', e => {
-        //     let rowInfo = rscGrid.getRow(e.rowKey)
-        //     rscNm.value = rowInfo.rscNm;
-        //     rscCd.value = rowInfo.rscCd;
-        //     rModal.hide(rscModal);
-        // })
-        //
-        // // get rsc grid data
-        // function getRscListInit() {
-        //     let url = 'getResources'
-        //     fetch(url).then(res => res.json())
-        //         .then(res => rscGrid.resetData(res))
-        // }
-
-        ///////////////////////////// !save main grid data ////////////////////////////////
-        saveBtn.addEventListener('click', function () {
-            let data = grid.getCheckedRows();
-            data[0].istDt = istDt.value;
-            console.log(data)
-            let url = 'setRscIstLot'
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => {
-                getRscInspHist();
-            })
-        });
 
         ////////////////////////////// add & delelte row ////////////////////////////
         addRow.addEventListener('click', function () {
-            grid.appendRow();
+            grid.appendRow()
         })
 
         delRow.addEventListener('click', function () {
             let rowKeys = grid.getCheckedRowKeys()
             grid.removeRows(rowKeys)
+        })
+
+        ///////////////////////////// resource ////////////////////////////////
+        // modal grid
+        let rscGrid = new tui.Grid({
+            el: document.getElementById('rsc-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '자재코드',
+                    name: 'rscCd'
+                },
+                {
+                    header: '자재명',
+                    name: 'rscNm'
+                },
+                {
+                    header: '자재단위',
+                    name: 'mngUnit'
+                }
+            ]
+        })
+
+        // when modal popped up
+        let rscModal = document.getElementById('rscModal');
+        rscModal.addEventListener('shown.bs.modal', e => {
+            rscGrid.refreshLayout();
+        })
+
+        // when modal away
+        rscModal.addEventListener('hidden.bs.modal', e => {
+            rscModalState = 0;
+        })
+
+        // when push rsc sch btn
+        let rscSch = document.getElementById('rscSch');
+        rscSch.addEventListener('click', function () {
+            let data = new FormData(rscSchForm);
+            let url = 'getResources'
+
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                rscGrid.innerHTML = '';
+                rscGrid.resetData(res);
+            })
+        });
+
+        // when choose item
+        rscGrid.on('dblclick', e => {
+            grid.finishEditing();
+            let info = rscGrid.getRow(e.rowKey);
+            getRscSingle(info.rscCd, rscModal.dataset.rowKey);
+            rModal.hide(rscModal);
+        })
+
+        function getRscListInit() {
+            let url = 'getResources'
+            fetch(url).then(res => res.json())
+                .then(res => rscGrid.resetData(res))
+        }
+
+        function getRscSingle(val, rowKey) {
+            let url = 'getRscSingle'
+            let data = {rscCd: val}
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(res => {
+                grid.setRow(rowKey, res)
+            }).catch(err => {
+                toastr.error('해당하는 자재가 없습니다.');
+            })
+        }
+
+        ///////////////////////////// lot ///////////////////////////////////
+        // modal grid
+        let lotGrid = new tui.Grid({
+            el: document.getElementById('lot-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: 'LOT코드',
+                    name: 'rscLotCd'
+                },
+                {
+                    header: 'LOT 잔여량',
+                    name: 'lotRmnCnt'
+                },
+                {
+                    header: '유통기한',
+                    name: 'expDt'
+                }
+            ]
+        })
+
+        // when modal popped up
+        let lotModal = document.getElementById('lotModal');
+        lotModal.addEventListener('shown.bs.modal', e => {
+            let rowKey = lotModal.dataset.rowKey;
+            let rowInfo = grid.getRow(rowKey)
+            getLotByRscCd(rowInfo);
+            lotGrid.refreshLayout();
+        })
+
+        // when modal away
+        lotModal.addEventListener('hidden.bs.modal', e => {
+            lotModalState = 0;
+        })
+
+        // when choose item
+        lotGrid.on('dblclick', e => {
+            let rowInfo = lotGrid.getRow(e.rowKey);
+            let rowKey = lotModal.dataset.rowKey; // main grid rowkey
+            grid.setValue(rowKey, 'rscLotCd', rowInfo.rscLotCd)
+            grid.setValue(rowKey, 'lotRmnCnt', rowInfo.lotRmnCnt)
+            lModal.hide(lotModal);
+        })
+
+        function getLotByRscCd(val) {
+            let url = 'getLotByRscCd';
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(val)
+            }).then(res => res.json()).then(res => {
+                lotGrid.resetData(res);
+            })
+        }
+
+        ///////////////////////////// save //////////////////////////////////
+        let saveBtn = document.getElementById('saveBtn')
+        saveBtn.addEventListener('click', function () {
+            let gridData = grid.getCheckedRows();
+
+            let obj = {};
+            let formData = new FormData(setOustFrm);
+            formData.forEach(function (value, key) {
+                obj[key] = value;
+            })
+            gridData.unshift(obj)
+            console.log(gridData)
+            setRscOust(gridData);
+        })
+
+        function setRscOust(val) {
+            let url = 'setRscOust'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(val)
+            })
+        }
+
+        ///////////////////////////// modify ////////////////////////////////
+        let mdfyGrid = new tui.Grid({
+            el: document.getElementById('modi-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '출고번호',
+                    name: 'rscOustCd'
+                },
+                {
+                    header: '건수',
+                    name: 'oustCnt'
+                },
+                {
+                    header: '출고일자',
+                    name: 'oustDt'
+                }
+            ]
+        })
+
+        let mModal;
+        modiBtn.addEventListener('click', function () {
+            mModal = new bootstrap.Modal(document.getElementById('modiModal'), {})
+            mModal.show('modiModal');
+        })
+
+        let modiModal = document.getElementById('modiModal');
+        modiModal.addEventListener('shown.bs.modal', e => {
+            mdfyGrid.refreshLayout();
+        })
+
+        let schBtnInMdfyMod = document.getElementById('schBtnInMdfyMod')
+        schBtnInMdfyMod.addEventListener('click', function () {
+            let data = new FormData(oustDtRngFrm);
+            let url = 'schRscOustHist'
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                mdfyGrid.resetData(res);
+            })
+        });
+
+        mdfyGrid.on('dblclick', e => {
+            let rowInfo = mdfyGrid.getRow(e.rowKey)
+            let data = {rscInspCd: rowInfo.rscInspCd, startDt: startDt.value, endDt: endDt.value}
+            rscInspCdTemp = rowInfo.rscInspCd
+            let url = 'getRscInspHistByCd'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => res.json()).then(res => {
+                grid.hideColumn('rmnCnt')
+                grid.resetData(res);
+            })
+            saveFlag = 1;
+            mModal.hide(modiModal);
+        })
+
+        ///////////////////////////// action on grid ////////////////////////////////
+        let gridEle = document.getElementById('grid')
+        gridEle.addEventListener('mouseleave', function () {
+            grid.finishEditing();
         })
     </script>
 </th:block>

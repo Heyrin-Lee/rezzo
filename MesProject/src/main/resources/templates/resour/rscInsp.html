@@ -483,7 +483,8 @@
 
         grid.on('editingStart', (ev) => {
             grid.check(ev.rowKey);
-            if (grid.getValue(ev.rowKey, 'ordrCd') != null && grid.getValue(ev.rowKey, 'ordrCd') != '') {
+            if (grid.getValue(ev.rowKey, 'ordrCd') != null
+                && grid.getValue(ev.rowKey, 'ordrCd') != '') {
                 if (ev.columnName == 'rscCd') {
                     ev.stop();
                 }

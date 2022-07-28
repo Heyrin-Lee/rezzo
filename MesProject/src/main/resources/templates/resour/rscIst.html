@@ -53,7 +53,6 @@
             </div>
         </div>
         <br>
-        <input type="button" value="추가" id="addRow">
         <input type="button" value="삭제" id="delRow">
         <div class="card">
             <div class="card-body">
@@ -141,11 +140,9 @@
         ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit()
-            getRscListInit()
             getRscIstHistList()
         })
 
-        let addRow = document.getElementById('addRow')
         let delRow = document.getElementById('delRow')
         let istDt = document.getElementById('istDt')
 
@@ -189,41 +186,6 @@
         });
 
         ///////////////////////////////// !main grid ///////////////////////////////
-        let rModal;
-        let modalState = 0;
-
-        class customInput {
-            constructor(props) {
-                const el = document.createElement('input');
-                let {rowKey} = props;
-                this.rowKey = rowKey
-                el.type = 'text';
-                el.value = String(props.value);
-                el.addEventListener('dblclick', function () {
-                    rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
-                    rModal.show('rscModal');
-                    rscModal.dataset.rowKey = rowKey;
-                    modalState = 1;
-                })
-                this.el = el;
-            }
-
-            getElement() {
-                return this.el;
-            }
-
-            getValue() {
-                if (modalState === 0) {
-                    getRscSingle(this.el.value, this.rowKey)
-                }
-                return this.el.value;
-            }
-
-            mounted() {
-                this.el.select();
-            }
-        };
-
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
             scrollX: false,
@@ -232,10 +194,7 @@
             columns: [
                 {
                     header: '자재코드',
-                    name: 'rscCd',
-                    editor: {
-                        type: customInput
-                    }
+                    name: 'rscCd'
                 },
                 {
                     header: '품명',
@@ -258,7 +217,7 @@
                     name: 'ordrCd'
                 },
                 {
-                    header: '검사합격수량',
+                    header: '추가입고가능수량',
                     name: 'passRmnCnt'
                 },
                 {
@@ -279,15 +238,6 @@
             ]
             , editingEvent: 'click'
         });
-
-        grid.on('editingStart', (ev) => {
-            grid.check(ev.rowKey);
-            if (grid.getValue(ev.rowKey, 'ordrCd') != null && grid.getValue(ev.rowKey, 'ordrCd') != '') {
-                if (ev.columnName == 'rscCd') {
-                    ev.stop();
-                }
-            }
-        })
 
         ///////////////////////////// !vendor ////////////////////////////////
         // vendor modal grid section
@@ -358,82 +308,6 @@
                 .then(res => vendGrid.resetData(res))
         }
 
-        ///////////////////////////// resource ////////////////////////////////
-        // rsc grid
-        let rscGrid = new tui.Grid({
-            el: document.getElementById('rsc-grid'),
-            scrollX: false,
-            scrollY: false,
-            columns: [
-                {
-                    header: '자재코드',
-                    name: 'rscCd'
-                },
-                {
-                    header: '자재명',
-                    name: 'rscNm'
-                },
-                {
-                    header: '자재단위',
-                    name: 'mngUnit'
-                }
-            ]
-        })
-
-        // when rsc modal shown => refresh
-        let rscModal = document.getElementById('rscModal');
-        rscModal.addEventListener('shown.bs.modal', e => {
-            rscGrid.refreshLayout();
-        })
-
-        rscModal.addEventListener('hidden.bs.modal', e => {
-            modalState = 0;
-        })
-
-        // search rsc
-        let rscSch = document.getElementById('rscSch');
-        rscSch.addEventListener('click', function () {
-            let data = new FormData(rscSchForm);
-            let url = 'getResources'
-
-            fetch(url, {
-                method: 'POST',
-                body: data
-            }).then(res => res.json()).then(res => {
-                rscGrid.innerHTML = '';
-                rscGrid.resetData(res);
-            })
-        });
-
-        // action in rsc modal
-        rscGrid.on('dblclick', e => {
-            grid.finishEditing();
-            let info = rscGrid.getRow(e.rowKey);
-            getRscSingle(info.rscCd, rscModal.dataset.rowKey);
-            rModal.hide(rscModal);
-        })
-
-        // get rsc grid data
-        function getRscListInit() {
-            let url = 'getResources'
-            fetch(url).then(res => res.json())
-                .then(res => rscGrid.resetData(res))
-        }
-
-        function getRscSingle(val, rowKey) {
-            let url = 'getRscSingle'
-            let data = {rscCd: val}
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => res.json()).then(res => {
-                grid.setRow(rowKey, res)
-            }).catch(err => {
-                toastr.error('해당하는 자재가 없습니다.');
-            })
-        }
-
         ///////////////////////////// !get main grid data ////////////////////////////////
         let getInspList = document.getElementById('getInspList');
         getInspList.addEventListener('click', getRscInspHist)
@@ -487,11 +361,7 @@
 
         });
 
-        ////////////////////////////// add & delelte row ////////////////////////////
-        addRow.addEventListener('click', function () {
-            grid.appendRow()
-        })
-
+        ////////////////////////////// delelte row ////////////////////////////
         delRow.addEventListener('click', function () {
             let rowKeys = grid.getCheckedRowKeys()
             grid.removeRows(rowKeys)
@@ -555,14 +425,9 @@
                 method: 'POST',
                 body: JSON.stringify(data)
             }).then(res => res.json()).then(res => {
-                console.log(res)
-                console.log('hello')
                 grid.resetData(res);
-
             })
         }
-
-
     </script>
 </th:block>
 </body>

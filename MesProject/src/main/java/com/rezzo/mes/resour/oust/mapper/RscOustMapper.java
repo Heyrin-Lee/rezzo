@@ -9,5 +9,11 @@ import java.util.List;
 public interface RscOustMapper {
 
     String getRscOustCd();
+    List<RscOustVO> getLotByRscCd(RscOustVO rscOustVO);
+
+    // 입력
+    void setRscOust(RscOustVO rscOustVOS);
+    void setRscOustEach(RscOustVO rscOustVO);
     void letHoldOust(RscOustVO rscOustVO);
+    List<RscOustVO> schRscOustHist(RscOustVO rscOustVO);
 }

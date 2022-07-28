@@ -4,5 +4,9 @@ import java.util.List;
 
 public interface RscOustService {
 
-    void letHoldOust(List<RscOustVO> rscOustVOS);
+    List<RscOustVO> getLotByRscCd(RscOustVO rscOustVO);
+
+    // 입력
+    void setRscOust(List<RscOustVO> rscOustVOS);
+    List<RscOustVO> schRscOustHist(RscOustVO rscOustVO);
 }

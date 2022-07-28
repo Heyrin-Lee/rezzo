@@ -14,4 +14,12 @@ public class RscOustVO {
     private String oustDt; // 출고일자
     private String oustTyp; // 출고유형
 
+    // misc
+    private int lotRmnCnt;
+    private String expDt;
+    private String from;
+
+    private String startDt;
+    private String endDt;
+
 }
