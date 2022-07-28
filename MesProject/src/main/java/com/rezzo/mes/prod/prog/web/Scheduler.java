@@ -16,7 +16,7 @@ public class Scheduler {
 	@Autowired
 	ProgService service;
 
-	@Scheduled(cron = "*/7 * * * * *")
+	//@Scheduled(cron = "*/7 * * * * *")
 	public void schedule() {
 		service.schedule(null, "QHT001");
 		service.schedule("QHT001", "MDC001");

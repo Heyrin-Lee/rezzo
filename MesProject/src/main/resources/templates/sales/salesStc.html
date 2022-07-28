@@ -14,7 +14,7 @@
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
 			<li class="breadcrumb-item">> 완제품 관리</li>
-			<li class="breadcrumb-item active">> 완제품재고 조회</li>
+			<li class="breadcrumb-item active">> 완제품출입고 조회</li>
 		</ol>
 <!-- 본문내용 끝 -->
 
@@ -24,22 +24,22 @@
             <div class="col">
                <div class="card mb-4">
                   <div class="card-header">
-                     <i class="fas fa-tachometer-alt"></i> 완제품재고 조회
+                     <i class="fas fa-tachometer-alt"></i> 완제품출입고 조회
                   </div>
 				<div class="card-body" id="vendModal">
                      <form name="searchFrm" id="searchFrm">
                       <div class="r_input">
                         <div class="mb-3">
-                           <label for="edctsIstNo" class="form-label">제품명</label>
-    						<input type="text" class="form-control" id="prdtNm" name="prdtNm">
+                           <label for="edctsIstNo" class="form-label">제품코드</label>
+    						<input type="text" class="form-control" id="edctsCd" name="edctsCd" style="width:200px">
     						<!-- 모달버튼 -->
     						<button type="button" class="btn btn-primary" id="prdtSearchBtn" data-bs-toggle="modal" data-bs-target="#proModal"><i class="fas fa-search"></i></button>	
                         <div class="mb-3">
-                           <label for="edctsLotNo" class="form-label">제조일자</label>
-    						<input type="date" id="makeStart" name="makeStart"> - <input type="date" id="makeEnd" name="makeEnd">					
+                           <label for="edctsLotNo" class="form-label">작업일자</label>
+    						<input type="date" id="workStart" name="workStart"> - <input type="date" id="workEnd" name="workEnd">					
                         </div>
                         <!-- 조회버튼 -->
-    						<button type="button" class="btn btn-primary" id="dtSearchBtn"><i class="fas fa-search"></i></button>	
+    						<button type="button" class="btn btn-primary" id="searchBtn" style="margin-top:20px;"><i class="fas fa-search"></i>검색</button>	
                         </div>
                        </div>
                      </form>
@@ -78,40 +78,40 @@
 	        height: 40
 	      },
 	      columns: [
+	      	{
+	          header: '완제품LOT번호',
+	          name: 'edctsLotNo',
+	          align:'center'
+	    	},
 	    	{
-	          header: '제품명',
-	          name: 'prdtNm',
-	          width: 100,
+	          header: '제품코드',
+	          name: 'edctsCd',
 	          align:'center'
 	    	},
 	        {
-	          header: '완제품LOT번호',
-	          name: 'edctsLotNo',
-	          editor: 'text',
+	          header: '제품명',
+	          name: 'prdtNm',
 	          align:'center'
 	        },
 	        {
-	          header: '제조일자',
-	          name: 'makeDt',
-	          editor: 'text',
+	          header: '입고수량',
+	          name: 'edctsIstCnt',
 	          align:'center'
 	        },
 	        {
-	          header: '재고량',
-	          name: 'stcCnt',
-	          editor: 'text',
+	          header: '출고수량',
+	          name: 'edctsOustCnt',
 	          align:'center'
 	        },
 	        {
-	          header: '유통기한',
-	          name: 'distbTerm',
-	          editor: 'text',
+	          header: '재고수량',
+	          name: 'lotCnt',
 	          align:'center'
 	        }
 		  ]   
 	    });
      	
-     	 // 제품명 모달 그리드(조회)    
+     	 // 제품코드 모달 그리드(조회)    
 	    const proGrid = new tui.Grid({
 	        el: document.getElementById('proGrid'),
 	        scrollX: false,
@@ -119,26 +119,35 @@
 	        rowHeaders: ['checkbox'],
 	        columns: [
 	            {
-	                header: '제품명',
-	                name: 'prdtNm',
-	                width: 200,
+	                header: '제품코드',
+	                name: 'edctsCd',
 	                align:'center'
 	            },
 	            {
-	                header: '제품코드',
-	                name: 'edctsCd',
-	                width: 200,
+	                header: '제품명',
+	                name: 'prdtNm',
+	                align:'center'
+	            },
+	            {
+	                header: '규격',
+	                name: 'spec',
+	                align:'center'
+	            },
+	            {
+	                header: '단위',
+	                name: 'unit',
 	                align:'center'
 	            }
 	        ]
 	    });
      	 
+     	 //제품코드 조회 모달
      	 $("#prdtSearchBtn").on("click",function(list){
      		 setTimeout(function () {
 					proGrid.refreshLayout()
 				}, 300);
      		 $.ajax({
-     			 url:"getProd",
+     			 url:"getPrdtNm",
      			 method:"get",
      			 dataType:"json",
      			 success:function(list) {
@@ -146,29 +155,31 @@
      			 }
      		 })
      	 })
-     	 //제품명 모달창에서 체크박스 선택 -> 제품명 폼에 출력
+     	 //제품코드 모달창에서 체크박스 선택 -> 제품명 폼에 출력
 	    proGrid.on("click", e => {
 	    	var proInfo = proGrid.getCheckedRows(e);
 	    	console.log(proInfo);
-	    	prdtNm.value = proInfo[0].prdtNm;
+	    	edctsCd.value = proInfo[0].edctsCd;
 	    })
 	    
 	    //조회버튼 클릭 -> 조건별 조회
-	    $("#dtSearchBtn").on("click",function(e){
-	    	var searchList = $("#searchFrm").serialize();
+	    $("#searchBtn").on("click",function(e){
+	    	//var searchList = $("#searchFrm").serialize();
+	    	var edctsCd = $("#edctsCd").val();
+	    	var inspStart = $("#inspStart").val();
+	    	var inspEnd = $("#inspEnd").val();
 	    	$.ajax({
-	    		url:"makeDtSearch",
-	    		method:"get",
+	    		url:"getSalesRecord",
+	    		method:"post",
 	    		dataType:"json",
-	    		data:searchList,
+	    		data:{"edctsCd":edctsCd,"inspStart":inspStart,"inspEnd":inspEnd},
 	    		success:function(result) {
 	    			grid.resetData(result);
 	    		}
 	    	})
 	    })
 	    
-	    //
-
+	    
 </script>
 </body>
 </html>
