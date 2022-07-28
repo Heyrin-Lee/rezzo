@@ -4,7 +4,10 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@Controller
 @SpringBootApplication
 @MapperScan(basePackages = "com.rezzo.mes.**.mapper")
 public class MesProjectApplication {
@@ -16,5 +19,10 @@ public class MesProjectApplication {
 	@Bean
 	public String saveDir() {
 		return "imgfile/";
+	}
+	
+	@RequestMapping("/")
+	public String home() {
+		return "home/home";
 	}
 }
