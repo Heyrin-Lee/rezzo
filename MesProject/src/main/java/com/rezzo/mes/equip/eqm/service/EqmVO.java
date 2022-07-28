@@ -1,6 +1,8 @@
 package com.rezzo.mes.equip.eqm.service;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,5 +34,6 @@ public class EqmVO {
 	String frmUseYN;
 	String lineNm;
 	
+
 	
 }

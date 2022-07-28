@@ -51,7 +51,7 @@
 				#{prodCnt},
 				#{prefRank},
 				#{indicaCnt},
-				#{plan_cd}
+				#{planCd}
 				)
 </insert>
 
@@ -89,5 +89,24 @@ SET NOW_ST = '지시'
 WHERE PLAN_CD = #{planCd} 
 </update>
 
+<select id="getHolding" resultType="com.rezzo.mes.resour.oust.service.RscOustVO">
+select rsc_cd, rsc_lot_cd, OUST_CNT
+from holding 
+where plan_cd = #{planCd}
+</select>
+
+<select id="getProgPrcs" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
+select p.*, e.eqm_cd, e.eqm_nm 
+from prcs_prog p
+join eqm e
+on e.prcs_cd = p.prcs_cd
+where wk_fr_dt between #{wkFrDt} and #{wkFrDt2}
+<if test="prcsCd != null">
+and prcs_cd = #{prcsCd}
+</if>
+<if test="inferCd != null">
+and infer_cd = #{inferCd}
+</if>
+</select>
 
 </mapper>	

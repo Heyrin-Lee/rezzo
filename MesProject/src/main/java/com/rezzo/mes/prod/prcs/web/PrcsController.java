@@ -27,7 +27,7 @@ public class PrcsController {
 	
 	@GetMapping("/prcs")
 	public String vend(Model model, CcdsVO vo) {
-		model.addAttribute("ccds", ccdsService.getCodes("100","101"));
+		model.addAttribute("ccds", ccdsService.getCodes("PRC"));
 		return "prod/prcs";
 	}
 
@@ -82,11 +82,11 @@ public class PrcsController {
 		return "prod/planSearch";
 	}
 	
-	@GetMapping("/prcsSearch")
-	public String prcsSearch() {
-		return "prod/prcsSearch";
-	}
-	
+//	@GetMapping("/prcsSearch")
+//	public String prcsSearch() {
+//		return "prod/prcsSearch";
+//	}
+//	
 	@GetMapping("/prodMng")
 	public String prodMng() {
 		return "prod/prodMng";

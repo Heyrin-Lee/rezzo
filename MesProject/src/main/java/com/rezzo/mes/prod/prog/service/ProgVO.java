@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rezzo.mes.resour.oust.service.RscOustVO;
 
 import lombok.Data;
 
@@ -39,13 +40,24 @@ public class ProgVO {
 	String eqmCd;
 	String eqmCd2;
 	String eqmNm;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date startTime;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date endTime;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date startTime;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date endTime;
 	String yn;
 	String orderNo;
 	Integer seqNo;
+	String rscCd;
+	Integer holdCnt;
+	String rscLotCd;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date wkFrDt;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date wkToDt;
+	
+
 }

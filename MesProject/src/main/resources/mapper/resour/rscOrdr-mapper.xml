@@ -35,6 +35,6 @@
 	
 	<!-- 발주 세부 테이블 등록 -->
 	<insert id="rscOrdrInsert" parameterType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
-		insert into rsc_ordr_dtl values(#{ordrCd}, #{rscCd}, #{ordrCnt}, #{ordrCnt}, #{paprdCmndDt})
+		insert into rsc_ordr_dtl values(#{ordrCd}, #{rscCd}, #{ordrCnt}, #{ordrCnt}, #{paprdCmndDt},0)
 	</insert>
 </mapper>

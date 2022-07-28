@@ -24,7 +24,8 @@ public class RscOustController {
     @RequestMapping("letHoldOust")
     @ResponseBody
     public void letHoldOust(@RequestBody List<RscOustVO> rscOustVOS) {
-        sv.letHoldOust(rscOustVOS);
+        System.out.println(rscOustVOS);
+    	sv.letHoldOust(rscOustVOS);
     }
 
 }
