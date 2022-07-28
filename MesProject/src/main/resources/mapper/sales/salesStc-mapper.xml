@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+  <mapper namespace="com.rezzo.mes.sales.stc.mapper.SalesStcMapper">
+  	
+  	<resultMap type="SalesStcVO" id="SalesStcVO">
+  		<result column="EDCTS_LOT_NO" property="edctsLotNo"/>
+  		<result column="EDCTS_CD" property="edctsCd"/>
+  		<result column="LOT_CNT" property="lotCnt"/>
+  	</resultMap>
+  	
+  	<resultMap type="EdctsmVO" id="EdctsmVO">
+  		<result column="PRDT_NM" property="prdtNm"/>
+  		<result column="SPEC" property="spec"/>
+  		<result column="SPEC" property="unit"/>
+  	</resultMap>
+  	
+  	<resultMap type="PrdtInspVO" id="PrdtInspVO">
+  		<result column="INSP_DT" property="inspDt"/>
+  	</resultMap>
+  	
+  	<resultMap type="SalesIstVO" id="SalesIstVO">
+  		<result column="EDCTS_IST_CNT" property="edctsIstCnt"/>
+  	</resultMap>
+  	
+  	<resultMap type="SalesOustVO" id="SalesOustVO">
+  		<result column="EDCTS_OUST_CNT" property="edctsOustCnt"/>
+  	</resultMap>
+  	
+  	<!-- 제품코드 조회 모달 -->
+  	<select id="getPrdtNm" resultType="SalesStcVO">
+  		SELECT DISTINCT s.edcts_cd, e.prdt_nm, e.spec, e.unit
+		FROM edcts_stc s
+		JOIN edcts e
+        	ON s.edcts_cd = e.edcts_cd
+  	</select>
+  	
+  	<!-- 완제품 입출고, 수량 조회 -->
+  	<select id="getSalesRecord" resultType="SalesStcVO">
+  		SELECT s.edcts_cd, s.edcts_lot_no, e.prdt_nm, i.edcts_ist_cnt, o.edcts_oust_cnt, s.lot_cnt
+		FROM edcts_stc s 
+		JOIN edcts e
+			ON e.edcts_cd = s.edcts_cd
+		JOIN edcts_ist i
+			ON s.edcts_lot_no = i.edcts_lot_no
+		FULL OUTER JOIN edcts_oust o
+			ON s.edcts_lot_no = o.edcts_lot_no
+		<if test="edctsCd != null and edctsCd !=''">AND s.edcts_cd = #{edctsCd}</if>
+  	</select>
+  	
+  </mapper>
+  

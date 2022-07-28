@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 public class SalesStcVO {
@@ -22,14 +23,18 @@ public class SalesStcVO {
 	String edctsIstNo;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date makeStart;
+	Date inspStart;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date makeEnd;
+	Date inspEnd;
 	
 	String orderNo;
 	String progAppe;
 	int orderCnt;
 	int lotCnt;
 	String edctsCd;
+	String spec;
+	String unit;
+	int edctsIstCnt;
+	int edctsOustCnt;
 }

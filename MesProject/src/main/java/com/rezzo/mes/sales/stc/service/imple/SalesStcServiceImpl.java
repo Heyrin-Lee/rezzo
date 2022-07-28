@@ -18,4 +18,18 @@ public class SalesStcServiceImpl implements SalesStcService{
 	public List<SalesStcVO> makeDtSearch(SalesStcVO vo) {
 		return mapper.makeDtSearch(vo);
 	}
+
+	//제품명 조회 모달
+	@Override
+	public List<SalesStcVO> getPrdtNm(SalesStcVO vo) {
+		return mapper.getPrdtNm(vo);
+	}
+
+	//완제품 입출고, 수량 조회
+	@Override
+	public List<SalesStcVO> getSalesRecord(SalesStcVO vo) {
+		return mapper.getSalesRecord(vo);
+	}
+	
+	
 }

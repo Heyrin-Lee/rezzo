@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,5 +26,19 @@ public class SalesStcController {
 	@ResponseBody
 	public List<SalesStcVO> makeDtSearch(SalesStcVO vo) {
 		return service.makeDtSearch(vo);
+	}
+	
+	//제품코드 조회 모달
+	@RequestMapping("getPrdtNm")
+	@ResponseBody
+	public List<SalesStcVO> getPrdtNm(SalesStcVO vo) {
+		return service.getPrdtNm(vo);
+	}
+	
+	//완제품 입출고, 수량 조회
+	@PostMapping("getSalesRecord")
+	@ResponseBody
+	public List<SalesStcVO> getSalesRecord(SalesStcVO vo) {
+		return service.getSalesRecord(vo);
 	}
 }
