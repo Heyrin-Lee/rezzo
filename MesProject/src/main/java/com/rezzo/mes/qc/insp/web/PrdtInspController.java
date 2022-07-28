@@ -17,6 +17,7 @@ import com.rezzo.mes.sales.order.service.OrderVO;
 public class PrdtInspController {
 	
 	@Autowired PrdtInspService service;
+
 	
 	@RequestMapping("prdtInsp")
 	public String prdtInsp(Model model) {
@@ -51,11 +52,5 @@ public class PrdtInspController {
 	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO) {
 		return service.getPrdtInsp(prdtInspVO);
 	}
-	
-	@RequestMapping("pdftest")
-	public String pdftest() {
-		return "qc/pdftest";
-	}
-	
-	
+
 }

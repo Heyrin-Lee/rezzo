@@ -13,6 +13,7 @@ public class Scheduler {
 	@Autowired
 	ProgService service;
 
+
 	@Scheduled(fixedRate = 300000)
 	public void schedule() {
 		service.schedule(null, "QHT001");
