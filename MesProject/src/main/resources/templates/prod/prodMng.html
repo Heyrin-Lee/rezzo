@@ -62,15 +62,17 @@ display:inline-block;
    <!-- 헤더부분 -->
    <div class="container-fluid px-4">
       <h1 class="mt-4">생산관리</h1>
-      <ol class="breadcrumb mb-4">
-         <li class="breadcrumb-item active">생산</li>
-      </ol>
+       <ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+		<li class="breadcrumb-item">> 생산관리</li>
+		<li class="breadcrumb-item active">> 생산관리</li>
+	  </ol>
    </div>
    <!-- 헤더부분 -->
 <div id="container">   
-   <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
+   <input type="button" data-bs-toggle="modal"  class="btn btn-primary"  id="modalBtn" data-bs-target="#exampleModal"
                     value="지시조회"></input>
-   <button id="rbtn" name="rbtn" class="c_btn" form="">공정이동표</button>
+   <button id="rbtn" name="rbtn"  class="btn btn-primary"  form="">공정이동표</button>
    <br>
    <br>
    <div id="grid">진행생산지시</div>
@@ -80,9 +82,9 @@ display:inline-block;
 	   <div id="grid3" style="width: 400px;">공정가동관리<br>
 	   <br>
 	   	<div class="linelist">
-	       <button id="startBtn" class="c_btn" form="">시작</button>
-	       <button class="c_btn" form="">긴급중지</button>
-	       <button class="c_btn" form="">재시작</button>
+	       <button id="startBtn"  class="btn btn-primary"  form="">시작</button>
+	       <button  class="btn btn-primary"  form="">긴급중지</button>
+	       <button  class="btn btn-primary"  form="">재시작</button>
 	     </div>
 	   </div>
 	</div>	  

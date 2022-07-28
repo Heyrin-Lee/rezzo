@@ -20,4 +20,5 @@ public interface ProgMapper {
 	public void schedule(String eqmCd, String eqmCd2);
 	public void updateIndica(ProgVO vo);
 	public List<ProgVO> getHolding(ProgVO vo);
+	public List<ProgVO> getProgPrcs(ProgVO vo);
 }

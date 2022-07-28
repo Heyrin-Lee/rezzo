@@ -46,8 +46,10 @@ body {
    <div class="container-fluid px-4">
       <h1 class="mt-4">공정실적조회</h1>
       <ol class="breadcrumb mb-4">
-         <li class="breadcrumb-item active">생산</li>
-      </ol>
+		<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+		<li class="breadcrumb-item">> 생산관리</li>
+		<li class="breadcrumb-item active">> 공정실적조회</li>
+	  </ol>
    </div>
    <!-- 헤더부분 -->
   <div id="container">
@@ -61,27 +63,25 @@ body {
                      
                      <form>
                         <div class="mb-3">
-                           <label for="name">생산계획</label> 
-               				<input type="text" class="form-control" id="planCd" name="planCd" style="width:150px;"></i>
-               				<button type="button" class="btn btn-primary" id="planBtn" data-bs-toggle="modal" data-bs-target="#planModal"><i class="fas fa-search"></i></button>
+                           <label for="prcsCd">공정코드</label> 
+                           <select id="prcsCd" class="dataTable-selector">
+               					<option selected value="">--선택--</option>
+               					<option th:each="code : ${ccds['PRC']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtl}"></option>
+               				</select>
                         </div>
                         <div class="mb-3">
-                           <label for="prcsName">공정코드</label> 
-                           <input type="text" class="form-control" id="prcsCd" name="prcsCd" style="width:150px;"></i>
-                           <button type="button" class="btn btn-primary" id="prcsBtn" data-bs-toggle="modal" data-bs-target="#prcsModal"><i class="fas fa-search"></i></button>
+                           <label for="inferCd">불량코드</label> 
+                           <select id="inferCd" class="dataTable-selector">
+               					<option selected value="">--선택--</option>
+               					<option th:each="code : ${ccds['PNF']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtl}"></option>
+               				</select>
                         </div>
                         <div class="mb-3">
-                           <label for="prcs">불량코드</label> 
-                           <input type="text" class="form-control" id="inferCd" name="inferCd" style="width:150px;">
-                           <button type="button" class="btn btn-primary" id="inferBtn" data-bs-toggle="modal" data-bs-target="#inferModal"><i class="fas fa-search"></i></button>
-                        </div>
-                        <div class="mb-3">
-                           <label for="prcs">생산일자</label> 
-                           <input type="date" id="frDate" name="frDate" style="width: 200px">~<input type="date" id="toDate" name="toDate" style="width: 200px">
+                           <label for="wkFrDt">생산일자</label> 
+                           <input type="date" class="form-control" id="wkFrDt" name="wkFrDt" style="width: 150px"> - <input type="date" id="wkFrDt2" name="wkFrDt2" class="form-control" style="width: 150px">
                         </div>
      					<div class="linelist">
-                        <button class="c_btn" form="">검색</button>
-                        <button class="c_btn" form="">초기화</button>
+                        <button class="btn btn-primary" id="sBtn" form="">검색</button>
                      </div>
               	
                      </form>
@@ -93,16 +93,7 @@ body {
    </div> 
    <script>
    const gridData = [];
-   (function() {
-      for (let i = 0; i < 1; i += 1) {
-         gridData.push({
-            c1 : 'User' + (i + 1),
-            c2 : ((i + 5) % 8) * 100 + i,
-            c3 : ((i + 3) % 7) * 60,
-            c4 : ((i + 3) % 7) * 60
-         });
-      }
-   })();
+   
    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      data: gridData,
@@ -111,55 +102,66 @@ body {
 	      columns: [
 	        {
 	          header: '생산지시일자',
-	          name: 'name'
+	          name: 'indicaDt'
 	        },
 	        {
 	          header: '생산계획코드',
-	          name: 'artist'
+	          name: 'planCd'
 	        },
 	        {
 	          header: '공정명',
-	          name: 'type'
+	          name: 'prcsCd'
 	        },
 	        {
 	          header: '설비코드',
-	          name: 'release'
+	          name: 'eqmCd'
 	        },
 	        {
 	          header: '설비명',
-	          name: 'IndicaCnt'
+	          name: 'eqmNm'
 	        },
 	        {
 	          header: '투입량',
-	          name: 'frWkDt'
+	          name: 'indicaCnt'
 	        },
 	        {
 	          header: '생산량',
-	          name: 'frWkDt'
+	          name: 'prodCnt'
 	        },
 	        {
 	          header: '불량량',
-	          name: 'frWkDt'
+	          name: 'inferCnt'
 	        },
 	        {
 	          header: '불량코드',
-	          name: 'frWkDt'
+	          name: 'inferCd'
 	        },
 	        {
 	          header: '시작시간',
-	          name: 'frWkDt'
+	          name: 'wkFrTm'
 	        },
 	        {
 	          header: '종료시간',
-	          name: 'frWkDt'
+	          name: 'wkToTm'
 	        },
 	        {
 	          header: '담당자',
-	          name: 'frWkDt'
+	          name: 'prcsPsch'
 	        }
 	      ]
 	    });
     
+   $("#sBtn").on("click", function(){
+	   let prcsCd = $("#prcsCd option:selected").text()
+	   let inferCd = $("#inferCd option:selected").text()
+	   console.log(inferCd)
+	   let wkFrDt = $("#wkFrDt").val()
+	   let wkFrDt2 = $("#wkFrDt2").val()
+	   $.ajax({
+		 url : 'getProgPrcs',
+		 data : {"inferCd" : inferCd, "wkFrDt" : wkFrDt, "wfFrDt2" : wkFrDt2}
+	   })
+   })
    
    
    </script>
