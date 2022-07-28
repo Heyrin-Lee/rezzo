@@ -6,9 +6,6 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<style>
-		body {
-			background: #eee
-		}
 
 		uploadResult {
 			display: grid;
@@ -65,7 +62,8 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">자재발주</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+			<li class="breadcrumb-item"><a href="home.do"><i
+						class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 자재관리</li>
 				<li class="breadcrumb-item active">> 자재발주관리</li>
 			</ol>
@@ -332,6 +330,14 @@
 				// 삭제 버튼
 
 				$('#minusBtn').on('click', function (ev) {
+					var data = grid2.getCheckedRows();
+					var isValid = true;
+					if(data.length == null || data.length == 0){
+						toastr.warning('체크된 발주 목록이 없습니다.');
+						isValid = false;
+						return false;
+					}
+					 
 					grid2.removeCheckedRows()
 					toastr.success('정상적으로 삭제되었습니다.');
 				})
@@ -341,6 +347,13 @@
 				$('#saveBtn').click(ev => {
 					var data = grid2.getCheckedRows();
 					var isValid = true;
+					
+					if(data.length == null || data.length == 0){
+						toastr.warning('체크된 발주 내역이 없습니다.');
+						isValid = false;
+						return false;
+					}
+					
 					for (i = 0; i < data.length; i++) {
 						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null) {
 							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
