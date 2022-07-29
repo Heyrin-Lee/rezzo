@@ -75,7 +75,7 @@
                 <div class="modal-body">
                     <input id="schBtnInMdfyMod" type="button" value="검색"/>
                     <hr>
-                    <div id="modi-grid"></div>
+                    <div id="mdfy-grid"></div>
                 </div>
             </div>
         </div>
@@ -234,12 +234,15 @@
 
             getValue() {
                 let cnt = grid.getValue(this.rowKey, 'lotRmnCnt')
-                if (this.el.value > cnt) {
-                    toastr.warning('출고수량은 LOT잔여수량을 초과할 수 없습니다.');
+                if (saveFlag === 0 ) {
+                    if (this.el.value > cnt) {
+                        toastr.warning('출고수량은 LOT잔여수량을 초과할 수 없습니다.');
+                    } else {
+                        return this.el.value;
+                    }
                 } else {
                     return this.el.value;
                 }
-
             }
 
             mounted() {
@@ -301,18 +304,23 @@
         });
 
         grid.on('editingStart', (ev) => {
-            grid.check(ev.rowKey);
-            if (grid.getValue(ev.rowKey, 'ordrCd') != null
-                && grid.getValue(ev.rowKey, 'ordrCd') != '') {
-                if (ev.columnName == 'rscCd') {
-                    ev.stop();
+            if (saveFlag === 1) {
+                if (grid.getValue(ev.rowKey, 'rscCd') != null
+                    || grid.getValue(ev.rowKey, 'rscCd') != '') {
+                    if (ev.columnName == 'rscCd' || ev.columnName == 'rscLotCd') {
+                        ev.stop();
+                    }
                 }
             }
         })
 
         ////////////////////////////// add & delelte row ////////////////////////////
         addRow.addEventListener('click', function () {
-            grid.appendRow()
+            if (saveFlag === 1) {
+                toastr.warning('수정모드에서는 추가 할 수 없습니다.')
+            } else {
+                grid.appendRow()
+            }
         })
 
         delRow.addEventListener('click', function () {
@@ -456,15 +464,19 @@
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
             let gridData = grid.getCheckedRows();
+            if (saveFlag == 0) {
+                let obj = {};
+                let formData = new FormData(setOustFrm);
+                formData.forEach(function (value, key) {
+                    obj[key] = value;
+                })
+                gridData.unshift(obj)
+                setRscOust(gridData);
+            } else {
+                console.log(gridData)
+                updRscOustHist(gridData)
+            }
 
-            let obj = {};
-            let formData = new FormData(setOustFrm);
-            formData.forEach(function (value, key) {
-                obj[key] = value;
-            })
-            gridData.unshift(obj)
-            console.log(gridData)
-            setRscOust(gridData);
         })
 
         function setRscOust(val) {
@@ -478,7 +490,7 @@
 
         ///////////////////////////// modify ////////////////////////////////
         let mdfyGrid = new tui.Grid({
-            el: document.getElementById('modi-grid'),
+            el: document.getElementById('mdfy-grid'),
             scrollX: false,
             scrollY: false,
             columns: [
@@ -522,27 +534,48 @@
 
         mdfyGrid.on('dblclick', e => {
             let rowInfo = mdfyGrid.getRow(e.rowKey)
-            let data = {rscInspCd: rowInfo.rscInspCd, startDt: startDt.value, endDt: endDt.value}
-            rscInspCdTemp = rowInfo.rscInspCd
-            let url = 'getRscInspHistByCd'
+            let url = 'getRscOustHist'
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
-                body: JSON.stringify(data)
+                body: JSON.stringify(rowInfo)
             }).then(res => res.json()).then(res => {
-                grid.hideColumn('rmnCnt')
                 grid.resetData(res);
             })
             saveFlag = 1;
             mModal.hide(modiModal);
         })
 
+        function updRscOustHist(val) {
+            let url = 'updRscOustHist'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(val)
+            })
+        }
+
         ///////////////////////////// action on grid ////////////////////////////////
         let gridEle = document.getElementById('grid')
         gridEle.addEventListener('mouseleave', function () {
             grid.finishEditing();
-            console.log('commit')
         })
+
+        let rscGridEl = document.getElementById('rsc-grid')
+        rscGridEl.addEventListener('mouseleave', function () {
+            rscGrid.finishEditing();
+        })
+
+        let lotGridEl = document.getElementById('lot-grid')
+        lotGridEl.addEventListener('mouseleave', function () {
+            lotGrid.finishEditing();
+        })
+
+        let mdfyGridEl = document.getElementById('mdfy-grid')
+        mdfyGridEl.addEventListener('mouseleave', function () {
+            mdfyGrid.finishEditing();
+        })
+
     </script>
 </th:block>
 </body>

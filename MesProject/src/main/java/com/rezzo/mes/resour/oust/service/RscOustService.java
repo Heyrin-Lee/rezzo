@@ -9,4 +9,8 @@ public interface RscOustService {
     // 입력
     void setRscOust(List<RscOustVO> rscOustVOS);
     List<RscOustVO> schRscOustHist(RscOustVO rscOustVO);
+
+    //수정
+    List<RscOustVO> getRscOustHist(RscOustVO rscOustVO);
+    void updRscOustHist(List<RscOustVO> rscOustVOS);
 }

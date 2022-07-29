@@ -40,4 +40,16 @@ public class RscOustController {
     public List<RscOustVO> schRscOustHist(@ModelAttribute RscOustVO rscOustVO) {
         return sv.schRscOustHist(rscOustVO);
     }
+
+    @RequestMapping("getRscOustHist")
+    @ResponseBody
+    public List<RscOustVO> getRscOustHist(@RequestBody RscOustVO rscOustVO) {
+        return sv.getRscOustHist(rscOustVO);
+    }
+
+    @RequestMapping("updRscOustHist")
+    @ResponseBody
+    public void updRscOustHist(@RequestBody List<RscOustVO> rscOustVOS) {
+        sv.updRscOustHist(rscOustVOS);
+    }
 }

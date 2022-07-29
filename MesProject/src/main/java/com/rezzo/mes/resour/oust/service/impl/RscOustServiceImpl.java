@@ -46,4 +46,16 @@ public class RscOustServiceImpl implements RscOustService {
     public List<RscOustVO> schRscOustHist(RscOustVO rscOustVO) {
         return mapper.schRscOustHist(rscOustVO);
     }
+
+    @Override
+    public List<RscOustVO> getRscOustHist(RscOustVO rscOustVO) {
+        return mapper.getRscOustHist(rscOustVO);
+    }
+
+    @Override
+    public void updRscOustHist(List<RscOustVO> rscOustVOS) {
+        for(RscOustVO rscOustVO : rscOustVOS) {
+            mapper.updRscOustHist(rscOustVO);
+        }
+    }
 }

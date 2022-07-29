@@ -16,4 +16,8 @@ public interface RscOustMapper {
     void setRscOustEach(RscOustVO rscOustVO);
     void letHoldOust(RscOustVO rscOustVO);
     List<RscOustVO> schRscOustHist(RscOustVO rscOustVO);
+
+    //수정
+    List<RscOustVO> getRscOustHist(RscOustVO rscOustVO);
+    void updRscOustHist(RscOustVO rscOustVO);
 }

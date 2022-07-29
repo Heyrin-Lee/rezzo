@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.insp.service;
 
+import com.rezzo.mes.comm.rsc.service.RscVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

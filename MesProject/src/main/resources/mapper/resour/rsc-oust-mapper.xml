@@ -70,19 +70,51 @@
         ]]>
     </select>
 
-    <select id="getRscOustHist" parameterType="RscOustVO" resultType="RscOustVo">
+    <select id="getRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
         select rod.RSC_CD,
                rod.OUST_CNT,
                rod.RSC_LOT_CD,
                rsc.RSC_NM,
                rsc.RSC_SPEC,
                rsc.MNG_UNIT,
+               rsc.RSC_TYP,
                rl.LOT_RMN_CNT
         from RSC_LOT rl,
              RSC_OUST_DTL rod,
              rsc
         where rl.RSC_LOT_CD = rod.RSC_LOT_CD
           and rsc.RSC_CD = rod.RSC_CD
+          and RSC_OUST_CD = #{rscOustCd}
     </select>
 
+    <update id="updRscOustHist" parameterType="RscOustVO">
+        declare
+            v_lot_rmn_cnt number(35);
+            v_oust_cnt    number(35);
+        begin
+            select LOT_RMN_CNT
+            into v_lot_rmn_cnt
+            from RSC_LOT
+            where RSC_LOT_CD = #{rscLotCd};
+
+            select OUST_CNT
+            into v_oust_cnt
+            from RSC_OUST_DTL
+            where RSC_LOT_CD = #{rscLotCd}
+              and RSC_OUST_CD = #{rscOustCd};
+
+            if #{oustCnt} > v_lot_rmn_cnt + v_oust_cnt then
+                raise_application_error(-90001, '잔여재고부족');
+            else
+                update RSC_OUST_DTL
+                set OUST_CNT = OUST_CNT + (#{oustCnt} - v_oust_cnt)
+                where RSC_OUST_CD = #{rscOustCd}
+                  and RSC_LOT_CD = #{rscLotCd};
+
+                update RSC_OUST
+                set OUST_CNT = OUST_CNT + (#{oustCnt} - v_oust_cnt)
+                where RSC_OUST_CD = #{rscOustCd} and RSC_CD = #{rscCd};
+            end if;
+        end;
+    </update>
 </mapper>

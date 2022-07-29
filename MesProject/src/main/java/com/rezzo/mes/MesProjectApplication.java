@@ -12,7 +12,6 @@ public class MesProjectApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MesProjectApplication.class, args);
 	}
-
 	@Bean
 	public String saveDir() {
 		return "/imgfile/";

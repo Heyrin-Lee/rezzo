@@ -1,11 +1,12 @@
 package com.rezzo.mes.resour.oust.service;
 
+import com.rezzo.mes.comm.rsc.service.RscVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RscOustVO {
+public class RscOustVO extends RscVO {
 
     private String rscOustCd; // 출고코드
     private String rscCd; // 자재코드
@@ -21,5 +22,4 @@ public class RscOustVO {
 
     private String startDt;
     private String endDt;
-
 }
