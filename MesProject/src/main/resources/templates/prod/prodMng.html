@@ -247,15 +247,15 @@ display:inline-block;
 			data : {"planCd" : planCd},
 			success : function(result) {
 					let today = new Date()
-					let obj = {oustDt:today, oustTyp:'공정출고'}
+					let obj = {oustDt:today, oustTyp:'공정출고', from:'prod'}
 					result.unshift(obj)
 				console.log(result)
-				//$.ajax({
-				//	url : 'letHoldOust',
-				//	method : 'post',
-				//	data : JSON.stringify(result),
-				//	contentType : 'application/json'
-				//})
+				$.ajax({
+					url : 'setRscOust',
+					method : 'post',
+					data : JSON.stringify(result),
+					contentType : 'application/json'
+				})
 			}
 		})
 		
