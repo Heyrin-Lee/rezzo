@@ -13,4 +13,8 @@ public interface RscOustService {
     //수정
     List<RscOustVO> getRscOustHist(RscOustVO rscOustVO);
     void updRscOustHist(List<RscOustVO> rscOustVOS);
+
+    // 조회
+    List<RscOustVO> getRscOustList(RscOustVO rscOustVO);
+
 }

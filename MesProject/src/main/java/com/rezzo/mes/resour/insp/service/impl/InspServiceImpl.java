@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.insp.service.impl;
 
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.mapper.InspMapper;
@@ -7,11 +8,9 @@ import com.rezzo.mes.resour.insp.service.InspService;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -63,6 +62,7 @@ public class InspServiceImpl implements InspService {
     @Override
     @Transactional
     public void updRscInspHist(List<RscInspVO> rscInspVOS) {
+        System.out.println("rscInspVOS = " + rscInspVOS);
         for (RscInspVO rscInspVO : rscInspVOS) {
             mapper.updRscInspHist(rscInspVO);
         }
@@ -78,4 +78,13 @@ public class InspServiceImpl implements InspService {
     public List<RscInspVO> getRscInspHist(RscInspVO rscInspVO) {
         return mapper.getRscInspHist(rscInspVO);
     }
+
+
+    // 검사상세
+    @Override
+    public List<CcdsVO> getInfCdList() {
+        return mapper.getInfCdList();
+    }
+
+
 }

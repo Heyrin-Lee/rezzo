@@ -70,6 +70,12 @@
           and ro.ordr_cd = rl.ordr_cd
           and ro.vend_cd = vend.vend_cd
           and rl.rsc_cd = rsc.RSC_CD
+        <![CDATA[
+          and ri.IST_DT >= #{startDt}
+          and ri.IST_DT <= #{endDt}
+        ]]>
+        <if test="vendCd != '' and vendCd != null">and ro.VEND_CD = #{vendCd}</if>
+        <if test="rscCd != '' and rscCd != null">and ri.RSC_CD = #{rscCd}</if>
     </select>
 
     <select id="getRscSingle" parameterType="RscVO" resultType="RscVO">

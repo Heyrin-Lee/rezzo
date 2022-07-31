@@ -103,7 +103,8 @@
                rid.PRE_IST_CNT,
                rid.INSP_CNT,
                rid.INSP_PASS_CNT,
-               rid.INSP_FAIL_CNT
+               rid.INSP_FAIL_CNT,
+               rid.RSC_INSP_CD
         from RSC_INSP_DTL rid,
              RSC_ORDR_DTL rod,
              RSC_ORDR ro,
@@ -129,7 +130,8 @@
                rid.PRE_IST_CNT,
                rid.INSP_CNT,
                rid.INSP_PASS_CNT,
-               rid.INSP_FAIL_CNT
+               rid.INSP_FAIL_CNT,
+               rid.RSC_INSP_CD
         from RSC_INSP_DTL rid,
              RSC
         where rsc.RSC_CD = rid.RSC_CD
@@ -200,4 +202,10 @@
         and rid.PASS_RMN_CNT != 0
     </select>
 
+    <select id="getInfCdList" resultType="CcdsVO">
+        SELECT *
+        FROM CCDS_DTL
+        WHERE CCD = 'INF'
+        ORDER BY CCD_DTL
+    </select>
 </mapper>

@@ -3,5 +3,61 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.rezzo.mes.resour.stc.mapper.RscStcMapper">
+    <select id="getIOList" parameterType="RscIOVO" resultType="RscIOVO">
+        select *
+        from (select to_char(IST_DT, 'yyyy-mm-dd') as prcsDt,
+        ri.RSC_IST_CD as cd,
+        ri.RSC_CD,
+        rsc.RSC_NM,
+        rsc.RSC_SPEC,
+        rsc.MNG_UNIT,
+        ri.IST_CNT,
+        null as oustCnt
+        from RSC_IST ri,
+        RSC
+        where ri.RSC_CD = rsc.RSC_CD
+
+        union
+
+        select to_char(OUST_DT, 'yyyy-mm-dd') as prcsDt,
+        ro.RSC_OUST_CD as cd,
+        ro.RSC_CD,
+        rsc.RSC_NM,
+        rsc.RSC_SPEC,
+        rsc.MNG_UNIT,
+        null,
+        ro.OUST_CNT
+        from RSC_OUST ro,
+        RSC
+        where ro.RSC_CD = rsc.RSC_CD)
+        where
+        <![CDATA[
+          prcsDt >= #{startDt}
+          and prcsDt <= #{endDt}
+        ]]>
+        <if test="rscCd != null and rscCd != ''">and RSC_CD = #{rscCd}</if>
+        order by
+        <if test="sortTyp == 'prcsDt'">prcsDt desc, RSC_CD, CD desc</if>
+        <if test="sortTyp == 'rscCd'">RSC_CD, prcsDt desc, CD desc</if>
+    </select>
+
+    <select id="getRscLotList" parameterType="RscLotVO" resultType="RscLotVO">
+        select rsc.RSC_CD,
+        rsc.RSC_NM,
+        rsc.RSC_TYP,
+        rsc.RSC_SPEC,
+        rsc.MNG_UNIT,
+        rl.RSC_LOT_CD,
+        rl.HOLD_CNT,
+        rl.HOLD_CNT,
+        rl.LOT_CNT as istCnt,
+        (rl.LOT_CNT - rl.LOT_RMN_CNT) as oustCnt,
+        rl.LOT_RMN_CNT
+        from RSC,
+        RSC_LOT rl
+        where rsc.RSC_CD = rl.RSC_CD
+        <if test="rscCd != null and rscCd != ''">and rsc.RSC_CD = #{rscCd}</if>
+        <if test="noZeroLot == 1">and rl.LOT_RMN_CNT != 0</if>
+    </select>
 
 </mapper>

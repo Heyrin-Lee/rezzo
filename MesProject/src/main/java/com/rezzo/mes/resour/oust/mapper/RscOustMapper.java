@@ -20,4 +20,7 @@ public interface RscOustMapper {
     //수정
     List<RscOustVO> getRscOustHist(RscOustVO rscOustVO);
     void updRscOustHist(RscOustVO rscOustVO);
+
+    // 조회
+    List<RscOustVO> getRscOustList(RscOustVO rscOustVO);
 }

@@ -6,46 +6,81 @@
 <head>
     <meta charset="UTF-8">
     <title>원자재출고관리</title>
+    <style>
+        tr {
+            height: 50px;
+        }
+    </style>
 </head>
 
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h3>원자재출고관리</h3>
-        <hr>
+        <h2 class="mt-2">원자재출고관리</h2>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item">> 자재관리</li>
+            <li class="breadcrumb-item active">> 원자재출고관리</li>
+        </ol>
         <div class="card">
             <div class="card-body">
-                <input type="button" value="저장" id="saveBtn">
-                <input type="button" value="조회/수정" id="modiBtn">
-                <input type="button" value="다시작성">
-                <hr>
-
+                <div style="display: inline-block; margin: auto 0; float: right">
+                    <button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+                    <button class="btn btn-primary" id="modiBtn"><i class="fa fa-edit"></i> 수정</button>
+                    <button class="btn btn-primary" id="reloadBtn"><i class="fas fa-file"></i> 새자료</button>
+                </div>
                 <form id="setOustFrm">
-                    <b>출고일자</b>
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input type="text" class="form-control" name="oustDt" id="oustDt" aria-label="Date-Time">
-                        <span class="tui-ico-date"></span>
-                    </div>
-                    <div id="wrapper" style="margin-top: -1px;"></div>
-                    <hr>
-
-                    <div id="sortBtn">
-                        <b>출고유형</b>
-                        <label>부서<input type="radio" name="oustTyp" id="dept" value="dept" checked></label>
-                        <label>협력사<input type="radio" name="oustTyp" id="partn" value="partn"></label>
-                    </div>
-                    <hr>
-
-                    <label for="note"><b>비고</b></label>
-                    <input type="text" name='note' id="note">
+                    <table style="vertical-align : middle;">
+                        <colgroup>
+                            <col style="width: 80px;">
+                            <col style="width: 200px;">
+                            <col style="width: 80px;">
+                            <col style="width: 200px;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <b>출고일자</b>
+                            </th>
+                            <td>
+                                <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                     style="height: 40px; border-radius: 5px;">
+                                    <input type="text" id="oustDt" name="oustDt" aria-label="Date-Time" class="form-control">
+                                    <span class="tui-ico-date"></span>
+                                </div>
+                                <div id="wrapper" style="margin-top: -1px;"></div>
+                            </td>
+                            <th>
+                                <b>출고유형</b>
+                            </th>
+                            <td>
+                                <div id="sortBtn">
+                                    <label><input type="radio" class="form-check-input" name="oustTyp" value="dept" checked> 일자</label>
+                                    <label><input type="radio" class="form-check-input" name="oustTyp" value="partn"> 업체</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="note"><b>상세정보</b></label>
+                            </th>
+                            <td>
+                                <input type="text" name='note' id="note" class="form-control" style="width: 168px;">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </form>
             </div>
         </div>
         <br>
-        <input type="button" value="추가" id="addRow">
-        <input type="button" value="삭제" id="delRow">
         <div class="card">
             <div class="card-body">
+                <div class="linelist" style="float: right;">
+                    <button class="btn btn-primary" id="addRow"><i class="fas fa-plus"></i> 추가</button>
+                    <button class="btn btn-primary" id="delRow"><i class="fas fa-minus"></i> 삭제</button>
+                </div>
+                <br><br>
                 <div id="grid"></div>
             </div>
         </div>
@@ -86,18 +121,41 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <b class="modal-title">자재검색</b>
+                    <h4 class="modal-title">자재검색</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="rscSchForm">
-                        <label>자재명<input type="text" name="rscNm" style="width:100px;"></label>
-                        <label>자재코드<input type="text" name="rscCd" style="width:100px;"></label>
-                        <input id="rscSch" type="button" value="검색">
+                        <table>
+                            <colgroup>
+                                <col style="width: 400px;">
+                                <col style="width: 10px">
+                                <col style="width: 50px;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" id="rscNmInMod" name="rscNm" class="form-control"
+                                           placeholder="자재명">
+                                </td>
+                                <td></td>
+                                <td rowspan="2">
+                                    <button id="rscSch" class="btn btn-primary" type="button" style="height: 90px;"><i
+                                            class="fas fa-search"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="rscCdInMod" name="rscCd" class="form-control"
+                                           placeholder="자재코드">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </form>
-                    <hr>
+                    <br>
                     <div id="rsc-grid"></div>
-                    <p>선택 : 더블클릭</p>
+                    <div style="float: right"><p>선택 : 더블클릭</p></div>
                 </div>
             </div>
         </div>
@@ -113,7 +171,7 @@
                 </div>
                 <div class="modal-body">
                     <div id="lot-grid"></div>
-                    <p>선택 : 더블클릭</p>
+                    <div style="float: right"><p>선택 : 더블클릭</p></div>
                 </div>
             </div>
         </div>
@@ -168,6 +226,7 @@
                     rscModalState = 1;
                 })
                 this.el = el;
+                this.el.value = '';
             }
 
             getElement() {
@@ -184,7 +243,7 @@
             mounted() {
                 this.el.select();
             }
-        };
+        }
 
         let lModal;
         let lotModalState = 0;
@@ -203,6 +262,7 @@
                     lotModalState = 1;
                 })
                 this.el = el;
+                this.el.value = '';
             }
 
             getElement() {
@@ -216,7 +276,7 @@
             mounted() {
                 this.el.select();
             }
-        };
+        }
 
         class oustCntInput {
             constructor(props) {
@@ -226,6 +286,7 @@
                 el.type = 'text';
                 el.value = String(props.value);
                 this.el = el;
+                this.el.value = '';
             }
 
             getElement() {
@@ -234,7 +295,7 @@
 
             getValue() {
                 let cnt = grid.getValue(this.rowKey, 'lotRmnCnt')
-                if (saveFlag === 0 ) {
+                if (saveFlag === 0) {
                     if (this.el.value > cnt) {
                         toastr.warning('출고수량은 LOT잔여수량을 초과할 수 없습니다.');
                     } else {
@@ -248,7 +309,7 @@
             mounted() {
                 this.el.select();
             }
-        };
+        }
 
         let gridOption = {
             row: {
@@ -260,8 +321,9 @@
         // main grid section
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
+            bodyHeight: 400,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             rowHeaders: ['checkbox'],
             columns: [
                 {
@@ -306,8 +368,8 @@
         grid.on('editingStart', (ev) => {
             if (saveFlag === 1) {
                 if (grid.getValue(ev.rowKey, 'rscCd') != null
-                    || grid.getValue(ev.rowKey, 'rscCd') != '') {
-                    if (ev.columnName == 'rscCd' || ev.columnName == 'rscLotCd') {
+                    || grid.getValue(ev.rowKey, 'rscCd') !== '') {
+                    if (ev.columnName === 'rscCd' || ev.columnName === 'rscLotCd') {
                         ev.stop();
                     }
                 }
@@ -408,8 +470,9 @@
         // modal grid
         let lotGrid = new tui.Grid({
             el: document.getElementById('lot-grid'),
+            bodyHeight: 300,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             columns: [
                 {
                     header: 'LOT코드',
@@ -443,10 +506,16 @@
         // when choose item
         lotGrid.on('dblclick', e => {
             let rowInfo = lotGrid.getRow(e.rowKey);
+            let colVal = grid.getColumnValues('rscLotCd')
             let rowKey = lotModal.dataset.rowKey; // main grid rowkey
-            grid.setValue(rowKey, 'rscLotCd', rowInfo.rscLotCd)
-            grid.setValue(rowKey, 'lotRmnCnt', rowInfo.lotRmnCnt)
-            lModal.hide(lotModal);
+            let bool = colVal.includes(rowInfo.rscLotCd)
+            if (bool) {
+                toastr.warning('같은 LOT재고가 이미 존재합니다.');
+            } else {
+                grid.setValue(rowKey, 'rscLotCd', rowInfo.rscLotCd)
+                grid.setValue(rowKey, 'lotRmnCnt', rowInfo.lotRmnCnt)
+                lModal.hide(lotModal);
+            }
         })
 
         function getLotByRscCd(val) {
@@ -464,7 +533,7 @@
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
             let gridData = grid.getCheckedRows();
-            if (saveFlag == 0) {
+            if (saveFlag === 0) {
                 let obj = {};
                 let formData = new FormData(setOustFrm);
                 formData.forEach(function (value, key) {
@@ -473,7 +542,6 @@
                 gridData.unshift(obj)
                 setRscOust(gridData);
             } else {
-                console.log(gridData)
                 updRscOustHist(gridData)
             }
 
@@ -491,8 +559,9 @@
         ///////////////////////////// modify ////////////////////////////////
         let mdfyGrid = new tui.Grid({
             el: document.getElementById('mdfy-grid'),
+            bodyHeight: 300,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             columns: [
                 {
                     header: '출고번호',

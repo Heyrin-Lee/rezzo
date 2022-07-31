@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.insp.service;
 
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
@@ -21,5 +22,8 @@ public interface InspService {
     // 입고검사조회
     List<RscVO> getResources(RscVO rscVO);
     List<RscInspVO> getRscInspHist(RscInspVO rscInspVO);
+
+    // 검사상세
+    List<CcdsVO> getInfCdList();
 
 }

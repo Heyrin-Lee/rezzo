@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.insp.mapper;
 
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
@@ -30,5 +31,8 @@ public interface InspMapper {
     // 입고검사조회
     List<RscVO> getResources(RscVO rscVO);
     List<RscInspVO> getRscInspHist(RscInspVO rscInspVO);
+
+    // 검사상세
+    List<CcdsVO> getInfCdList();
 
 }

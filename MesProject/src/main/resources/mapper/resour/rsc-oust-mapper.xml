@@ -10,6 +10,7 @@
                substr(RSC_LOT_CD, 6, 4) || '-' || substr(RSC_LOT_CD, 10, 2) || '-' || substr(RSC_LOT_CD, 12, 2) expDt
         from RSC_LOT
         where RSC_CD = #{rscCd}
+          and LOT_RMN_CNT != 0
     </select>
 
     <select id="getRscOustCd" resultType="String">
@@ -78,7 +79,8 @@
                rsc.RSC_SPEC,
                rsc.MNG_UNIT,
                rsc.RSC_TYP,
-               rl.LOT_RMN_CNT
+               rl.LOT_RMN_CNT,
+               rod.RSC_OUST_CD
         from RSC_LOT rl,
              RSC_OUST_DTL rod,
              rsc
@@ -113,8 +115,30 @@
 
                 update RSC_OUST
                 set OUST_CNT = OUST_CNT + (#{oustCnt} - v_oust_cnt)
-                where RSC_OUST_CD = #{rscOustCd} and RSC_CD = #{rscCd};
+                where RSC_OUST_CD = #{rscOustCd}
+                  and RSC_CD = #{rscCd};
             end if;
         end;
     </update>
+
+    <select id="getRscOustList" parameterType="RscOustVO" resultType="RscOustVO">
+        select ro.OUST_DT,
+        ro.RSC_OUST_CD,
+        rod.RSC_CD,
+        rsc.RSC_NM,
+        rod.OUST_CNT,
+        rod.RSC_LOT_CD,
+        ro.OUST_TYP,
+        ro.NOTE
+        from RSC_OUST_DTL rod,
+        RSC_OUST ro,
+        RSC
+        where ro.RSC_OUST_CD = rod.RSC_OUST_CD
+        and rod.RSC_CD = rsc.RSC_CD
+        <if test="rscCd != null and rscCd != ''">and rod.RSC_CD = #{rscCd}</if>
+        <![CDATA[
+          and ro.OUST_DT >= #{startDt}
+          and ro.OUST_DT <= #{endDt}
+        ]]>
+    </select>
 </mapper>

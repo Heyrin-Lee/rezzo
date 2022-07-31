@@ -1,6 +1,5 @@
 package com.rezzo.mes.resour.oust.web;
 
-import com.rezzo.mes.resour.ist.service.RscIstVO;
 import com.rezzo.mes.resour.oust.service.RscOustService;
 import com.rezzo.mes.resour.oust.service.RscOustVO;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,11 @@ public class RscOustController {
     @RequestMapping("rscOust")
     public String rscOus() {
         return "resour/rscOust";
+    }
+
+    @RequestMapping("rscOustList")
+    public String rscOustList() {
+        return "resour/rscOustList";
     }
 
     @RequestMapping("getLotByRscCd")
@@ -51,5 +55,11 @@ public class RscOustController {
     @ResponseBody
     public void updRscOustHist(@RequestBody List<RscOustVO> rscOustVOS) {
         sv.updRscOustHist(rscOustVOS);
+    }
+
+    @RequestMapping("getRscOustList")
+    @ResponseBody
+    public List<RscOustVO> getRscOustList(@ModelAttribute RscOustVO rscOustVO) {
+        return sv.getRscOustList(rscOustVO);
     }
 }
