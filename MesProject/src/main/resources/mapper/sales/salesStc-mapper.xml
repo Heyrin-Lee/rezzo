@@ -15,38 +15,24 @@
   		<result column="SPEC" property="spec"/>
   		<result column="SPEC" property="unit"/>
   	</resultMap>
+
   	
-  	<resultMap type="PrdtInspVO" id="PrdtInspVO">
-  		<result column="INSP_DT" property="inspDt"/>
-  	</resultMap>
-  	
-  	<resultMap type="SalesIstVO" id="SalesIstVO">
-  		<result column="EDCTS_IST_CNT" property="edctsIstCnt"/>
-  	</resultMap>
-  	
-  	<resultMap type="SalesOustVO" id="SalesOustVO">
-  		<result column="EDCTS_OUST_CNT" property="edctsOustCnt"/>
-  	</resultMap>
-  	
-  	<!-- 제품코드 조회 모달 -->
+  	<!-- 제품명 조회 모달 -->
   	<select id="getPrdtNm" resultType="SalesStcVO">
-  		SELECT DISTINCT s.edcts_cd, e.prdt_nm, e.spec, e.unit
+  		SELECT DISTINCT s.edcts_cd, e.prdt_nm
 		FROM edcts_stc s
 		JOIN edcts e
         	ON s.edcts_cd = e.edcts_cd
   	</select>
   	
-  	<!-- 완제품 입출고, 수량 조회 -->
-  	<select id="getSalesRecord" resultType="SalesStcVO">
-  		SELECT s.edcts_cd, s.edcts_lot_no, e.prdt_nm, i.edcts_ist_cnt, o.edcts_oust_cnt, s.lot_cnt
-		FROM edcts_stc s 
-		JOIN edcts e
-			ON e.edcts_cd = s.edcts_cd
-		JOIN edcts_ist i
-			ON s.edcts_lot_no = i.edcts_lot_no
-		FULL OUTER JOIN edcts_oust o
-			ON s.edcts_lot_no = o.edcts_lot_no
-		<if test="edctsCd != null and edctsCd !=''">AND s.edcts_cd = #{edctsCd}</if>
+  	<!-- 완제품LOT번호별 재고 목록 조회 -->
+  	<select id="getLotStcList" resultType="SalesStcVO">
+  		SELECT s.edcts_lot_no, s.edcts_cd, e.prdt_nm, e.unit, e.spec, s.lot_cnt
+		FROM edcts_stc s JOIN edcts e
+		ON s.edcts_cd = e.edcts_cd
+		WHERE s.lot_cnt != 0
+		<if test="prdtNm != null and prdtNm != ''">AND prdt_nm = #{prdtNm}</if>
+		ORDER BY s.edcts_lot_no
   	</select>
   	
   </mapper>

@@ -9,6 +9,6 @@ public interface SalesStcMapper {
 	public List<SalesStcVO> makeDtSearch(SalesStcVO vo);
 	//제품명 조회 모달
 	public List<SalesStcVO> getPrdtNm(SalesStcVO vo);
-	//완제품 입출고, 수량 조회
-	public List<SalesStcVO> getSalesRecord(SalesStcVO vo);
+	//완제품LOT번호별 재고 목록 조회
+	public List<SalesStcVO> getLotStcList(SalesStcVO vo);
 }
