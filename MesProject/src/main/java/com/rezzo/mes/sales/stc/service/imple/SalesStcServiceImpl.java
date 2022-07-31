@@ -25,11 +25,12 @@ public class SalesStcServiceImpl implements SalesStcService{
 		return mapper.getPrdtNm(vo);
 	}
 
-	//완제품 입출고, 수량 조회
+	//완제품LOT번호별 재고 목록 조회
 	@Override
-	public List<SalesStcVO> getSalesRecord(SalesStcVO vo) {
-		return mapper.getSalesRecord(vo);
+	public List<SalesStcVO> getLotStcList(SalesStcVO vo) {
+		return mapper.getLotStcList(vo);
 	}
+
 	
 	
 }

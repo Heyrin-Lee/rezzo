@@ -28,17 +28,17 @@ public class SalesStcController {
 		return service.makeDtSearch(vo);
 	}
 	
-	//제품코드 조회 모달
+	//제품명 조회 모달
 	@RequestMapping("getPrdtNm")
 	@ResponseBody
 	public List<SalesStcVO> getPrdtNm(SalesStcVO vo) {
 		return service.getPrdtNm(vo);
 	}
 	
-	//완제품 입출고, 수량 조회
-	@PostMapping("getSalesRecord")
+	//완제품LOT번호별 재고 목록 조회
+	@PostMapping("getLotStcList")
 	@ResponseBody
-	public List<SalesStcVO> getSalesRecord(SalesStcVO vo) {
-		return service.getSalesRecord(vo);
+	public List<SalesStcVO> getLotStcList(SalesStcVO vo) {
+		return service.getLotStcList(vo);
 	}
 }

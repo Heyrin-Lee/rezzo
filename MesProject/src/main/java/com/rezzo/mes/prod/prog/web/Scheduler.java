@@ -12,6 +12,7 @@ import com.rezzo.mes.prod.prog.service.ProgService;
 public class Scheduler {
 	@Autowired
 	ProgService service;
+
 	
 //	@Scheduled(fixedRate = 8000)
 //	public void schedule() {
@@ -23,6 +24,7 @@ public class Scheduler {
 //		service.schedule("QCD001", "OPG001");
 //	
 //	}
+
 	
 	
 	
