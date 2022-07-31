@@ -9,9 +9,6 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <style>
-        body {
-            background: #eee
-        }
 
         #container {
             width: 98%;
@@ -20,19 +17,6 @@
 
         .col {
             width: 100%
-        }
-
-        .c_btn {
-            color: #fff;
-            font-size: 13px;
-            background: #333;
-            border: none;
-            padding: 6px;
-            border-radius: 4px
-        }
-
-        .c_btn:hover {
-            background: #555;
         }
 
         .linelist {
@@ -66,6 +50,8 @@
         </div>
         <!-- 헤더부분 -->
         <div id="container">
+         <div class="card mb-4">
+			<div class="card-body">
             <div id="pDate">
                 <label>생산계획일자</label>
                 <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
@@ -80,17 +66,30 @@
                 <button class="btn btn-primary" id="regiBtn">계획등록</button>
                 <button class="btn btn-primary"id="osBtn">저장</button>
             </div>
-
+			</div>
+			</div>
+			<div class="card mb-4">
+			<div class="card-body">
             <div id="grid"></div>
+            </div>
+            </div>
             <br>
+            <div class="card mb-4">
+			<div class="card-body">
             <div class="d-flex flex-row justify-content-between">
                 <div id="grid2" style="width: 1000px;">제품</div>
                 <div id="grid3" style="width: 500px;">제품공정확인</div>
             </div>
+            </div>
+            </div>
             <br>
+            <div class="card mb-4">
+			<div class="card-body">
             <div class="d-flex flex-row justify-content-between">
                 <div id="grid4" style="width: 1000px;">사용가능자재</div>
                 <div id="grid5" style="width: 500px;">자재확인</div>
+            </div>
+            </div>
             </div>
 
 
@@ -330,7 +329,7 @@
                 el: document.getElementById('grid3'),
                 data: gridData3,
                 scrollX: false,
-                scrollY: false,
+                scrollY: true,
                 columns: [{
                         header: '제품코드',
                         name: 'edctsCd'
@@ -417,15 +416,13 @@
                 ]
             });
 
-
-
             var datepicker = new tui.DatePicker('#tui-date-picker-container1', {
                 language: 'ko',
                 date: new Date(),
                 input: {
                     element: '#tui-date-picker-target',
                     format: 'yyyy-MM-dd'
-                }
+               }
             });
 
 

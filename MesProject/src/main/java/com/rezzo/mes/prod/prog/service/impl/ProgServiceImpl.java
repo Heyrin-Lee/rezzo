@@ -86,7 +86,7 @@ public class ProgServiceImpl implements ProgService {
 
 	@Override
 	public List<ProgVO> getProgPrcs(ProgVO vo) {
-		return mapper.getPrcsProg(vo);
+		return mapper.getProgPrcs(vo);
 	}
 	
 	

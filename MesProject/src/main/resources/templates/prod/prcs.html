@@ -19,19 +19,6 @@ body {
    width: 100%
 }
 
-.c_btn {
-   color: #fff;
-   font-size: 13px;
-   background: #333;
-   border: none;
-   padding: 6px;
-   border-radius: 4px
-}
-
-.c_btn:hover {
-   background: #555;
-}
-
 .linelist {
    float: right;
    margin-top: 0px;
@@ -56,9 +43,7 @@ body {
               <section>
             <div class="col">
                <div class="card mb-4">
-                  <div class="card-header">
-                     <i class="fas fa-table me-1"></i> 조건설정
-                  </div>
+           
                   <div class="card-body">
                      
                      <form>
@@ -78,7 +63,8 @@ body {
                </div>
             </div>
          </section>
-          <div>
+          <div class="card mb-4">
+			<div class="card-body">
 	          <div class="linelist">
 	             <button id="addBtn" class="btn btn-primary" form="">추가</button>
 	             <button id="deleteBtn" class="btn btn-primary" form="">삭제</button>
@@ -87,6 +73,8 @@ body {
 	          <br>
 	          <br>
 	          <div id='grid'>
+	         </div>
+			</div> 
           </div>
       </div>
    <br>
@@ -136,7 +124,7 @@ body {
             {
               header: '공정설명',
               name: 'prcsCtnt',
-              align : 'center',
+              
               editor: 'text'
             }
           ]
