@@ -28,17 +28,17 @@ public class RscOustServiceImpl implements RscOustService {
         setOust.setRscOustCd(rscOustCd);
         rscOustVOS.remove(0);
 
-//        if (setOust.getFrom().equals("prod")) {
-//            for (RscOustVO rscOustVO : rscOustVOS) {
-//                rscOustVO.setRscOustCd(rscOustCd);
-//                mapper.letHoldOust(rscOustVO);
-//            }
-//        } else {
+        if (setOust.getFrom().equals("prod")) {
+            for (RscOustVO rscOustVO : rscOustVOS) {
+                rscOustVO.setRscOustCd(rscOustCd);
+                mapper.letHoldOust(rscOustVO);
+            }
+        } else {
             for (RscOustVO rscOustVO : rscOustVOS) {
                 rscOustVO.setRscOustCd(rscOustCd);
                 mapper.setRscOustEach(rscOustVO);
             }
-//        }
+        }
         mapper.setRscOust(setOust);
     }
 
