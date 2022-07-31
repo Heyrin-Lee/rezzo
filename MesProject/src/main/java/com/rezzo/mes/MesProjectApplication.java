@@ -34,4 +34,15 @@ public class MesProjectApplication {
 	public String home() {
 		return "home/home";
 	}
+	
+	@RequestMapping("login")
+    public String login(){
+        return "home/login";
+    }
+	
+	@RequestMapping("loginFail")
+    public String loginFail(){
+        return "home/login";
+    }
+	
 }
