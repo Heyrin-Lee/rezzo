@@ -89,6 +89,7 @@ public class ProgController {
 	@RequestMapping("getProgPrcs")
 	@ResponseBody
 	public List<ProgVO> getProgPrcs(ProgVO vo) {
-		return service.getPrcsProg(vo);
+		System.out.println(vo);
+		return service.getProgPrcs(vo);
 	}
 }

@@ -28,6 +28,7 @@ SELECT NVL(LPAD(MAX(SUBSTR(PLAN_CD, 12))+1, 3, '0'), 0) as "index"
 	JOIN BOM B
 	ON R.RSC_CD = B.RSC_CD
 	WHERE EDCTS_CD = #{edctsCd}
+	AND R.LOT_RMN_CNT > 0
 </select> 
 
 <insert id="grid1Insert" parameterType="PlanVO">

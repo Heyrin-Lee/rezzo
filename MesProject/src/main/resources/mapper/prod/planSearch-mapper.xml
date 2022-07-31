@@ -9,10 +9,13 @@
 	ON P.EDCTS_CD = E.EDCTS_CD
 	JOIN PLAN N
 	ON N.PLAN_CD = P.PLAN_CD
+	<if test="planDt != null and planDt2 != null">
 	<![CDATA[
 	WHERE P.PLAN_DT >= #{planDt}
 	  AND P.PLAN_DT <= #{planDt2}
 	]]>
+	</if>
+	<if test="nowSt != null">
 	 <choose>
     <when test='nowSt.equals("전체")'>
      AND (N.NOW_ST = '미진행'
@@ -22,7 +25,10 @@
      AND N.NOW_ST = #{nowSt}
     </otherwise>
   </choose>
-	AND E.PRDT_NM = #{prdtNm}
+  </if>
+   <if test="prdtNm != null">
+	AND E.PRDT_NM LIKE '%'||#{prdtNm}||'%'
+	</if>
 </select>
 
 <delete id="deletePlan" parameterType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO" >

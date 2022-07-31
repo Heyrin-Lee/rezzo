@@ -96,16 +96,26 @@ where plan_cd = #{planCd}
 </select>
 
 <select id="getProgPrcs" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
-select p.*, e.eqm_cd, e.eqm_nm 
-from prcs_prog p
-join eqm e
-on e.prcs_cd = p.prcs_cd
-where wk_fr_dt between #{wkFrDt} and #{wkFrDt2}
-<if test="prcsCd != null">
-and prcs_cd = #{prcsCd}
+SELECT P.*, E.EQM_CD, E.EQM_NM, I.INFER_CD	
+FROM PRCS_PROG P
+JOIN EQM E
+ON E.PRCS_CD = P.PRCS_CD
+JOIN PLAN_DTL D
+ON P.PLAN_CD = D.PLAN_CD
+JOIN PRCS_PROG_INFER I 
+ON P.PLAN_CD = I.PLAN_CD
+<if test="wkFrDt != null and wkFrDt2 != null">
+<![CDATA[
+	WHERE D.WK_FR_DT >= #{wkFrDt}
+	  AND D.WK_FR_DT <= #{wkFrDt2}
+	]]>
+</if>	
+<if test="prcsCd != null and !prcsCd.equals('--선택--')">
+and p.prcs_cd LIKE #{prcsCd}||'%'
 </if>
-<if test="inferCd != null">
-and infer_cd = #{inferCd}
+<if test="inferCd != null and !inferCd.equals('--선택--')">
+and i.infer_cd = #{inferCd}
+and p.infer_cnt > 0
 </if>
 </select>
 

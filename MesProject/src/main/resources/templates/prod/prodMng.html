@@ -8,9 +8,6 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <style>
-body {
-   background: #eee
-}
 
 #container {
    width : 98%;
@@ -21,23 +18,9 @@ body {
    width: 700px
 }
 
-.c_btn {
-   color: #fff;
-   font-size: 13px;
-   background: #333;
-   border: none;
-   padding: 6px;
-   border-radius: 4px
-}
-
-.c_btn:hover {
-   background: #555;
-}
-
 #pDate {
    float: left;
 }
-
 
 #lbtn{
 float:left;
@@ -70,24 +53,34 @@ display:inline-block;
    </div>
    <!-- 헤더부분 -->
 <div id="container">   
+
    <input type="button" data-bs-toggle="modal"  class="btn btn-primary"  id="modalBtn" data-bs-target="#exampleModal"
                     value="지시조회"></input>
    <button id="rbtn" name="rbtn"  class="btn btn-primary"  form="">공정이동표</button>
    <br>
    <br>
+      <div class="card mb-4">
+			<div class="card-body">
    <div id="grid">진행생산지시</div>
+   </div>
+   </div>
    <br>
+      <div class="card mb-4">
+			<div class="card-body">
    <div class="d-flex flex-row justify-content-between">
+   	
    	   <div id="grid2"  style="width: 1200px;">공정목록</div>	
 	   <div id="grid3" style="width: 400px;">공정가동관리<br>
 	   <br>
-	   	<div class="linelist">
+	   	<div class="linelist" >
 	       <button id="startBtn"  class="btn btn-primary"  form="">시작</button>
-	       <button  class="btn btn-primary"  form="">긴급중지</button>
-	       <button  class="btn btn-primary"  form="">재시작</button>
+	       <button id="stopBtn" class="btn btn-primary"  form="">긴급중지</button>
+	       <button id="restartBtn" class="btn btn-primary"  form="">재시작</button>
 	     </div>
 	   </div>
-	</div>	  
+	</div>	
+	</div>
+	</div>  
 	<div id="dialog" title=""></div> 
 	<!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -377,6 +370,10 @@ display:inline-block;
 	  
 	  
    })	   
+   
+   $("#stopBtn").on("click", function(){
+	   
+   })
    
 
       

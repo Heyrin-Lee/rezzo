@@ -6,9 +6,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-body {
-   background: #eee
-}
 
 #container {
    width : 98%;
@@ -17,19 +14,6 @@ body {
 
 .col {
    width: 100%
-}
-
-.c_btn {
-   color: #fff;
-   font-size: 13px;
-   background: #333;
-   border: none;
-   padding: 6px;
-   border-radius: 4px
-}
-
-.c_btn:hover {
-   background: #555;
 }
 
 .linelist {
@@ -57,13 +41,17 @@ body {
             <div class="col">
                <div class="card mb-4">
                   <div class="card-header">
-                     <i class="fas fa-table me-1"></i> 조건설정
+                     <i class="fas fa-table me-1"></i>
                   </div>
                   <div class="card-body">
                      
                      <form>
+                     	<div class="mb-3">
+                           <label for="wkFrDt">생산일자</label> 
+                           <input type="date" class="form-control" id="wkFrDt" name="wkFrDt" style="width: 150px"> - <input type="date" id="wkFrDt2" name="wkFrDt2" class="form-control" style="width: 150px">
+                        </div>
                         <div class="mb-3">
-                           <label for="prcsCd">공정코드</label> 
+                           <label for="prcsCd">공정구분</label> 
                            <select id="prcsCd" class="dataTable-selector">
                					<option selected value="">--선택--</option>
                					<option th:each="code : ${ccds['PRC']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtl}"></option>
@@ -76,10 +64,6 @@ body {
                					<option th:each="code : ${ccds['PNF']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtl}"></option>
                				</select>
                         </div>
-                        <div class="mb-3">
-                           <label for="wkFrDt">생산일자</label> 
-                           <input type="date" class="form-control" id="wkFrDt" name="wkFrDt" style="width: 150px"> - <input type="date" id="wkFrDt2" name="wkFrDt2" class="form-control" style="width: 150px">
-                        </div>
      					<div class="linelist">
                         <button class="btn btn-primary" id="sBtn" form="">검색</button>
                      </div>
@@ -89,9 +73,14 @@ body {
                </div>
             </div>
          </section>
-   <div id='grid'></div>
+          <div class="card mb-4">
+			<div class="card-body">
+  				<div id='grid'></div>
+			</div>
+		   </div>		
    </div> 
    <script>
+   
    const gridData = [];
    
    const grid = new tui.Grid({
@@ -159,7 +148,12 @@ body {
 	   let wkFrDt2 = $("#wkFrDt2").val()
 	   $.ajax({
 		 url : 'getProgPrcs',
-		 data : {"inferCd" : inferCd, "wkFrDt" : wkFrDt, "wfFrDt2" : wkFrDt2}
+		 data : {"prcsCd" : prcsCd, "wkFrDt" : wkFrDt, "wkFrDt2" : wkFrDt2, "inferCd" : inferCd},
+		 success : function(result){
+			 grid.resetData(result)
+		 }
+	   
+		 //data : {"prcsCd" : prcsCd, "inferCd" : inferCd, "wkFrDt" : wkFrDt, "wfFrDt2" : wkFrDt2}
 	   })
    })
    

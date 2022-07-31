@@ -12,16 +12,17 @@ import com.rezzo.mes.prod.prog.service.ProgService;
 public class Scheduler {
 	@Autowired
 	ProgService service;
-
-	@Scheduled(fixedRate = 8000)
-	public void schedule() {
-		service.schedule(null, "QHT001");
-		service.schedule("QHT001", "MDC001");
-		service.schedule("MDC001", "FUL001");
-		service.schedule("FUL001", "CPP001");
-		service.schedule("CPP001", "QCD001");
-		service.schedule("QCD001", "OPG001");
-	}
+	
+//	@Scheduled(fixedRate = 8000)
+//	public void schedule() {
+//		service.schedule(null, "QHT001");
+//		service.schedule("QHT001", "MDC001");
+//		service.schedule("MDC001", "FUL001");
+//		service.schedule("FUL001", "CPP001");
+//		service.schedule("CPP001", "QCD001");
+//		service.schedule("QCD001", "OPG001");
+//	
+//	}
 	
 	
 	

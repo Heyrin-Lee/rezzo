@@ -57,7 +57,7 @@ public class ProgVO {
 	Date wkFrDt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkToDt;
+	Date wkFrDt2;
 	
 
 }
