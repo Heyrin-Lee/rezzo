@@ -3,6 +3,7 @@ package com.rezzo.mes.resour.insp.mapper;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
+import com.rezzo.mes.resour.insp.service.RscInfVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,11 +21,14 @@ public interface InspMapper {
     void setRscInspList(RscInspVO rscInspVOS);
     void updRscOrdrRmnCnt(RscInspVO rscInspVO);
     String genRscInspCd();
+    String genRscNoOrdrCd();
 
     // 입고검사수정
     List<RscInspVO> schRscInspHist(RscInspVO rscInspVO);
 
     List<RscInspVO> getRscInspHistByCd(RscInspVO rscInspVO);
+
+    List<RscInfVO> getRscInfHistByCd(RscInspVO rscInspVO);
 
     void updRscInspHist(RscInspVO rscInspVO);
 
@@ -34,5 +38,6 @@ public interface InspMapper {
 
     // 검사상세
     List<CcdsVO> getInfCdList();
+    void setRscInfList(@Param("insp") RscInspVO rscInspVO, @Param("inf")RscInfVO rscInfVO);
 
 }

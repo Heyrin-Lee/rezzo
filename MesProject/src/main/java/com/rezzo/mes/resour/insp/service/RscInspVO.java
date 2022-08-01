@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -34,4 +35,6 @@ public class RscInspVO {
     private int inspFailCnt; // 불량수량
 
     private int passRmnCnt; // 합격잔여수량
+
+    private List<RscInfVO> rscInfList; //불량목록
 }

@@ -5,6 +5,7 @@ import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.mapper.InspMapper;
 import com.rezzo.mes.resour.insp.service.InspService;
+import com.rezzo.mes.resour.insp.service.RscInfVO;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import lombok.AllArgsConstructor;
@@ -40,11 +41,23 @@ public class InspServiceImpl implements InspService {
         mapper.setRscInsp(rscInspCd, inspDt, inspTstr);
 
         // rsc_insp_dtl insert
-        for(RscInspVO rscInspVO : rscInspVOS) {
+        for (RscInspVO rscInspVO : rscInspVOS) {
+
+            // when ordrCd doesn't exist -> gen cd and set cd
+            if (rscInspVO.getOrdrCd() == null) {
+                String noOrdrCd = mapper.genRscNoOrdrCd();
+                rscInspVO.setOrdrCd(noOrdrCd);
+            }
+
+            // set rsc insp dtl each
             rscInspVO.setRscInspCd(rscInspCd);
-            System.out.println("rscInspVO = " + rscInspVO);
             mapper.setRscInspList(rscInspVO);
             mapper.updRscOrdrRmnCnt(rscInspVO);
+
+            // set rsc inf list each
+            for (RscInfVO rscInfVO : rscInspVO.getRscInfList()) {
+                mapper.setRscInfList(rscInspVO, rscInfVO);
+            }
         }
     }
 
@@ -56,15 +69,25 @@ public class InspServiceImpl implements InspService {
 
     @Override
     public List<RscInspVO> getRscInspHistByCd(RscInspVO rscInspVO) {
-        return mapper.getRscInspHistByCd(rscInspVO);
+        List<RscInspVO> rscInspVOS = mapper.getRscInspHistByCd(rscInspVO);
+        for(RscInspVO vo : rscInspVOS) {
+            List<RscInfVO> rscInfVOS = mapper.getRscInfHistByCd(vo);
+            vo.setRscInfList(rscInfVOS);
+        }
+        return rscInspVOS;
     }
 
     @Override
     @Transactional
     public void updRscInspHist(List<RscInspVO> rscInspVOS) {
-        System.out.println("rscInspVOS = " + rscInspVOS);
         for (RscInspVO rscInspVO : rscInspVOS) {
+            // update insp, insp-dtl
             mapper.updRscInspHist(rscInspVO);
+
+            // update inf
+            for(RscInfVO rscInfVO : rscInspVO.getRscInfList()) {
+                mapper.setRscInfList(rscInspVO, rscInfVO);
+            }
         }
     }
 

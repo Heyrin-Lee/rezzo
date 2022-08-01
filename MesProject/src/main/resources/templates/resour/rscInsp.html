@@ -24,7 +24,7 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h2 class="mt-2">자재수입검사</h2>
+        <h1 class="mt-2">자재수입검사</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
@@ -258,8 +258,12 @@
                 </div>
                 <div class="modal-body">
                     <div id="inf-grid"></div>
+                    <br>
+                    <div style="float: right">
+                        <input type="button" id="calInfCnt" value="입력" class="btn btn-primary">
+                    </div>
                 </div>
-                <input type="button" id="calInfCnt" value="입력">
+
             </div>
         </div>
     </div>
@@ -496,41 +500,49 @@
                 {
                     header: '자재코드',
                     name: 'rscCd',
-                    editor: customInput
+                    editor: customInput,
+                    align: 'center'
                 },
                 {
                     header: '품명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '규격',
-                    name: 'rscSpec'
+                    name: 'rscSpec',
+                    align: 'center'
                 },
                 {
                     header: '단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 },
                 {
                     header: '공급업체',
-                    name: 'vendNm'
+                    name: 'vendNm',
+                    align: 'center'
                 },
                 {
                     header: '발주번호',
-                    name: 'ordrCd'
+                    name: 'ordrCd',
+                    align: 'center'
                 },
                 {
                     header: '발주량',
                     name: 'ordrCnt',
                     validation: {
                         dataType: 'number'
-                    }
+                    },
+                    align: 'right'
                 },
                 {
                     header: '미입고량',
                     name: 'rmnCnt',
                     validation: {
                         dataType: 'number'
-                    }
+                    },
+                    align: 'right'
                 },
                 {
                     header: '가입고량',
@@ -553,7 +565,8 @@
                         options: {
                             maxLength: 10
                         }
-                    }
+                    },
+                    align: 'right'
                 },
                 {
                     header: '검사량',
@@ -568,7 +581,8 @@
                         options: {
                             maxLength: 10
                         }
-                    }
+                    },
+                    align: 'right'
                 },
                 {
                     header: '검사',
@@ -583,7 +597,8 @@
                     validation: {
                         dataType: 'number',
                         required: true
-                    }
+                    },
+                    align: 'right'
                 },
                 {
                     header: '불량수량',
@@ -597,7 +612,8 @@
                         options: {
                             maxLength: 10
                         }
-                    }
+                    },
+                    align: 'right'
                 }
             ]
             , editingEvent: 'click'
@@ -630,8 +646,9 @@
         // vendor grid
         let vendGrid = new tui.Grid({
             el: document.getElementById('vend-grid'),
+            bodyHeight: 300,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             columns: [
                 {
                     header: '업체코드',
@@ -687,8 +704,9 @@
         // rsc grid
         let rscGrid = new tui.Grid({
             el: document.getElementById('rsc-grid'),
+            bodyHeight: 300,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             columns: [
                 {
                     header: '자재코드',
@@ -790,16 +808,19 @@
 
         let infGrid = new tui.Grid({
             el: document.getElementById('inf-grid'),
+            bodyHeight: 300,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             columns: [
                 {
                     header: '불량코드',
-                    name: 'ccdDtl'
+                    name: 'ccdDtl',
+                    align: 'center'
                 },
                 {
                     header: '불량명',
-                    name: 'ccdDtlNm'
+                    name: 'ccdDtlNm',
+                    align: 'center'
                 },
                 {
                     header: '불량수량',
@@ -809,13 +830,9 @@
                         options: {
                             maxLength: 10
                         }
-                    }
-                },
-                {
-                    header: '검사자료',
-                    name: 'infData',
-                    hidden: true
-                },
+                    },
+                    align: 'center'
+                }
             ]
         })
 
@@ -825,10 +842,12 @@
         infModal.addEventListener('shown.bs.modal', e => {
             let rowKey = infModal.dataset.rowKey;
             let data = infData.get(rowKey)
-            if (data === undefined) {
+            if (data === undefined) { // initiate
                 infGrid.setColumnValues('infCnt', '')
+            } else if(data.length != 0) {
+                infGrid.resetData(data)
             } else {
-                infGrid.resetData(infData.get(rowKey))
+                infGrid.setColumnValues('infCnt', '')
             }
             infGrid.refreshLayout();
         })
@@ -870,6 +889,10 @@
         getOrdrListBtn.addEventListener('click', getOrdrList);
 
         function getOrdrList() {
+            // initiate inf list
+            infData.clear();
+            getInfList();
+
             // init conditions
             saveFlag = 0;
             grid.showColumn('rmnCnt');
@@ -894,12 +917,15 @@
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
             let gridVal = grid.getCheckedRows();
+            gridVal.forEach(el => {
+                let rowKey = el.rowKey.toString();
+                el.rscInfList = infData.get(rowKey)
+            })
             if (saveFlag === 0) {
                 gridVal[0].inspDt = inspDt.value;
                 gridVal[0].inspTstr = inspTstr.value;
                 setRscInspList(gridVal);
             } else {
-                console.log(gridVal)
                 updRscInspHist(gridVal);
             }
         })
@@ -914,7 +940,6 @@
                 getOrdrList();
             })
         }
-
 
         function updRscInspHist(data) {
             let url = 'updRscInspHist';
@@ -931,20 +956,24 @@
         // search grid
         let mdfyGrid = new tui.Grid({
             el: document.getElementById('modi-grid'),
+            bodyHeight: 300,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             columns: [
                 {
                     header: '검사일자',
-                    name: 'inspDt'
+                    name: 'inspDt',
+                    align: 'center'
                 },
                 {
                     header: '건수',
-                    name: 'inspCnt'
+                    name: 'inspCnt',
+                    align: 'center'
                 },
                 {
                     header: '검사코드',
-                    name: 'rscInspCd'
+                    name: 'rscInspCd',
+                    align: 'center'
                 }
             ]
         })
@@ -984,7 +1013,18 @@
                 body: JSON.stringify(rowInfo)
             }).then(res => res.json()).then(res => {
                 grid.hideColumn('rmnCnt')
+
+                // initiate inf grid
+                infData.clear();
+                getInfList();
+
+                // set main grid
                 grid.resetData(res);
+
+                // set inf grid
+                res.forEach(function (el, idx) {
+                    infData.set(idx.toString(), el.rscInfList);
+                })
             })
             saveFlag = 1;
             mModal.hide(modiModal);
@@ -1012,8 +1052,6 @@
         reloadBtn.addEventListener('click', e => {
             location.reload();
         })
-
-
     </script>
 </th:block>
 </body>
