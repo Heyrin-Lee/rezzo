@@ -32,6 +32,7 @@
 		ON s.edcts_cd = e.edcts_cd
 		WHERE s.lot_cnt != 0
 		<if test="prdtNm != null and prdtNm != ''">AND prdt_nm = #{prdtNm}</if>
+		<if test="edctsLotNo != null and edctsLotNo != ''">AND edcts_lot_no LIKE '%'||#{edctsLotNo}||'%'</if>
 		ORDER BY s.edcts_lot_no
   	</select>
   	

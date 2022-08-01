@@ -18,7 +18,7 @@ public interface OrderMapper {
 	//주문서 삭제
 	public void deleteOrdr(OrderVO vo);
 	//주문서 수정입력
-	public void saveOrdr(OrderVO vo);
+	public void saveOrdr(OrderVO ordList);
 	//주문번호 생성, 가져오기
 	public OrderVO getordrNo(OrderVO vo);
 }
