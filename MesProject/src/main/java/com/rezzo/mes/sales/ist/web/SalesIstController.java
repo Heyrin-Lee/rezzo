@@ -5,13 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rezzo.mes.qc.insp.service.PrdtInspVO;
 import com.rezzo.mes.sales.ist.service.SalesIstService;
 import com.rezzo.mes.sales.ist.service.SalesIstVO;
+import com.rezzo.mes.sales.order.service.OrderVO;
 
 @Controller
 public class SalesIstController {
@@ -57,6 +58,14 @@ public class SalesIstController {
 	@ResponseBody
 	public List<SalesIstVO> istOptionList(SalesIstVO vo) {
 		return service.istOptionList(vo);
+	}
+	
+	//입고등록 후 진행상황 입고완료로 변경
+	@PutMapping("modifyProg")
+	@ResponseBody
+	public OrderVO modifyProg(OrderVO vo) {
+		service.modifyProg(vo);
+		return vo;
 	}
 	
 }

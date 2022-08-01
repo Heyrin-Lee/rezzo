@@ -182,31 +182,7 @@
 	        ]
 	    }); 
 	    
-	    //제품 입고 등록&수정
-	    $("#saveBtn").click(ev => {
-	    	//제품 입고 등록버튼 클릭 -> 제품 입고번호 자동생성 & 등록 시 출력
-	    	//var submitData = $("#submitFrm").serialize();
-	    	var inspData = lotNoGrid.getCheckedRows();
-	    	var edctsLotNo = $("#edctsLotNo").val();
-	    	console.log(edctsLotNo);
-	    	console.log(inspData);
-	    	var edctsCd = lotNoGrid.getValue(inspData,'edctsCd');
-	    	console.log(edctsCd);
-	    	var edctsIstDt = $("#edctsIstDtStart").val();
-	    	var edctsIstCnt = $("#edctsIstCnt").val();
-	    	console.log(edctsIstCnt);
-	    	var edctsIstNo = $("#edctsIstNo").val();
-	    	$.ajax({
-	    		url:"saveIst",
-	    		dataType:"json",
-	    		method:"post",
-	    		data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsIstDt":edctsIstDt,"edctsIstCnt":edctsIstCnt,"edctsIstNo":edctsIstNo},
-	    		success:function(result) {
-	    			toastr.success('저장되었습니다');
-	    			salesIstList();
-	    		}
-	    	})
-	    })
+	    
 	    
 	    //제품 입고 전체 목록 - 현재 날짜 기준으로
 	    function salesIstList() {
@@ -265,14 +241,56 @@
 					}
 				})
 			})
+			
+		var orderNo;
 		//체크박스 선택시 완제품LOT번호 가져오기
 		lotNoGrid.on("click", e => {
 			let rowInfo = lotNoGrid.getCheckedRows(e);
 			edctsLotNo.value = rowInfo[0].edctsLotNo;
 			inspCnt.value = rowInfo[0].inspCnt;
+			
 		})
 		
-		
+	    //제품 입고 등록&수정
+	    $("#saveBtn").click(ev => {
+	    	//제품 입고 등록버튼 클릭 -> 제품 입고번호 자동생성 & 등록 시 출력
+	    	//var submitData = $("#submitFrm").serialize();
+	    	var inspData = lotNoGrid.getCheckedRows();
+	    	var edctsLotNo = $("#edctsLotNo").val();
+	    	console.log(edctsLotNo);
+	    	console.log(inspData);
+	    	var edctsCd = lotNoGrid.getValue(inspData,'edctsCd');
+	    	console.log(edctsCd);
+	    	var edctsIstDt = $("#edctsIstDtStart").val();
+	    	var edctsIstCnt = $("#edctsIstCnt").val();
+	    	console.log(edctsIstCnt);
+	    	var edctsIstNo = $("#edctsIstNo").val();
+	    	var orderNo = inspData[0].orderNo;
+			console.log(orderNo);
+	    	$.ajax({
+	    		url:"saveIst",
+	    		dataType:"json",
+	    		method:"post",
+	    		data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsIstDt":edctsIstDt,"edctsIstCnt":edctsIstCnt,"edctsIstNo":edctsIstNo},
+	    		success:function(result) {
+	    			toastr.success('저장되었습니다');
+	    			salesIstList();
+	    			$.ajax({
+	    				url:"modifyProg",
+	    				method:"put",
+	    				dataType:"json",
+	    				data:{"orderNo":orderNo},
+	    				error:function(er) {
+	    					console.log('에러!');
+	    				},
+	    				success:function(ordrList) {
+	    					salesIstList();
+	    				}
+	    			})
+	    		}
+	    	})
+	    })
+	    
 		$("#dtSearchBtn").on("click",function() {
 			istOptionList();
 		})

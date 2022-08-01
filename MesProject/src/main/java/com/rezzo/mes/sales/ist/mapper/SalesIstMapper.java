@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rezzo.mes.qc.insp.service.PrdtInspVO;
 import com.rezzo.mes.sales.ist.service.SalesIstVO;
+import com.rezzo.mes.sales.order.service.OrderVO;
 
 public interface SalesIstMapper {
 
@@ -15,4 +16,6 @@ public interface SalesIstMapper {
 	public List<SalesIstVO> istOptionList(SalesIstVO vo);
 	//완제품LOT번호 모달 조회
 	public List<PrdtInspVO> getLotList(PrdtInspVO vo);
+	//입고등록 후 입고완료로 진행상황 변경
+	public void modifyProg(OrderVO vo);
 }

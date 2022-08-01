@@ -9,6 +9,7 @@ import com.rezzo.mes.qc.insp.service.PrdtInspVO;
 import com.rezzo.mes.sales.ist.mapper.SalesIstMapper;
 import com.rezzo.mes.sales.ist.service.SalesIstService;
 import com.rezzo.mes.sales.ist.service.SalesIstVO;
+import com.rezzo.mes.sales.order.service.OrderVO;
 
 @Service
 public class SalesIstServiceImpl implements SalesIstService{
@@ -38,6 +39,13 @@ public class SalesIstServiceImpl implements SalesIstService{
 	@Override
 	public List<SalesIstVO> istOptionList(SalesIstVO vo) {
 		return mapper.istOptionList(vo);
+	}
+
+	//입고등록 후 진행상황 입고완료로 변경
+	@Override
+	public void modifyProg(OrderVO vo) {
+		mapper.modifyProg(vo);
+		
 	}
 
 
