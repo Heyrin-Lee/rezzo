@@ -24,6 +24,12 @@ public class SalesIstController {
 		return "sales/salesIst";
 	}
 	
+	//제품 입고 조회 페이지
+	@RequestMapping("salesIstSearch")
+	public String saelsIstSearch() {
+		return "sales/salesIstSearch";
+	}
+	
 	//제품 입고 등록&수정
 	@PostMapping("saveIst")
 	@ResponseBody
@@ -32,7 +38,7 @@ public class SalesIstController {
 		return service.salesIstList(vo);
 	}
 	
-	//제품 입고 목록 조건별 조회
+	//제품 입고 목록 현재 날짜 기준으로 조회(첫페이지)
 	@PostMapping("salesIstList")
 	@ResponseBody
 	public List<SalesIstVO> salesIstList(SalesIstVO vo) {
@@ -44,6 +50,13 @@ public class SalesIstController {
 	@ResponseBody
 	public List<PrdtInspVO> getLotList(PrdtInspVO vo) {
 		return service.getLotList(vo);
+	}
+	
+	//제품 입고 목록 조건별 조회
+	@PostMapping("istOptionList")
+	@ResponseBody
+	public List<SalesIstVO> istOptionList(SalesIstVO vo) {
+		return service.istOptionList(vo);
 	}
 	
 }

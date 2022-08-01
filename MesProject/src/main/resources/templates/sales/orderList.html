@@ -24,7 +24,7 @@
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
 			<li class="breadcrumb-item">> 주문서관리</li>
-			<li class="breadcrumb-item active">> 주문서 조회/등록</li>
+			<li class="breadcrumb-item active">> 주문서 관리</li>
 		</ol>
 		
 		<div class="card mb-4">
@@ -48,17 +48,17 @@
                         </div>
                         <div class="mb-3">
                            <label for="vendNm" class="form-label">거래처명</label>
-    						<input type="text" class="form-control" id="vendNm" name="vendNm">
+    						<input type="text" class="form-control" id="vendNm" name="vendNm" style="width:150px;">
                             <button type="button" class="btn btn-primary" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-3">
                            <label for="prdtNm" class="form-label">제품명</label> 
-                           <input type="text" class="form-control" id="prdtNm" name="prdtNm">
+                           <input type="text" class="form-control" id="prdtNm" name="prdtNm" style="width:150px;margin-left: 15px;">
                            <button type="button" class="btn btn-primary" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-4">
                            <label for="email" class="form-label">주문일자</label> 
-                           <input type="date" id="start" name="start"> - <input type="date" id="end" name="end">
+                           <input type="date" id="start" name="start" class="form-control" style="width:150px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;"> 
                         </div>
                        </div>
                      </form>
@@ -74,12 +74,10 @@
    		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 검색</button>
    </div>
    </div>
-   
-   <div class="card mb-4">
-   	<div class="card-body">
-   		<div id="grid"></div>   		
-   	</div>
-   </div>
+
+   		<div id="grid" class="card mb-4"></div>   		
+
+
    
    <!-- 제품코드 모달(등록) -->
    <div class="modal fade" id="edctsCdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -152,9 +150,6 @@
     
     
     <script>
-   /* 그리드 */
-		//초기페이지 - 주문서 전체 목록 보여주기-주문일자가 현재 날짜인 주문서만 보이기
-
 
 		$(function() {
 			search();
@@ -414,6 +409,7 @@
 		   				})
 		   			}
 		   		})
+		   	});
 		   		//거래처 목록 모달창에서 거래처 선택 -> 추가된 행 거래처명,코드에 값 들어가기
 		   		vendGrid.on("click",ev => {
 		   			let row = vendGrid.getCheckedRowKeys(ev);
@@ -425,7 +421,7 @@
 		   			grid.setValue(vendRowKey, 'vendNm', nmInfo);
 		   			grid.setValue(vendRowKey, 'vendCd', cdInfo);
 		   		})
-		   	});
+		   
 			
 			//제품코드 칸 클릭 -> 제품코드 모달창 띄우기
 			grid.on("click",(e) => {
@@ -506,11 +502,15 @@
 			$.ajax({
 				url:"deleteOrdr",
 				method:"delete",
-				dataType:"json",
 				data:JSON.stringify(data),
 				contentType:"application/json",
-				success:function(result) {
+				success:function() {
+					toastr.success('삭제되었습니다');
+					//grid.clear();
 					search();
+				},
+				error:function(er) {
+					console.log(er);
 				}
 			})
 		})
@@ -523,13 +523,16 @@
 			$.ajax({
 				url:"saveOrdr",
 				method:"post",
-				dataType:"json",
 				data:JSON.stringify(data),
 				contentType:"application/json",
-				success:function(result) {
-					grid.resetData(result);
-				}
-			})
+				success:function() {
+					grid.uncheckAll();
+					toastr.success('저장되었습니다');
+					},
+					error:function(er){
+						console.log(er);
+					}
+				})
 			})
 			
 			

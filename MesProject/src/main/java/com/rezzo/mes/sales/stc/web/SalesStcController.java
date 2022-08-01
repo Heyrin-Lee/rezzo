@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,14 +19,9 @@ public class SalesStcController {
 	
 	//완제품재고 조회 페이지 불러오기
 	@RequestMapping("salesStc")
-	public String salesStc() {
+	public String salesStc(Model model) {
+		model.addAttribute("lotNo", service.getLotStcList(null));
 		return "sales/salesStc";
-	}
-	
-	@RequestMapping("makeDtSearch")
-	@ResponseBody
-	public List<SalesStcVO> makeDtSearch(SalesStcVO vo) {
-		return service.makeDtSearch(vo);
 	}
 	
 	//제품명 조회 모달
@@ -41,4 +37,5 @@ public class SalesStcController {
 	public List<SalesStcVO> getLotStcList(SalesStcVO vo) {
 		return service.getLotStcList(vo);
 	}
+	
 }

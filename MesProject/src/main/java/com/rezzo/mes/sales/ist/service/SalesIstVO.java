@@ -30,7 +30,8 @@ public class SalesIstVO {
 	Date edctsIstDtEnd;
 	
 	String orderNo;
-	int inspCnt;
+	Integer inspCnt;
 	String inspJm;
 	String inspPsch;
+	String progAppe;
 }

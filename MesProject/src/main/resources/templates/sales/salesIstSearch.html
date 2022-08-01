@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
-<title>제품 입고 등록 및 수정</title>
+<title>제품 입고 조회</title>
 <style>
 	.c_btn {
    color: #fff;
@@ -24,7 +24,7 @@
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
 			<li class="breadcrumb-item">> 제품 입고 관리</li>
-			<li class="breadcrumb-item active">> 제품 입고 등록 및 수정</li>
+			<li class="breadcrumb-item active">> 제품 입고 조회</li>
 		</ol>
 		
 		<div class="card mb-4">
@@ -33,35 +33,21 @@
             <div class="col">
                <div class="card mb-4">
                   <div class="card-header">
-                     <i class="fas fa-tachometer-alt"></i> 제품 입고 관리
+                     <i class="fas fa-tachometer-alt"></i> 제품 입고 조회
                   </div>
 				<div class="card-body" id="vendModal">
                      <form name="IstSearchFrm" id="IstSearchFrm">
                       <div class="r_input">
                         <div class="mb-3">
-                           <label for="edctsIstNo" class="form-label">제품 입고번호</label>
-    						<input type="text" class="form-control" id="edctsIstNo" name="edctsIstNo" placeholder="입고 등록시 자동생성" readonly style="width:200px;margin-left: 6px;">
-                        </div>
-                        <div class="mb-3">
                            <label for="edctsLotNo" class="form-label">완제품LOT번호</label>
     						<input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo" style="width:200px;" readonly>
     						<!-- 모달버튼 -->
     						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
-                        </div>                       
-                        <div class="mb-3">
-                        	<label for="prdtInsp" class="form-label">검사수량</label>
-                        	<input type="text" class="form-control" id="inspCnt" name="inspCnt" style="width:200px;margin-left: 42px;" readonly>
-                        </div>
-                        <div class="mb-3">
-                           <label for="edctsIstCnt" class="form-label">제품 입고수량</label> 
-                           <input type="text" class="form-control" id="edctsIstCnt" name="edctsIstCnt" style="width:200px;margin-left: 5px;">
-                        </div>
+                        </div> 
                         <div class="mb-4">
                            <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
-                           <input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;">
-                           <button type="button" class="btn btn-primary" id="dtSearchBtn"><i class="fas fa-search"></i> 검색</button><br>
-                           <button type="button" class="btn btn-primary" id="saveBtn" style="margin-top:20px;"><i class="fas fa-save"></i> 등록</button>
-                           
+                           <input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;"><br>
+                           <button type="button" class="btn btn-primary" id="optionSearchBtn" style="margin-top:20px;"><i class="fas fa-search"></i> 검색</button>
                         </div>
                        </div>
                      </form>
@@ -91,14 +77,13 @@
     </div>
       <div id="grid" class="card mb-4"></div>
    </div>
-      
-     <script>
-     
-     $(function() {
+   
+  <script>
+  	$(function() {
      	salesIstList();
      })
-     
-     const grid = new tui.Grid({
+  
+  	const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      scrollX: false,
 	      bodyHeight: 300,
@@ -182,32 +167,6 @@
 	        ]
 	    }); 
 	    
-	    //제품 입고 등록&수정
-	    $("#saveBtn").click(ev => {
-	    	//제품 입고 등록버튼 클릭 -> 제품 입고번호 자동생성 & 등록 시 출력
-	    	//var submitData = $("#submitFrm").serialize();
-	    	var inspData = lotNoGrid.getCheckedRows();
-	    	var edctsLotNo = $("#edctsLotNo").val();
-	    	console.log(edctsLotNo);
-	    	console.log(inspData);
-	    	var edctsCd = lotNoGrid.getValue(inspData,'edctsCd');
-	    	console.log(edctsCd);
-	    	var edctsIstDt = $("#edctsIstDtStart").val();
-	    	var edctsIstCnt = $("#edctsIstCnt").val();
-	    	console.log(edctsIstCnt);
-	    	var edctsIstNo = $("#edctsIstNo").val();
-	    	$.ajax({
-	    		url:"saveIst",
-	    		dataType:"json",
-	    		method:"post",
-	    		data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsIstDt":edctsIstDt,"edctsIstCnt":edctsIstCnt,"edctsIstNo":edctsIstNo},
-	    		success:function(result) {
-	    			toastr.success('저장되었습니다');
-	    			salesIstList();
-	    		}
-	    	})
-	    })
-	    
 	    //제품 입고 전체 목록 - 현재 날짜 기준으로
 	    function salesIstList() {
 	    		var IstData = $("#IstSearchFrm").serialize();
@@ -221,37 +180,8 @@
 	    		}
 	    	})
 	    }
-	   
-	    //제품 입고 목록 조건별 조회
-	    function istOptionList() {
-	    	var optionIstData = $("#IstSearchFrm").serialize();
-	    	$.ajax({
-	    		url:"istOptionList",
-	    		method:"post",
-	    		dataType:"json",
-	    		data:optionIstData,
-	    		success:function(optionList) {
-	    			grid.resetData(optionList);
-	    		}
-	    	})
-	    } 
 	    
-	    //제품 입고번호 칸 클릭 -> 폼에 상세값 출력
-		grid.on("click",(e) => {
-			const {columnName} = e;			
-			IstNoRowKey = e.rowKey;
-			let edctsIstNoResult = grid.getValue(IstNoRowKey ,'edctsIstNo');
-			let edctsLotNoResult = grid.getValue(IstNoRowKey, 'edctsLotNo');
-			let edctsIstCntResult = grid.getValue(IstNoRowKey, 'edctsIstCnt');
-			console.log(edctsIstNoResult);
-			if(columnName == 'edctsIstNo') {
-				edctsIstNo.value = edctsIstNoResult;
-				edctsLotNo.value = edctsLotNoResult;
-				edctsIstCnt.value = edctsIstCntResult;
-			}
-		})
-		
-		//완제품LOT번호 검색 버튼 클릭 -> 완제품LOT번호 목록 모달창
+	    //완제품LOT번호 검색 버튼 클릭 -> 완제품LOT번호 목록 모달창
 		$("#lotSearchBtn").on("click",function(lotList) {
 			setTimeout(function () {
 							lotNoGrid.refreshLayout()
@@ -269,17 +199,28 @@
 		lotNoGrid.on("click", e => {
 			let rowInfo = lotNoGrid.getCheckedRows(e);
 			edctsLotNo.value = rowInfo[0].edctsLotNo;
-			inspCnt.value = rowInfo[0].inspCnt;
+		})
+		
+		//입고 목록 조건별 조회
+		$("#optionSearchBtn").on("click",function(istList) {
+			var edctsLotNo = $("#edctsLotNo").val();
+			var edctsIstDtStart = $("#edctsIstDtStart").val();
+			var edctsIstDtEnd = $("#edctsIstDtEnd").val();
+			$.ajax({
+				url:"istOptionList",
+				method:"post",
+				dataType:"json",
+				data:{"edctsLotNo":edctsLotNo, "edctsIstDtStart":edctsIstDtStart, "edctsIstDtEnd":edctsIstDtEnd},
+				success:function(istList){
+					grid.resetData(istList);
+				}
+			})
 		})
 		
 		
-		$("#dtSearchBtn").on("click",function() {
-			istOptionList();
-		})
-		
-	    //제품 입고일자 현재 날짜로 설정
+		//제품 입고일자 현재 날짜로 설정
 	    document.getElementById("edctsIstDtStart").valueAsDate = new Date();
 	    document.getElementById("edctsIstDtEnd").valueAsDate = new Date();
-     </script>
+  </script>
 </body>
 </html>

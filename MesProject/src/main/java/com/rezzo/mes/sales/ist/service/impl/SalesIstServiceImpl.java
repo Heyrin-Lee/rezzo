@@ -16,7 +16,7 @@ public class SalesIstServiceImpl implements SalesIstService{
 	@Autowired SalesIstMapper mapper;
 
 	
-	//제품 입고 목록 조건별 조회
+	//제품 입고 목록 현재 날짜 기준으로 조회(첫페이지)
 	@Override
 	public List<SalesIstVO> salesIstList(SalesIstVO vo) {
 		return mapper.salesIstList(vo);
@@ -32,6 +32,12 @@ public class SalesIstServiceImpl implements SalesIstService{
 	@Override
 	public void saveIst(SalesIstVO vo) {
 			mapper.saveIst(vo);			
+	}
+
+	//제품 입고 목록 조건별 조회
+	@Override
+	public List<SalesIstVO> istOptionList(SalesIstVO vo) {
+		return mapper.istOptionList(vo);
 	}
 
 
