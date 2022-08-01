@@ -55,7 +55,7 @@
 			where 1=1
 			<if test="frDt != null"><![CDATA[ AND fr_dt <= #{frDt}]]></if>
 			<if test="toDt != null"><![CDATA[ AND to_dt >= #{toDt}]]></if>
-			<if test="eqmNm != null and eqmNm !=''">and e.eqm_nm = #{eqmNm}</if>
+			<if test="eqmNm != null and eqmNm !=''">and e.eqm_nm Like '%'||#{eqmNm}||'%'</if>
 			<if test="eqmCd != null and eqmCd !=''">and e.eqm_cd = #{eqmCd}</if>
 	</select>
 	
@@ -103,5 +103,23 @@
 				opert_ctnt = #{opertCtnt}
 		where nopr_cd = #{noprCd}
 	</update>
+	
+	<select id = "getOprListMap" resultMap="eqmMap">
+        	select 
+			e.eqm_cd as "설비코드", e.line_cd as "라인코드", e.prcs_cd as "공정코드",
+			e.eqm_nm as "설비명", to_char(o.fr_dt, 'yyyy-mm-dd') as "시작일", to_char(o.to_dt, 'yyyy-mm-dd') as "종료일", o.eqm_psch as "담당자", 
+			o.opert_ctnt as "작업내용", o.nopr_cd as "비가동코드"
+			from eqm e 
+			join eqm_opr o 
+			on e.eqm_cd = o.eqm_cd
+			where 1=1
+			<if test="frDt != null"><![CDATA[ AND fr_dt <= #{frDt}]]></if>
+			<if test="toDt != null"><![CDATA[ AND to_dt >= #{toDt}]]></if>
+			<if test="eqmNm != null and eqmNm !=''">and e.eqm_nm Like '%'||#{eqmNm}||'%'</if>
+			<if test="eqmCd != null and eqmCd !=''">and e.eqm_cd = #{eqmCd}</if>
+	</select>
+	
+	
+
 
 </mapper>

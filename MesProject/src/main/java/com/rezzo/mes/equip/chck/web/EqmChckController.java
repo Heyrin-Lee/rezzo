@@ -1,7 +1,12 @@
 package com.rezzo.mes.equip.chck.web;
 
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
@@ -75,6 +81,19 @@ public class EqmChckController {
 	public List<EqmChckVO> eqmChckSearch(EqmChckVO vo, EqmVO eqmVo){
 		List<EqmChckVO> chckSearch = service.eqmChckSearch(vo);
 		return chckSearch;
+	}
+	
+	
+	//내역 엑셀 다운로드
+	@GetMapping(path="eqmChckExelView", produces = "application/vnd.ms-excel")
+	public ModelAndView excelView(EqmChckVO vo, HttpServletResponse response) throws IOException {
+		List<Map<String, Object>> list = service.getEqmListMap(vo);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String[] header = {"점검코드", "설비코드", "설비명","가동여부", "점검일자", "점검구분", "판정", "조치사항", "조치내역", "담당자"};
+		map.put("headers", header);
+		map.put("filename", "eqmChck_list");
+		map.put("datas", list);
+		return new ModelAndView("commonExcelView", map);
 	}
 	
 }

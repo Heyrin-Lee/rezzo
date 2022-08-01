@@ -38,6 +38,7 @@
 		textarea {
 			resize: none;
 		}
+		
 	</style>
 </head>
 
@@ -48,7 +49,7 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">설비점검내역</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do"><i
+				<li class="breadcrumb-item"><a href="/"><i
 						class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 설비관리</li>
 				<li class="breadcrumb-item active">> 설비점검내역</li>
@@ -145,7 +146,8 @@
 
 			<div class="card mb-4">
 				<div class="card-body">
-
+					
+					<form action="" method="get">
 					<tr>
 						<th>설비명</th>
 						<td><input class="form-control" type="text" id="keyword3" name="eqmNm" style="width: 150px"></td>&nbsp&nbsp
@@ -155,13 +157,13 @@
 							<input type="date" class="form-control" id="toDt" name="toDt" style="width: 150px;">
 						</td>&nbsp
 						<td>
-							<button style="margin-bottom:3px" class="btn btn-primary" id="bSearchBtn"><i class="fas fa-search"></i>
-								검색</button>
+							<button type="button" style="margin-bottom:3px" class="btn btn-primary" id="bSearchBtn"><i class="fas fa-search"></i> 검색</button>
+							<button type="submit" formaction="eqmChckExelView" style="margin-bottom:3px" class="btn btn-primary" id="excelBtn"><i class="fas fa-download" ></i> Excel</button></a>
 						</td>
 					</tr>
-
-
-					<br><br>
+					</form>
+					
+					<br>
 					<div id="grid"></div>
 				</div>
 			</div>
@@ -239,6 +241,29 @@
 						}
 					]
 				});
+				
+			/*	// 엑셀버튼
+				
+			function excelOn(){				
+				$('#excelBtn').on('click', (ev)=>{
+					var eqmNm = $('#keyword3').val()
+					var toDt = $('#toDt').val()
+					var stDt = $('#stDt').val()
+					$.ajax({
+						url: "eqmChckExelView",
+						method: 'GET',
+						dataType: 'JSON',
+						data: {
+							eqmNm: eqmNm,
+							toDt: toDt,
+							stDt: stDt
+						},success(result){
+							console.log(result)
+						}
+					})
+				})
+				}
+			*/
 
 				// 그리드 클릭
 				grid.on('click', (ev) => {
@@ -400,7 +425,6 @@
 						return;
 					}
 
-					//var result = confirm("해당 내역을 삭제하시겠습니까?")
 	
 					  $.ajax({
 						url: "eqmChckDelete",
@@ -422,7 +446,6 @@
 							}
 						});
 					})
-              //"삭제" 버튼을 눌렀을 때 작업할 내용을 이곳에 넣어주면 된다. 
 		  }
 		)
 
@@ -434,8 +457,6 @@
 						this.reset();
 					});
 				})
-
-
 
 			
 

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.rezzo.mes.equip.eqm.service.EqmVO;
 
 
 @Service
@@ -26,5 +25,8 @@ public interface EqmOprService {
 		public List<Map<String, String>> OprSelectList(String keyword);
 		
 		public void oprUpdate (EqmOprVO vo);
+		
+		//엑셀 전체목록받아오기
+		public List<Map<String, Object>> getOprListMap(EqmOprVO vo);
 
 }

@@ -21,7 +21,7 @@
 	</select>
 	
 	<select id = "rscRowSelectList" resultType="com.rezzo.mes.resour.ordr.service.RscOrdrVO">
-			select r.rsc_cd, r.rsc_nm, v.vend_cd, v.vend_nm, s.rsc_stc, s.saf_stc
+			select r.rsc_cd, r.rsc_nm, v.vend_cd, v.vend_nm, s.rsc_stc, r.saf_stc
 			from rsc r join vend v
 			on v.vend_cd=r.vend_cd 
 			join rsc_stc s on 1=1

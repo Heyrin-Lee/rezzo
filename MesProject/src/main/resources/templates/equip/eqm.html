@@ -64,7 +64,7 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">설비관리</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do"><i
+				<li class="breadcrumb-item"><a href="/"><i
 						class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 설비관리</li>
 				<li class="breadcrumb-item active">> 설비관리</li>
@@ -233,7 +233,7 @@
 			$('[name="file"]').click();
 		})
 		
-		$('#preview').attr('src',"imgfile/add-image.png").css('width','150px')
+		$('#preview').attr('src',"assets/img/add-image.png").css('width','150px')
 			function readURL(input) {
 				if (input.files && input.files[0]) {
 					var reader = new FileReader();
@@ -386,7 +386,7 @@
 			$('#initBtn').on('click', function () {
 				$('#dataForm').each(function () {
 					this.reset()
-					$('#preview').attr('src',"imgfile/add-image.png");
+					$('#preview').attr('src',"assets/img/add-image.png");
 				})
 			})
 
@@ -442,7 +442,7 @@
 							grid.resetData(result)
 							$('#dataForm').each(function () {
 							this.reset()
-							$('#preview').attr('src',"imgfile/add-image.png");
+							$('#preview').attr('src',"assets/img/add-image.png");
 						})
 						}
 					})
@@ -503,7 +503,7 @@
 							grid.resetData(result)
 							$('#dataForm').each(function () {
 								this.reset()
-								$('#preview').attr('src',"imgfile/add-image.png");
+								$('#preview').attr('src',"assets/img/add-image.png");
 							})
 						}
 					})
@@ -553,7 +553,7 @@
 							toastr.success('설비삭제가 완료되었습니다.');
 							$('#dataForm').each(function () {
 								this.reset()
-								$('#preview').attr('src',"imgfile/add-image.png");
+								$('#preview').attr('src',"assets/img/add-image.png");
 							})
 						}
 					})
@@ -594,7 +594,7 @@
 						$('#eqmIstDt').val(result[0].eqmIstDt);
 						$('[name="eqmFg"]').val(result[0].eqmFg);
 						if(result[0].imgPath==null || result[0].imgPath==''){
-							$('#preview').attr('src',"imgfile/add-image.png");
+							$('#preview').attr('src',"assets/img/add-image.png");
 							} else{
 							$('#preview').attr("src", "image/" + result[0].imgPath);}
 					}

@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.rezzo.mes.equip.eqm.service.EqmVO;
 import com.rezzo.mes.equip.opr.mapper.EqmOprMapper;
 import com.rezzo.mes.equip.opr.service.EqmOprService;
 import com.rezzo.mes.equip.opr.service.EqmOprVO;
@@ -57,6 +56,11 @@ public class EqmOprServiceImpl implements EqmOprService {
 	@Override
 	public List<EqmOprVO> OprKeyList(EqmOprVO vo) {
 		return map.OprKeyList(vo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getOprListMap(EqmOprVO vo) {
+		return map.getOprListMap(vo);
 	}
 
 
