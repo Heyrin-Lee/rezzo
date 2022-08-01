@@ -118,5 +118,24 @@ and i.infer_cd = #{inferCd}
 and p.infer_cnt > 0
 </if>
 </select>
+<update id="updateYn">
+update dum 
+set yn = 'N'
+where seq_no >= (SELECT min(seq_no) KEEP(DENSE_RANK FIRST ORDER BY seq_no) FROM dum where yn = 'Y')
+</update>
+
+<update id="updateYn2">
+update dum
+set yn = 'Y'
+where seq_no >= (SELECT min(seq_no) KEEP(DENSE_RANK FIRST ORDER BY seq_no) FROM dum where yn = 'N')
+and (WK_TO_TM is null  or  WK_FR_TM is null)
+</update>
+
+<select id="getNoOprEqm" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
+select eqm_cd 
+from dum
+where yn = 'N'
+and wk_to_tm is null
+</select>
 
 </mapper>	

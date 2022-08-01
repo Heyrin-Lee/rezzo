@@ -40,10 +40,7 @@ display:inline-block;
 </head>
 <body>
 <!-- 본문내용 -->
-<th:block layout:fragment="
-
-
-">
+<th:block layout:fragment="main">  
 
    <!-- 헤더부분 -->
    <div class="container-fluid px-4">
@@ -54,7 +51,6 @@ display:inline-block;
 		<li class="breadcrumb-item active">> 생산관리</li>
 	  </ol>
    </div>
-   <!-- 헤더부분 -->
 
 <div id="container">   
 
@@ -204,9 +200,9 @@ display:inline-block;
    		})
    })
 
-   
+  //생산 끝난 후 
   let value
-
+	
   interval2=setInterval(function(){
    	if(value == '완료') {
 		clearInterval(interval2)
@@ -224,9 +220,6 @@ display:inline-block;
 			data : {"orderNo" : orderNo, "lineCd" : lineCd, "edctsCd" : edctsCd, "prodCnt" : prodCnt, "planCd" : planCd}
 		})
 
-		//자재 재고 업데이트
-
-		
 		//진행공정 인서트
 		let data = grid2.getData()
 		$.each(data, function(index, item) {
@@ -244,23 +237,25 @@ display:inline-block;
 
 		
 		//자재 업데이트			
-		$.ajax({
-			url : 'getHolding',
-			method : 'post',
-			data : {"planCd" : planCd},
-			success : function(result) {
-					let today = new Date()
-					let obj = {oustDt:today, oustTyp:'공정출고', from:'prod'}
-					result.unshift(obj)
-				console.log(result)
-				$.ajax({
-					url : 'setRscOust',
-					method : 'post',
-					data : JSON.stringify(result),
-					contentType : 'application/json'
-				})
-			}
-		})
+	//	$.ajax({
+	//		url : 'getHolding',
+	//		method : 'post',
+	//		data : {"planCd" : planCd},
+	//		success : function(result) {
+	//				let today = new Date()
+	//				today = today.toISOString().substring(0, 10)
+	//				console.log(today)
+	//				let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
+	//				result.unshift(obj)
+	//			console.log(result)
+	//			$.ajax({
+	//				url : 'setRscOust',
+	//				method : 'post',
+	//				data : JSON.stringify(result),
+	//				contentType : 'application/json'
+	//			})
+	//		}
+	//	})
 		
 		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt
@@ -272,15 +267,11 @@ display:inline-block;
         	iGrid.lineCd = grid.getData()[0].lineCd
         	iGrid.prefRank = grid.getData()[0].prefRank
         	iGrid.planCd = grid.getData()[0].planCd
-
         	
 			$.ajax({
 				url : 'insertInfer',
 				method : 'post',
-				data : iGrid,
-				success : function () {
-					//window.location.reload()
-				}
+				data : iGrid
 			})
 
 		
@@ -288,39 +279,103 @@ display:inline-block;
    	} 
    }, 1000)
 
+    //긴급 중지
+   $("#stopBtn").on("click", function(){
+   	//누르는 순간 가동중이던 설비부터 그 뒤에 남은 설비들 전부 N상태로 update하기 -> 해당 설비를 업데이트 위한 파라미터로 보내야 함 -> 전부 N로 바꾸면?
+   																		//  -> 당장 인서트는 막을 수 있겠지만 재시작할 때 기준이 없다..??
+   																	    //  -> 파라미터는 일단 전부 넘기고 조건 걸어서 N면 두고 Y면 업데이트 
+   																	    //  -> 조건에 맞아서 업데이트된 설비들을 재시작 버튼 파라미터로 재사용 -> 어떻게?
+   																	    //  -> seqNo 가 있음 긴급중지 조건 줄 때 Y면서 seqNo 제일 작은 설비만 찾으면
+   																	    //  -> seqNo보다 큰 것들 전부 업데이트 하도록 구현
+   																	    
+   	//-> Y여야 인서트가 실행되므로 인서트를 막기 위함
+   	//그 설비에 대한 비가동 정보가 insert (종료일시는 null) 
+   		$.ajax({
+   			url : 'updateYn',
+			success : function(result){
+				for(i=0; i<grid2.getRowCount(); i++) {
+				
+				  for(j=0; j<result.length; j++) {
+					  if(grid2.getValue(i, 'eqmCd') == result[j].eqmCd){
+					  	grid2.setValue(i, 'nowSt', '긴급중지');
+					  }
+				  }
+	            
+	            clearInterval(arrTest[i])
+				}
+				arrTest = [];
+			}
+   		})
+   })
+   
+   //재시작
+   $("#restartBtn").on("click", function(){
+   	//위와 반대 이벤트 걸리게 Y로 바뀌었던 것들을 N를 Y로 
+   	//다시 insert 시작
+   	//+ 그 설비에 대한 비가동 정보 중 종료일시 update
+   		$.ajax({
+   			url : 'updateYn2',
+   			success : function(){
+   				 for(i=0; i<grid2.getRowCount(); i++) {
+   				 	let eqmCd = grid2.getValue(i, 'eqmCd')
+					   let indicaCnt = grid.getData()[0].indicaCnt
+					   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
+					   let lineCd = grid.getData()[0].lineCd
+					   let valueI = i
+					   let interval = setInterval(interFn , 5000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
+		               arrTest.push(interval)
+   				 }
+   			}
+   		})
+   })
+	
+	let arrTest = []
+   // 생산지시	
    $("#startBtn").on("click", function(){
 	  for(i=0; i<grid2.getRowCount(); i++) {
-		   (function (i) {
-			   let eqmCd = grid2.getValue(i, 'eqmCd')
-			   let indicaCnt = grid.getData()[0].indicaCnt
-			   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
-			   let lineCd = grid.getData()[0].lineCd
-			   grid2.setValue(i, 'nowSt', '대기중')
-				 
-				 $.ajax({
-					 url : 'insertEqmCd',
-					 data : {"eqmCd" : eqmCd, "lineCd" : lineCd , "seqNo" : i+1},
-					 success : function(){
-					 	let interval = setInterval(function () {
-					    let arr = []
-					   
-					    if(grid2.getRow(i).nowSt != '완료') {
+		   let eqmCd = grid2.getValue(i, 'eqmCd')
+		   let indicaCnt = grid.getData()[0].indicaCnt
+		   let valueI = i
+		   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
+		   let lineCd = grid.getData()[0].lineCd
+		   grid2.setValue(i, 'nowSt', '대기중')
+		   $.ajax({
+			 url : 'insertEqmCd',
+			 data : {"eqmCd" : eqmCd, "lineCd" : lineCd , "seqNo" : i+1},
+			 success : function(){
+			 	let interval = setInterval(interFn , 5000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
+                arrTest.push(interval)
+			 }  //end of success
+		   })  //end of ajax
+	   }  // end of for
+   })	
+   
+   
+  function interFn(i, eqmCd, indicaCnt, inferCnt, lineCd) {
+  
+//  for(i=0; i<grid2.getRowCount(); i++) {
+//	  if(grid.getValue(i, 'eqmCd') == eqm)
+//  }
+					    console.log(i)
+					    //if(grid2.getRow(i).nowSt != '완료') {
 				             $.ajax({
 				            	 url : 'selectEqm',
 				            	 data : {"eqmCd" : eqmCd},
 				            	 success : function(result){
+				            	 console.log(i)
 				            		if (result.wkFrTm != null && result.wkToTm == null) {
 				            			grid2.setValue(i, 'wkFrTm', result.wkFrTm)
 				            			 grid2.setValue(i, 'nowSt', '진행중')
 				            			 if (i < 3) {
 				            				 grid2.setValue(i, 'indicaCnt', indicaCnt)
-				            				
-				            				 arr.push(interval)
+				            				 console.log(arrTest)
+				            				 //arr.push(interval)
+				            				 
 				            			 } else {
 				            				 let value = grid2.getValue(i-1, 'prodCnt')
 				            				 grid2.setValue(i, 'indicaCnt', value)
 				            				 
-				            				 arr.push(interval)
+				            				 //arr.push(interval)
 				            			 }
 				            		} else if (result.wkToTm != null){
 				            			if(i == 0) {
@@ -341,7 +396,7 @@ display:inline-block;
 					            			result.prodCnt=grid2.getData()[i].prodCntd
 					            			result.orderNo=grid.getData()[i].orderNo
 					            			
-					            			arr.push(interval)
+					            			//arr.push(interval)
 				            			} else{
 				            				indicaCnt = grid2.getValue(i-1, 'prodCnt')
 				            				if(i < 5) {
@@ -351,7 +406,7 @@ display:inline-block;
 						            			grid2.setValue(i, 'nowSt', '완료')
 
 						            			
-						            			arr.push(interval)
+						            			//arr.push(interval)
 						            			
 				            				} else {
 				            					grid2.setValue(i, 'wkToTm', result.wkToTm)
@@ -361,7 +416,7 @@ display:inline-block;
 
 						            			value = grid2.getValue(i, 'nowSt')
 						            			
-						            			arr.push(interval)
+						            			//arr.push(interval)
 				            				}
 				            			}
 
@@ -369,26 +424,12 @@ display:inline-block;
 				            			console.log("ajax 호출중")
 				            		}
 				            	 }
-				             })
+				             })  //end of inner ajax
 
-				             } else {
-				               arr = []
-				             }
-				             arr.push(interval)
-				          }, 500);
-				          
-					  }		  	
-				   })
-		   })(i)
-
-	   }
-   })	   
-   
-   $("#stopBtn").on("click", function(){
-	   
-   })
-   
-   })
+			             //} else {
+			             //  //arrTest = []
+			             //}
+			            }
 
    const gridData2 = [];
 

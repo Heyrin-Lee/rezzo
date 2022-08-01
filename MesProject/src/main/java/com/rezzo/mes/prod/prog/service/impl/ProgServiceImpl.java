@@ -88,6 +88,22 @@ public class ProgServiceImpl implements ProgService {
 	public List<ProgVO> getProgPrcs(ProgVO vo) {
 		return mapper.getProgPrcs(vo);
 	}
+
+	@Override
+	public void updateYn() {
+		mapper.updateYn();
+	}
+
+	@Override
+	public void updateYn2() {
+		mapper.updateYn2();
+	}
+
+	@Override
+	public List<ProgVO> getNoOprEqm() {
+		return mapper.getNoOprEqm();
+	}
+	
 	
 	
 	

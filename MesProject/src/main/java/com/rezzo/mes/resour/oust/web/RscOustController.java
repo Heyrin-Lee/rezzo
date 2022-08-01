@@ -36,6 +36,7 @@ public class RscOustController {
     @RequestMapping("setRscOust")
     @ResponseBody
     public void setRscOust(@RequestBody List<RscOustVO> rscOustVOS) {
+    	System.out.println(rscOustVOS);
         sv.setRscOust(rscOustVOS);
     }
 
