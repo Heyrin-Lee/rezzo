@@ -16,12 +16,51 @@ public class RscOustServiceImpl implements RscOustService {
     private final RscOustMapper mapper;
 
     @Override
+    public List<RscOustVO> getLotByRscCd(RscOustVO rscOustVO) {
+        return mapper.getLotByRscCd(rscOustVO);
+    }
+
+    @Override
     @Transactional
-    public void letHoldOust(List<RscOustVO> rscOustVOS) {
-        String oustCd = mapper.getRscOustCd();
-        for(RscOustVO rscOustVO : rscOustVOS) {
-            rscOustVO.setRscOustCd(oustCd);
-            mapper.letHoldOust(rscOustVO);
+    public void setRscOust(List<RscOustVO> rscOustVOS) {
+        String rscOustCd = mapper.getRscOustCd();
+        RscOustVO setOust = rscOustVOS.get(0);
+        setOust.setRscOustCd(rscOustCd);
+        rscOustVOS.remove(0);
+
+        if (setOust.getFrom().equals("prod")) {
+            for (RscOustVO rscOustVO : rscOustVOS) {
+                rscOustVO.setRscOustCd(rscOustCd);
+                mapper.letHoldOust(rscOustVO);
+            }
+        } else {
+            for (RscOustVO rscOustVO : rscOustVOS) {
+                rscOustVO.setRscOustCd(rscOustCd);
+                mapper.setRscOustEach(rscOustVO);
+            }
         }
+        mapper.setRscOust(setOust);
+    }
+
+    @Override
+    public List<RscOustVO> schRscOustHist(RscOustVO rscOustVO) {
+        return mapper.schRscOustHist(rscOustVO);
+    }
+
+    @Override
+    public List<RscOustVO> getRscOustHist(RscOustVO rscOustVO) {
+        return mapper.getRscOustHist(rscOustVO);
+    }
+
+    @Override
+    public void updRscOustHist(List<RscOustVO> rscOustVOS) {
+        for(RscOustVO rscOustVO : rscOustVOS) {
+            mapper.updRscOustHist(rscOustVO);
+        }
+    }
+
+    @Override
+    public List<RscOustVO> getRscOustList(RscOustVO rscOustVO) {
+        return mapper.getRscOustList(rscOustVO);
     }
 }

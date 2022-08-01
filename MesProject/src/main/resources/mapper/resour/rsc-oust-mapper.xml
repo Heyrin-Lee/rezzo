@@ -3,8 +3,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.rezzo.mes.resour.oust.mapper.RscOustMapper">
+
+    <select id="getLotByRscCd" parameterType="RscOustVO" resultType="RscOustVO">
+        select RSC_LOT_CD,
+               LOT_RMN_CNT,
+               substr(RSC_LOT_CD, 6, 4) || '-' || substr(RSC_LOT_CD, 10, 2) || '-' || substr(RSC_LOT_CD, 12, 2) expDt
+        from RSC_LOT
+        where RSC_CD = #{rscCd}
+          and LOT_RMN_CNT != 0
+    </select>
+
     <select id="getRscOustCd" resultType="String">
-        select 'ROT' || to_char(sysdate, 'YYYYMMDD') || lpad(NVL(max(substr(RSC_OUST_CD, 12, 3)), 0) + 1, 3, '0')
+        select 'MOT' || to_char(sysdate, 'YYYYMMDD') || lpad(NVL(max(substr(RSC_OUST_CD, 12, 3)), 0) + 1, 3, '0')
         from RSC_OUST
         where substr(RSC_OUST_CD, 4, 8) = to_char(sysdate, 'yyyymmdd')
     </select>
@@ -16,8 +26,119 @@
                 LOT_RMN_CNT = LOT_RMN_CNT - #{oustCnt}
             where RSC_LOT_CD = #{rscLotCd};
 
-            insert into RSC_OUST (RSC_OUST_CD, RSC_CD, RSC_LOT_CD, OUST_CNT, OUST_DT, OUST_TYP)
-            values (#{rscOustCd}, #{rscCd}, #{rscLotCd}, #{oustCnt}, #{oustDt}, #{oustTyp});
+            insert into RSC_OUST_DTL (RSC_OUST_CD, OUST_CNT, RSC_CD, RSC_LOT_CD)
+            values (#{rscOustCd}, #{oustCnt}, #{rscCd}, #{rscLotCd});
         end;
     </update>
+
+    <insert id="setRscOustEach" parameterType="RscOustVO">
+        begin
+            update RSC_LOT
+            set LOT_RMN_CNT = LOT_RMN_CNT - #{oustCnt}
+            where RSC_LOT_CD = #{rscLotCd};
+
+            insert into RSC_OUST_DTL (RSC_OUST_CD, OUST_CNT, RSC_CD, RSC_LOT_CD)
+            values (#{rscOustCd}, #{oustCnt}, #{rscCd}, #{rscLotCd});
+        end;
+    </insert>
+
+    <insert id="setRscOust" parameterType="RscOustVO">
+        declare
+            v_values rsc_oust%rowtype;
+        begin
+            for v_values in (
+                select rsc_cd, sum(OUST_CNT) as oust_cnt
+                from RSC_OUST_DTL
+                where RSC_OUST_CD = #{rscOustCd}
+                group by rsc_cd)
+
+                loop
+                    insert into RSC_OUST (RSC_OUST_CD, OUST_DT, RSC_CD, OUST_CNT)
+                    values (#{rscOustCd}, #{oustDt}, v_values.RSC_CD, v_values.oust_cnt);
+                end loop;
+        end;
+    </insert>
+
+    <select id="schRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
+        select ro.RSC_OUST_CD, count(*) oustCnt, ro.OUST_DT
+        from RSC_OUST_DTL rod,
+             RSC_OUST ro
+        where rod.RSC_OUST_CD = ro.RSC_OUST_CD
+           <![CDATA[
+          and ro.OUST_DT >= #{startDt}
+          and ro.OUST_DT <= #{endDt}
+        group by oust_DT, ro.RSC_oust_CD
+        ]]>
+    </select>
+
+    <select id="getRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
+        select rod.RSC_CD,
+               rod.OUST_CNT,
+               rod.RSC_LOT_CD,
+               rsc.RSC_NM,
+               rsc.RSC_SPEC,
+               rsc.MNG_UNIT,
+               rsc.RSC_TYP,
+               rl.LOT_RMN_CNT,
+               rod.RSC_OUST_CD
+        from RSC_LOT rl,
+             RSC_OUST_DTL rod,
+             rsc
+        where rl.RSC_LOT_CD = rod.RSC_LOT_CD
+          and rsc.RSC_CD = rod.RSC_CD
+          and RSC_OUST_CD = #{rscOustCd}
+    </select>
+
+    <update id="updRscOustHist" parameterType="RscOustVO">
+        declare
+            v_lot_rmn_cnt number(35);
+            v_oust_cnt    number(35);
+        begin
+            select LOT_RMN_CNT
+            into v_lot_rmn_cnt
+            from RSC_LOT
+            where RSC_LOT_CD = #{rscLotCd};
+
+            select OUST_CNT
+            into v_oust_cnt
+            from RSC_OUST_DTL
+            where RSC_LOT_CD = #{rscLotCd}
+              and RSC_OUST_CD = #{rscOustCd};
+
+            if #{oustCnt} > v_lot_rmn_cnt + v_oust_cnt then
+                raise_application_error(-90001, '잔여재고부족');
+            else
+                update RSC_OUST_DTL
+                set OUST_CNT = OUST_CNT + (#{oustCnt} - v_oust_cnt)
+                where RSC_OUST_CD = #{rscOustCd}
+                  and RSC_LOT_CD = #{rscLotCd};
+
+                update RSC_OUST
+                set OUST_CNT = OUST_CNT + (#{oustCnt} - v_oust_cnt)
+                where RSC_OUST_CD = #{rscOustCd}
+                  and RSC_CD = #{rscCd};
+            end if;
+        end;
+    </update>
+
+    <select id="getRscOustList" parameterType="RscOustVO" resultType="RscOustVO">
+        select ro.OUST_DT,
+        ro.RSC_OUST_CD,
+        rod.RSC_CD,
+        rsc.RSC_NM,
+        rod.OUST_CNT,
+        rod.RSC_LOT_CD,
+        ro.OUST_TYP,
+        ro.NOTE
+        from RSC_OUST_DTL rod,
+        RSC_OUST ro,
+        RSC
+        where ro.RSC_OUST_CD = rod.RSC_OUST_CD
+        and rod.RSC_CD = rsc.RSC_CD
+        <if test="rscCd != null and rscCd != ''">and rod.RSC_CD = #{rscCd}</if>
+        <![CDATA[
+          and ro.OUST_DT >= #{startDt}
+          and ro.OUST_DT <= #{endDt}
+        ]]>
+    </select>
 </mapper>

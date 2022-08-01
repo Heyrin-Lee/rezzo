@@ -6,84 +6,168 @@
 <head>
     <meta charset="UTF-8">
     <title>자재수입검사</title>
+    <style>
+        tr {
+            height: 50px;
+        }
+
+        .inspBtn {
+            border-width: 0.01em;
+            border-radius: 5px;
+            border-color: #4f5050;
+            color: black;
+            height: 25px;
+        }
+    </style>
 </head>
 
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h3>자재수입검사</h3>
-        <hr>
+        <h2 class="mt-2">자재수입검사</h2>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+            <li class="breadcrumb-item">> 자재관리</li>
+            <li class="breadcrumb-item active">> 자재수입검사</li>
+        </ol>
         <div class="card">
             <div class="card-body">
-                <input type="button" value="저장" id="saveBtn">
-                <input type="button" value="조회/수정" id="modiBtn">
-                <input type="button" value="다시작성">
-                <input type="button" value="삭제">
-                <input type="hidden" id="rscInspCdTemp">
-                <hr>
-
+                <div style="display: inline-block; margin: auto 0; float: right">
+                    <button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
+                    <button class="btn btn-primary" id="modiBtn"><i class="fa fa-edit"></i> 수정</button>
+                    <button class="btn btn-primary" id="reloadBtn"><i class="fas fa-file"></i> 새자료</button>
+                </div>
                 <form id="getInspListFrm">
-                    <label for="vendNm"><b>업체명</b></label>
-                    <input id="vendNm" type="text" placeholder="검색버튼을 이용하세요" required readonly>
-                    <input id="vendCd" type="hidden" name="vendCd">
-                    <input type="button" id="modalBtn" value="검색"/>
+                    <table style="vertical-align : middle;">
+                        <colgroup>
+                            <col style="width: 80px;">
+                            <col style="width: 200px;">
+                            <col style="width: 80px;">
+                            <col style="width: 200px;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <b>검사일자</b>
+                            </th>
+                            <td>
+                                <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                     style="height: 40px; border-radius: 5px;">
+                                    <input type="text" id="inspDt" aria-label="Date-Time" class="form-control">
+                                    <span class="tui-ico-date"></span>
+                                </div>
+                                <div id="wrapper" style="margin-top: -1px;"></div>
+                            </td>
+                            <th>
+                                <b>검사자</b>
+                            </th>
+                            <td>
+                                <input type="text" id="inspTstr" class="form-control" style="width: 168px;">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                     <hr>
-
-                    <b>납기예정일</b>
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input id="startpicker-input" name="startDt" type="text" aria-label="Date" required>
-                        <span class="tui-ico-date"></span>
-                        <div id="startpicker-container" style="margin-left: -1px;"></div>
-                    </div>
-                    <span></span>
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input id="endpicker-input" name="endDt" type="text" aria-label="Date" required>
-                        <span class="tui-ico-date"></span>
-                        <div id="endpicker-container" style="margin-left: -1px;"></div>
-                    </div>
-                    <input id="getOrdrList" type="button" value="가져오기"/>
-                    <hr>
-
-                    <b>검사일자</b>
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input type="text" id="inspDt" aria-label="Date-Time">
-                        <span class="tui-ico-date"></span>
-                    </div>
-                    <div id="wrapper" style="margin-top: -1px;"></div>
-
-                    <b>검사자</b>
-                    <input type="text" id="inspTstr">
-                    <hr>
+                    <table>
+                        <colgroup>
+                            <col style="width: 100px;">
+                            <col style="width: 350px;">
+                            <col style="width: 10px;">
+                            <col style="width: 100px;">
+                        </colgroup>
+                        <tr>
+                            <th>
+                                <label for="vendNm"><b>업체명</b></label>
+                            </th>
+                            <td>
+                                <input id="vendNm" type="text" class="form-control" placeholder="검색버튼을 이용하세요"
+                                       style="width: 300px;" required
+                                       readonly>
+                                <input id="vendCd" type="hidden" name="vendCd">
+                                <button id="modalBtn" type="button" class="btn btn-primary"><i
+                                        class="fas fa-search"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <b>납기예정일</b>
+                            </th>
+                            <td>
+                                <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                     style="height: 40px; border-radius: 5px;">
+                                    <input id="startpicker-input" class="form-control" type="text" aria-label="Date"
+                                           name="startDt">
+                                    <span class="tui-ico-date"></span>
+                                    <div id="startpicker-container" style="margin-left: -1px;"></div>
+                                </div>
+                                <span></span>
+                                <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                     style="height: 40px; border-radius: 5px;">
+                                    <input id="endpicker-input" class="form-control" type="text" aria-label="Date"
+                                           name="endDt">
+                                    <span class="tui-ico-date"></span>
+                                    <div id="endpicker-container" style="margin-left: -1px;"></div>
+                                </div>
+                            </td>
+                            <th></th>
+                            <td>
+                                <input id="getOrdrList" type="button" class="btn btn-primary" value="가져오기"/>
+                            </td>
+                        </tr>
+                    </table>
                 </form>
             </div>
         </div>
         <br>
-        <input type="button" value="추가" id="addRow">
-        <input type="button" value="삭제" id="delRow">
         <div class="card">
             <div class="card-body">
+                <div class="linelist" style="float: right;">
+                    <button class="btn btn-primary" id="addRow"><i class="fas fa-plus"></i> 추가</button>
+                    <button class="btn btn-primary" id="delRow"><i class="fas fa-minus"></i> 삭제</button>
+                </div>
+                <br><br>
                 <div id="grid"></div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for vend search -->
-    <div class="modal fade" id="vendModal" tabindex="-1" aria-labelledby="vendModal" aria-hidden="true">
+    <div class="modal fade" id="vendModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <b class="modal-title">업체검색</b>
+                    <h4 class="modal-title">업체검색</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="vendSchForm">
-                        <label>업체명<input type="text" name="vendNm" style="width:100px;"></label>
-                        <label>업체코드<input type="text" name="vendCd" style="width:100px;"></label>
-                        <input id="vendSch" type="button" value="검색">
+                        <table>
+                            <colgroup>
+                                <col style="width: 400px;">
+                                <col style="width: 10px">
+                                <col style="width: 50px;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" name="vendNm" class="form-control" placeholder="업체명">
+                                </td>
+                                <td></td>
+                                <td rowspan="2">
+                                    <button id="vendSch" class="btn btn-primary" type="button" style="height: 90px;"><i
+                                            class="fas fa-search"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" name="vendCd" class="form-control" placeholder="업체코드">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </form>
-                    <hr>
+                    <br>
                     <div id="vend-grid"></div>
-                    <p>선택 : 더블클릭</p>
+                    <div style="float: right"><p>선택 : 더블클릭</p></div>
                 </div>
             </div>
         </div>
@@ -124,36 +208,74 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <b class="modal-title">자재검색</b>
+                    <h4 class="modal-title">자재검색</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="rscSchForm">
-                        <label>자재명<input type="text" name="rscNm" style="width:100px;"></label>
-                        <label>자재코드<input type="text" name="rscCd" style="width:100px;"></label>
-                        <input id="rscSch" type="button" value="검색">
+                        <table>
+                            <colgroup>
+                                <col style="width: 400px;">
+                                <col style="width: 10px">
+                                <col style="width: 50px;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" id="rscNmInMod" name="rscNm" class="form-control"
+                                           placeholder="자재명">
+                                </td>
+                                <td></td>
+                                <td rowspan="2">
+                                    <button id="rscSch" class="btn btn-primary" type="button" style="height: 90px;"><i
+                                            class="fas fa-search"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="rscCdInMod" name="rscCd" class="form-control"
+                                           placeholder="자재코드">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </form>
-                    <hr>
+                    <br>
                     <div id="rsc-grid"></div>
-                    <p>선택 : 더블클릭</p>
+                    <div style="float: right"><p>선택 : 더블클릭</p></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!--inspection detail modal-->
+    <div class="modal fade" id="infModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <b class="modal-title">검사상세</b>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="inf-grid"></div>
+                </div>
+                <input type="button" id="calInfCnt" value="입력">
+            </div>
+        </div>
+    </div>
 
     <script>
         ///////////////////////////// !init ////////////////////////////////
         window.addEventListener('load', function () {
             getVendListInit();
             getRscListInit();
+            getInfList();
         })
 
         let startDt = document.getElementById('startpicker-input');
         let endDt = document.getElementById('endpicker-input');
         let vendCd = document.getElementById('vendCd');
         let inspDt = document.getElementById('inspDt');
-        let rscInspCdTemp = document.getElementById('rscInspCdTemp');
         let inspTstr = document.getElementById('inspTstr');
 
         let saveFlag = 0 // 0 : 저장, 1 : 수정저장
@@ -193,9 +315,9 @@
             }
         });
 
-        ///////////////////////////// main grid section ////////////////////////////////
+        ///////////////////////////// main grid ////////////////////////////////
         let rModal;
-        let modalState = 0;
+        let rscModalState = 0;
 
         class customInput {
             constructor(props) {
@@ -208,7 +330,7 @@
                     rModal = new bootstrap.Modal(document.getElementById('rscModal'), {})
                     rModal.show('rscModal');
                     rscModal.dataset.rowKey = rowKey;
-                    modalState = 1;
+                    rscModalState = 1;
                 })
                 this.el = el;
             }
@@ -218,7 +340,7 @@
             }
 
             getValue() {
-                if (modalState === 0) {
+                if (rscModalState === 0) {
                     getRscSingle(this.el.value, this.rowKey)
                 }
                 return this.el.value;
@@ -227,9 +349,8 @@
             mounted() {
                 this.el.select();
             }
-        };
+        }
 
-        // custom input renderers
         class inputPreIstCnt {
             constructor(props) {
                 let el = document.createElement('input');
@@ -341,11 +462,11 @@
                 let text = document.createTextNode(value);
                 btn.appendChild(text);
                 btn.innerHTML = '검사'
-                btn.className = 'insp-btn';
+                btn.className = 'inspBtn';
                 btn.addEventListener('click', function (e) {
-                    let modDiv = document.getElementById('infModal');
-                    modDiv.dataset.rowKey = rowKey;
-                    iModal = new bootstrap.Modal(modDiv, {});
+                    let infDiv = document.getElementById('infModal');
+                    infDiv.dataset.rowKey = rowKey;
+                    iModal = new bootstrap.Modal(infDiv, {});
                     iModal.show('infModal');
                 })
                 this.el = btn;
@@ -367,8 +488,9 @@
         // main grid section
         let grid = new tui.Grid({
             el: document.getElementById('grid'),
+            bodyHeight: 380,
             scrollX: false,
-            scrollY: false,
+            scrollY: true,
             rowHeaders: ['checkbox'],
             columns: [
                 {
@@ -448,13 +570,13 @@
                         }
                     }
                 },
-                // {
-                //     header: '검사',
-                //     name: 'rscInfBtn',
-                //     align: 'center',
-                //     renderer: {type: rscInfBtn},
-                //     width: 50
-                // },
+                {
+                    header: '검사',
+                    name: 'rscInfBtn',
+                    align: 'center',
+                    renderer: {type: rscInfBtn},
+                    width: 50
+                },
                 {
                     header: '합격량',
                     name: 'inspPassCnt',
@@ -483,8 +605,9 @@
 
         grid.on('editingStart', (ev) => {
             grid.check(ev.rowKey);
-            if (grid.getValue(ev.rowKey, 'ordrCd') != null && grid.getValue(ev.rowKey, 'ordrCd') != '') {
-                if (ev.columnName == 'rscCd') {
+            if (grid.getValue(ev.rowKey, 'ordrCd') != null
+                && grid.getValue(ev.rowKey, 'ordrCd') !== '') {
+                if (ev.columnName === 'rscCd') {
                     ev.stop();
                 }
             }
@@ -560,154 +683,6 @@
                 .then(res => vendGrid.resetData(res))
         }
 
-        ///////////////////////////// get ordr list ////////////////////////////////
-        // get order list
-        let getOrdrListBtn = document.getElementById('getOrdrList');
-        getOrdrListBtn.addEventListener('click', getOrdrList);
-
-        function getOrdrList() {
-            // init conditions
-            saveFlag = 0;
-            grid.showColumn('rmnCnt');
-
-            if (startDt.value === '' || endDt.value === '') {
-                alert('기간을 입력하세요')
-                // } else if (vendCd.value === '') {
-                //     alert('공급업체를 입력하세요')
-            } else {
-                let data = new FormData(getInspListFrm)
-                let url = 'getRscOrdrList';
-                fetch(url, {
-                    method: 'POST',
-                    body: data
-                })
-                    .then(res => res.json())
-                    .then(res => grid.resetData(res))
-            }
-        }
-
-        ///////////////////////////// insert or update inspection result ////////////////////////////////
-        function setRscInspList(data) {
-            let url = 'setRscInspList';
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => {
-                getOrdrList();
-            })
-        }
-
-
-        function updRscInspHist(data) {
-            let url = 'updRscInspHist';
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            })
-        }
-
-        let saveBtn = document.getElementById('saveBtn')
-        saveBtn.addEventListener('click', function () {
-            let gridVal = grid.getCheckedRows();
-            if (saveFlag == 0) {
-                gridVal[0].inspDt = inspDt.value;
-                gridVal[0].inspTstr = inspTstr.value;
-                setRscInspList(gridVal);
-            } else {
-                gridVal.forEach(element => {
-                    element.rscInspCd = rscInspCdTemp;
-                })
-                updRscInspHist(gridVal);
-            }
-        })
-
-        /////////////////////////// inspection history  ////////////////////////////////////
-        ///////////////////////////// modify and delete ////////////////////////////////
-        // declare modal
-        let mModal;
-        modiBtn.addEventListener('click', function () {
-            mModal = new bootstrap.Modal(document.getElementById('modiModal'), {})
-            mModal.show('modiModal');
-        })
-
-        // modal cation
-        let modiModal = document.getElementById('modiModal');
-        modiModal.addEventListener('shown.bs.modal', e => {
-            mdfyGrid.refreshLayout();
-        })
-
-        // search grid
-        let mdfyGrid = new tui.Grid({
-            el: document.getElementById('modi-grid'),
-            scrollX: false,
-            scrollY: false,
-            columns: [
-                {
-                    header: '검사일자',
-                    name: 'inspDt'
-                },
-                {
-                    header: '건수',
-                    name: 'inspCnt'
-                },
-                {
-                    header: '검사코드',
-                    name: 'rscInspCd'
-                }
-            ]
-        })
-
-        // search by date range
-        let inspHistSchBtn = document.getElementById('inspHistSchBtn')
-        inspHistSchBtn.addEventListener('click', function () {
-            let data = new FormData(inspDtRngFrm);
-            let url = 'schRscInspHist'
-            fetch(url, {
-                method: 'POST',
-                body: data
-            }).then(res => res.json()).then(res => {
-                mdfyGrid.resetData(res);
-            })
-        });
-
-        // select
-        mdfyGrid.on('dblclick', e => {
-            let rowInfo = mdfyGrid.getRow(e.rowKey)
-            let data = {rscInspCd: rowInfo.rscInspCd, startDt: startDt.value, endDt: endDt.value}
-            rscInspCdTemp = rowInfo.rscInspCd
-            let url = 'getRscInspHistByCd'
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => res.json()).then(res => {
-                grid.hideColumn('rmnCnt')
-                grid.resetData(res);
-            })
-            saveFlag = 1;
-            mModal.hide(modiModal);
-
-        })
-
-
-        ///////////////////////////// action on grid ////////////////////////////////
-        let gridEle = document.getElementById('grid')
-        gridEle.addEventListener('mouseleave', function () {
-            grid.finishEditing();
-        })
-
-        ////////////////////////////// add & delelte row ////////////////////////////
-        addRow.addEventListener('click', function () {
-            grid.appendRow()
-        })
-
-        delRow.addEventListener('click', function () {
-            let rowKeys = grid.getCheckedRowKeys()
-            grid.removeRows(rowKeys)
-        })
-
         ///////////////////////////// resource ////////////////////////////////
         // rsc grid
         let rscGrid = new tui.Grid({
@@ -737,7 +712,7 @@
         })
 
         rscModal.addEventListener('hidden.bs.modal', e => {
-            modalState = 0;
+            rscModalState = 0;
         })
 
         // search rsc
@@ -783,6 +758,262 @@
                 toastr.error('해당하는 자재가 없습니다.');
             })
         }
+
+        //////////////////////////////// inspection detail /////////////////////////
+        ///////////////////////////// inferior rsc ////////////////////////////////
+        class inputInferCnt {
+            constructor(props) {
+                const el = document.createElement('input');
+                el.type = 'text';
+                el.value = String(props.value);
+                this.el = el;
+            }
+
+            getElement() {
+                this.el.value = '';
+                return this.el;
+            }
+
+            getValue() {
+                let val = this.el.value.replace(/[^0-9]/g, '')
+                if (val === '') {
+                    return val;
+                } else {
+                    return parseInt(val);
+                }
+            }
+
+            mounted() {
+                this.el.select();
+            }
+        }
+
+        let infGrid = new tui.Grid({
+            el: document.getElementById('inf-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '불량코드',
+                    name: 'ccdDtl'
+                },
+                {
+                    header: '불량명',
+                    name: 'ccdDtlNm'
+                },
+                {
+                    header: '불량수량',
+                    name: 'infCnt',
+                    editor: {
+                        type: inputInferCnt,
+                        options: {
+                            maxLength: 10
+                        }
+                    }
+                },
+                {
+                    header: '검사자료',
+                    name: 'infData',
+                    hidden: true
+                },
+            ]
+        })
+
+        let infData = new Map();
+        let infModal = document.getElementById('infModal');
+
+        infModal.addEventListener('shown.bs.modal', e => {
+            let rowKey = infModal.dataset.rowKey;
+            let data = infData.get(rowKey)
+            if (data === undefined) {
+                infGrid.setColumnValues('infCnt', '')
+            } else {
+                infGrid.resetData(infData.get(rowKey))
+            }
+            infGrid.refreshLayout();
+        })
+
+        infModal.addEventListener('hidden.bs.modal', e => {
+            let rowKey = infModal.dataset.rowKey;
+            let data = infGrid.getData();
+            infData.set(rowKey, data);
+            infGrid.refreshLayout();
+        })
+
+        let calInfCnt = document.getElementById('calInfCnt');
+        calInfCnt.addEventListener('click', function () {
+            let rowKey = infModal.dataset.rowKey;
+            let colVal = infGrid.getColumnValues('infCnt')
+            let infSum = colVal.reduce((a, b) => (a + b));
+            let inspCnt = grid.getValue(rowKey, 'inspCnt')
+
+            if (infSum > parseInt(inspCnt)) {
+                alert("불량수량이 검사량 보다 많습니다.")
+            } else {
+                grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
+                grid.setValue(rowKey, 'inspFailCnt', infSum)
+            }
+            iModal.hide(infModal);
+        })
+
+        function getInfList() {
+            let url = 'getInfCdList'
+            fetch(url).then(res => res.json())
+                .then(res => {
+                    infGrid.resetData(res)
+                });
+        }
+
+        ///////////////////////////// get ordr list ////////////////////////////////
+        // get order list
+        let getOrdrListBtn = document.getElementById('getOrdrList');
+        getOrdrListBtn.addEventListener('click', getOrdrList);
+
+        function getOrdrList() {
+            // init conditions
+            saveFlag = 0;
+            grid.showColumn('rmnCnt');
+
+            if (startDt.value === '' || endDt.value === '') {
+                alert('기간을 입력하세요')
+                // } else if (vendCd.value === '') {
+                //     alert('공급업체를 입력하세요')
+            } else {
+                let data = new FormData(getInspListFrm)
+                let url = 'getRscOrdrList';
+                fetch(url, {
+                    method: 'POST',
+                    body: data
+                })
+                    .then(res => res.json())
+                    .then(res => grid.resetData(res))
+            }
+        }
+
+        ///////////////////////////// insert or update inspection result /////////////////
+        let saveBtn = document.getElementById('saveBtn')
+        saveBtn.addEventListener('click', function () {
+            let gridVal = grid.getCheckedRows();
+            if (saveFlag === 0) {
+                gridVal[0].inspDt = inspDt.value;
+                gridVal[0].inspTstr = inspTstr.value;
+                setRscInspList(gridVal);
+            } else {
+                console.log(gridVal)
+                updRscInspHist(gridVal);
+            }
+        })
+
+        function setRscInspList(data) {
+            let url = 'setRscInspList';
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => {
+                getOrdrList();
+            })
+        }
+
+
+        function updRscInspHist(data) {
+            let url = 'updRscInspHist';
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+        }
+
+
+        /////////////////////////// inspection history  ////////////////////////////////////
+        ///////////////////////////// modify and delete ////////////////////////////////
+        // search grid
+        let mdfyGrid = new tui.Grid({
+            el: document.getElementById('modi-grid'),
+            scrollX: false,
+            scrollY: false,
+            columns: [
+                {
+                    header: '검사일자',
+                    name: 'inspDt'
+                },
+                {
+                    header: '건수',
+                    name: 'inspCnt'
+                },
+                {
+                    header: '검사코드',
+                    name: 'rscInspCd'
+                }
+            ]
+        })
+
+        // declare modal
+        let mModal;
+        modiBtn.addEventListener('click', function () {
+            mModal = new bootstrap.Modal(document.getElementById('modiModal'), {})
+            mModal.show('modiModal');
+        })
+
+        let modiModal = document.getElementById('modiModal');
+        modiModal.addEventListener('shown.bs.modal', e => {
+            mdfyGrid.refreshLayout();
+        })
+
+        // search by date range
+        let inspHistSchBtn = document.getElementById('inspHistSchBtn')
+        inspHistSchBtn.addEventListener('click', function () {
+            let data = new FormData(inspDtRngFrm);
+            let url = 'schRscInspHist'
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(res => res.json()).then(res => {
+                mdfyGrid.resetData(res);
+            })
+        });
+
+        // select
+        mdfyGrid.on('dblclick', e => {
+            let rowInfo = mdfyGrid.getRow(e.rowKey)
+            let url = 'getRscInspHistByCd'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(rowInfo)
+            }).then(res => res.json()).then(res => {
+                grid.hideColumn('rmnCnt')
+                grid.resetData(res);
+            })
+            saveFlag = 1;
+            mModal.hide(modiModal);
+
+        })
+
+
+        ///////////////////////////// action on grid ////////////////////////////////
+        let gridEle = document.getElementById('grid')
+        gridEle.addEventListener('mouseleave', function () {
+            grid.finishEditing();
+        })
+
+        ////////////////////////////// add & delelte row ////////////////////////////
+        addRow.addEventListener('click', function () {
+            grid.appendRow()
+        })
+
+        delRow.addEventListener('click', function () {
+            let rowKeys = grid.getCheckedRowKeys()
+            grid.removeRows(rowKeys)
+        })
+
+        //////////////////////////// referesh btn //////////////////////////////////
+        reloadBtn.addEventListener('click', e => {
+            location.reload();
+        })
+
+
     </script>
 </th:block>
 </body>

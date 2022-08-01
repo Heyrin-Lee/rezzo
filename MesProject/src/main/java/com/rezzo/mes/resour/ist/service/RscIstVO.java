@@ -36,6 +36,7 @@ public class RscIstVO {
 
     // misc
     private String vendNm;
+    private String vendCd;
     private String rscNm;
     private String startDt;
     private String endDt;

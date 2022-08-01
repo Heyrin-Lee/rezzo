@@ -40,8 +40,11 @@ display:inline-block;
 </head>
 <body>
 <!-- 본문내용 -->
-<th:block layout:fragment="main">  
-	
+<th:block layout:fragment="
+
+
+">
+
    <!-- 헤더부분 -->
    <div class="container-fluid px-4">
       <h1 class="mt-4">생산관리</h1>
@@ -52,6 +55,7 @@ display:inline-block;
 	  </ol>
    </div>
    <!-- 헤더부분 -->
+
 <div id="container">   
 
    <input type="button" data-bs-toggle="modal"  class="btn btn-primary"  id="modalBtn" data-bs-target="#exampleModal"
@@ -68,6 +72,7 @@ display:inline-block;
       <div class="card mb-4">
 			<div class="card-body">
    <div class="d-flex flex-row justify-content-between">
+
    	
    	   <div id="grid2"  style="width: 1200px;">공정목록</div>	
 	   <div id="grid3" style="width: 400px;">공정가동관리<br>
@@ -78,6 +83,7 @@ display:inline-block;
 	       <button id="restartBtn" class="btn btn-primary"  form="">재시작</button>
 	     </div>
 	   </div>
+
 	</div>	
 	</div>
 	</div>  
@@ -113,7 +119,7 @@ display:inline-block;
    			}
    		})
    })
-   
+
    const modGrid = new tui.Grid({
         el: document.getElementById('modGrid'),
         scrollX: false,
@@ -123,12 +129,12 @@ display:inline-block;
             header: '생산계획코드',
             name: 'planCd',
             align: 'center',
-        }, 
+        },
         {
             header: '제품명',
             name: 'prdtNm',
             align: 'center'
-        }, 
+        },
         {
             header: '생산지시일자',
             name: 'indicaDt',
@@ -139,19 +145,19 @@ display:inline-block;
             name: 'indicaCnt',
             align: 'center'
         },
-         
+
         ]
      })
-   	
+
    //grid에 모달 내용 띄우기
    $("#confirmBtn").on("click", function(){
    		let result = modGrid.getCheckedRows();
         	grid.resetData(result);
    })
-   
+
    const gridData = [];
-  
-   
+
+
    const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
 	      data: gridData,
@@ -181,10 +187,10 @@ display:inline-block;
 	        {
 	          header: '우선순위',
 	          name: 'prefRank'
-	        }      
+	        }
 	        ]
 	    });
-	    
+
    //grid2에 grid1에 있는 완제품 코드를 통해서 그 제품 만드는 공정들 띄우기
    $("#grid").on("dblclick", function(){
    		let edctsCd = grid.getData()[0].edctsCd
@@ -197,17 +203,19 @@ display:inline-block;
    			}
    		})
    })
+
    
   let value
-   
+
   interval2=setInterval(function(){
    	if(value == '완료') {
 		clearInterval(interval2)
-		
+
 		let orderNo = grid.getData()[0].orderNo
 		let lineCd = grid.getData()[0].lineCd
 		let edctsCd = grid.getData()[0].edctsCd
 		let prodCnt = grid2.getRow(5).prodCnt
+
 		let planCd = grid.getData()[0].planCd
 		
 		//주문서 업데이트, 설비 끄기, 완제품lot 입력, 지시 업데이트
@@ -215,8 +223,9 @@ display:inline-block;
 			url : 'afterProd',
 			data : {"orderNo" : orderNo, "lineCd" : lineCd, "edctsCd" : edctsCd, "prodCnt" : prodCnt, "planCd" : planCd}
 		})
-		
+
 		//자재 재고 업데이트
+
 		
 		//진행공정 인서트
 		let data = grid2.getData()
@@ -225,13 +234,14 @@ display:inline-block;
             	item.lineCd = grid.getData()[0].lineCd
             	item.prefRank = grid.getData()[0].prefRank
             	item.planCd = grid.getData()[0].planCd
-		 }) 
+		 })
 		$.ajax({
 			url : 'insertProgPrcs',
 			method : 'post',
 			data : JSON.stringify(data),
 			contentType : 'application/json'
 		})
+
 		
 		//자재 업데이트			
 		$.ajax({
@@ -254,14 +264,15 @@ display:inline-block;
 		
 		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt
-		
+
 		if(iCnt > 0 ) {
 			let iGrid = grid2.getRow(5)
-        	
+
         	iGrid.indicaDt = grid.getData()[0].indicaDt
         	iGrid.lineCd = grid.getData()[0].lineCd
         	iGrid.prefRank = grid.getData()[0].prefRank
         	iGrid.planCd = grid.getData()[0].planCd
+
         	
 			$.ajax({
 				url : 'insertInfer',
@@ -271,11 +282,12 @@ display:inline-block;
 					//window.location.reload()
 				}
 			})
+
 		
 		}
    	} 
    }, 1000)
-   
+
    $("#startBtn").on("click", function(){
 	  for(i=0; i<grid2.getRowCount(); i++) {
 		   (function (i) {
@@ -317,8 +329,8 @@ display:inline-block;
 					            			grid2.setValue(i, 'inferCnt', 0)
 					            			grid2.setValue(i, 'prodCnt', indicaCnt)
 					            			grid2.setValue(i, 'nowSt', '완료')
-					            			
-					            			//insert를 위해서 object에 값 지정 
+
+					            			//insert를 위해서 object에 값 지정
 					            			result.lineCd=grid.getData()[i].lineCd
 					            			result.indicaDt=grid.getData()[i].indicaDt
 					            			result.prefRank=grid.getData()[i].prefRank
@@ -337,6 +349,7 @@ display:inline-block;
 						            			grid2.setValue(i, 'inferCnt', 0)
 						            			grid2.setValue(i, 'prodCnt', indicaCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
+
 						            			
 						            			arr.push(interval)
 						            			
@@ -345,17 +358,19 @@ display:inline-block;
 						            			grid2.setValue(i, 'inferCnt', inferCnt )
 						            			grid2.setValue(i, 'prodCnt', indicaCnt-inferCnt)
 						            			grid2.setValue(i, 'nowSt', '완료')
-						            			
+
 						            			value = grid2.getValue(i, 'nowSt')
 						            			
 						            			arr.push(interval)
 				            				}
 				            			}
+
 				            		} else {
 				            			console.log("ajax 호출중")
 				            		}
 				            	 }
 				             })
+
 				             } else {
 				               arr = []
 				             }
@@ -365,20 +380,18 @@ display:inline-block;
 					  }		  	
 				   })
 		   })(i)
-	
+
 	   }
-	  
-	  
    })	   
    
    $("#stopBtn").on("click", function(){
 	   
    })
    
+   })
 
-      
    const gridData2 = [];
-  
+
    const grid2 = new tui.Grid({
 	      el: document.getElementById('grid2'),
 	      data: gridData2,
@@ -446,7 +459,7 @@ display:inline-block;
 	        {
 	          header: '투입량',
 	          name: 'indicaCnt'
-	        }, 
+	        },
 	        {
 	          header: '불량량',
 	          name: 'inferCnt'
@@ -465,12 +478,11 @@ display:inline-block;
 	        }
 	        ]
 	    });
-	    
 	    modalBtn.addEventListener('click', function () {
                 setTimeout(function () {
                     modGrid.refreshLayout()
                 }, 300);
-            });    
+            });
    </script>
 </th:block>
 </body>

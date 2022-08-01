@@ -1,6 +1,7 @@
 package com.rezzo.mes.resour.insp.web;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
+import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
 import com.rezzo.mes.resour.insp.service.InspService;
@@ -85,5 +86,12 @@ public class InspController {
     @ResponseBody
     public void updRscInspHist(@RequestBody List<RscInspVO> rscInspVOS) {
         sv.updRscInspHist(rscInspVOS);
+    }
+
+    // 검사상세
+    @RequestMapping("getInfCdList")
+    @ResponseBody
+    public List<CcdsVO> getInfCdList() {
+        return sv.getInfCdList();
     }
 }
