@@ -27,8 +27,21 @@ select e.prcs_cd, e.eqm_ist_dt, e.chck_perd, e.use_yn, e.prcs_nm, c.chck_cd, c.e
 	on e.eqm_cd = c.eqm_cd
 	where 1=1
 	<if test="stDt != null"><![CDATA[ AND c.chck_dt >= #{stDt}]]></if>
-	<if test="toDt != null"><![CDATA[ AND c.chck_dt < #{toDt}]]></if>
+	<if test="toDt != null"><![CDATA[ AND c.chck_dt < to_date(#{toDt}+2)]]></if>
 	<if test="eqmNm != null"> and e.eqm_nm like '%'||#{eqmNm}||'%'</if>
 </select>
-
+	
+<select id="getEqmListMap" resultType="map">
+select e.use_yn as "가동여부", c.chck_cd as "점검코드", 
+		c.eqm_cd as "설비코드", e.eqm_nm "설비명", c.chck_fg as "점검구분", 
+		to_char(c.chck_dt,'yyyy-mm-dd') as "점검일자", c.jdgmnt as "판정", c.dispo_matter as "조치사항", 
+		c.dispo_ctnt as "조치내역", c.chck_psch as "담당자"
+		from eqm e
+		inner join eqm_chck c
+		on e.eqm_cd = c.eqm_cd
+		where 1=1
+	<if test="stDt != null"><![CDATA[ AND c.chck_dt >= #{stDt}]]></if>
+	<if test="toDt != null"><![CDATA[ AND c.chck_dt < to_date(#{toDt}+1)]]></if>
+	<if test="eqmNm != null"> and e.eqm_nm like '%'||#{eqmNm}||'%'</if>
+</select>
 </mapper>

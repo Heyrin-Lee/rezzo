@@ -1,7 +1,11 @@
 package com.rezzo.mes.equip.opr.web;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
@@ -117,6 +122,18 @@ public class EqmOprController {
 	@ResponseBody
 	public List<EqmOprVO> OprKeyList(EqmOprVO vo) {
 		return service.OprKeyList(vo);
+	}
+	
+	//내역 엑셀 다운로드
+	@GetMapping(path="eqmOprExelView", produces = "application/vnd.ms-excel")
+	public ModelAndView excelView(EqmOprVO vo, HttpServletResponse response) throws IOException {
+		List<Map<String, Object>> list = service.getOprListMap(vo);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String[] header = {"비가동코드", "설비코드", "설비명", "시작일", "종료일", "담당자", "작업내용"};
+		map.put("headers", header);
+		map.put("filename", "eqmOpr_list");
+		map.put("datas", list);
+		return new ModelAndView("commonExcelView", map);
 	}
 	
 	
