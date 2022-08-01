@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +45,7 @@ public class EqmController {
 	PrcsService prcsService;
 	@Autowired
 	CcdsService ccdsService;
-	@Value("$com.rezzo.upload.path}")
+	@Value("${com.rezzo.upload.path}")
 	private String uploadPath;
 
 	
@@ -99,10 +98,10 @@ public class EqmController {
 		return vo;
 	};
 
-	//이미지 파일
+//이미지 파일
 	@GetMapping(value = "image/{imagename}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<byte[]> userSearch(@PathVariable("imagename") String imagename) throws IOException {
-		InputStream imageStream = new FileInputStream("/imgfile/" + imagename);
+		InputStream imageStream = new FileInputStream("imgfile/" + imagename);
 		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
 		imageStream.close();
 		return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
@@ -156,5 +155,5 @@ public class EqmController {
 		eqmService.eqmImgUpdate(vo);
 		return eqmService.eqmList(vo);
 	}
-	
 }
+	

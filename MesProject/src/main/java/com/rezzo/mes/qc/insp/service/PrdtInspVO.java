@@ -31,4 +31,6 @@ public class PrdtInspVO {
 	String inspJmDtl;
 	
 	String edctsNm;
+	
+	String prdtNm;
 }

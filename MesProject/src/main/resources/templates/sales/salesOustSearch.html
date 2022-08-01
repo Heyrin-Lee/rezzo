@@ -40,24 +40,18 @@
                       <div class="r_input">
                         <div class="mb-3">
                            <label for="edctsIstNo" class="form-label">제품명</label>
-    						<input type="text" class="form-control" id="inPrdtNm" name="inPrdtNm" style="width:150px;">
-    						<!-- 모달버튼 -->
-    						<button type="button" class="btn btn-primary" id="prdtSearchBtn"><i class="fas fa-search"></i></button>	
+    						<input type="text" class="form-control" id="prdtNm" name="prdtNm" style="width:150px;">
                         </div>
                         <div class="mb-3">
                            <label for="edctsCd" class="form-label">거래처</label>
     						<input type="text" class="form-control" id="vendNm" name="vendNm" style="width:150px;">
-    						<!-- 모달버튼 -->
-    						<button type="button" class="btn btn-primary" id="comSearchBtn"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-3">
                            <label for="edctsLotNo" class="form-label">출고일자</label>
-    						<input type="date" id="oustStart" name="oustStart"> - <input type="date" id="oustEnd" name="oustEnd"><br>
+    						<input type="date" id="oustStart" name="oustStart" class="form-control" style="width:150px"> - <input type="date" id="oustEnd" name="oustEnd"><br>
     						<!-- 모달버튼 -->
-    						<button type="button" class="btn btn-primary" id="dtSearchBtn" style="margin-top:20px;"><i class="fas fa-search"></i>검색</button>
-    							
-                        </div>
-                        
+   						<button type="button" class="btn btn-primary" id="dtSearchBtn" style="margin-top:20px;"><i class="fas fa-search"></i>검색</button>   							
+                        </div>                        
                         </div>
                        </div>
                      </form>
@@ -133,21 +127,6 @@
 		  ]   
 	    });
 	    
-	 
-	    //제품명 입력시 조회
-	    $("#prdtSearchBtn").on("click",function(result) {
-	    	var prdtNm = $("#inPrdtNm").val();
-	    	$.ajax({
-	    		url:"getProduct",
-	    		method:"post",
-	    		dataType:"json",
-	    		data:{"prdtNm":prdtNm},
-	    		success:function(result) {
-	    			grid.resetData(result);
-	    		}
-	    	})
-	    })
-	    
 		function getOustList() {
 			var searchList = $("#searchFrm").serialize();
 	    	$.ajax({
@@ -163,12 +142,7 @@
 		
 	    //조회버튼 클릭 -> 조건별 조회
 	    $("#dtSearchBtn").on("click",function(e) {
-	    	var prdtNm = $("#inPrdtNm").val();
-	    	//var oustStart = $('input[name=oustStart]').val();
-	    	//var oustEnd = $('input[name=oustEnd]').val();
-	    	
-	    	getOustList();
-	    	
+	    	getOustList();	    	
 	    });
 	    
 	    //제품출고조회 출고일자 기본값을 현재날짜로 설정

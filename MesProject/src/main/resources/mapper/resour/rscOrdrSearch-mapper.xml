@@ -9,11 +9,12 @@ join vend v on r.vend_cd = v.vend_cd
 </select>
 
 <select id="ordrSearchOneList" resultType="com.rezzo.mes.resour.search.service.OrdrSearchVO">
-	select * from vw_ordr_detale
-	where 1=1
-	<if test="vendNm != null"> AND VEND_NM LIKE '%'||#{vendNm}||'%'</if>
-	<if test="frDt != null"><![CDATA[ AND PAPRD_CMND_DT >= #{frDt}]]></if>
-	<if test="toDt != null"><![CDATA[ AND PAPRD_CMND_DT < #{toDt}]]></if>
+	select r.ordr_cd, r.ordr_req_dt, v.vend_cd, v.vend_nm 
+from rsc_ordr r 
+join vend v on r.vend_cd = v.vend_cd
+	<if test="vendNm != null"> AND v.VEND_NM LIKE '%'||#{vendNm}||'%'</if>
+	<if test="frDt != null"><![CDATA[ AND r.ordr_req_dt >= #{frDt}]]></if>
+	<if test="toDt != null"><![CDATA[ AND r.ordr_req_dt <= to_date(#{toDt}+1)]]></if>
 </select>
 
 <select id="ordrDtlList" resultType="com.rezzo.mes.resour.search.service.OrdrSearchVO">

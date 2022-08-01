@@ -19,19 +19,6 @@ body {
    width: 100%
 }
 
-.c_btn {
-   color: #fff;
-   font-size: 13px;
-   background: #333;
-   border: none;
-   padding: 6px;
-   border-radius: 4px
-}
-
-.c_btn:hover {
-   background: #555;
-}
-
 .linelist {
    float: right;
    margin-top: 0px;
@@ -46,30 +33,29 @@ body {
    <div class="container-fluid px-4">
       <h1 class="mt-4">공정관리</h1>
       <ol class="breadcrumb mb-4">
-         <li class="breadcrumb-item active">생산</li>
-      </ol>
+		<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+		<li class="breadcrumb-item">> 생산관리</li>
+		<li class="breadcrumb-item active">> 공정관리</li>
+	  </ol>
    </div>
    <!-- 헤더부분 -->
       <div id="container">
               <section>
             <div class="col">
                <div class="card mb-4">
-                  <div class="card-header">
-                     <i class="fas fa-table me-1"></i> 조건설정
-                  </div>
+           
                   <div class="card-body">
                      
                      <form>
                         <div class="mb-3">
                            <label for="name">공정구분</label> 
-               				<select id="prcs">
+               				<select id="prcs" class="dataTable-selector">
                					<option selected value="">--선택--</option>
-               				<!-- <option th:each="code : ${ccds['100']}"
-               							th:value="${code.ccdDtl}" th:text="${code.ccdDtlNm}"</option> -->
+               					<option th:each="code : ${ccds['PRC']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtl}"></option>
                				</select>
                         </div>
      					<div class="linelist">
-                        <button id="sBtn" class="c_btn" form="">검색</button>
+                        <button id="sBtn" class="btn btn-primary" form="">검색</button>
                      </div>
               	
                      </form>
@@ -77,15 +63,18 @@ body {
                </div>
             </div>
          </section>
-          <div>
+          <div class="card mb-4">
+			<div class="card-body">
 	          <div class="linelist">
-	             <button id="addBtn" class="c_btn" form="">추가</button>
-	             <button id="deleteBtn" class="c_btn" form="">삭제</button>
-	             <button id="saveBtn" class="c_btn" form="">저장</button>
+	             <button id="addBtn" class="btn btn-primary" form="">추가</button>
+	             <button id="deleteBtn" class="btn btn-primary" form="">삭제</button>
+	             <button id="saveBtn" class="btn btn-primary" form="">저장</button>
 	          </div>
 	          <br>
 	          <br>
 	          <div id='grid'>
+	         </div>
+			</div> 
           </div>
       </div>
    <br>
@@ -135,7 +124,7 @@ body {
             {
               header: '공정설명',
               name: 'prcsCtnt',
-              align : 'center',
+              
               editor: 'text'
             }
           ]

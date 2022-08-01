@@ -7,9 +7,6 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<style>
-		body {
-			background: #eee
-		}
 
 		uploadResult {
 			display: grid;
@@ -66,7 +63,8 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">자재발주</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+				<li class="breadcrumb-item"><a href="home.do"><i
+						class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 자재관리</li>
 				<li class="breadcrumb-item active">> 자재발주조회</li>
 			</ol>
@@ -167,7 +165,7 @@
 				})
 
 
-			grid.on('dblclick', ev => {
+			grid.on('click', ev => {
 				var ordrCd = grid.getValue(ev.rowKey, 'ordrCd')
 				var vendCd = grid.getValue(ev.rowKey,'vendCd')
 				var vendNm = grid.getValue(ev.rowKey,'vendNm')
@@ -263,8 +261,15 @@
 				$('#saveBtn').click(ev => {
 					var data = grid2.getCheckedRows();
 					var isValid = true;
+					
+					if(data.length == null || data.length == 0){
+						toastr.warning('체크된 발주 내역이 없습니다.');
+						isValid = false;
+						return false;
+					}
+					
 					for (i = 0; i < data.length; i++) {
-						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null) {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].paprdCmndDt == null) {
 							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
 							isValid = false;
 							return false;
@@ -277,11 +282,11 @@
 								data: JSON.stringify(data),
 								contentType: 'application/json'
 							}).done(function (result) {
-								toastr.success('발주내역 수정이 완료되었습니다.');
 								grid2.uncheckAll()
 							})
 						}
 					}
+						toastr.success('발주내역 수정이 완료되었습니다.');
 				})
 						
 			</script>

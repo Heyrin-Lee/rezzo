@@ -41,6 +41,7 @@ public class RscOustController {
 
     @RequestMapping("schRscOustHist")
     @ResponseBody
+
     public List<RscOustVO> schRscOustHist(@ModelAttribute RscOustVO rscOustVO) {
         return sv.schRscOustHist(rscOustVO);
     }

@@ -60,10 +60,13 @@ WHERE PLAN_CD=#{planCd}
 	ON D.EDCTS_CD = E.EDCTS_CD
 	JOIN INDICA I 
 	ON I.INDICA_DT = D.INDICA_DT
+	<if test="indicaDt != null and indicaDt2 != null">
 	<![CDATA[
 	WHERE I.INDICA_DT >= #{indicaDt}
 	  AND I.INDICA_DT <= #{indicaDt2}
 	]]>
+	</if>
+	<if test="nowSt != null">
 	 <choose>
     <when test='nowSt.equals("전체")'>
      AND (I.NOW_ST = '미지시'
@@ -73,7 +76,10 @@ WHERE PLAN_CD=#{planCd}
      AND I.NOW_ST = #{nowSt}
     </otherwise>
   </choose>
-	AND E.PRDT_NM = #{prdtNm}
+  </if>
+  <if test="prdtNm != null">
+	AND E.PRDT_NM LIKE '%'||#{prdtNm}||'%'
+	</if>
 </select>
 
 <delete id="deleteIndica" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO" >

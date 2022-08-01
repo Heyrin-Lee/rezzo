@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rezzo.mes.resour.oust.service.RscOustVO;
 
 import lombok.Data;
 
@@ -22,12 +23,14 @@ public class ProgVO {
 	String prcsCd;
 	String prcsNm;
 	String prcsPsch;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkFrTm;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date wkToTm;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date wkFrTm;
+	String wkFrTm;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date wkToTm;
+	String wkToTm;
 	Integer inferCnt;
 	String inferCd;
 	Integer prodCnt;
@@ -35,14 +38,26 @@ public class ProgVO {
 	String edctsLotNo;
 	String planCd;
 	String eqmCd;
+	String eqmCd2;
 	String eqmNm;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date startTime;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date endTime;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date startTime;
+//	@DateTimeFormat(pattern="yyyy-MM-dd")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+//	Date endTime;
 	String yn;
 	String orderNo;
+	Integer seqNo;
+	String rscCd;
+	Integer holdCnt;
+	String rscLotCd;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date wkFrDt;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date wkFrDt2;
+	
 
 }

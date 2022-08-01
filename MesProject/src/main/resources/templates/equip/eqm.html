@@ -6,9 +6,6 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<style>
-		body {
-			background: #eee
-		}
 
 		uploadResult {
 			display: grid;
@@ -82,12 +79,13 @@
 
 						<div class="card-body">
 							<div>
-	<tbody>
-										<tr>
-											<th>설비코드</th>
-											<td>
+								<tbody>
+								<tr>
+								<th>설비코드</th>
+									<td>
 								<input class="form-control"  type="text" id="keyword" name="keyword" placeholder="설비명" style="width:250px"></input>
-								<button type="button" style="margin-bottom:3px" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="modalBtn" name="modalBtn"><i class="fas fa-search"></i></button>
+								<button type="button" style="margin-bottom:3px" class="btn btn-primary" data-bs-toggle="modal" 
+									data-bs-target="#exampleModal" id="modalBtn" name="modalBtn"><i class="fas fa-search"></i></button>
 								<button type="button" onclick="eqmSelect()" class="btn btn-primary" style="margin-bottom:3px"><i class="fas fa-search"></i> 검색</button>
 							</td>
 							</tr>
@@ -130,17 +128,21 @@
 									</colgroup>
 									<tbody>
 										<tr>
+										<th>설비구분 *</th>
+											<td>
+												<select class="dataTable-selector" name="eqmFg" id="eqmFg" style="width: 250px">
+													<option selected value="">==등록시필수선택==</option>
+													<option th:each="value : ${ccds.EQM}" th:value="${value.ccdDtl}" th:text="${value.ccdDtlNm}"></option>
+												</select>
 											<th>설비코드</th>
 											<td>
-												<input class="form-control" name="eqmCd" id="eqmCd" style="width: 250px" readonly>
+												<input class="form-control" name="eqmCd" id="eqmCd" style="width: 250px" readonly placeholder="등록시 자동 입력">
 											</td>
-											<th>설비명</th>
-											<td><input class="form-control" type="text" id="eqmNm" name="eqmNm" style="width: 250px">
-											<th>입고일자</th>
-											<td><input class="form-control" type="date" id="eqmIstDt" name="eqmIstDt" style="width: 250px" /></td>
+											<th>설비명 *</th>
+											<td><input class="form-control" type="text" id="eqmNm" name="eqmNm" style="width: 250px" >
 										</tr>
 										<tr>
-											<th>라인명</th>
+											<th>라인명 *</th>
 											<td>
 												<select class="dataTable-selector" name="lineNm" id="lineNm" style="width: 250px">
 													<option selected value="">==등록시필수선택==</option>
@@ -150,13 +152,13 @@
 											<td>
 												<input class="form-control" name="lineCd" id="lineCd" style="width: 250px" readonly>
 											</td>
-											<th>점검주기(일)</th>
+											<th>점검주기(일) *</th>
 											<td>
 												<input type="number" class="form-control" name="chckPerd" id="chckPerd" style="width: 250px">
 											</td>
 										</tr>
 										<tr>
-											<th>공정명</th>
+											<th>공정명 *</th>
 											<td>
 												<select name="prcsNm" aria-label="Default select example" style="width: 250px"
 												id='prcsNm' class="dataTable-selector">
@@ -175,7 +177,9 @@
 											</td>
 										</tr>
 										<tr>
-										<th>가동여부</th>
+										<th>입고일자 *</th>
+											<td><input class="form-control" type="date" id="eqmIstDt" name="eqmIstDt" style="width: 250px" /></td>
+										<th>가동여부 *</th>
 										<td>
 											<select class="dataTable-selector" name="useYN" id="useYN" style="width: 250px">
 													<option selected value="">==등록시필수선택==</option>
@@ -205,8 +209,10 @@
 
 					</div><br>
 					<div class="ms-3">
-						<label style="width:60px">설비명</label>
-						<input type="text" id="keyword2" name="keyword2" placeholder="설비명"></input>
+						<th>설비명</th>
+						<td>
+						<input type="text" id="keyword2" name="keyword2" placeholder="설비명" class="form-control" style="width: 250px">
+						</td>
 						<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
 					</div>
 					<div id="modGrid" class="modal-body"></div>
@@ -222,6 +228,11 @@
 		<br>
 
 		<script>
+		// 이미지 클릭 시 파일 첨부
+		$('#preview').click(function(){
+			$('[name="file"]').click();
+		})
+		
 		$('#preview').attr('src',"imgfile/add-image.png").css('width','150px')
 			function readURL(input) {
 				if (input.files && input.files[0]) {
@@ -383,12 +394,26 @@
 			$('#insertBtn').on('click', function () {
 			var isValid = true;
 			var eqmCd = $('#eqmCd').val()
-			console.log(eqmCd)
+			var eqmNm = $('#eqmNm').val()
+			var eqmFg = $('[name="eqmFg"]').val()
+			var lineNm = $('[name="lineNm"]').val()
+			var prcsNm = $('[name="prcsNm"]').val()
+			var eqmIstDt = $('#eqmIstDt').val()
+			var useYn = $('[name="useYN"]').val()
+			var chckPerd = $('#chckPerd').val()
+			
+			if(eqmNm==null || eqmNm==''||eqmFg==null||eqmFg==''||lineNm==''||lineNm==null||prcsNm==''||prcsNm==null||eqmIstDt==''||eqmIstDt==null||useYn==''||useYn==null||chckPerd==null||chckPerd==''){
+				toastr.warning('필수 항목을 입력해주세요.');
+				isValid = false;
+				return false;
+			} 
+			
 			if(eqmCd!=''){
 				toastr.warning('설비 수정 버튼을 이용해주세요.');
 				isValid = false;
 				return false;
 			} 
+			
 				var formData = new FormData(document.getElementById('dataForm'))
 			
 
@@ -428,12 +453,27 @@
 			$('#modBtn').on('click', function () {
 			var isValid = true;
 			var eqmCd = $('#eqmCd').val()
-			console.log(eqmCd)
+			var eqmNm = $('#eqmNm').val()
+			var eqmFg = $('[name="eqmFg"]').val()
+			var lineNm = $('[name="lineNm"]').val()
+			var prcsNm = $('[name="prcsNm"]').val()
+			var eqmIstDt = $('#eqmIstDt').val()
+			var useYn = $('[name="useYN"]').val()
+			var chckPerd = $('#chckPerd').val()
+			
 			if(eqmCd==null || eqmCd==''){
 				toastr.warning('설비등록시 등록버튼을 이용해주세요.');
 				isValid = false;
 				return false;
+			}
+			
+			if(eqmNm==null || eqmNm==''||eqmFg==null||eqmFg==''||lineNm==''||lineNm==null||prcsNm==''||prcsNm==null||eqmIstDt==''||eqmIstDt==null||useYn==''||useYn==null||chckPerd==null||chckPerd==''){
+				toastr.warning('필수 항목을 입력해주세요.');
+				isValid = false;
+				return false;
 			} 
+			
+			
 				var formData = new FormData(document.getElementById('dataForm'))
 
 				var lineNm = $('#lineNm option:checked').text()
@@ -492,7 +532,7 @@
 
 			//삭제버튼
 			$('#delBtn').on('click', function () {
-					
+				var eqmCd = $('#eqmCd').val()
 				if ($('#eqmCd').val() == null || $('#eqmCd').val() == '') {
 					toastr.warning('삭제할 설비를 선택해주세요.');
 				} else{
@@ -510,6 +550,11 @@
 						dataType: "JSON",
 						success: function (result) {
 							grid.resetData(result);
+							toastr.success('설비삭제가 완료되었습니다.');
+							$('#dataForm').each(function () {
+								this.reset()
+								$('#preview').attr('src',"imgfile/add-image.png");
+							})
 						}
 					})
 				})
@@ -548,7 +593,10 @@
 						$('#chckPerd').val(result[0].chckPerd);
 						$('#eqmIstDt').val(result[0].eqmIstDt);
 						$('[name="eqmFg"]').val(result[0].eqmFg);
-						$('#preview').attr("src", "image/" + result[0].imgPath);
+						if(result[0].imgPath==null || result[0].imgPath==''){
+							$('#preview').attr('src',"imgfile/add-image.png");
+							} else{
+							$('#preview').attr("src", "image/" + result[0].imgPath);}
 					}
 				})
 			});

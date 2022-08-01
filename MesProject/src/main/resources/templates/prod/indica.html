@@ -8,9 +8,7 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <style>
-body {
-   background: #eee
-}
+
 
 #container {
    width : 98%;
@@ -19,19 +17,6 @@ body {
 
 .col {
    width: 700px
-}
-
-.c_btn {
-   color: #fff;
-   font-size: 13px;
-   background: #333;
-   border: none;
-   padding: 6px;
-   border-radius: 4px
-}
-
-.c_btn:hover {
-   background: #555;
 }
 
 .linelist {
@@ -51,26 +36,34 @@ body {
    <div class="container-fluid px-4">
       <h1 class="mt-4">생산지시</h1>
       <ol class="breadcrumb mb-4">
-         <li class="breadcrumb-item active">생산</li>
-      </ol>
+		<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+		<li class="breadcrumb-item">> 생산관리</li>
+		<li class="breadcrumb-item active">> 생산지시</li>
+	  </ol>
    </div>
    <!-- 헤더부분 -->
    <div id="container">
- 	
+ 	   <div class="card mb-4">
+			<div class="card-body">
      <div class="linelist">
-       <button class="c_btn" form="">초기화</button>
-       <input type="button" data-bs-toggle="modal" class="c_btn" id="modalBtn" data-bs-target="#exampleModal"
+       <button class="btn btn-primary" form="">초기화</button>
+       <input type="button" data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
                     value="계획조회"></input>
-       <button class="c_btn" id="regiBtn">저장</button>
+       <button class="btn btn-primary" id="regiBtn">저장</button>
      </div>
      
 	 <div id="grid"></div>
+	 </div>
+	 </div>
 	 <br>
+	    <div class="card mb-4">
+			<div class="card-body">
 	  <div class="d-flex flex-row justify-content-between">
 	     <div id="grid2" style="width: 1000px;">공정자재</div>
 	     <div id="grid3" style="width: 500px;">자재지시</div>
 	  </div>
-	  
+	  </div>
+	  </div>
 	  <div id="#tui-date-picker-container1"></div>
 	  <div id="dialog" title="생산계획조회"></div>
    <br>

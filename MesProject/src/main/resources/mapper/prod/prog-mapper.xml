@@ -23,7 +23,7 @@
 	ORDER BY B.BOM_SQ
 </select>
 <insert id="insertEqmCd">
-	INSERT INTO DUM VALUES (#{eqmCd}, NULL, NULL, NULL)
+	INSERT INTO DUM VALUES (#{eqmCd}, NULL, NULL, 'Y', #{seqNo})
 </insert>
 <select id="selectEqm" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
 	SELECT * FROM DUM WHERE EQM_CD = #{eqmCd}
@@ -51,7 +51,7 @@
 				#{prodCnt},
 				#{prefRank},
 				#{indicaCnt},
-				#{plan_cd}
+				#{planCd}
 				)
 </insert>
 
@@ -69,11 +69,54 @@
 								#{prcsCd},
 								#{planCd}
 										)
-</insert>
-
-<insert id="insertEdctsInfo" parameterType="com.rezzo.mes.prod.prog.service.ProgVO">
+</insert> 
+ 
+<insert id="insertEdctsInfo" parameterType="com.rezzo.mes.prod.prog.service.ProgVO" statementType="CALLABLE">
 <![CDATA[{call PROC_PROD_INSERT(#{edctsCd},#{prodCnt})}]]>
 </insert>
 
+<update id="schedule" statementType="CALLABLE">
+<![CDATA[{call proc_prod_mng
+			(#{param1}, 
+			#{param2}
+			)
+			}]]>
+</update>
+
+<update id="updateIndica">
+UPDATE INDICA 
+SET NOW_ST = '지시'
+WHERE PLAN_CD = #{planCd} 
+</update>
+
+<select id="getHolding" resultType="com.rezzo.mes.resour.oust.service.RscOustVO">
+select rsc_cd, rsc_lot_cd, OUST_CNT
+from holding 
+where plan_cd = #{planCd}
+</select>
+
+<select id="getProgPrcs" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
+SELECT P.*, E.EQM_CD, E.EQM_NM, I.INFER_CD	
+FROM PRCS_PROG P
+JOIN EQM E
+ON E.PRCS_CD = P.PRCS_CD
+JOIN PLAN_DTL D
+ON P.PLAN_CD = D.PLAN_CD
+JOIN PRCS_PROG_INFER I 
+ON P.PLAN_CD = I.PLAN_CD
+<if test="wkFrDt != null and wkFrDt2 != null">
+<![CDATA[
+	WHERE D.WK_FR_DT >= #{wkFrDt}
+	  AND D.WK_FR_DT <= #{wkFrDt2}
+	]]>
+</if>	
+<if test="prcsCd != null and !prcsCd.equals('--선택--')">
+and p.prcs_cd LIKE #{prcsCd}||'%'
+</if>
+<if test="inferCd != null and !inferCd.equals('--선택--')">
+and i.infer_cd = #{inferCd}
+and p.infer_cnt > 0
+</if>
+</select>
 
 </mapper>	

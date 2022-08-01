@@ -6,9 +6,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-body {
-   background: #eee
-}
 
 #container {
    width : 98%;
@@ -17,19 +14,6 @@ body {
 
 .col {
    width: 100%
-}
-
-.c_btn {
-   color: #fff;
-   font-size: 13px;
-   background: #333;
-   border: none;
-   padding: 6px;
-   border-radius: 4px
-}
-
-.c_btn:hover {
-   background: #555;
 }
 
 .linelist {
@@ -46,8 +30,10 @@ body {
    <div class="container-fluid px-4">
       <h1 class="mt-4">생산지시조회</h1>
       <ol class="breadcrumb mb-4">
-         <li class="breadcrumb-item active">생산</li>
-      </ol>
+		<li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
+		<li class="breadcrumb-item">> 생산관리</li>
+		<li class="breadcrumb-item active">> 생산지시조회</li>
+	  </ol>
    </div>
    <!-- 헤더부분 -->
    <div id="container">
@@ -55,27 +41,27 @@ body {
             <div class="col">
                <div class="card mb-4">
                   <div class="card-header">
-                     <i class="fas fa-table me-1"></i> 조건설정
+                     <i class="fas fa-table me-1"></i> 
                   </div>
                   <div class="card-body">
                      
                      <form>
                         <div class="mb-3">
                            <label for="frDate">지시일자</label> 
-                           <input type="date" id="start-input" name="start-input" style="width: 200px">~<input type="date" id="end-input" name="end-input" style="width: 200px">
+                           <input type="date"  class="form-control" id="start-input" name="start-input" style="width: 150px"> - <input type="date" class="form-control" id="end-input" name="end-input" style="width: 150px">
                         </div>
                         <div class="mb-3">
                            <label for="all">지시상태</label> 
-                            <label><input type="radio" name="status" value="전체">전체</label>
-                            <label><input type="radio" name="status" value="지시">지시</label>
-                            <label><input type="radio" name="status" value="미지시">미지시</label>
+                            <label><input class="form-check-input" type="radio" name="status" value="전체">전체</label>
+                            <label><input class="form-check-input" type="radio" name="status" value="지시">지시</label>
+                            <label><input class="form-check-input" type="radio" name="status" value="미지시">미지시</label>
                         </div>
                         <div class="mb-3">
-                           <label for="name">제품명</label> <input
-                              type="text" id="name" name="name">
+                           <label for="name">제품명</label> 
+                           <input type="text" style="width: 150px" class="form-control" id="name" name="name">
                         </div>
      					<div class="linelist">
-                        <button type="button" class="c_btn" id="sBtn">조회</button>
+                        <button type="button" class="btn btn-primary" id="sBtn">조회</button>
                      </div>
               	
                      </form>
@@ -83,12 +69,16 @@ body {
                </div>
             </div>
          </section>
+         <div class="card mb-4">
+			<div class="card-body">
           <div class="linelist">
-              <button type="button" class="c_btn" id="dBtn">삭제</button>
+              <button type="button" class="btn btn-primary" id="dBtn">삭제</button>
            </div>
            <br><br>
    <div id='grid'></div>
    </div> 
+   </div>
+   </div>
    <script>
    const gridData = [];
 

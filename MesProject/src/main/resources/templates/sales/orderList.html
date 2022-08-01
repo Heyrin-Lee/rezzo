@@ -518,7 +518,7 @@
 
 		//주문서 수정입력
 		var okBtn = document.getElementById('okBtn');
-		okBtn.addEventListener('click',function(e) {
+		okBtn.addEventListener('click',function(result) {
 			var data = grid.getCheckedRows();
 			$.ajax({
 				url:"saveOrdr",
@@ -527,12 +527,7 @@
 				data:JSON.stringify(data),
 				contentType:"application/json",
 				success:function(result) {
-					setTimeout(function () {
-						grid.refreshLayout()
-						grid.uncheckAll()
-					}, 300);
 					grid.resetData(result);
-					toastr.warning('주문서가 등록되었습니다.');
 				}
 			})
 			})

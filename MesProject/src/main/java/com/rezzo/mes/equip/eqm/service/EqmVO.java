@@ -1,6 +1,8 @@
 package com.rezzo.mes.equip.eqm.service;
 
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,8 +23,8 @@ public class EqmVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	public Date eqmIstDt;
-	int minTemp;
-	int maxTemp;
+	Integer minTemp;
+	Integer maxTemp;
 	String chckPerd;
 	String useYN;
 	String prcsNm;
@@ -32,5 +34,6 @@ public class EqmVO {
 	String frmUseYN;
 	String lineNm;
 	
+
 	
 }

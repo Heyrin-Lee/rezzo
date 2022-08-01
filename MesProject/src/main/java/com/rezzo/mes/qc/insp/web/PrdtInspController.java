@@ -2,12 +2,16 @@ package com.rezzo.mes.qc.insp.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.rezzo.mes.qc.insp.service.PrdtInspService;
 import com.rezzo.mes.qc.insp.service.PrdtInspVO;
@@ -17,6 +21,7 @@ import com.rezzo.mes.sales.order.service.OrderVO;
 public class PrdtInspController {
 	
 	@Autowired PrdtInspService service;
+
 	
 	@RequestMapping("prdtInsp")
 	public String prdtInsp(Model model) {
@@ -51,4 +56,11 @@ public class PrdtInspController {
 	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO) {
 		return service.getPrdtInsp(prdtInspVO);
 	}
+	
+	@RequestMapping("report")
+	public ModelAndView report2(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+	return new ModelAndView("pdfView", "filename", "/reports/cert.jasper");
+	}
+
 }
