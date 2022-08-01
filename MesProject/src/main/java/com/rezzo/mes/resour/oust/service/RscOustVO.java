@@ -19,6 +19,7 @@ public class RscOustVO extends RscVO {
     private int lotRmnCnt;
     private String expDt;
     private String from;
+    private String planCd;
 
     private String startDt;
     private String endDt;

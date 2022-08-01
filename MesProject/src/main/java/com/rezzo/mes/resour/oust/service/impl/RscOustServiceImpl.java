@@ -28,7 +28,10 @@ public class RscOustServiceImpl implements RscOustService {
         setOust.setRscOustCd(rscOustCd);
         rscOustVOS.remove(0);
 
+        System.out.println("setOust = " + rscOustVOS);
+
         if (setOust.getFrom().equals("prod")) {
+            mapper.letHoldingAway(setOust);
             for (RscOustVO rscOustVO : rscOustVOS) {
                 rscOustVO.setRscOustCd(rscOustCd);
                 mapper.letHoldOust(rscOustVO);
@@ -54,7 +57,7 @@ public class RscOustServiceImpl implements RscOustService {
 
     @Override
     public void updRscOustHist(List<RscOustVO> rscOustVOS) {
-        for(RscOustVO rscOustVO : rscOustVOS) {
+        for (RscOustVO rscOustVO : rscOustVOS) {
             mapper.updRscOustHist(rscOustVO);
         }
     }
