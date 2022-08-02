@@ -14,7 +14,7 @@ public class Scheduler {
 	@Autowired
 	ProgService service;
 	
-	@Scheduled(fixedRate = 8000)
+	//@Scheduled(fixedRate = 8000)
 	public void schedule() {
 		service.schedule(null, "QHT001");
 		service.schedule("QHT001", "MDC001");

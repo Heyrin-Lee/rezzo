@@ -20,17 +20,18 @@
 		SELECT * FROM edcts_ist
 		WHERE 1=1
 		<if test="edctsLotNo != null and edctsLotNo != ''">and EDCTS_LOT_NO = #{edctsLotNo}</if>
-		<if test="edctsIstDt != null and edctsIstDt != ''">and EDCTS_IST_DT BETWEEN #{edctsIstDtStart} AND #{edctsIstDtEnd}</if>
+		<if test="edctsIstDtStart != null"><![CDATA[and EDCTS_IST_DT >= #{edctsIstDtStart}]]></if>
+		<if test="edctsIstDtEnd != null"><![CDATA[and EDCTS_IST_DT >= #{edctsIstDtEnd}]]></if>
 		ORDER BY edcts_ist_no
 	</select>
 
 	
 	<!-- 완제품LOT번호 모달 조회 -->
 	<select id="getLotList" resultType="PrdtInspVO">
-	SELECT P.ORDER_NO, P.EDCTS_LOT_NO, P.EDCTS_CD, O.PRDT_NM, P.INSP_CNT, P.INSP_JM, P.INSP_PSCH
-	FROM PRDT_INSP P JOIN ORDER_SHEET O
-	ON P.ORDER_NO = O.ORDER_NO
-	WHERE INSP_JM = '적합'
+	SELECT p.order_no, p.edcts_lot_no, p.edcts_cd, o.prdt_nm, p.insp_cnt, p.insp_jm, p.insp_psch
+	FROM prdt_insp p JOIN order_sheet o
+	ON p.order_no = o.order_no
+	WHERE insp_jm = '적합' AND NOT o.prog_appe IN ('입고완료')
 	</select>
 	
 	<!-- 입고등록 후 입고완료로 진행상황 변경 -->

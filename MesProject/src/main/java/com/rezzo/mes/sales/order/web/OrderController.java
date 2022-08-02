@@ -30,7 +30,7 @@ public class OrderController {
 	}
 	
 	//주문서 전체 불러오기
-	@GetMapping("orderSelect")
+	@PostMapping("orderSelect")
 	@ResponseBody
 	public List<OrderVO> orderSelect(OrderVO vo) {
 		return service.searchOrdr(vo);
