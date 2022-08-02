@@ -57,7 +57,7 @@
 
    <input type="button" data-bs-toggle="modal"  class="btn btn-primary"  id="modalBtn" data-bs-target="#exampleModal"
                     value="지시조회"></input>
-   <button id="rbtn" name="rbtn"  class="btn btn-primary"  form="">공정이동표</button>
+   <a href="prcsReport"><button id="rbtn" name="rbtn"  class="btn btn-primary"  form="">공정이동표</button></a>
    <br>
    <br>
       <div class="card mb-4">
@@ -107,6 +107,9 @@
 
 </div>
    <script>
+   //공정이동표
+  
+   
    //지시 계획 모달에 띄우기
    $("#modalBtn").on("click", function(){
    		$.ajax({
@@ -238,27 +241,26 @@
 			contentType : 'application/json'
 		})
 
-		
 		//자재 업데이트			
-	//	$.ajax({
-	//		url : 'getHolding',
-	//		method : 'post',
-	//		data : {"planCd" : planCd},
-	//		success : function(result) {
-	//				let today = new Date()
-	//				today = today.toISOString().substring(0, 10)
-	//				console.log(today)
-	//				let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
-	//				result.unshift(obj)
-	//			console.log(result)
-	//			$.ajax({
-	//				url : 'setRscOust',
-	//				method : 'post',
-	//				data : JSON.stringify(result),
-	//				contentType : 'application/json'
-	//			})
-	//		}
-	//	})
+		//$.ajax({
+		//	url : 'getHolding',
+		//	method : 'post',
+		//	data : {"planCd" : planCd},
+		//	success : function(result) {
+		//			let today = new Date()
+		//			today = today.toISOString().substring(0, 10)
+		//			console.log(today)
+		//			let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
+		//			result.unshift(obj)
+		//		console.log(result)
+		//		$.ajax({
+		//			url : 'setRscOust',
+		//			method : 'post',
+		//			data : JSON.stringify(result),
+		//			contentType : 'application/json'
+		//		})
+		//	}
+		//})
 		
 		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt
@@ -276,34 +278,24 @@
 				method : 'post',
 				data : iGrid
 			})
-
-		
 		}
    	} 
    }, 1000)
 
     //긴급 중지
    $("#stopBtn").on("click", function(){
-   	//누르는 순간 가동중이던 설비부터 그 뒤에 남은 설비들 전부 N상태로 update하기 -> 해당 설비를 업데이트 위한 파라미터로 보내야 함 -> 전부 N로 바꾸면?
-   																		//  -> 당장 인서트는 막을 수 있겠지만 재시작할 때 기준이 없다..??
-   																	    //  -> 파라미터는 일단 전부 넘기고 조건 걸어서 N면 두고 Y면 업데이트 
-   																	    //  -> 조건에 맞아서 업데이트된 설비들을 재시작 버튼 파라미터로 재사용 -> 어떻게?
-   																	    //  -> seqNo 가 있음 긴급중지 조건 줄 때 Y면서 seqNo 제일 작은 설비만 찾으면
-   																	    //  -> seqNo보다 큰 것들 전부 업데이트 하도록 구현
-   																	    
-   	//-> Y여야 인서트가 실행되므로 인서트를 막기 위함
-   	//그 설비에 대한 비가동 정보가 insert (종료일시는 null) 
    		$.ajax({
    			url : 'updateYn',
 			success : function(result){
+				
 				for(i=0; i<grid2.getRowCount(); i++) {
 				
 				  for(j=0; j<result.length; j++) {
 					  if(grid2.getValue(i, 'eqmCd') == result[j].eqmCd){
 					  	grid2.setValue(i, 'nowSt', '긴급중지');
+					  	//prcsPsch : grid2.getValue(i, 'prcsPsch')
 					  }
 				  }
-	            
 	            clearInterval(arrTest[i])
 				}
 				arrTest = [];
@@ -313,21 +305,21 @@
    
    //재시작
    $("#restartBtn").on("click", function(){
-   	//위와 반대 이벤트 걸리게 Y로 바뀌었던 것들을 N를 Y로 
-   	//다시 insert 시작
-   	//+ 그 설비에 대한 비가동 정보 중 종료일시 update
    		$.ajax({
    			url : 'updateYn2',
-   			success : function(){
+   			success : function(result){
+   					console.log(result)
    				 for(i=0; i<grid2.getRowCount(); i++) {
    				 	let eqmCd = grid2.getValue(i, 'eqmCd')
 					   let indicaCnt = grid.getData()[0].indicaCnt
 					   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
 					   let lineCd = grid.getData()[0].lineCd
 					   let valueI = i
-					   let interval = setInterval(interFn , 5000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
+					   let interval = setInterval(interFn , 3000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
 		               arrTest.push(interval)
    				 }
+   				 clearInterval(arrTest[i])
+	   			arrTest = [];
    			}
    		})
    })
@@ -346,10 +338,12 @@
 			 url : 'insertEqmCd',
 			 data : {"eqmCd" : eqmCd, "lineCd" : lineCd , "seqNo" : i+1},
 			 success : function(){
-			 	let interval = setInterval(interFn , 5000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
+			 	let interval = setInterval(interFn , 3000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
                 arrTest.push(interval)
 			 }  //end of success
 		   })  //end of ajax
+			 	clearInterval(arrTest[i])
+			 	arrTest = [];
 	   }  // end of for
    })	
    
@@ -359,7 +353,7 @@
 //  for(i=0; i<grid2.getRowCount(); i++) {
 //	  if(grid.getValue(i, 'eqmCd') == eqm)
 //  }
-					    console.log(i)
+					    //console.log(i)
 					    //if(grid2.getRow(i).nowSt != '완료') {
 				             $.ajax({
 				            	 url : 'selectEqm',
@@ -492,11 +486,37 @@
                             text: '서길동',
                             value: '서길동'
                         },
-                    ]
-
+                       ]
                 }
-            ]
-        });
+               }
+           },
+           {
+             header: '시작시간',
+             name: 'wkFrTm'
+           },
+           {
+             header: '투입량',
+             name: 'indicaCnt'
+           },
+           {
+             header: '불량량',
+             name: 'inferCnt'
+           },
+           {
+             header: '생산량',
+             name: 'prodCnt'
+           },
+           {
+             header: '종료시간',
+             name: 'wkToTm'
+           },
+           {
+             header: '현재상태',
+             name: 'nowSt'
+           }
+           ]
+       });
+
         modalBtn.addEventListener('click', function () {
             setTimeout(function () {
                 modGrid.refreshLayout()

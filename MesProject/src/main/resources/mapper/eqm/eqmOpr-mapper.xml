@@ -31,7 +31,7 @@
 	</resultMap>
 	
 	<select id = "eqmOprInsert" statementType="CALLABLE">
-			{call opr_ins(#{frmEqmCd}, #{frmEqmNm}, #{frDt}, #{toDt},#{frmPsch},#{opertCtnt},#{frmUseYN})}
+			{call opr_ins(#{frmEqmCd}, #{frDt}, #{toDt},#{frmPsch},#{opertCtnt},#{frmUseYN})}
 	</select>
 		
 	<select id = "OprList" resultMap="eqmMap">
