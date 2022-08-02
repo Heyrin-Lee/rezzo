@@ -1,6 +1,7 @@
 package com.rezzo.mes.qc.insp.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,16 @@ public class PrdtInspServiceImpl implements PrdtInspService {
 	@Override
 	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO) {
 		return mapper.getPrdtInsp(prdtInspVO);
+	}
+	
+	@Override
+	public List<PrdtInspVO> getPrdtInspDtl(PrdtInspVO prdtInspVO) {
+		return mapper.getPrdtInspDtl(prdtInspVO);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPrdtInspListMap(PrdtInspVO prdtInspVO) {
+		return mapper.getPrdtInspListMap(prdtInspVO);
 	}
 
 }
