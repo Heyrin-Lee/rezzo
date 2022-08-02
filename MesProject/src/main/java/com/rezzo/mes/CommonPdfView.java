@@ -25,6 +25,7 @@ public class CommonPdfView extends AbstractView {
 	
 	@Autowired DataSource dataSource;
 	
+	
 	@Override
 	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -32,9 +33,10 @@ public class CommonPdfView extends AbstractView {
 		Connection conn = dataSource.getConnection();
 		
 		String reportFile = (String)model.get("filename");
-		HashMap<String,Object> map = new HashMap<>();
-		//map.put("p_departmentId", request.getParameter("dept"));
 		
+		@SuppressWarnings("unchecked")
+		HashMap<String,Object> map = (HashMap<String, Object>)model.get("params");
+
 		InputStream jasperStream = getClass().getResourceAsStream(reportFile);
 		JasperReport jasperReport = JasperCompileManager.compileReport(jasperStream);
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, conn);

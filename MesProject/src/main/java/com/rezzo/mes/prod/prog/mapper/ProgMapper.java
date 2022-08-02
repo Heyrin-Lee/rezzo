@@ -22,6 +22,9 @@ public interface ProgMapper {
 	public List<ProgVO> getHolding(ProgVO vo);
 	public List<ProgVO> getProgPrcs(ProgVO vo);
 	public void updateYn();
-	public void updateYn2();
 	public List<ProgVO> getNoOprEqm();
+	public void updateYn2();
+	public List<ProgVO> getNoOprEqm2();
+	public void insertOprEqm(ProgVO vo);
+	public void updateOprEqm(ProgVO vo);
 }

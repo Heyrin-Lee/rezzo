@@ -1,10 +1,15 @@
 package com.rezzo.mes.prod.prog.web;
 
+import java.io.InputStream;
+import java.sql.Connection;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -17,12 +22,20 @@ import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.prod.prog.service.ProgService;
 import com.rezzo.mes.prod.prog.service.ProgVO;
-import com.rezzo.mes.resour.oust.web.RscOustController;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 @Controller
 public class ProgController {
 	@Autowired ProgService service;
 	@Autowired CcdsService ccdsService;
+	@Autowired Scheduler scheduler;
+	@Autowired DataSource dataSource;
+	
 	
 	@GetMapping("/prcsSearch")
 	public String vend(Model model, CcdsVO vo) {
@@ -48,6 +61,11 @@ public class ProgController {
 	public void insertEqmCd(ProgVO vo) {
 		service.insertEqmCd(vo);
 		service.updateEqm1(vo);
+		if(scheduler.isAlive()) {
+			scheduler.interrupt();
+		}
+		scheduler = new Scheduler();
+		scheduler.start();
 	}
 	
 	@RequestMapping("selectEqm")
@@ -97,20 +115,31 @@ public class ProgController {
 	@ResponseBody
 	public List<ProgVO> updateYn () {
 		service.updateYn();
-		return service.getNoOprEqm();
+		List<ProgVO> list = service.getNoOprEqm();
+		service.insertOprEqm(list);
+		
+		return list; 
 	}
 	
 	@RequestMapping("updateYn2")
 	@ResponseBody
-	public void updateYn2 () {
+	public List<ProgVO> updateYn2 () {
 		service.updateYn2();
+		List<ProgVO> list = service.getNoOprEqm2();
+		service.updateOprEqm(list);
+		
+		return list;
 	}
-	
-	/*
-	 * @RequestMapping("getNoOprEqm")
-	 * 
-	 * @ResponseBody public ProgVO getNoOprEqm() { return service.getNoOprEqm(); }
-	 */
-	
-	
+
+	@RequestMapping(path="prcsReport", produces = {MediaType.APPLICATION_PDF_VALUE})	
+	public void report(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("application/pdf");
+		Connection conn = dataSource.getConnection();
+		InputStream stream = getClass().getResourceAsStream("/jasper/reports/prcsReport.jrxml");
+		JasperReport jasperReport = JasperCompileManager.compileReport(stream);
+		//파라미터 맵
+		//HashMap<String,Object> map = new HashMap<>();
+		//map.put("p_departmentId", request.getParameter("dept"));
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, conn);
+		JasperExportManager.exportReportToPdfStream( jasperPrint, response.getOutputStream());}
 }

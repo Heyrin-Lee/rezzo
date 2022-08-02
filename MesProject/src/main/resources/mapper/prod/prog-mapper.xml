@@ -20,6 +20,7 @@
 	JOIN EQM E
 	ON P.PRCS_CD = E.PRCS_CD
 	WHERE EDCTS_CD = #{edctsCd}
+	AND E.LINE_CD = 'LNE001'
 	ORDER BY B.BOM_SQ
 </select>
 <insert id="insertEqmCd">
@@ -118,12 +119,22 @@ and i.infer_cd = #{inferCd}
 and p.infer_cnt > 0
 </if>
 </select>
+
+<!-- 긴급중지 -->
 <update id="updateYn">
 update dum 
 set yn = 'N'
 where seq_no >= (SELECT min(seq_no) KEEP(DENSE_RANK FIRST ORDER BY seq_no) FROM dum where yn = 'Y')
 </update>
+<!-- 긴급중지된 설비들 -->
+<select id="getNoOprEqm" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
+select eqm_cd
+from dum
+where yn = 'N'
+and wk_to_tm is null
+</select>
 
+<!-- 재가동  -->
 <update id="updateYn2">
 update dum
 set yn = 'Y'
@@ -131,11 +142,27 @@ where seq_no >= (SELECT min(seq_no) KEEP(DENSE_RANK FIRST ORDER BY seq_no) FROM 
 and (WK_TO_TM is null  or  WK_FR_TM is null)
 </update>
 
-<select id="getNoOprEqm" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
-select eqm_cd 
+<select id="getNoOprEqm2" resultType="com.rezzo.mes.prod.prog.service.ProgVO">
+select eqm_cd
 from dum
-where yn = 'N'
+where yn = 'Y'
 and wk_to_tm is null
 </select>
+
+<insert id="insertOprEqm" parameterType="com.rezzo.mes.prod.prog.service.ProgVO" statementType="CALLABLE">
+<![CDATA[{call PROD_EQM_CTRL(#{eqmCd})}]]>
+</insert>
+
+<update id="updateOprEqm">
+UPDATE eqm_opr
+SET to_dt = sysdate
+WHERE OPERT_CTNT = '긴급점검'
+</update>
+
+<update id="updateUseYn">
+UPDATE eqm
+SET use_yn = 'Y'
+WHERE eqm_cd = #{eqmCd}
+</update>
 
 </mapper>	

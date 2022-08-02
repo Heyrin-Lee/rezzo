@@ -46,9 +46,9 @@ public class CcdsController {
 	 }
 	
 	@PostMapping("ccdsInsert")
-	public String ccdsInsert(CcdsVO ccdsVO) {
+	public List<CcdsVO> ccdsInsert(CcdsVO ccdsVO) {
 		service.ccdsInsert(ccdsVO);
-		return "comm/ccds";
+		return service.ccdsList(null);
 	}
 	
 	@PostMapping("ccdsUpdate")

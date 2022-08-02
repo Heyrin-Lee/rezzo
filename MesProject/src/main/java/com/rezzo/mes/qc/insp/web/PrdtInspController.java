@@ -1,9 +1,11 @@
 package com.rezzo.mes.qc.insp.web;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,8 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.rezzo.mes.CommonPdfView;
 import com.rezzo.mes.qc.insp.service.PrdtInspService;
 import com.rezzo.mes.qc.insp.service.PrdtInspVO;
 import com.rezzo.mes.sales.order.service.OrderVO;
@@ -29,17 +34,19 @@ import net.sf.jasperreports.engine.JasperReport;
 
 @Controller
 public class PrdtInspController {
-	
-	@Autowired PrdtInspService service;
-	@Autowired DataSource dataSource;
 
-	
+	@Autowired
+	PrdtInspService service;
+	@Autowired
+	DataSource dataSource;
+	@Autowired CommonPdfView commonPdfView;
+
 	@RequestMapping("prdtInsp")
 	public String prdtInsp(Model model) {
 		model.addAttribute("lots", service.getPrdtInsp(null));
 		return "qc/prdtInsp";
 	}
-	
+
 	@RequestMapping("getInspCode")
 	@ResponseBody
 	public List<PrdtInspVO> getInspCode() {
@@ -51,35 +58,65 @@ public class PrdtInspController {
 	public List<OrderVO> prdtInspOrder() {
 		return service.prdtInspOrder();
 	}
-	
+
 	@RequestMapping("delPrdtInsp")
 	public void delPrdtInsp(PrdtInspVO prdtInspVO) {
 		service.delPrdtInsp(prdtInspVO);
 	}
-	
+
 	@RequestMapping("savePrdtInsp")
 	public void savePrdtInsp(@RequestBody List<PrdtInspVO> prdtInspList) {
 		service.savePrdtInsp(prdtInspList);
 	}
-	
+
 	@RequestMapping("getPrdtInsp")
 	@ResponseBody
 	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO) {
 		return service.getPrdtInsp(prdtInspVO);
 	}
+
+	@RequestMapping("getPrdtInspDtl")
+	@ResponseBody
+	public List<PrdtInspVO> getPrdtInspDtl(PrdtInspVO prdtInspVO) {
+		return service.getPrdtInspDtl(prdtInspVO);
+	}
 	
-	@RequestMapping(path="report", produces = {MediaType.APPLICATION_PDF_VALUE})	
+	//컨트롤러에서 컴파일하기
+	@RequestMapping(path = "report", produces = { MediaType.APPLICATION_PDF_VALUE })
 	public void report(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("application/pdf");
 		Connection conn = dataSource.getConnection();
 		InputStream stream = getClass().getResourceAsStream("/jasper/reports/prdtReport.jrxml");
 		JasperReport jasperReport = JasperCompileManager.compileReport(stream);
-		//파라미터 맵
-		//HashMap<String,Object> map = new HashMap<>();
-		//map.put("p_departmentId", request.getParameter("dept"));
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, conn);
-		JasperExportManager.exportReportToPdfStream( jasperPrint, response.getOutputStream());
+		// 파라미터 맵
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("param", request.getParameter("param"));
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, conn);
+		JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
 
+	}
+	
+	//공통뷰 상속받기
+	@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
+	public ModelAndView prdtInspPdf(@RequestParam Map<String,Object> pram) throws Exception {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("filename", "/jasper/reports/aaa.jrxml");
+		map.put("params", pram);
+		
+		return new ModelAndView(commonPdfView, map);
+	}
+	
+	//검사리스트 엑셀 다운로드
+	@RequestMapping(path="prdtInspExel", produces = "application/vnd.ms-excel")
+	public ModelAndView excelView(PrdtInspVO prdtInspVO, HttpServletResponse response) throws IOException {
+		List<Map<String, Object>> list = service.getPrdtInspListMap(prdtInspVO);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		String[] header = {"LOT번호", "제품코드", "제품명", "최종판정", "검사날짜", "검사자"};
+		map.put("headers", header);
+		map.put("filename", "prdtInspList");
+		map.put("datas", list);
+		return new ModelAndView("commonExcelView", map);
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.rezzo.mes.qc.insp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.rezzo.mes.sales.order.service.OrderVO;
 
@@ -16,5 +17,8 @@ public interface PrdtInspService {
 	public void savePrdtInsp(List<PrdtInspVO> prdtInspList);
 	//검사테이블 데이터 불러오기
 	public List<PrdtInspVO> getPrdtInsp(PrdtInspVO prdtInspVO);
-	
+	//저장된 검사 불러오기
+	public List<PrdtInspVO> getPrdtInspDtl(PrdtInspVO prdtInspVO);
+	//엑셀 전체목록받아오기
+	public List<Map<String, Object>> getPrdtInspListMap(PrdtInspVO prdtInspVO);
 }

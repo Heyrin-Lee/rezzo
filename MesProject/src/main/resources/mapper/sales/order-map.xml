@@ -7,7 +7,9 @@
 	<!-- 주문서 전체조회 -->
 	<select id="searchOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
 		SELECT * FROM ORDER_SHEET
-		WHERE ORDER_DT BETWEEN TO_DATE(#{start},'yyyy-MM-dd') AND TO_DATE(#{end},'yyyy-MM-dd')
+		WHERE 1=1 
+		<if test="start != null"><![CDATA[and ORDER_DT >= #{start}]]></if> 
+		<if test="end != null"><![CDATA[and ORDER_DT <= #{end}]]></if> 
 		ORDER BY ORDER_NO
 	</select>
 
@@ -24,9 +26,13 @@
 	<!-- 조건별 주문서 조회 -->
 	<select id="findOrdr" resultType="com.rezzo.mes.sales.order.service.OrderVO">
 	SELECT * FROM ORDER_SHEET
-	WHERE ORDER_DT BETWEEN #{start} AND #{end}
+	<!-- WHERE ORDER_DT BETWEEN #{start} AND #{end} -->
+	WHERE 1=1
 	<if test="vendNm != null and vendNm != ''">and VEND_NM = #{vendNm}</if>
 	<if test="prdtNm != null and prdtNm != ''">and PRDT_NM = #{prdtNm}</if>
+	<if test="start != null"><![CDATA[and ORDER_DT >= #{start}]]></if>
+	<if test="end != null"><![CDATA[and ORDER_DT <= #{end}]]></if>
+	ORDER BY ORDER_NO
 	</select>
 	
 	<!-- 주문서 삭제 -->

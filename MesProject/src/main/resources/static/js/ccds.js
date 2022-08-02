@@ -240,7 +240,8 @@
              type: "POST",
              data: $('#dataForm').serialize(),
              dataType: 'json',
-             success: function() {
+             success: function(result) {
+             	grid.resetData(result);
              	$('#ccd').attr("readonly", true);
              	toastr.success('성공적으로 저장되었습니다.');
              	search();
