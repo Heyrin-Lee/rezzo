@@ -120,8 +120,8 @@
             <div class="card-body">
             	<div class="linelist" style="float: right;">
 								<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
-								<a href="report"><button class="btn btn-primary" id="pdfBtn"><i class="fas fa-download"></i> PDF</button></a>
-								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+            		<button class="btn btn-primary" id="resetBtn"><i class="fas fa-file"></i> 초기화</button>
+            		<button class="btn btn-primary" id="excelBtn"><i class="fas fa-download"></i> Excel</button>
 								<br> <br>
 							</div>
 							<form id="dataForm2" name="dataForm2" action="#" method="post">
@@ -163,6 +163,29 @@
             </div>
         	</div>
 				</div><!-- end nav-tabContent -->
+				<!-- 성적서 모달 -->
+				<div class="modal fade" id="inspModal" tabindex="-1" aria-labelledby="inspModalLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-xl">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="inspModalLabel">검사상세조회</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+				      	<form action="prdtInspPdf" method="post">
+				      	<label for="inspModalNo" autofocus="autofocus">LOT </label>  <input type="text" class="form-control" id="inspModalNo" name="param" style="width: 200px" readonly />
+								<button class="btn btn-primary" id="pdfBtn"><i class="fas fa-download"></i> 성적서</button>
+								</form>
+								<br><br>
+				        <div id="inspModalGrid"></div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+				        <button type="button" class="btn btn-primary" id="inspModalSelBtn">확인</button>
+				      </div>
+				    </div>
+				  </div>
+				</div><!-- 성적서 모달 end -->
 			</div>
 		</div>
 		
@@ -202,7 +225,7 @@
 		         sortingType: 'desc'
 		     }, {
 		         header: '결과판정',
-		         name: 'inspJm',
+		         name: 'inspJmDtl',
 		         align: 'center',
 		         validation: {
 		             required: true
@@ -368,17 +391,21 @@
  		
  		//저장
  		$('#saveBtn').click(ev => {
- 			$.ajax({
-			 	url: "savePrdtInsp",
-			  method: "POST",
-	      data: JSON.stringify(datas),
-	      dataType: 'json',
-	      contentType: 'application/json',
-			    success: function (result) {
-			    	toastr.success('정상적으로 삭제되었습니다.');
-			    	grid.resetData(result);
-			    }
-			})
+ 			if ($('#inspJm').val() == '') {
+ 				toastr.warning('최종판정은 필수 값입니다.');
+ 			} else { 			
+	 			$.ajax({
+				 	url: "savePrdtInsp",
+				  method: "POST",
+		      data: JSON.stringify(datas),
+		      dataType: 'json',
+		      contentType: 'application/json',
+				    success: function (result) {
+				    	toastr.success('정상적으로 저장되었습니다.');
+				    	grid.resetData(result);
+				    }
+				});
+ 			}
  		})
  		
  		
@@ -387,7 +414,7 @@
 	     el: document.getElementById('grid2'),
 	     scrollX: false,
 	     bodyHeight: 300,
-	     rowHeaders: ['checkbox'],
+	     rowHeaders: ['rowNum'],
 	     columns: [{
 	         header: '완제품LOT번호',
 	         name: 'edctsLotNo',
@@ -402,7 +429,7 @@
 	         sortingType: 'desc'
 	     }, {
 	         header: '제품명',
-	         name: 'edctsNm',
+	         name: 'prdtNm',
 	         align: 'center',
 	         sortable: true,
 	         sortingType: 'desc'
@@ -410,7 +437,6 @@
 	         header: '최종판정',
 	         name: 'inspJm',
 	         align: 'center',
-	         editor: 'text',
 	         sortable: true,
 	         sortingType: 'desc'
 	     }, {
@@ -434,11 +460,16 @@
 		   		grid2.refreshLayout()
 		   }, 200);
 		 });
+		 $('#nav-insp-tab').click(ev => {
+			 setTimeout(function () {
+		   		grid.refreshLayout()
+		   }, 200);
+		 });
 		 
 		 //조회결과 로드
 		 $('#searchBtn').click( ev => {
 			 $.ajax({
-			    url: "getInspCode",
+			    url: "getPrdtInsp",
 			    method: "POST",
 			    data : $('#dataForm2').serialize(),
 			    dataType: "JSON",
@@ -451,22 +482,75 @@
 				})	 
 		 });
 		 
+		 //성적서 모달 그리드
+ 		const inspModalGrid = new tui.Grid({
+	     el: document.getElementById('inspModalGrid'),
+		     scrollX: false,
+		     bodyHeight: 250,
+		     rowHeaders: ['rowNum'],
+		     columns: [{
+		         header: '검사코드',
+		         name: 'inspCd',
+		         align: 'center',
+		         sortable: true,
+		         sortingType: 'desc'
+		     }, {
+		         header: '검사명',
+		         name: 'inspNm',
+		         align: 'center',
+		         sortable: true,
+		         sortingType: 'desc'
+		     }, {
+		         header: '검사기준',
+		         name: 'inspSd',
+		         align: 'center',
+		         sortable: true,
+		         sortingType: 'desc'
+		     }, {
+		         header: '검사결과',
+		         name: 'inspRsltDtl',
+		         align: 'center',
+		         sortable: true,
+		         sortingType: 'desc'
+		     }, {
+		         header: '결과판정',
+		         name: 'inspJmDtl',
+		         align: 'center',
+		         sortable: true,
+		         sortingType: 'desc'
+		     }]
+		 });
 		 
-		</script>
+		 //조회 초기화버튼
+		$('#resetBtn').click(ev => {
+			$('#dataForm2')[0].reset();
+			grid2.clear();
+		})
 		
-<script type = "text/javascript" src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
-<script type = "text/javascript" src = "https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<script>
-$('#pdfBtn').click(function() {
-		//pdf_wrap을 canvas객체로 변환
-		html2canvas($("").load('pdfTest #pdf_wrap')).then(function(canvas) {
-			var doc = new jsPDF('p', 'mm', 'a4'); //jspdf객체 생성
-	    var imgData = canvas.toDataURL('image/png'); //캔버스를 이미지로 변환
-	    doc.addImage(imgData, 'PNG', 0, 0); //이미지를 기반으로 pdf생성
-	    doc.save('sample-file.pdf'); //pdf저장
-	  });
-});
-</script>
+		grid2.on('click', ev => {
+		 	var edctsLotNo = grid2.getValue(ev.rowKey, "edctsLotNo")
+		 	$('#inspModal').modal('show');
+		 	$('#inspModalNo').val(edctsLotNo);
+		 	$.ajax({
+			    url: "getPrdtInspDtl",
+			    method: "POST",
+			    data : {edctsLotNo : edctsLotNo},
+			    dataType: "JSON",
+			    success: function (result) {
+			    	setTimeout(function () {
+			    		inspModalGrid.refreshLayout()
+			    		}, 300);
+			    	inspModalGrid.resetData(result);
+			    }
+				})
+		 });
+		 
+		 $('#excelBtn').click(ev => {
+		 	var f = document.getElementById('dataForm2')
+		 		f.action = "prdtInspExel"
+		 		f.submit();
+		 })
+		</script>
 	</th:block>
 </body>
 </html>

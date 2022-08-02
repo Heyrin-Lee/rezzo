@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="550a8a2e-f15a-49b8-be5a-0ba3cdf5e9ef">
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prdtReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="550a8a2e-f15a-49b8-be5a-0ba3cdf5e9ef">
+	<property name="com.jaspersoft.studio.data.sql.tables">
+		<![CDATA[IlBSRFRfSU5TUCIgLDE2NiwxNSxkYTFmMDc0NS1jNmNhLTRkMTEtOWU0OC05NTFhMmYzYzMxNGI7
+IlBSRFRfSU5TUF9EVEwiICwxNSwyOSxjOGY2NGJjOS0zYzkzLTRlZTEtYjM4Zi0wZDMzMzViNzU4
+ZTI7]]>
+	</property>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="rezzo"/>
+	<parameter name="param" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT *
-FROM "PRDT_INSP"
-	JOIN "PRDT_INSP_DTL" USING(EDCTS_LOT_NO)]]>
+FROM PRDT_INSP
+	JOIN PRDT_INSP_DTL USING(EDCTS_LOT_NO) 
+WHERE 
+	 EDCTS_LOT_NO = $P{param}]]>
 	</queryString>
 	<field name="EDCTS_LOT_NO" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="EDCTS_LOT_NO"/>
