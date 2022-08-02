@@ -60,4 +60,44 @@
         <if test="noZeroLot == 1">and rl.LOT_RMN_CNT != 0</if>
     </select>
 
+    <select id="getRscStcList" parameterType="RscStcVO" resultType="RscStcVO">
+        select distinct ri.RSC_CD,
+        rsc.RSC_NM,
+        rsc.RSC_TYP,
+        rsc.RSC_SPEC,
+        rsc.MNG_UNIT,
+        rsc.SAF_STC,
+        rsh.PRVMM_STC,
+        (PRVMM_STC + sum(distinct nvl(ri.IST_CNT, 0)) over (partition by ri.RSC_CD)
+        - sum(distinct nvl(ro.OUST_CNT, 0)) over (partition by ri.RSC_CD)) as stcCnt
+        from RSC_IST ri,
+        RSC_OUST ro,
+        RSC_STC_HIST rsh,
+        RSC
+        where rsh.CLS_YYMM = to_char(sysdate, 'yyyyMM')
+        and rsh.RSC_CD = ri.RSC_CD(+)
+        and rsh.RSC_CD = ro.RSC_CD(+)
+        and rsh.RSC_CD = rsc.RSC_CD
+        <if test="rscCd != null and rscCd != ''">and rsh.RSC_CD = #{rscCd}</if>
+        and (IST_DT between trunc(to_date(#{inqDt}), 'MM') and to_date(#{inqDt})
+        or OUST_DT between trunc(to_date(#{inqDt}), 'MM') and to_date(#{inqDt}))
+    </select>
+
+    <insert id="stcStack">
+        declare
+            v_prev_stcs RSC_STC_HIST%rowtype;
+        begin
+            for v_prev_stcs in (
+                select *
+                from RSC_STC_HIST
+                where CLS_YYMM = to_char(add_months(sysdate, -1), 'yyyyMM')
+                )
+                loop
+                    insert into RSC_STC_HIST
+                        (cls_yymm, rsc_cd, ist_cnt, oust_cnt, prvmm_stc)
+                    values (to_char(sysdate, 'yyyyMM'), v_prev_stcs.RSC_CD, 0, 0,
+                            (v_prev_stcs.IST_CNT - v_prev_stcs.OUST_CNT));
+                end loop;
+        end;
+    </insert>
 </mapper>

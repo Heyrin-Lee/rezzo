@@ -60,15 +60,16 @@
     </insert>
 
     <select id="schRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
-        select ro.RSC_OUST_CD, count(*) oustCnt, ro.OUST_DT
+        select ro.RSC_OUST_CD, count(*) oustCnt, to_char(ro.OUST_DT, 'yyyy-MM-dd') oustDt
         from RSC_OUST_DTL rod,
              RSC_OUST ro
         where rod.RSC_OUST_CD = ro.RSC_OUST_CD
+          and rod.RSC_CD = ro.RSC_CD
            <![CDATA[
           and ro.OUST_DT >= #{startDt}
           and ro.OUST_DT <= #{endDt}
-        group by oust_DT, ro.RSC_oust_CD
         ]]>
+        group by ro.OUST_DT, ro.RSC_oust_CD
     </select>
 
     <select id="getRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
@@ -141,8 +142,10 @@
           and ro.OUST_DT <= #{endDt}
         ]]>
     </select>
-    
+
     <delete id="letHoldingAway" parameterType="RscOustVO">
-        delete from HOLDING where PLAN_CD = #{planCd}
+        delete
+        from HOLDING
+        where PLAN_CD = #{planCd}
     </delete>
 </mapper>

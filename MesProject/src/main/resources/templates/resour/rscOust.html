@@ -16,7 +16,7 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h2 class="mt-2">원자재출고관리</h2>
+        <h1 class="mt-2">원자재출고관리</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
@@ -411,6 +411,7 @@
                     name: 'mngUnit'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         // when modal popped up
@@ -488,6 +489,7 @@
                     name: 'expDt'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         // when modal popped up
@@ -577,6 +579,7 @@
                     name: 'oustDt'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         let mModal;

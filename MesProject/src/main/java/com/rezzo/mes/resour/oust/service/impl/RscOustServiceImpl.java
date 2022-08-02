@@ -56,6 +56,7 @@ public class RscOustServiceImpl implements RscOustService {
     }
 
     @Override
+    @Transactional
     public void updRscOustHist(List<RscOustVO> rscOustVOS) {
         for (RscOustVO rscOustVO : rscOustVOS) {
             mapper.updRscOustHist(rscOustVO);

@@ -85,7 +85,7 @@
                             <td>
                                 <div id="sortBtn">
                                     <label><input type="radio" class="form-check-input" name="ordrBy" value="date" checked> 일자</label>
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="vend"> 업체</label>
+                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="rscInspCd"> 검사번호</label>
                                     <label><input type="radio" class="form-check-input" name="ordrBy" value="rsc"> 자재</label>
                                 </div>
                             </td>
@@ -407,12 +407,6 @@
                 grid.resetData(res);
             })
         });
-
-        /////////////////////////// export ////////////////////////////////////
-        let excelExpt = document.getElementById('excelExpt');
-        excelExpt.addEventListener('click', function () {
-            grid.export('xlsx');
-        })
 
         //////////////////////////// referesh btn //////////////////////////////////
         reloadBtn.addEventListener('click', e => {

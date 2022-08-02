@@ -56,7 +56,7 @@
     <insert id="setRscInspList" parameterType="RscInspVO">
         insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, PASS_RMN_CNT,
                                   INSP_FAIL_CNT, PRE_IST_CNT)
-        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, #{inspPassCnt}, #{inspPassCnt}, #{inspFailCnt},
+        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, #{inspPassCnt}, #{inspPassCnt}, nvl(#{inspFailCnt}, 0),
                 #{preIstCnt})
     </insert>
 
@@ -64,9 +64,10 @@
         merge into RSC_INFER
         using dual
         on (RSC_CD = #{insp.rscCd} and RSC_INSP_CD = #{insp.rscInspCd}
-                and ORDR_CD = #{insp.ordrCd} and CCD_DTL = #{inf.ccdDtl})
+            and ORDR_CD = #{insp.ordrCd} and CCD_DTL = #{inf.ccdDtl})
         when matched then
-            update set INF_CNT = #{inf.infCnt}
+            update
+            set INF_CNT = #{inf.infCnt}
         when not matched then
             insert (CCD_DTL, RSC_CD, RSC_INSP_CD, INF_CNT, ORDR_CD)
             values (#{inf.ccdDtl}, #{insp.rscCd}, #{insp.rscInspCd}, #{inf.infCnt}, #{insp.ordrCd})
@@ -80,7 +81,7 @@
     </update>
 
     <select id="schRscInspHist" parameterType="RscInspVO" resultType="RscInspVO">
-        select ri.INSP_DT, count(*) inspCnt, ri.RSC_INSP_CD
+        select to_char(ri.INSP_DT, 'yyyy-MM-dd') inspDt, count(*) inspCnt, ri.RSC_INSP_CD
         from RSC_INSP ri,
              RSC_INSP_DTL rid
         where ri.RSC_INSP_CD = rid.RSC_INSP_CD
@@ -156,7 +157,7 @@
             update RSC_INSP_DTL
             set INSP_CNT      = #{inspCnt},
                 INSP_PASS_CNT = #{inspPassCnt},
-                INSP_FAIL_CNT = #{inspFailCnt},
+                INSP_FAIL_CNT = nvl(#{inspFailCnt}, 0),
                 PRE_IST_CNT= #{preIstCnt},
                 PASS_RMN_CNT  = #{inspPassCnt}
             where RSC_INSP_CD = #{rscInspCd}

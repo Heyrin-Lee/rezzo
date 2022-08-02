@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>자재수입검사</title>
+    <title>자재입고검사</title>
     <style>
         tr {
             height: 50px;
@@ -24,11 +24,11 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h1 class="mt-2">자재수입검사</h1>
+        <h1 class="mt-2">자재입고검사</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
-            <li class="breadcrumb-item active">> 자재수입검사</li>
+            <li class="breadcrumb-item active">> 자재입고검사</li>
         </ol>
         <div class="card">
             <div class="card-body">
@@ -181,23 +181,46 @@
                     <b class="modal-title">검사자료 조회</b>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="inspDtRngFrm">
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input id="startpicker-input-mod" name="startDt" type="text" aria-label="Date" required>
-                        <span class="tui-ico-date"></span>
-                        <div id="startpicker-container-mod" style="margin-left: -1px;"></div>
-                    </div>
-                    <span></span>
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input id="endpicker-input-mod" name="endDt" type="text" aria-label="Date" required>
-                        <span class="tui-ico-date"></span>
-                        <div id="endpicker-container-mod" style="margin-left: -1px;"></div>
-                    </div>
-                </form>
                 <div class="modal-body">
-                    <input id="inspHistSchBtn" type="button" value="검색"/>
-                    <hr>
-                    <div id="modi-grid"></div>
+                    <table>
+                        <colgroup>
+                            <col style="width: 380px;">
+                            <col style="width: 60px;">
+                        </colgroup>
+                        <tbody>
+                        <tr style="height: 25px;">
+                            <th>
+                                <b>검색기간</b>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form id="inspDtRngFrm">
+                                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                         style="height: 40px; border-radius: 5px;">
+                                        <input id="startpicker-input-mod" class="form-control" type="text" aria-label="Date"
+                                               name="startDt">
+                                        <span class="tui-ico-date"></span>
+                                        <div id="startpicker-container-mod" style="margin-left: -1px;"></div>
+                                    </div>
+                                    <span></span>
+                                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                         style="height: 40px; border-radius: 5px;">
+                                        <input id="endpicker-input-mod" class="form-control" type="text" aria-label="Date"
+                                               name="endDt">
+                                        <span class="tui-ico-date"></span>
+                                        <div id="endpicker-container-mod" style="margin-left: -1px;"></div>
+                                    </div>
+                                </form>
+                            </td>
+                            <td>
+                                <input id="inspHistSchBtn" class="btn btn-primary" type="button" value="검색"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <div id="mdfy-grid"></div>
                 </div>
             </div>
         </div>
@@ -340,6 +363,7 @@
             }
 
             getElement() {
+                this.el.value = '';
                 return this.el;
             }
 
@@ -375,7 +399,6 @@
                 let val = this.el.value.replace(/[^0-9]/g, '')
                 grid.setValue(this.rowKey, 'inspCnt', val);
                 grid.setValue(this.rowKey, 'inspPassCnt', val);
-                grid.setValue(this.rowKey, 'inspFailCnt', 0);
                 return val;
             }
 
@@ -404,51 +427,17 @@
                 let val = this.el.value.replace(/[^0-9]/g, '')
                 let preIstCnt = grid.getValue(this.rowKey, 'preIstCnt')
                 if (parseInt(val) > parseInt(preIstCnt) || preIstCnt === '') {
-                    alert('검사량이 입고량 보다 많습니다.');
+                    toastr.error('검사량이 입고량 보다 많습니다.');
                     grid.setValue(this.rowKey, 'inspPassCnt', '');
                     grid.setValue(this.rowKey, 'inspFailCnt', '');
                     return '';
                 } else {
                     grid.setValue(this.rowKey, 'inspPassCnt', val);
-                    grid.setValue(this.rowKey, 'inspFailCnt', 0);
                     if (val === '') {
                         return val;
                     } else {
                         return parseInt(val);
                     }
-                }
-            }
-
-            mounted() {
-                this.el.select();
-            }
-        }
-
-        class inputFailCnt {
-            constructor(props) {
-                let el = document.createElement('input');
-                let {rowKey} = props;
-                this.rowKey = rowKey;
-                el.type = 'text';
-                el.value = String(props.value);
-                this.el = el;
-            }
-
-            getElement() {
-                grid.check(this.rowKey);
-                this.el.value = ''
-                return this.el;
-            }
-
-            getValue() {
-                let val = this.el.value.replace(/[^0-9]/g, '')
-                let inspCnt = grid.getValue(this.rowKey, 'inspCnt')
-                if (parseInt(val) > parseInt(inspCnt)) {
-                    alert('불량수량은 검사량보다 클 수 없습니다.')
-                } else {
-                    let res = inspCnt - val;
-                    grid.setValue(this.rowKey, 'inspPassCnt', res)
-                    return val;
                 }
             }
 
@@ -531,17 +520,11 @@
                 {
                     header: '발주량',
                     name: 'ordrCnt',
-                    validation: {
-                        dataType: 'number'
-                    },
                     align: 'right'
                 },
                 {
                     header: '미입고량',
                     name: 'rmnCnt',
-                    validation: {
-                        dataType: 'number'
-                    },
                     align: 'right'
                 },
                 {
@@ -607,12 +590,6 @@
                         dataType: 'number',
                         required: true
                     },
-                    editor: {
-                        type: inputFailCnt,
-                        options: {
-                            maxLength: 10
-                        }
-                    },
                     align: 'right'
                 }
             ]
@@ -667,6 +644,7 @@
                     name: 'telno'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         // search vendors by keyword
@@ -721,6 +699,7 @@
                     name: 'mngUnit'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         // when rsc modal shown => refresh
@@ -765,6 +744,9 @@
 
         function getRscSingle(val, rowKey) {
             let url = 'getRscSingle'
+            if (val === '' || val == null) {
+
+            }
             let data = {rscCd: val}
             fetch(url, {
                 headers: {'Content-Type': 'application/json'},
@@ -834,6 +816,7 @@
                     align: 'center'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         let infData = new Map();
@@ -844,7 +827,7 @@
             let data = infData.get(rowKey)
             if (data === undefined) { // initiate
                 infGrid.setColumnValues('infCnt', '')
-            } else if(data.length != 0) {
+            } else if (data.length != 0) {
                 infGrid.resetData(data)
             } else {
                 infGrid.setColumnValues('infCnt', '')
@@ -867,7 +850,7 @@
             let inspCnt = grid.getValue(rowKey, 'inspCnt')
 
             if (infSum > parseInt(inspCnt)) {
-                alert("불량수량이 검사량 보다 많습니다.")
+                toastr.error('불량수량이 검사량 보다 많습니다.');
             } else {
                 grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
                 grid.setValue(rowKey, 'inspFailCnt', infSum)
@@ -898,9 +881,7 @@
             grid.showColumn('rmnCnt');
 
             if (startDt.value === '' || endDt.value === '') {
-                alert('기간을 입력하세요')
-                // } else if (vendCd.value === '') {
-                //     alert('공급업체를 입력하세요')
+                toastr.error('기간을 입력하세요.');
             } else {
                 let data = new FormData(getInspListFrm)
                 let url = 'getRscOrdrList';
@@ -925,8 +906,12 @@
                 gridVal[0].inspDt = inspDt.value;
                 gridVal[0].inspTstr = inspTstr.value;
                 setRscInspList(gridVal);
+                toastr.success('저장이 완료되었습니다.')
             } else {
                 updRscInspHist(gridVal);
+                grid.clear();
+                saveFlag === 0;
+                toastr.success('수정이 완료되었습니다.')
             }
         })
 
@@ -955,27 +940,29 @@
         ///////////////////////////// modify and delete ////////////////////////////////
         // search grid
         let mdfyGrid = new tui.Grid({
-            el: document.getElementById('modi-grid'),
+            el: document.getElementById('mdfy-grid'),
             bodyHeight: 300,
             scrollX: false,
             scrollY: true,
             columns: [
                 {
-                    header: '검사일자',
-                    name: 'inspDt',
+                    header: '검사코드',
+                    name: 'rscInspCd',
                     align: 'center'
                 },
+
                 {
                     header: '건수',
                     name: 'inspCnt',
                     align: 'center'
                 },
                 {
-                    header: '검사코드',
-                    name: 'rscInspCd',
+                    header: '검사일자',
+                    name: 'inspDt',
                     align: 'center'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         // declare modal
@@ -1038,9 +1025,33 @@
             grid.finishEditing();
         })
 
+        let venGridEl = document.getElementById('vend-grid')
+        venGridEl.addEventListener('mouseleave', function () {
+            vendGrid.finishEditing();
+        })
+
+        let mdfyGridEl = document.getElementById('mdfy-grid')
+        mdfyGridEl.addEventListener('mouseleave', function () {
+            mdfyGrid.finishEditing();
+        })
+
+        let rscGridEl = document.getElementById('rsc-grid')
+        rscGridEl.addEventListener('mouseleave', function () {
+            rscGrid.finishEditing();
+        })
+
+        let infGridEl = document.getElementById('inf-grid')
+        infGridEl.addEventListener('mouseleave', function () {
+            infGrid.finishEditing();
+        })
+
         ////////////////////////////// add & delelte row ////////////////////////////
         addRow.addEventListener('click', function () {
-            grid.appendRow()
+            if (saveFlag === 1) {
+                toastr.warning('수정모드에서는 추가 할 수 없습니다.')
+            } else {
+                grid.appendRow()
+            }
         })
 
         delRow.addEventListener('click', function () {

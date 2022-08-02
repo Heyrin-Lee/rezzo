@@ -39,6 +39,7 @@ public class IstServiceImpl implements RscIstService {
     }
 
     @Override
+    @Transactional
     public RscVO getRscSingle(RscVO rscVO) throws NullPointerException {
         return mapper.getRscSingle(rscVO);
     }
@@ -54,6 +55,7 @@ public class IstServiceImpl implements RscIstService {
     }
 
     @Override
+    @Transactional
     public void updRscIstHist(List<RscIstVO> rscIstVOS) {
         for(RscIstVO rscIstVO : rscIstVOS) {
             mapper.updRscIstHist(rscIstVO);
