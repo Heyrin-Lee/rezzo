@@ -21,14 +21,32 @@
 
 <!-- 공정등록 -->
 <insert id="prcsInsert" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">
-	INSERT INTO PRCS  (prcs_cd, 
-						prcs_nm, 
-						prcs_fg, 
-						prcs_ctnt)
-	VALUES (#{prcsCd}, 
-			#{prcsNm}, 
-			#{prcsFg}, 
-			#{prcsCtnt})
+	<!-- MERGE INTO PRCS p
+		USING DUAL ON (p.PRCS_CD = #{prcsCd})
+	WHEN MATCHED THEN
+		UPDATE 
+		SET p.PRCS_CD = #{prcsCd},
+			p.PRCS_NM = #{prcsNm},
+			p.PRCS_FG = #{prcsFg},
+			p.PRCS_CTNT = #{prcsCtnt}
+	WHEN NOT MATCHED THEN
+		INSERT (p.PRCS_CD, 
+			   p.PRCS_NM, 
+			   p.PRCS_FG, 
+			   p.PRCS_CTNT)
+		VALUES (#{prcsCd}, 
+				#{prcsNm}, 
+				#{prcsFg}, 
+				#{prcsCtnt}) -->
+				
+		INSERT into prcs (PRCS_CD, 
+			   PRCS_NM, 
+			   PRCS_FG, 
+			   PRCS_CTNT)
+		VALUES (#{prcsCd}, 
+				#{prcsNm}, 
+				#{prcsFg}, 
+				#{prcsCtnt})				
 </insert>	
 
 <!-- 공정삭제 -->

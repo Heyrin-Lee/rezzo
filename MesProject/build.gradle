@@ -36,6 +36,7 @@ dependencies {
 	// pdf
 	implementation 'net.sf.jasperreports:jasperreports:6.9.0'
 	implementation 'com.lowagie:itext:2.1.7'
+	
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'

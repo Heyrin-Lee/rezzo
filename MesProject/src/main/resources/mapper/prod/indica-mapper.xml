@@ -19,7 +19,7 @@ FROM  BOM B
 JOIN  RSC_LOT L
 ON B.RSC_CD = L.RSC_CD
 WHERE B.EDCTS_CD = #{edctsCd}
-AND R.LOT_RMN_CNT > 0
+AND L.HOLD_CNT > 0
 </select>
 
 <insert id="indicaDtlInsert" parameterType="com.rezzo.mes.prod.indica.service.IndicaVO">
