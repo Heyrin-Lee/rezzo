@@ -120,7 +120,7 @@
             <div class="card-body">
             	<div class="linelist" style="float: right;">
 								<button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i> 조회</button>
-								<button class="btn btn-primary" id="pdfBtn"><i class="fas fa-download"></i> PDF</button>
+								<a href="report"><button class="btn btn-primary" id="pdfBtn"><i class="fas fa-download"></i> PDF</button></a>
 								<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
 								<br> <br>
 							</div>
@@ -165,11 +165,8 @@
 				</div><!-- end nav-tabContent -->
 			</div>
 		</div>
-		<a id="clickk" href="pdfTest">가기</a>
 		
 		<script>
-		
-		window.open('D:/')
 		 const grid = new tui.Grid({
 		     el: document.getElementById('grid'),
 		     scrollX: false,
