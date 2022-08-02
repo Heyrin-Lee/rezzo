@@ -52,6 +52,10 @@
 			width: 100px;
 			float: left;
 		}
+		
+		.tui-grid-cell.addClass{
+			background-color:rgba(255,0,0,0.3);
+		}
 	</style>
 </head>
 
@@ -63,7 +67,7 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">자재발주</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="home.do"><i
+				<li class="breadcrumb-item"><a href="/"><i
 						class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 자재관리</li>
 				<li class="breadcrumb-item active">> 자재발주조회</li>
@@ -180,9 +184,13 @@
 					success: function (result) {
 						grid2.resetData(result)
 						for (var all of result){
+							var rscStc = all.rscStc
+							if (rscStc ==null || rscStc == 0 || rscStc == ''){
+								rscStc = 0;
+							}
 							var allStc = Number(all.ordrCnt)+Number(all.rscStc)
-							console.log(allStc)
 							grid2.setValue(all.rowKey, 'allStc', allStc)
+							grid2.setValue(all.rowKey, 'rscStc', rscStc)
 						}
 						}
 				})
@@ -247,13 +255,25 @@
 						});
 						
 					grid2.on('editingFinish',function (ev){
-							var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
-							var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
-							ordrCnt = Number(ordrCnt);
-							rscStc = Number(rscStc);
-							var allStc = ordrCnt+rscStc
-							grid2.setValue(ev.rowKey, 'allStc', allStc)
-							
+					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
+					var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
+					var safStc = grid2.getValue(ev.rowKey, 'safStc')
+					var isValid = true;
+
+					ordrCnt = Number(ordrCnt);
+					rscStc = Number(rscStc);
+
+					var allStc = ordrCnt + rscStc
+					
+					grid2.setValue(ev.rowKey, 'allStc', allStc)
+					
+					if(Number(allStc)<Number(safStc)){
+						grid2.addRowClassName(ev.rowKey, 'addClass')
+					}
+					if(Number(allStc)>=Number(safStc)){
+						grid2.removeRowClassName(ev.rowKey, 'addClass')
+					}
+					
 						})
 						
 				// 수정 버튼
@@ -269,7 +289,16 @@
 					}
 					
 					for (i = 0; i < data.length; i++) {
-						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].paprdCmndDt == null) {
+					if (Number(data[i].allStc)<Number(data[i].safStc)) {
+						toastr.warning('안전재고 이상으로 발주를 진행해주세요.');
+						isValid = false;
+						return false;
+					}} 
+					
+					
+					
+					for (i = 0; i < data.length; i++) {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].ordrCnt == '' || data[0].paprdCmndDt == null || data[0].paprdCmndDt == '' || data[0].paprdCmndDt == '0') {
 							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
 							isValid = false;
 							return false;

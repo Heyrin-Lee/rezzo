@@ -51,6 +51,10 @@
 			width: 100px;
 			float: left;
 		}
+		
+		.tui-grid-cell.addClass{
+			background-color:rgba(255,0,0,0.3);
+		}
 	</style>
 </head>
 
@@ -62,7 +66,7 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">자재발주</h1>
 			<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do"><i
+			<li class="breadcrumb-item"><a href="/"><i
 						class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 자재관리</li>
 				<li class="breadcrumb-item active">> 자재발주관리</li>
@@ -164,22 +168,31 @@
 					method: 'GET',
 					dataType: 'JSON',
 					success: function (result) {
+						for (res in result){
+						var rscStc = result[res].rscStc
+								console.log(result[res].rscStc)
+							if(rscStc == null || rscStc == ''|| rscStc == 0){
+								result[res].rscStc=0
+							}
+						}
 						grid.resetData(result);
 					}
 				})
-
 
 				grid.on('dblclick', ev => {
 					var rscCd = grid.getValue(ev.rowKey, 'rscCd')
 					var rscNm = grid.getValue(ev.rowKey, 'rscNm')
 					var rscStc = grid.getValue(ev.rowKey, 'rscStc')
+					if (rscStc==0 || rscStc==null || rscStc == ''){
+					rscStc =0;} 
 					var safStc = grid.getValue(ev.rowKey, 'safStc')
 					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
 					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
 
 					var rscCd2 = grid2.getColumnValues('rscCd');
 					var vendCd2 = grid2.getColumnValues('vendCd');
-
+					
+					
 					var isValid = true;
 					for (i = 0; i < rscCd2.length; i++) {
 						if (rscCd2[i] == rscCd) {
@@ -316,14 +329,28 @@
 					}],
 				});
 
+			// 수정 완료 시 값 반영
 				grid2.on('editingFinish', function (ev) {
 					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
 					var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
+					var safStc = grid2.getValue(ev.rowKey, 'safStc')
+					var isValid = true;
+
 					ordrCnt = Number(ordrCnt);
 					rscStc = Number(rscStc);
-					var allStc = ordrCnt + rscStc
-					grid2.setValue(ev.rowKey, 'allStc', allStc)
 
+					var allStc = ordrCnt + rscStc
+					
+					grid2.setValue(ev.rowKey, 'allStc', allStc)
+					
+					if(Number(allStc)<Number(safStc)){
+						grid2.addRowClassName(ev.rowKey, 'addClass')
+					}
+					if(Number(allStc)>=Number(safStc)){
+						grid2.removeRowClassName(ev.rowKey, 'addClass')
+					}
+					
+					
 				})
 
 
@@ -355,7 +382,16 @@
 					}
 					
 					for (i = 0; i < data.length; i++) {
-						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[0].paprdCmndDt == null) {
+						if (Number(data[i].allStc)<Number(data[i].safStc)) {
+							toastr.warning('안전재고 이상으로 발주를 진행해주세요.');
+							isValid = false;
+							return false;
+
+						}} 
+					
+
+					for (i = 0; i < data.length; i++) {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].ordrCnt == '' || data[0].paprdCmndDt == null || data[0].paprdCmndDt == '') {
 							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
 							isValid = false;
 							return false;

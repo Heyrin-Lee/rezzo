@@ -23,4 +23,7 @@ public interface RscOustMapper {
 
     // 조회
     List<RscOustVO> getRscOustList(RscOustVO rscOustVO);
+
+    // holding 삭제
+    void letHoldingAway(RscOustVO rscOustVO);
 }

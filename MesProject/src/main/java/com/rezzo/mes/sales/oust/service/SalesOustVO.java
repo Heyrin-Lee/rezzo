@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class SalesOustVO {
 
 	String edctsOustNo;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date edctsOustDt;
 	int edctsOustCnt;
 	String edctsCd;

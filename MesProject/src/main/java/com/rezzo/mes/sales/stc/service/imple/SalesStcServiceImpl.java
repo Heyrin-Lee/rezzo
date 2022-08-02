@@ -14,11 +14,6 @@ public class SalesStcServiceImpl implements SalesStcService{
 
 	@Autowired SalesStcMapper mapper;
 
-	@Override
-	public List<SalesStcVO> makeDtSearch(SalesStcVO vo) {
-		return mapper.makeDtSearch(vo);
-	}
-
 	//제품명 조회 모달
 	@Override
 	public List<SalesStcVO> getPrdtNm(SalesStcVO vo) {

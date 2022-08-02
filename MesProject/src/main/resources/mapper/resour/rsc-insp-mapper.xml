@@ -41,36 +41,35 @@
         where substr(rsc_insp_cd, 4, 8) = to_char(sysdate, 'yyyymmdd')
     </select>
 
+    <select id="genRscNoOrdrCd" resultType="String">
+        select 'NOR' || to_char(sysdate, 'YYYYMMDD') || lpad(NVL(max(substr(ORDR_CD, 12, 3)), 0) + 1, 3, '0')
+        from rsc_insp_dtl
+        where 'NOR' = substr(ORDR_CD, 0, 3)
+          and substr(ORDR_CD, 4, 8) = to_char(sysdate, 'yyyymmdd')
+    </select>
+
     <insert id="setRscInsp" parameterType="RscInspVO">
         insert into RSC_INSP (RSC_INSP_CD, INSP_DT, INSP_TSTR)
         values (#{rscInspCd}, #{inspDt}, #{inspTstr})
     </insert>
 
     <insert id="setRscInspList" parameterType="RscInspVO">
-        declare
-            v_no_ordr_cd varchar2(50);
-        begin
-            if #{ordrCd} != 'null' then
-                insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, PASS_RMN_CNT,
-                                          INSP_FAIL_CNT, PRE_IST_CNT)
-                values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, #{inspPassCnt}, #{inspPassCnt}, #{inspFailCnt},
-                        #{preIstCnt});
+        insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, PASS_RMN_CNT,
+                                  INSP_FAIL_CNT, PRE_IST_CNT)
+        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, #{inspPassCnt}, #{inspPassCnt}, #{inspFailCnt},
+                #{preIstCnt})
+    </insert>
 
-            else
-                select 'NOR' || to_char(sysdate, 'YYYYMMDD') ||
-                       lpad(NVL(max(substr(ORDR_CD, 12, 3)), 0) + 1, 3, '0')
-                into v_no_ordr_cd
-                from rsc_insp_dtl
-                where 'NOR' = substr(ORDR_CD, 0, 3)
-                  and substr(ORDR_CD, 4, 8) = to_char(sysdate, 'yyyymmdd');
-
-                insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, PASS_RMN_CNT,
-                                          INSP_FAIL_CNT, PRE_IST_CNT)
-                values (#{rscCd}, #{rscInspCd}, v_no_ordr_cd, #{inspCnt}, #{inspPassCnt}, #{inspPassCnt},
-                        #{inspFailCnt},
-                        #{preIstCnt});
-            end if;
-        end;
+    <insert id="setRscInfList">
+        merge into RSC_INFER
+        using dual
+        on (RSC_CD = #{insp.rscCd} and RSC_INSP_CD = #{insp.rscInspCd}
+                and ORDR_CD = #{insp.ordrCd} and CCD_DTL = #{inf.ccdDtl})
+        when matched then
+            update set INF_CNT = #{inf.infCnt}
+        when not matched then
+            insert (CCD_DTL, RSC_CD, RSC_INSP_CD, INF_CNT, ORDR_CD)
+            values (#{inf.ccdDtl}, #{insp.rscCd}, #{insp.rscInspCd}, #{inf.infCnt}, #{insp.ordrCd})
     </insert>
 
     <update id="updRscOrdrRmnCnt" parameterType="RscInspVO">
@@ -137,6 +136,17 @@
         where rsc.RSC_CD = rid.RSC_CD
           and rid.RSC_INSP_CD = #{rscInspCd}
           and substr(ordr_cd, 1, 3) = 'NOR'
+    </select>
+
+    <select id="getRscInfHistByCd" parameterType="RscInspVO" resultType="RscInfVO">
+        select ri.CCD_DTL, ri.INF_CNT, cd.CCD_DTL_NM
+        from RSC_INFER ri,
+             CCDS_DTL cd
+        where ri.RSC_CD = #{rscCd}
+          and ri.RSC_INSP_CD = #{rscInspCd}
+          and ri.ORDR_CD = #{ordrCd}
+          and cd.CCD = 'INF'
+          and cd.CCD_DTL = ri.CCD_DTL
     </select>
 
     <update id="updRscInspHist" parameterType="RscInspVO">

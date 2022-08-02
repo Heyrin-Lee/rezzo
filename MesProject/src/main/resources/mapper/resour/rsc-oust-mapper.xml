@@ -141,4 +141,8 @@
           and ro.OUST_DT <= #{endDt}
         ]]>
     </select>
+    
+    <delete id="letHoldingAway" parameterType="RscOustVO">
+        delete from HOLDING where PLAN_CD = #{planCd}
+    </delete>
 </mapper>

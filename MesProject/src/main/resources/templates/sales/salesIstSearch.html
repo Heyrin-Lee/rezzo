@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<head>
+<meta charset="UTF-8">
+<title>제품 입고 조회</title>
+<style>
+	.c_btn {
+   color: #fff;
+   font-size: 13px;
+   background: #333;
+   border: none;
+   padding: 6px;
+   border-radius: 4px
+}
+</style>
+</head>
+<body>
+<!-- 본문내용 -->
+<th:block layout:fragment="main">  
+	<div class="container-fluid px-4">
+		<h1 class="mt-4">영업관리</h1>
+		<ol class="breadcrumb mb-4">
+			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+			<li class="breadcrumb-item">> 제품 입고 관리</li>
+			<li class="breadcrumb-item active">> 제품 입고 조회</li>
+		</ol>
+		
+		<div class="card mb-4">
+      <div id="cont" style="padding-bottom:0px">
+         <section id="r_section">
+            <div class="col">
+               <div class="card mb-4">
+                  <div class="card-header">
+                     <i class="fas fa-tachometer-alt"></i> 제품 입고 조회
+                  </div>
+				<div class="card-body" id="vendModal">
+                     <form name="IstSearchFrm" id="IstSearchFrm">
+                      <div class="r_input">
+                        <div class="mb-3">
+                           <label for="edctsLotNo" class="form-label">완제품LOT번호</label>
+    						<input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo" style="width:200px;" readonly>
+    						<!-- 모달버튼 -->
+    						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
+                        </div> 
+                        <div class="mb-4">
+                           <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
+                           <input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;"><br>
+                           <button type="button" class="btn btn-primary" id="optionSearchBtn" style="margin-top:20px;"><i class="fas fa-search"></i> 검색</button>
+                        </div>
+                       </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </section>
+		<!-- 완제품LOT번호 모달 -->
+		<div class="modal fade" id="lotModal" tabindex="-1" aria-labelledby="elLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">xampleModa
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="lotModalLabel">검사완료 완제품LOT번호</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <div id="lotNoGrid"></div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-primary">확인</button>
+		      </div>
+		    </div>
+		  </div>
+		</div> <!-- 모달 div끝 -->
+      </div>
+    </div>
+      <div id="grid" class="card mb-4"></div>
+   </div>
+   
+  <script>
+  	$(function() {
+     	salesIstList();
+     })
+  
+  	const grid = new tui.Grid({
+	      el: document.getElementById('grid'),
+	      scrollX: false,
+	      bodyHeight: 300,
+	      rowHeight: 35,
+	      rowHeaders: ['rowNum'],
+	      header: {
+	        height: 40
+	      },
+	      columns: [
+	        {
+	          header: '제품 입고번호',
+	          name: 'edctsIstNo',
+	          align:'center'
+	        },
+	        {
+	          header: '제품 입고일자',
+	          name: 'edctsIstDt',
+	          align:'center'
+	        },
+	        {
+	          header: '제품 입고수량',
+	          name: 'edctsIstCnt',
+	          align:'center'
+	        },
+	        {
+	          header: '제품코드',
+	          name: 'edctsCd',
+	          align:'center'
+	        },
+	        {
+	          header: '완제품LOT번호',
+	          name: 'edctsLotNo',
+	          align:'center'
+	        }
+		  ]   
+	    });
+	    
+	    // 완제품LOT번호 모달 그리드(조회)    
+	    const lotNoGrid = new tui.Grid({
+	        el:document.getElementById('lotNoGrid'),
+	        scrollX: false,
+	        scrollY: false,
+	        rowHeaders: ['checkbox'],
+	        columns: [
+	        	 {
+	                header: '주문번호',
+	                name: 'orderNo',
+	                width:120,
+	                align:'center'
+	            },
+	            {
+	                header: '완제품LOT번호',
+	                name: 'edctsLotNo',
+	                align:'center'
+	            },
+	            {
+	                header: '제품코드',
+	                name: 'edctsCd',
+	                align:'center'
+	            }, 
+	            {
+	                header: '제품명',
+	                name: 'prdtNm',
+	                align:'center'
+	            }, 
+	            {
+	                header: '검사수량',
+	                name: 'inspCnt',
+	                align:'center'
+	            },
+	             {
+	                header: '최종판정',
+	                name: 'inspJm',
+	                align:'center'
+	            },
+	            {
+	               	header: '검사 담당자',
+	                name: 'inspPsch',
+	                align:'center'
+	            }
+	        ]
+	    }); 
+	    
+	    //제품 입고 전체 목록 - 현재 날짜 기준으로
+	    function salesIstList() {
+	    		var IstData = $("#IstSearchFrm").serialize();
+	    	$.ajax({
+	    		url:"salesIstList",
+	    		dataType:"json",
+	    		method:"post",
+	    		data:IstData,
+	    		success:function(list) {
+	    			grid.resetData(list);
+	    		}
+	    	})
+	    }
+	    
+	    //완제품LOT번호 검색 버튼 클릭 -> 완제품LOT번호 목록 모달창
+		$("#lotSearchBtn").on("click",function(lotList) {
+			setTimeout(function () {
+							lotNoGrid.refreshLayout()
+							}, 300);
+				$.ajax({
+					url:"getLotList",
+					method:"get",
+					dataType:"json",
+					success:function(lotList) {
+						lotNoGrid.resetData(lotList);
+					}
+				})
+			})
+		//체크박스 선택시 완제품LOT번호 가져오기
+		lotNoGrid.on("click", e => {
+			let rowInfo = lotNoGrid.getCheckedRows(e);
+			edctsLotNo.value = rowInfo[0].edctsLotNo;
+		})
+		
+		//입고 목록 조건별 조회
+		$("#optionSearchBtn").on("click",function(istList) {
+			var edctsLotNo = $("#edctsLotNo").val();
+			var edctsIstDtStart = $("#edctsIstDtStart").val();
+			var edctsIstDtEnd = $("#edctsIstDtEnd").val();
+			$.ajax({
+				url:"istOptionList",
+				method:"post",
+				dataType:"json",
+				data:{"edctsLotNo":edctsLotNo, "edctsIstDtStart":edctsIstDtStart, "edctsIstDtEnd":edctsIstDtEnd},
+				success:function(istList){
+					grid.resetData(istList);
+				}
+			})
+		})
+		
+		
+		//제품 입고일자 현재 날짜로 설정
+	    document.getElementById("edctsIstDtStart").valueAsDate = new Date();
+	    document.getElementById("edctsIstDtEnd").valueAsDate = new Date();
+  </script>
+</body>
+</html>

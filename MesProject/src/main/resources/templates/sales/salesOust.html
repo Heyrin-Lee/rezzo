@@ -23,8 +23,8 @@
 		<h1 class="mt-4">영업관리</h1>
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 출고관리</li>
-			<li class="breadcrumb-item active">> 출고 등록</li>
+			<li class="breadcrumb-item">> 제품 출고관리</li>
+			<li class="breadcrumb-item active">> 제품 출고 등록</li>
 		</ol>
 <!-- 본문내용 끝 -->
 
@@ -274,7 +274,6 @@
 				method:"put",
 				dataType:"json",
 				data:{"orderNo":orderNo},
-				error:console.log('r'),
 				success:function(result) {
 					findOrder();
 				}

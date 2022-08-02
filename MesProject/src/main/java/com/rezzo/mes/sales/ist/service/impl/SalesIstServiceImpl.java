@@ -9,6 +9,7 @@ import com.rezzo.mes.qc.insp.service.PrdtInspVO;
 import com.rezzo.mes.sales.ist.mapper.SalesIstMapper;
 import com.rezzo.mes.sales.ist.service.SalesIstService;
 import com.rezzo.mes.sales.ist.service.SalesIstVO;
+import com.rezzo.mes.sales.order.service.OrderVO;
 
 @Service
 public class SalesIstServiceImpl implements SalesIstService{
@@ -16,7 +17,7 @@ public class SalesIstServiceImpl implements SalesIstService{
 	@Autowired SalesIstMapper mapper;
 
 	
-	//제품 입고 목록 조건별 조회
+	//제품 입고 목록 현재 날짜 기준으로 조회(첫페이지)
 	@Override
 	public List<SalesIstVO> salesIstList(SalesIstVO vo) {
 		return mapper.salesIstList(vo);
@@ -32,6 +33,19 @@ public class SalesIstServiceImpl implements SalesIstService{
 	@Override
 	public void saveIst(SalesIstVO vo) {
 			mapper.saveIst(vo);			
+	}
+
+	//제품 입고 목록 조건별 조회
+	@Override
+	public List<SalesIstVO> istOptionList(SalesIstVO vo) {
+		return mapper.istOptionList(vo);
+	}
+
+	//입고등록 후 진행상황 입고완료로 변경
+	@Override
+	public void modifyProg(OrderVO vo) {
+		mapper.modifyProg(vo);
+		
 	}
 
 

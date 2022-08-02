@@ -9,28 +9,21 @@
 	<![CDATA[{call proc_edctsIst_save(#{edctsIstNo},#{edctsLotNo},#{edctsCd},#{edctsIstCnt},#{edctsIstDt})]]>
 	</update>
 	
-	<!-- 입고 목록 조건별 조회  -->
+	<!-- 입고 목록 날짜 기준 조회(첫페이지)  -->
 	<select id="salesIstList" resultType="SalesIstVO">
 	SELECT * FROM EDCTS_IST
-	WHERE EDCTS_IST_DT BETWEEN #{edctsIstDtStart} AND #{edctsIstDtEnd}
-	<if test="edctsLotNo != null and edctsLotNo != ''">and EDCTS_LOT_NO = #{edctsLotNo}</if>
-	<if test="edctsIstCnt != null and edctsIstCnt != ''">and EDCTS_IST_CNT = #{edctsIstCnt}</if>
-	ORDER BY EDCTS_IST_NO
+	 WHERE EDCTS_IST_DT BETWEEN #{edctsIstDtStart} AND #{edctsIstDtEnd}
 	</select>
 	
-	<resultMap type="PrdtInspVO" id="PrdtInspVO">
-		<result column="ORDER_NO" property="orderNo"/>
-		<result column="EDCTS_LOT_NO" property="edctsLotNo"/>
-		<result column="EDCTS_CD" property="edctsCd"/>
-		<result column="INSP_CNT" property="inspCnt"/>
-		<result column="INSP_JM" property="inspJm"/>
-		<result column="INSP_PSCH" property="inspPsch"/>
-	</resultMap>
-	
-	<resultMap type="OrderVO" id="OrderVO">
-		<result column="PRDT_NM" property="prdtNm"/>
-		<result column="ORDER_NO" property="orderNo"/>
-	</resultMap>
+	<!-- 입고 목록 조건별 조회 -->
+	<select id="istOptionList" resultType="SalesIstVO">
+		SELECT * FROM edcts_ist
+		WHERE 1=1
+		<if test="edctsLotNo != null and edctsLotNo != ''">and EDCTS_LOT_NO = #{edctsLotNo}</if>
+		<if test="edctsIstDt != null and edctsIstDt != ''">and EDCTS_IST_DT BETWEEN #{edctsIstDtStart} AND #{edctsIstDtEnd}</if>
+		ORDER BY edcts_ist_no
+	</select>
+
 	
 	<!-- 완제품LOT번호 모달 조회 -->
 	<select id="getLotList" resultType="PrdtInspVO">
@@ -39,4 +32,11 @@
 	ON P.ORDER_NO = O.ORDER_NO
 	WHERE INSP_JM = '적합'
 	</select>
+	
+	<!-- 입고등록 후 입고완료로 진행상황 변경 -->
+	<update id="modifyProg" parameterType="OrderVO">
+		UPDATE ORDER_SHEET
+		SET PROG_APPE = '입고완료'
+		WHERE ORDER_NO = #{orderNo}
+	</update>
 </mapper>

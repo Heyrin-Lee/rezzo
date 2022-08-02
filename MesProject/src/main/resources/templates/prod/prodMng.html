@@ -3,43 +3,44 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-<style>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <style>
 
-#container {
-   width : 98%;
-   margin : 0 auto;
-}
+        #container {
+            width : 98%;
+            margin : 0 auto;
+        }
 
-.col {
-   width: 700px
-}
+        .col {
+            width: 700px
+        }
 
-#pDate {
-   float: left;
-}
+        #pDate {
+            float: left;
+        }
 
-#lbtn{
-float:left;
-display:inline-block;
-}
+        #lbtn{
+            float:left;
+            display:inline-block;
+        }
 
-#rbtn{
-float:right;
-display:inline-block;
-}
+        #rbtn{
+            float:right;
+            display:inline-block;
+        }
 
-#grid3{
- float: right;
-   margin-top: 0px;
-}
-</style>
+        #grid3{
+            float: right;
+            margin-top: 0px;
+        }
+    </style>
 </head>
 <body>
 <!-- 본문내용 -->
+
 <th:block layout:fragment="main">  
 
    <!-- 헤더부분 -->
@@ -85,6 +86,7 @@ display:inline-block;
 	</div>  
 	<div id="dialog" title=""></div> 
 	<!-- Modal -->
+
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -96,12 +98,13 @@ display:inline-block;
                     <div id="modGrid" class="modal-body"></div>
                     <div class="modal-footer">
                         <button type="button" id="confirmBtn" class="btn btn-primary"
-                            data-bs-dismiss="modal">확인</button>
+                                data-bs-dismiss="modal">확인</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
         </div>
+
 </div>
    <script>
    //지시 계획 모달에 띄우기
@@ -490,41 +493,16 @@ display:inline-block;
                             value: '서길동'
                         },
                     ]
+
                 }
-               }
-	        },
-	        {
-	          header: '시작시간',
-	          name: 'wkFrTm'
-	        },
-	        {
-	          header: '투입량',
-	          name: 'indicaCnt'
-	        },
-	        {
-	          header: '불량량',
-	          name: 'inferCnt'
-	        },
-	        {
-	          header: '생산량',
-	          name: 'prodCnt'
-	        },
-	        {
-	          header: '종료시간',
-	          name: 'wkToTm'
-	        },
-	        {
-	          header: '현재상태',
-	          name: 'nowSt'
-	        }
-	        ]
-	    });
-	    modalBtn.addEventListener('click', function () {
-                setTimeout(function () {
-                    modGrid.refreshLayout()
-                }, 300);
-            });
-   </script>
+            ]
+        });
+        modalBtn.addEventListener('click', function () {
+            setTimeout(function () {
+                modGrid.refreshLayout()
+            }, 300);
+        });
+    </script>
 </th:block>
 </body>
 </html>

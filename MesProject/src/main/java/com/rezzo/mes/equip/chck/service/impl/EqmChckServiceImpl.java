@@ -1,6 +1,7 @@
 package com.rezzo.mes.equip.chck.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,12 @@ public class EqmChckServiceImpl implements EqmChckService{
 	public List<EqmChckVO> eqmChckSearch(EqmChckVO vo) {
 		return map.eqmChckSearch(vo);
 	}
-	
+
+	@Override
+	public List<Map<String, Object>> getEqmListMap(EqmChckVO vo) {
+		return map.getEqmListMap(vo);
+	}
+
 	
 
 	

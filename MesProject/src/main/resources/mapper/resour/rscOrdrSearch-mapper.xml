@@ -19,7 +19,7 @@ join vend v on r.vend_cd = v.vend_cd
 
 <select id="ordrDtlList" resultType="com.rezzo.mes.resour.search.service.OrdrSearchVO">
 
-select dt.ordr_cd, dt.rsc_cd, dt.ordr_cnt, dt.paprd_cmnd_dt, ord.ordr_req_dt, ord.vend_cd, v.vend_nm, r.rsc_nm, rsc.rsc_stc, rsc.saf_stc
+select dt.ordr_cd, dt.rsc_cd, dt.ordr_cnt, dt.paprd_cmnd_dt, ord.ordr_req_dt, ord.vend_cd, v.vend_nm, r.rsc_nm, rsc.rsc_stc, r.saf_stc
 from rsc_ordr_dtl dt 
 join rsc_ordr ord on dt.ordr_cd=ord.ordr_cd
 join vend v on ord.vend_cd = v.vend_cd
