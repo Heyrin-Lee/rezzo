@@ -4,14 +4,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -98,26 +106,28 @@ public class EqmController {
 		return vo;
 	};
 
-//이미지 파일
-	@GetMapping(value = "image/{imagename}", produces = MediaType.IMAGE_JPEG_VALUE)
-	public ResponseEntity<byte[]> userSearch(@PathVariable("imagename") String imagename) throws IOException {
-		InputStream imageStream = new FileInputStream("imgfile/" + imagename);
-		byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-		imageStream.close();
-		return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
-	}
-	
+	/*
+	 * //이미지 파일
+	 * 
+	 * @GetMapping(value = "image/{imagename}") public ResponseEntity<byte[]>
+	 * userSearch(@PathVariable("imagename") String imagename, HttpServletResponse
+	 * response) throws IOException {
+	 * response.setContentType("application/octet-stream"); InputStream imageStream
+	 * = new FileInputStream(uploadPath + imagename); byte[] imageByteArray =
+	 * IOUtils.toByteArray(imageStream); imageStream.close(); return new
+	 * ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK); }
+	 */
 	//추가
 	
 	@PostMapping("eqmInsert")
 	@ResponseBody
 	public List<EqmVO> eqmInsert(EqmVO vo, MultipartFile file) {
 		System.out.println(vo);
-		String fileName = file.getOriginalFilename();
-		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
+		if(file != null && file.getSize() >0) {
+			String fileName = file.getOriginalFilename();
 			String uid = UUID.randomUUID().toString();
-			String saveFileName = uid + fileName.substring(fileName.indexOf("_"));
-			File target = new File(saveDir, saveFileName);
+			String saveFileName = uid + fileName;
+			File target = new File(uploadPath, saveFileName);
 			System.out.println(target.getPath());
 			vo.setEqmImg(fileName);
 			vo.setImgPath(saveFileName);
@@ -132,16 +142,39 @@ public class EqmController {
 		return eqmService.eqmList(vo);
 	};
 	
+	
+	//다운로드
+	
+	@GetMapping("/download")
+	public ResponseEntity<Object> download(String path) {
+		//String path = "F:/uploadFile/jarzip.PNG";
+		
+		try {
+			Path filePath = Paths.get(uploadPath, path);
+			Resource resource = new InputStreamResource(Files.newInputStream(filePath)); // 파일 resource 얻기
+			
+			File file = new File(path);
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());  // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
+			
+			return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
+		}
+	}
+	
+	
 	//수정
 	
 	@PostMapping("eqmUpdate")
 	@ResponseBody
 	public List<EqmVO> eqmUpdate(EqmVO vo, MultipartFile file) {
-		String fileName = file.getOriginalFilename();
-		if(fileName != null && !fileName.isEmpty() && fileName.length () !=0) {
+		if(file != null && file.getSize() >0) {
+			String fileName = file.getOriginalFilename();
 			String uid = UUID.randomUUID().toString();
-			String saveFileName = uid + fileName.substring(fileName.indexOf("_"));
-			File target = new File(saveDir, saveFileName);
+			String saveFileName = uid + fileName;
+			File target = new File(uploadPath, saveFileName);
 			System.out.println(target.getPath());
 			vo.setEqmImg(fileName);
 			vo.setImgPath(saveFileName);

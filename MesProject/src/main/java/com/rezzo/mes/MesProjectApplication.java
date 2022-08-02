@@ -27,7 +27,7 @@ public class MesProjectApplication {
 
 	@Bean
 	public String saveDir() {
-		return "imgfile/";
+		return "C:imgfile/";
 	}
 	
 	@RequestMapping("/")

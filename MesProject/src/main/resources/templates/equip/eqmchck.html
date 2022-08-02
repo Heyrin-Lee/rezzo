@@ -206,6 +206,25 @@
 					dataType: "JSON",
 					success: function (result) {
 						grid.resetData(result);
+						
+						for (var i in result){
+						const chckD = grid.getValue(i,'chckDt');
+						var chckDt = new Date(chckD)
+						
+						const chckPerd = grid.getValue(i,'chckPerd');
+						
+						console.log(chckPerd)
+						chckDt.setDate(chckDt.getDate()+Number(chckPerd))
+						
+						var year = chckDt.getFullYear();
+						var month = ('0' + (chckDt.getMonth() + 1)).slice(-2);
+						var day = ('0' + chckDt.getDate()).slice(-2);
+						
+						var dateString = year + '-' + month  + '-' + day;
+						
+						grid.setValue(i,'chckPerd',dateString)
+						}
+						
 					}
 				})
 
@@ -230,6 +249,11 @@
 							header: '점검일자',
 							name: 'chckDt',
 							align: 'center'
+						},
+						{
+							header: '차기점검일',
+							name: 'chckPerd',
+							align: 'center'
 						}, {
 							header: '판정',
 							name: 'jdgmnt',
@@ -242,28 +266,6 @@
 					]
 				});
 				
-			/*	// 엑셀버튼
-				
-			function excelOn(){				
-				$('#excelBtn').on('click', (ev)=>{
-					var eqmNm = $('#keyword3').val()
-					var toDt = $('#toDt').val()
-					var stDt = $('#stDt').val()
-					$.ajax({
-						url: "eqmChckExelView",
-						method: 'GET',
-						dataType: 'JSON',
-						data: {
-							eqmNm: eqmNm,
-							toDt: toDt,
-							stDt: stDt
-						},success(result){
-							console.log(result)
-						}
-					})
-				})
-				}
-			*/
 
 				// 그리드 클릭
 				grid.on('click', (ev) => {
@@ -393,6 +395,7 @@
 						dataType: "JSON",
 						success: function (result) {
 							modGrid.resetData(result);
+							
 						}
 					})
 				}
@@ -477,6 +480,23 @@
 						},
 						success: function (result) {
 							grid.resetData(result);
+							for (var i in result){
+								const chckD = grid.getValue(i,'chckDt');
+								var chckDt = new Date(chckD)
+								
+								const chckPerd = grid.getValue(i,'chckPerd');
+								
+								console.log(chckPerd)
+								chckDt.setDate(chckDt.getDate()+Number(chckPerd))
+								
+								var year = chckDt.getFullYear();
+								var month = ('0' + (chckDt.getMonth() + 1)).slice(-2);
+								var day = ('0' + chckDt.getDate()).slice(-2);
+								
+								var dateString = year + '-' + month  + '-' + day;
+								
+							grid.setValue(i,'chckPerd',dateString)
+							}
 						}
 					})
 

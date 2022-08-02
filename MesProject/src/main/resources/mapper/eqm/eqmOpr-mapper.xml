@@ -31,7 +31,7 @@
 	</resultMap>
 	
 	<select id = "eqmOprInsert" statementType="CALLABLE">
-			{call opr_ins(#{frmEqmCd}, #{frmEqmNm}, #{frDt}, #{toDt},#{frmPsch},#{opertCtnt},#{frmUseYN})}
+			{call opr_ins(#{frmEqmCd}, #{frDt}, #{toDt},#{frmPsch},#{opertCtnt},#{frmUseYN})}
 	</select>
 		
 	<select id = "OprList" resultMap="eqmMap">
@@ -114,7 +114,7 @@
 			on e.eqm_cd = o.eqm_cd
 			where 1=1
 			<if test="frDt != null"><![CDATA[ AND fr_dt <= #{frDt}]]></if>
-			<if test="toDt != null"><![CDATA[ AND to_dt >= #{toDt}]]></if>
+			<if test="toDt != null"><![CDATA[ AND to_dt <= #{toDt}]]></if>
 			<if test="eqmNm != null and eqmNm !=''">and e.eqm_nm Like '%'||#{eqmNm}||'%'</if>
 			<if test="eqmCd != null and eqmCd !=''">and e.eqm_cd = #{eqmCd}</if>
 	</select>
