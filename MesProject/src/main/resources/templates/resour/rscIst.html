@@ -16,7 +16,7 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h2 class="mt-2">자재입고관리</h2>
+        <h1 class="mt-2">자재입고관리</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
@@ -45,7 +45,8 @@
                             <td>
                                 <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
                                      style="height: 40px; border-radius: 5px;">
-                                    <input type="text" id="istDt" name="istDt" aria-label="Date-Time" class="form-control">
+                                    <input type="text" id="istDt" name="istDt" aria-label="Date-Time"
+                                           class="form-control">
                                     <span class="tui-ico-date"></span>
                                 </div>
                                 <div id="wrapper" style="margin-top: -1px;"></div>
@@ -140,7 +141,8 @@
                                 </td>
                                 <td></td>
                                 <td rowspan="2">
-                                    <button id="vendSch" class="btn btn-primary" type="button" style="height: 90px;"><i class="fas fa-search"></i></button>
+                                    <button id="vendSch" class="btn btn-primary" type="button" style="height: 90px;"><i
+                                            class="fas fa-search"></i></button>
                                 </td>
                             </tr>
                             <tr>
@@ -213,23 +215,46 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="dateRngFrm">
-                        <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                            <input id="startpicker-input-mdfy" name="startDt" type="text" aria-label="Date"
-                                   required>
-                            <span class="tui-ico-date"></span>
-                            <div id="startpicker-container-mdfy" style="margin-left: -1px;"></div>
-                        </div>
-                        <span></span>
-                        <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                            <input id="endpicker-input-mdfy" name="endDt" type="text" aria-label="Date"
-                                   required>
-                            <span class="tui-ico-date"></span>
-                            <div id="endpicker-container-mdfy" style="margin-left: -1px;"></div>
-                        </div>
-                    </form>
-                    <input id="schByDateRng" type="button" value="검색"/>
-                    <hr>
+                    <table>
+                        <colgroup>
+                            <col style="width: 380px;">
+                            <col style="width: 60px;">
+                        </colgroup>
+                        <tbody>
+                        <tr style="height: 25px;">
+                            <th>
+                                <b>검색기간</b>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form id="dateRngFrm">
+                                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                         style="height: 40px; border-radius: 5px;">
+                                        <input id="startpicker-input-mdfy" class="form-control" type="text"
+                                               aria-label="Date"
+                                               name="startDt">
+                                        <span class="tui-ico-date"></span>
+                                        <div id="startpicker-container-mdfy" style="margin-left: -1px;"></div>
+                                    </div>
+                                    <span></span>
+                                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                         style="height: 40px; border-radius: 5px;">
+                                        <input id="endpicker-input-mdfy" class="form-control" type="text"
+                                               aria-label="Date"
+                                               name="endDt">
+                                        <span class="tui-ico-date"></span>
+                                        <div id="endpicker-container-mdfy" style="margin-left: -1px;"></div>
+                                    </div>
+                                </form>
+                            </td>
+                            <td>
+                                <input id="schByDateRng" class="btn btn-primary" type="button" value="검색"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
                     <div id="mdfy-grid"></div>
                     <p>선택 : 더블클릭</p>
                 </div>
@@ -296,36 +321,48 @@
             columns: [
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '품명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '규격',
-                    name: 'rscSpec'
+                    name: 'rscSpec',
+                    align: 'center'
                 },
                 {
                     header: '단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 },
                 {
                     header: '자재유형',
-                    name: 'rscTyp'
+                    name: 'rscTyp',
+                    align: 'center'
                 },
                 {
                     header: '발주번호',
-                    name: 'ordrCd'
+                    name: 'ordrCd',
+                    align: 'center'
                 },
                 {
-                    header: '추가입고가능수량',
-                    name: 'passRmnCnt'
+                    header: '입고가능수량',
+                    name: 'passRmnCnt',
+                    align: 'right'
                 },
                 {
                     header: '입고수량',
                     name: 'lotCnt',
-                    editor: 'text'
+                    editor: 'text',
+                    align: 'right',
+                    validation: {
+                        dataType: 'number',
+                        required: true
+                    },
                 },
                 {
                     header: '유통기한',
@@ -335,11 +372,20 @@
                         options: {
                             format: 'yyyy-MM-dd'
                         }
-                    }
+                    },
+                    align: 'center',
+                    validation: {
+                        dataType: 'date',
+                        required: true
+                    },
                 }
             ]
             , editingEvent: 'click'
         });
+
+        grid.on('editingStart', (ev) => {
+            grid.check(ev.rowKey);
+        })
 
         ///////////////////////////// !vendor ////////////////////////////////
         // vendor modal grid section
@@ -351,21 +397,26 @@
             columns: [
                 {
                     header: '업체코드',
-                    name: 'vendCd'
+                    name: 'vendCd',
+                    align: 'center'
                 },
                 {
                     header: '업체이름',
-                    name: 'vendNm'
+                    name: 'vendNm',
+                    align: 'center'
                 },
                 {
                     header: '사업자번호',
-                    name: 'bizno'
+                    name: 'bizno',
+                    align: 'center'
                 },
                 {
                     header: '전화번호',
-                    name: 'telno'
+                    name: 'telno',
+                    align: 'center'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         // declare vendor modal
@@ -491,13 +542,21 @@
             columns: [
                 {
                     header: '입고코드',
-                    name: 'rscIstCd'
+                    name: 'rscIstCd',
+                    align: 'center'
+                },
+                {
+                    header: '건수',
+                    name: 'istCnt',
+                    align: 'center'
                 },
                 {
                     header: '입고일자',
-                    name: 'istDt'
+                    name: 'istDt',
+                    align: 'center'
                 }
             ]
+            , editingEvent: 'click'
         })
 
         let schByDateRng = document.getElementById('schByDateRng');
@@ -518,6 +577,7 @@
             let data = mdfyGrid.getRow(e.rowKey);
             getRscIstHistMdfy(data)
             mModal.hide(mdfyModal);
+            grid.hideColumn('expDt')
             saveFlag = 1;
         })
 
@@ -536,6 +596,23 @@
         reloadBtn.addEventListener('click', e => {
             location.reload();
         })
+
+        ///////////////////////////// action on grid ////////////////////////////////
+        let gridEle = document.getElementById('grid')
+        gridEle.addEventListener('mouseleave', function () {
+            grid.finishEditing();
+        })
+
+        let venGridEl = document.getElementById('vend-grid')
+        venGridEl.addEventListener('mouseleave', function () {
+            vendGrid.finishEditing();
+        })
+
+        let mdfyGridEl = document.getElementById('mdfy-grid')
+        mdfyGridEl.addEventListener('mouseleave', function () {
+            mdfyGrid.finishEditing();
+        })
+
     </script>
 </th:block>
 </body>

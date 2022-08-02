@@ -3,6 +3,7 @@ package com.rezzo.mes.resour.stc.web;
 import com.rezzo.mes.resour.stc.service.RscIOVO;
 import com.rezzo.mes.resour.stc.service.RscLotVO;
 import com.rezzo.mes.resour.stc.service.RscStcService;
+import com.rezzo.mes.resour.stc.service.RscStcVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -47,5 +48,11 @@ public class RscStcController {
     @ResponseBody
     public List<RscLotVO> getRscLotList(@ModelAttribute RscLotVO rscLotVO) {
         return rss.getRscLotList(rscLotVO);
+    }
+
+    @RequestMapping("getRscStcList")
+    @ResponseBody
+    public List<RscStcVO> getRscStcList(@ModelAttribute RscStcVO rscStcVO) {
+        return rss.getRscStcList(rscStcVO);
     }
 }

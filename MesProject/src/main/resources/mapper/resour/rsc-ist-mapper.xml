@@ -53,23 +53,23 @@
 
     <select id="getRscIstHist" parameterType="RscIstVO" resultType="RscIstVO">
         select rl.rsc_lot_cd,
-               rl.rsc_cd,
-               rl.lot_cnt,
-               rl.rsc_ist_cd,
-               rl.ordr_cd,
-               ri.ist_dt,
-               vend.vend_nm,
-               rsc.rsc_nm
+        rl.rsc_cd,
+        rl.lot_cnt,
+        rl.rsc_ist_cd,
+        rl.ordr_cd,
+        to_char(ri.ist_dt, 'yyyy-mm-dd') as istDt,
+        vend.vend_nm,
+        rsc.rsc_nm
         from rsc_lot rl,
-             rsc_ist ri,
-             rsc_ordr ro,
-             vend,
-             RSC
+        rsc_ist ri,
+        rsc_ordr ro,
+        vend,
+        RSC
         where rl.rsc_ist_cd = ri.rsc_ist_cd
-          and rl.rsc_cd = ri.rsc_cd
-          and ro.ordr_cd = rl.ordr_cd
-          and ro.vend_cd = vend.vend_cd
-          and rl.rsc_cd = rsc.RSC_CD
+        and rl.rsc_cd = ri.rsc_cd
+        and ro.ordr_cd = rl.ordr_cd
+        and ro.vend_cd = vend.vend_cd
+        and rl.rsc_cd = rsc.RSC_CD
         <![CDATA[
           and ri.IST_DT >= #{startDt}
           and ri.IST_DT <= #{endDt}
@@ -87,13 +87,16 @@
     </select>
 
     <select id="getRscIstHistList" parameterType="RscIstVO" resultType="RscIstVO">
-        select rsc_ist_cd, ist_dt
-        from rsc_ist
-        <if test="startDt != '' and startDt != null">
-            where
-            <![CDATA[IST_DT >= #{startDt} and IST_DT <= #{endDt}]]>
-        </if>
-        group by rsc_ist_cd, ist_dt
+        select ri.RSC_IST_CD, count(*) istCnt, to_char(ri.IST_DT, 'yyyy-MM-dd') istDt
+        from RSC_IST ri,
+             RSC_LOT rl
+        where ri.RSC_IST_CD = rl.RSC_IST_CD
+          and ri.RSC_CD = rl.RSC_CD
+            <![CDATA[
+          and IST_DT >= #{startDt}
+          and IST_DT <= #{endDt}
+            ]]>
+        group by ri.RSC_IST_CD, ri.IST_DT
     </select>
 
     <select id="getRscIstHistMdfy" parameterType="RscIstVO" resultType="RscIstVO">

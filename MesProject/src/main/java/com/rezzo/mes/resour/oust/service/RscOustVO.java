@@ -23,4 +23,5 @@ public class RscOustVO extends RscVO {
 
     private String startDt;
     private String endDt;
+    private String note;
 }

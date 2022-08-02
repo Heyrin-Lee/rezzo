@@ -53,22 +53,23 @@
                 group by rsc_cd)
 
                 loop
-                    insert into RSC_OUST (RSC_OUST_CD, OUST_DT, RSC_CD, OUST_CNT)
-                    values (#{rscOustCd}, #{oustDt}, v_values.RSC_CD, v_values.oust_cnt);
+                    insert into RSC_OUST (RSC_OUST_CD, OUST_DT, RSC_CD, OUST_CNT, OUST_TYP, note)
+                    values (#{rscOustCd}, #{oustDt}, v_values.RSC_CD, v_values.oust_cnt, #{oustTyp}, #{note});
                 end loop;
         end;
     </insert>
 
     <select id="schRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
-        select ro.RSC_OUST_CD, count(*) oustCnt, ro.OUST_DT
+        select ro.RSC_OUST_CD, count(*) oustCnt, to_char(ro.OUST_DT, 'yyyy-MM-dd') oustDt
         from RSC_OUST_DTL rod,
              RSC_OUST ro
         where rod.RSC_OUST_CD = ro.RSC_OUST_CD
+          and rod.RSC_CD = ro.RSC_CD
            <![CDATA[
           and ro.OUST_DT >= #{startDt}
           and ro.OUST_DT <= #{endDt}
-        group by oust_DT, ro.RSC_oust_CD
         ]]>
+        group by ro.OUST_DT, ro.RSC_oust_CD
     </select>
 
     <select id="getRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
@@ -122,7 +123,7 @@
     </update>
 
     <select id="getRscOustList" parameterType="RscOustVO" resultType="RscOustVO">
-        select ro.OUST_DT,
+        select to_char(ro.OUST_DT, 'yyyy-mm-dd') as oustDt,
         ro.RSC_OUST_CD,
         rod.RSC_CD,
         rsc.RSC_NM,
@@ -135,14 +136,17 @@
         RSC
         where ro.RSC_OUST_CD = rod.RSC_OUST_CD
         and rod.RSC_CD = rsc.RSC_CD
+        and ro.RSC_CD = rsc.RSC_CD
         <if test="rscCd != null and rscCd != ''">and rod.RSC_CD = #{rscCd}</if>
         <![CDATA[
           and ro.OUST_DT >= #{startDt}
           and ro.OUST_DT <= #{endDt}
         ]]>
     </select>
-    
+
     <delete id="letHoldingAway" parameterType="RscOustVO">
-        delete from HOLDING where PLAN_CD = #{planCd}
+        delete
+        from HOLDING
+        where PLAN_CD = #{planCd}
     </delete>
 </mapper>

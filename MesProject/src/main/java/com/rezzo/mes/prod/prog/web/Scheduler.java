@@ -39,7 +39,5 @@ public class Scheduler extends Thread {
 //		service.schedule("QCD001", "OPG001");
 //	}
 
-	
-	
-	
+
 }

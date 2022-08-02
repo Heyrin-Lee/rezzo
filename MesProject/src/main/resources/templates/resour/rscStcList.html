@@ -17,7 +17,7 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h2 class="mt-2">자재재고조회</h2>
+        <h1 class="mt-2">자재재고조회</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
@@ -29,10 +29,6 @@
                     <button class="btn btn-primary" id="schBtn"><i class="fas fa-search"></i> 조회</button>
                     <button class="btn btn-primary" id="reloadBtn"><i class="fas fa-file"></i> 새자료</button>
                     <button class="btn btn-primary" id="excelBtn"><i class="fas fa-file-excel"></i> 엑셀</button>
-
-                    <!--                    <button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>-->
-                    <!--                    <button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>-->
-
                 </div>
                 <form id="schParam">
                     <table style="vertical-align : middle;">
@@ -47,19 +43,11 @@
                             <td>
                                 <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
                                      style="height: 40px; border-radius: 5px;">
-                                    <input id="startpicker-input" class="form-control" type="text" aria-label="Date"
-                                           name="startDt">
+                                    <input type="text" id="inqDt" name="inqDt" aria-label="Date-Time"
+                                           class="form-control">
                                     <span class="tui-ico-date"></span>
-                                    <div id="startpicker-container" style="margin-left: -1px;"></div>
                                 </div>
-                                <span></span>
-                                <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
-                                     style="height: 40px; border-radius: 5px;">
-                                    <input id="endpicker-input" class="form-control" type="text" aria-label="Date"
-                                           name="endDt">
-                                    <span class="tui-ico-date"></span>
-                                    <div id="endpicker-container" style="margin-left: -1px;"></div>
-                                </div>
+                                <div id="wrapper" style="margin-top: -1px;"></div>
                             </td>
                         </tr>
                         <tr>
@@ -74,18 +62,18 @@
                                         class="fas fa-search"></i></button>
                             </td>
                         </tr>
-                        <tr>
-                            <th>
-                                <b>정렬구분</b>
-                            </th>
-                            <td>
-                                <div id="sortBtn">
-                                    <label><input type="radio" class="form-check-input" name="sortTyp"
-                                                  value="prcsDt" checked> 처리일자</label>
-                                    <label><input type="radio" class="form-check-input" name="sortTyp" value="rscCd"> 자재</label>
-                                </div>
-                            </td>
-                        </tr>
+<!--                        <tr>-->
+<!--                            <th>-->
+<!--                                <b>정렬구분</b>-->
+<!--                            </th>-->
+<!--                            <td>-->
+<!--                                <div id="sortBtn">-->
+<!--                                    <label><input type="radio" class="form-check-input" name="sortTyp"-->
+<!--                                                  value="prcsDt" checked> 처리일자</label>-->
+<!--                                    <label><input type="radio" class="form-check-input" name="sortTyp" value="rscCd"> 자재</label>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                        </tr>-->
                         </tbody>
                     </table>
                 </form>
@@ -99,11 +87,12 @@
         </div>
     </div>
 
+    <!-- Modal for resource search -->
     <div class="modal fade" id="rscModal" tabindex="-1" aria-labelledby="rscModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">자재검색</h3>
+                    <h4 class="modal-title">자재검색</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -111,38 +100,33 @@
                         <table>
                             <colgroup>
                                 <col style="width: 400px;">
-                                <col style="width: 20px">
+                                <col style="width: 10px">
                                 <col style="width: 50px;">
                             </colgroup>
                             <tbody>
                             <tr>
                                 <td>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text">자재명</span>
-                                        <input type="text" id="rscNmInMod" name="rscNm" class="form-control"
-                                               placeholder="ex. 유자당절임">
-                                    </div>
+                                    <input type="text" id="rscNmInMod" name="rscNm" class="form-control"
+                                           placeholder="자재명">
                                 </td>
                                 <td></td>
                                 <td rowspan="2">
-                                    <button id="rscSch" class="btn btn-primary" type="button" style="height: 70px;"><i
+                                    <button id="rscSch" class="btn btn-primary" type="button" style="height: 90px;"><i
                                             class="fas fa-search"></i></button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group mb-3" style="margin: 0 auto;">
-                                        <span class="input-group-text">자재코드</span>
-                                        <input type="text" id="rscCdInMod" name="rscCd" class="form-control"
-                                               placeholder="ex. RMR001">
-                                    </div>
+                                    <input type="text" id="rscCdInMod" name="rscCd" class="form-control"
+                                           placeholder="자재코드">
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </form>
+                    <br>
                     <div id="rsc-grid"></div>
-                    <p>선택 : 더블클릭</p>
+                    <div style="float: right"><p>선택 : 더블클릭</p></div>
                 </div>
             </div>
         </div>
@@ -156,19 +140,13 @@
 
         ///////////////////////////// date picker ////////////////////////////////
         let today = new Date();
-        let picker = tui.DatePicker.createRangePicker({
-            startpicker: {
-                date: today,
-                input: '#startpicker-input',
-                container: '#startpicker-container'
-            },
-            endpicker: {
-                date: today,
-                input: '#endpicker-input',
-                container: '#endpicker-container'
-            },
-            type: 'date',
-            format: 'yyyy-MM-dd'
+        // ist date picker
+        let datepicker = new tui.DatePicker('#wrapper', {
+            date: today,
+            input: {
+                element: '#inqDt',
+                format: 'yyyy-MM-dd'
+            }
         });
 
         ///////////////////////////// grid ////////////////////////////////
@@ -200,32 +178,23 @@
                     name: 'mngUnit'
                 },
                 {
+                    header: '기초수량',
+                    name: 'prvmmStc'
+                },
+                {
+                    header: '재고수량',
+                    name: 'stcCnt'
+                },
+                {
                     header: '안전재고',
-                    name: 'istCnt'
+                    name: 'safStc'
                 },
                 {
-                    header: '홀딩수량',
-                    name: 'istCnt'
-                },
-                {
-                    header: '입고수량',
-                    name: 'istCnt'
-                },
-                {
-                    header: '출고수량',
-                    name: 'oustCnt'
-                },
-                {
-                    header: '현재고',
-                    name: 'oustCnt'
-                },
-                {
-                    header: '미달량',
-                    name: 'oustCnt'
+                    header: '가용수량',
+                    name: 'avalStc'
                 }
             ]
         });
-
 
         ///////////////////////////// resource ////////////////////////////////
         // rsc grid
@@ -295,13 +264,13 @@
         ///////////////////////////// main search ////////////////////////////////
         let schBtn = document.getElementById('schBtn');
         schBtn.addEventListener('click', function () {
-            let url = 'getIOList'
+            let url = 'getRscStcList'
             let data = new FormData(schParam)
             fetch(url, {
                 method: 'POST',
                 body: data
             }).then(res => res.json()).then(res => {
-                grid.resetData(res);
+                grid.resetData(res)
             })
         });
 
@@ -309,6 +278,8 @@
         reloadBtn.addEventListener('click', e => {
             location.reload();
         })
+
+        ///////////////////////////
 
     </script>
 
