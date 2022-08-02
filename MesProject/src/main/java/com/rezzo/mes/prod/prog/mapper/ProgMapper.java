@@ -21,4 +21,7 @@ public interface ProgMapper {
 	public void updateIndica(ProgVO vo);
 	public List<ProgVO> getHolding(ProgVO vo);
 	public List<ProgVO> getProgPrcs(ProgVO vo);
+	public void updateYn();
+	public void updateYn2();
+	public List<ProgVO> getNoOprEqm();
 }

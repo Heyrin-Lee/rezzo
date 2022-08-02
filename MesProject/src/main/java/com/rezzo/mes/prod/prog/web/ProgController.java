@@ -83,13 +83,34 @@ public class ProgController {
 	@RequestMapping("getHolding")
 	@ResponseBody
 	public List<ProgVO> getHolding(ProgVO vo) {
+		System.out.println(vo);
 		return service.getHolding(vo);
 	}
 	
 	@RequestMapping("getProgPrcs")
 	@ResponseBody
 	public List<ProgVO> getProgPrcs(ProgVO vo) {
-		System.out.println(vo);
 		return service.getProgPrcs(vo);
 	}
+	
+	@RequestMapping("updateYn")
+	@ResponseBody
+	public List<ProgVO> updateYn () {
+		service.updateYn();
+		return service.getNoOprEqm();
+	}
+	
+	@RequestMapping("updateYn2")
+	@ResponseBody
+	public void updateYn2 () {
+		service.updateYn2();
+	}
+	
+	/*
+	 * @RequestMapping("getNoOprEqm")
+	 * 
+	 * @ResponseBody public ProgVO getNoOprEqm() { return service.getNoOprEqm(); }
+	 */
+	
+	
 }
