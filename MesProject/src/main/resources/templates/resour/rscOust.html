@@ -45,7 +45,8 @@
                             <td>
                                 <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
                                      style="height: 40px; border-radius: 5px;">
-                                    <input type="text" id="oustDt" name="oustDt" aria-label="Date-Time" class="form-control">
+                                    <input type="text" id="oustDt" name="oustDt" aria-label="Date-Time"
+                                           class="form-control">
                                     <span class="tui-ico-date"></span>
                                 </div>
                                 <div id="wrapper" style="margin-top: -1px;"></div>
@@ -55,8 +56,10 @@
                             </th>
                             <td>
                                 <div id="sortBtn">
-                                    <label><input type="radio" class="form-check-input" name="oustTyp" value="dept" checked> 일자</label>
-                                    <label><input type="radio" class="form-check-input" name="oustTyp" value="partn"> 업체</label>
+                                    <label><input type="radio" class="form-check-input" name="oustTyp" value="부서"
+                                                  checked> 부서</label>
+                                    <label><input type="radio" class="form-check-input" name="oustTyp" value="협력사">
+                                        협력업체</label>
                                 </div>
                             </td>
                         </tr>
@@ -95,22 +98,47 @@
                     <b class="modal-title">출고자료 조회</b>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="oustDtRngFrm">
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input id="startpicker-input-mod" name="startDt" type="text" aria-label="Date" required>
-                        <span class="tui-ico-date"></span>
-                        <div id="startpicker-container-mod" style="margin-left: -1px;"></div>
-                    </div>
-                    <span></span>
-                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                        <input id="endpicker-input-mod" name="endDt" type="text" aria-label="Date" required>
-                        <span class="tui-ico-date"></span>
-                        <div id="endpicker-container-mod" style="margin-left: -1px;"></div>
-                    </div>
-                </form>
                 <div class="modal-body">
-                    <input id="schBtnInMdfyMod" type="button" value="검색"/>
-                    <hr>
+                    <table>
+                        <colgroup>
+                            <col style="width: 380px;">
+                            <col style="width: 60px;">
+                        </colgroup>
+                        <tbody>
+                        <tr style="height: 25px;">
+                            <th>
+                                <b>검색기간</b>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <form id="oustDtRngFrm">
+                                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                         style="height: 40px; border-radius: 5px;">
+                                        <input id="startpicker-input-mod" class="form-control" type="text"
+                                               aria-label="Date"
+                                               name="startDt">
+                                        <span class="tui-ico-date"></span>
+                                        <div id="startpicker-container-mod" style="margin-left: -1px;"></div>
+                                    </div>
+                                    <span></span>
+                                    <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
+                                         style="height: 40px; border-radius: 5px;">
+                                        <input id="endpicker-input-mod" class="form-control" type="text"
+                                               aria-label="Date"
+                                               name="endDt">
+                                        <span class="tui-ico-date"></span>
+                                        <div id="endpicker-container-mod" style="margin-left: -1px;"></div>
+                                    </div>
+                                </form>
+                            </td>
+                            <td>
+                                <input id="schBtnInMdfyMod" class="btn btn-primary" type="button" value="검색"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
                     <div id="mdfy-grid"></div>
                 </div>
             </div>
@@ -330,43 +358,64 @@
                 {
                     header: '자재코드',
                     name: 'rscCd',
-                    editor: rscInput
+                    editor: rscInput,
+                    validation: {
+                        dataType: 'text',
+                        required: true
+                    },
+                    align: 'center'
                 },
                 {
                     header: '자재명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '규격',
-                    name: 'rscSpec'
+                    name: 'rscSpec',
+                    align: 'center'
                 },
                 {
                     header: '단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 },
                 {
                     header: '자재유형',
-                    name: 'rscTyp'
+                    name: 'rscTyp',
+                    align: 'center'
                 },
                 {
                     header: 'LOT번호',
                     name: 'rscLotCd',
-                    editor: lotInput
+                    editor: lotInput,
+                    validation: {
+                        dataType: 'text',
+                        required: true
+                    },
+                    align: 'center'
                 },
                 {
                     header: 'LOT재고',
-                    name: 'lotRmnCnt'
+                    name: 'lotRmnCnt',
+                    align: 'right'
                 },
                 {
                     header: '출고량',
                     name: 'oustCnt',
-                    editor: oustCntInput
+                    editor: oustCntInput,
+                    validation: {
+                        dataType: 'number',
+                        required: true
+                    },
+                    align: 'right'
                 }
             ]
             , editingEvent: 'click'
         });
 
         grid.on('editingStart', (ev) => {
+            grid.check(ev.rowKey);
             if (saveFlag === 1) {
                 if (grid.getValue(ev.rowKey, 'rscCd') != null
                     || grid.getValue(ev.rowKey, 'rscCd') !== '') {
@@ -400,15 +449,18 @@
             columns: [
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '자재명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '자재단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 }
             ]
             , editingEvent: 'click'
@@ -478,15 +530,18 @@
             columns: [
                 {
                     header: 'LOT코드',
-                    name: 'rscLotCd'
+                    name: 'rscLotCd',
+                    align: 'center'
                 },
                 {
                     header: 'LOT 잔여량',
-                    name: 'lotRmnCnt'
+                    name: 'lotRmnCnt',
+                    align: 'center'
                 },
                 {
                     header: '유통기한',
-                    name: 'expDt'
+                    name: 'expDt',
+                    align: 'center'
                 }
             ]
             , editingEvent: 'click'
@@ -568,15 +623,18 @@
             columns: [
                 {
                     header: '출고번호',
-                    name: 'rscOustCd'
+                    name: 'rscOustCd',
+                    align: 'center'
                 },
                 {
                     header: '건수',
-                    name: 'oustCnt'
+                    name: 'oustCnt',
+                    align: 'center'
                 },
                 {
                     header: '출고일자',
-                    name: 'oustDt'
+                    name: 'oustDt',
+                    align: 'center'
                 }
             ]
             , editingEvent: 'click'
@@ -647,6 +705,11 @@
         let mdfyGridEl = document.getElementById('mdfy-grid')
         mdfyGridEl.addEventListener('mouseleave', function () {
             mdfyGrid.finishEditing();
+        })
+
+        //////////////////////////// referesh btn //////////////////////////////////
+        reloadBtn.addEventListener('click', e => {
+            location.reload();
         })
 
     </script>

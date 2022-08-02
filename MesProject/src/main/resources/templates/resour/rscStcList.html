@@ -87,11 +87,12 @@
         </div>
     </div>
 
+    <!-- Modal for resource search -->
     <div class="modal fade" id="rscModal" tabindex="-1" aria-labelledby="rscModal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">자재검색</h3>
+                    <h4 class="modal-title">자재검색</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -99,38 +100,33 @@
                         <table>
                             <colgroup>
                                 <col style="width: 400px;">
-                                <col style="width: 20px">
+                                <col style="width: 10px">
                                 <col style="width: 50px;">
                             </colgroup>
                             <tbody>
                             <tr>
                                 <td>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text">자재명</span>
-                                        <input type="text" id="rscNmInMod" name="rscNm" class="form-control"
-                                               placeholder="ex. 유자당절임">
-                                    </div>
+                                    <input type="text" id="rscNmInMod" name="rscNm" class="form-control"
+                                           placeholder="자재명">
                                 </td>
                                 <td></td>
                                 <td rowspan="2">
-                                    <button id="rscSch" class="btn btn-primary" type="button" style="height: 70px;"><i
+                                    <button id="rscSch" class="btn btn-primary" type="button" style="height: 90px;"><i
                                             class="fas fa-search"></i></button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group mb-3" style="margin: 0 auto;">
-                                        <span class="input-group-text">자재코드</span>
-                                        <input type="text" id="rscCdInMod" name="rscCd" class="form-control"
-                                               placeholder="ex. RMR001">
-                                    </div>
+                                    <input type="text" id="rscCdInMod" name="rscCd" class="form-control"
+                                           placeholder="자재코드">
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </form>
+                    <br>
                     <div id="rsc-grid"></div>
-                    <p>선택 : 더블클릭</p>
+                    <div style="float: right"><p>선택 : 더블클릭</p></div>
                 </div>
             </div>
         </div>
@@ -155,36 +151,6 @@
 
         ///////////////////////////// grid ////////////////////////////////
         // main grid
-        class shortCnt {
-            constructor(props) {
-                const el = document.createElement('div');
-                this.el = el;
-                el.classList.add('shortCnt')
-
-                let {rowKey} = props;
-                this.rowKey = rowKey;
-
-                let stcCnt = grid.getValue(rowKey, 'stcCnt')
-                let safStc = grid.getValue(rowKey, 'safStc')
-                let val = stcCnt - safStc;
-                if (val >= 0) {
-                    val = 0;
-                } else {
-                    val = Math.abs(val)
-                }
-
-                this.render(val);
-            }
-
-            getElement() {
-                return this.el;
-            }
-
-            render(val) {
-                this.el.innerHTML = val;
-            }
-        }
-
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
             bodyHeight: 450,
@@ -211,17 +177,12 @@
                     header: '단위',
                     name: 'mngUnit'
                 },
-
                 {
-                    header: '홀딩수량',
-                    name: 'istCnt'
+                    header: '기초수량',
+                    name: 'prvmmStc'
                 },
                 {
-                    header: '가용수량',
-                    name: 'istCnt'
-                },
-                {
-                    header: '현재고',
+                    header: '재고수량',
                     name: 'stcCnt'
                 },
                 {
@@ -229,15 +190,8 @@
                     name: 'safStc'
                 },
                 {
-                    header: '미달량',
-                    name: 'shortCnt',
-                    renderer: {
-                        type: shortCnt
-                    }
-                },
-                {
-                    header: '전월재고',
-                    name: 'prvmmStc'
+                    header: '가용수량',
+                    name: 'avalStc'
                 }
             ]
         });
@@ -324,6 +278,8 @@
         reloadBtn.addEventListener('click', e => {
             location.reload();
         })
+
+        ///////////////////////////
 
     </script>
 

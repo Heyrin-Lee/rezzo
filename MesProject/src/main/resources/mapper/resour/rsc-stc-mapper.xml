@@ -67,17 +67,20 @@
         rsc.RSC_SPEC,
         rsc.MNG_UNIT,
         rsc.SAF_STC,
+        rs.AVAL_STC,
         rsh.PRVMM_STC,
         (PRVMM_STC + sum(distinct nvl(ri.IST_CNT, 0)) over (partition by ri.RSC_CD)
         - sum(distinct nvl(ro.OUST_CNT, 0)) over (partition by ri.RSC_CD)) as stcCnt
         from RSC_IST ri,
         RSC_OUST ro,
         RSC_STC_HIST rsh,
+        RSC_STC rs,
         RSC
         where rsh.CLS_YYMM = to_char(sysdate, 'yyyyMM')
         and rsh.RSC_CD = ri.RSC_CD(+)
         and rsh.RSC_CD = ro.RSC_CD(+)
         and rsh.RSC_CD = rsc.RSC_CD
+        and rsh.RSC_CD = rs.RSC_CD
         <if test="rscCd != null and rscCd != ''">and rsh.RSC_CD = #{rscCd}</if>
         and (IST_DT between trunc(to_date(#{inqDt}), 'MM') and to_date(#{inqDt})
         or OUST_DT between trunc(to_date(#{inqDt}), 'MM') and to_date(#{inqDt}))

@@ -179,31 +179,38 @@
             columns: [
                 {
                     header: '출고번호',
-                    name: 'rscOustCd'
+                    name: 'rscOustCd',
+                    align: 'center'
                 },
                 {
                     header: '출고일자',
-                    name: 'oustDt'
+                    name: 'oustDt',
+                    align: 'center'
                 },
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '자재명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '출고량',
-                    name: 'oustCnt'
+                    name: 'oustCnt',
+                    align: 'right'
                 },
                 {
                     header: 'LOT번호',
-                    name: 'rscLotCd'
+                    name: 'rscLotCd',
+                    align: 'center'
                 },
                 {
                     header: '출고유형',
-                    name: 'oustTyp'
+                    name: 'oustTyp',
+                    align: 'center'
                 },
                 {
                     header: '비고',
@@ -223,15 +230,18 @@
             columns: [
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '자재명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '자재단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 }
             ]
         })
@@ -266,7 +276,7 @@
         // action in rsc modal
         rscGrid.on('dblclick', e => {
             let rowInfo = rscGrid.getRow(e.rowKey)
-            rscNm.value = rowInfo.rscNm;
+            rscNm.value = rowInfo.rscCd + ' - ' +rowInfo.rscNm;
             rscCd.value = rowInfo.rscCd;
             rModal.hide(rscModal);
         })

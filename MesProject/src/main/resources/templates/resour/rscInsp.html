@@ -532,8 +532,7 @@
                     name: 'preIstCnt',
                     validation: {
                         dataType: 'number',
-                        required: true,
-                        validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])
+                        required: true
                     },
                     relations: [
                         {
@@ -557,7 +556,7 @@
                     validation: {
                         dataType: 'number',
                         required: true,
-                        validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['ordrCnt'])
+                        validatorFn: (value, row, ordrCnt) => Number(value) <= Number(row['preIstCnt'])
                     },
                     editor: {
                         type: inputInspCnt,
@@ -586,10 +585,6 @@
                 {
                     header: '불량수량',
                     name: 'inspFailCnt',
-                    validation: {
-                        dataType: 'number',
-                        required: true
-                    },
                     align: 'right'
                 }
             ]

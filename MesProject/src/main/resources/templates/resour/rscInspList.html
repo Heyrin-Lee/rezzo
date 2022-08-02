@@ -206,19 +206,23 @@
             columns: [
                 {
                     header: '업체코드',
-                    name: 'vendCd'
+                    name: 'vendCd',
+                    align: 'center'
                 },
                 {
                     header: '업체이름',
-                    name: 'vendNm'
+                    name: 'vendNm',
+                    align: 'center'
                 },
                 {
                     header: '사업자번호',
-                    name: 'bizno'
+                    name: 'bizno',
+                    align: 'center'
                 },
                 {
                     header: '전화번호',
-                    name: 'telno'
+                    name: 'telno',
+                    align: 'center'
                 }
             ]
         })
@@ -232,15 +236,18 @@
             columns: [
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '자재명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '자재단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 }
             ]
         })
@@ -254,39 +261,48 @@
             columns: [
                 {
                     header: '검사번호',
-                    name: 'rscInspCd'
+                    name: 'rscInspCd',
+                    align: 'center'
                 },
                 {
                     header: '검사일자',
-                    name: 'inspDt'
+                    name: 'inspDt',
+                    align: 'center'
                 },
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '품명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '규격',
-                    name: 'rscSpec'
+                    name: 'rscSpec',
+                    align: 'center'
                 },
                 {
                     header: '단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 },
                 {
                     header: '검사량',
-                    name: 'inspCnt'
+                    name: 'inspCnt',
+                    align: 'right'
                 },
                 {
                     header: '합격량',
-                    name: 'inspPassCnt'
+                    name: 'inspPassCnt',
+                    align: 'right'
                 },
                 {
                     header: '불량량',
-                    name: 'inspFailCnt'
+                    name: 'inspFailCnt',
+                    align: 'right'
                 }
             ]
         });
@@ -340,7 +356,7 @@
         // action in vendor modal
         vendGrid.on('dblclick', e => {
             let rowInfo = vendGrid.getRow(e.rowKey)
-            vendNm.value = rowInfo.vendNm;
+            vendNm.value = rowInfo.vendCd + ' - ' + rowInfo.vendNm;
             vendCd.value = rowInfo.vendCd;
             vModal.hide(vendModal);
         })
@@ -383,7 +399,7 @@
         // action in rsc modal
         rscGrid.on('dblclick', e => {
             let rowInfo = rscGrid.getRow(e.rowKey)
-            rscNm.value = rowInfo.rscNm;
+            rscNm.value = rowInfo.rscCd + ' - ' + rowInfo.rscNm;
             rscCd.value = rowInfo.rscCd;
             rModal.hide(rscModal);
         })

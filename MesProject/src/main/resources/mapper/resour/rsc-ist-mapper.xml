@@ -57,7 +57,7 @@
         rl.lot_cnt,
         rl.rsc_ist_cd,
         rl.ordr_cd,
-        ri.ist_dt,
+        to_char(ri.ist_dt, 'yyyy-mm-dd') as istDt,
         vend.vend_nm,
         rsc.rsc_nm
         from rsc_lot rl,

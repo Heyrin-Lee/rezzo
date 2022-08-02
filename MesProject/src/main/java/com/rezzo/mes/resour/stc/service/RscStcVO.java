@@ -14,6 +14,7 @@ public class RscStcVO {
     private String mngUnit;
     private String rscTyp;
     private int safStc;
+    private int avalStc;
     private int prvmmStc; // 전월재고(기초재고)
     private int stcCnt; // 재고량
     
