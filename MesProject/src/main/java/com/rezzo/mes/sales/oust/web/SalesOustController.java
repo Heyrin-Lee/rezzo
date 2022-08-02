@@ -78,7 +78,7 @@ public class SalesOustController {
 	}
 	
 	//조건별 조회
-	@RequestMapping("optionSearch")
+	@PostMapping("optionSearch")
 	@ResponseBody
 	public List<SalesOustVO> optionSearch(SalesOustVO vo) {
 		return service.optionSearch(vo);

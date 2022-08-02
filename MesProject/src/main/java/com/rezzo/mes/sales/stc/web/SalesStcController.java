@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,7 +32,14 @@ public class SalesStcController {
 		return service.getPrdtNm(vo);
 	}
 	
-	//완제품LOT번호별 재고 목록 조회
+	//완제품LOT번호별 재고 목록 전체조회(첫페이지)
+	@GetMapping("getStcAllList")
+	@ResponseBody
+	public List<SalesStcVO> getStcAllList(SalesStcVO vo) {
+		return service.getStcAllList(vo);
+	}
+	
+	//완제품LOT번호별 재고 목록 조회(조건별)
 	@PostMapping("getLotStcList")
 	@ResponseBody
 	public List<SalesStcVO> getLotStcList(SalesStcVO vo) {

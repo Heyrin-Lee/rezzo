@@ -20,10 +20,16 @@ public class SalesStcServiceImpl implements SalesStcService{
 		return mapper.getPrdtNm(vo);
 	}
 
-	//완제품LOT번호별 재고 목록 조회
+	//완제품LOT번호별 재고 목록 조회(조건별)
 	@Override
 	public List<SalesStcVO> getLotStcList(SalesStcVO vo) {
 		return mapper.getLotStcList(vo);
+	}
+
+	//완제품LOT번호별 재고 목록 전체조회(첫페이지)
+	@Override
+	public List<SalesStcVO> getStcAllList(SalesStcVO vo) {
+		return mapper.getStcAllList(vo);
 	}
 
 	

@@ -29,43 +29,53 @@
 		
 		<div class="card mb-4">
       <div id="cont" style="padding-bottom:0px">
-         <section id="r_section">
             <div class="col">
-               <div class="card mb-4">
-                  <div class="card-header">
-                     <i class="fas fa-tachometer-alt"></i> 제품 출고 조회
-                  </div>
-				<div class="card-body" id="vendModal">
+				<div class="card-body">
                      <form name="searchFrm" id="searchFrm">
-                      <div class="r_input">
-                        <div class="mb-3">
-                           <label for="edctsIstNo" class="form-label">제품명</label>
-    						<input type="text" class="form-control" id="prdtNm" name="prdtNm" style="width:150px;">
-                        </div>
-                        <div class="mb-3">
-                           <label for="edctsCd" class="form-label">거래처</label>
-    						<input type="text" class="form-control" id="vendNm" name="vendNm" style="width:150px;">
-                        </div>
-                        <div class="mb-3">
-                           <label for="edctsLotNo" class="form-label">출고일자</label>
-    						<input type="date" id="oustStart" name="oustStart" class="form-control" style="width:150px"> - <input type="date" id="oustEnd" name="oustEnd" class="form-control" style="width:150px"><br>
-    						<!-- 모달버튼 -->
-   						<button type="button" class="btn btn-primary" id="dtSearchBtn" style="margin-top:20px;"><i class="fas fa-search"></i>검색</button>   							
-                        </div>                        
-                        </div>
-                       </div>
+                     <table class="table" style="vertical-align : middle">
+                     	<colgroup>
+                     		<col style="width: 150px;">
+	                     	<col>
+	                     	<col style="width: 150px;">
+	                     	<col>
+	                     	<col style="width: 150px;">
+	                     	<col>
+                     	</colgroup>
+                     	<tbody>
+                     		<tr>
+                     			<th>제품명</th>
+                     			<td><input type="text" class="form-control" id="prdtNm" name="prdtNm" style="width:150px"></td>
+                     			<th></th>
+                     			<td></td>
+                     			<th></th>
+                     			<td></td>
+                     		</tr>
+                     		<tr>
+                     			<th>거래처</th>
+                     			<td><input type="text" class="form-control" id="vendNm" name="vendNm" style="width:150px;"></td>
+                     			<th></th>
+                     			<td></td>
+                     			<th></th>
+                     			<td></td>
+                     		</tr>
+                     		<tr>
+                     			<th>제품 출고일자</th>
+                     			<td><input type="date" id="oustStart" name="oustStart" class="form-control" style="width:150px"> - <input type="date" id="oustEnd" name="oustEnd" class="form-control" style="width:150px">
+                     			<button type="button" class="btn btn-primary" id="dtSearchBtn" style="float:right;margin-right: 465px;"><i class="fas fa-search"></i>검색</button></td>
+                     			<th></th>
+                     			<td></td>
+                     			<th></th>
+                     			<td></td>		
+                     		</tr>
+                     	</tbody>
+                     </table>
                      </form>
                   </div>
                </div>
             </div>
-         </section>
+            </div>
           <div id="grid" class="card mb-4"></div>
-         </div>
      <script>
-     
-     $(function() {
-     	getOustList();
-     })
      
      	const grid = new tui.Grid({
 	      el: document.getElementById('grid'),
@@ -127,22 +137,27 @@
 		  ]   
 	    });
 	    
-		function getOustList() {
-			var searchList = $("#searchFrm").serialize();
-	    	$.ajax({
+	    //조회버튼 클릭 -> 조건별 조회
+	    $("#dtSearchBtn").on("click",function(e) {
+	    	var prdtNm = $("#prdtNm").val();
+			var vendNm = $("#vendNm").val();
+			var oustStart = $("#oustStart").val();
+			console.log(oustStart);
+			var oustEnd = $("#oustEnd").val();
+			if($("#oustStart").val()<=$("#oustEnd").val()){
+				$.ajax({
 	    		url:"optionSearch",
 	    		method:"post",
 	    		dataType:"json",
-	    		data:searchList,
+	    		data:{"prdtNm":prdtNm,"vendNm":vendNm,"oustStart":oustStart,"oustEnd":oustEnd},
 	    		success:function(result) {
 	    			grid.resetData(result);
-	    		}
-	    	})
-		}
-		
-	    //조회버튼 클릭 -> 조건별 조회
-	    $("#dtSearchBtn").on("click",function(e) {
-	    	getOustList();	    	
+	    			}
+	    		})	
+			}else {
+				toastr.error('검색범위가 올바르지 않습니다');
+			}
+	    	
 	    });
 	    
 	    //제품출고조회 출고일자 기본값을 현재날짜로 설정

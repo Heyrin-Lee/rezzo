@@ -29,32 +29,36 @@
 		
 		<div class="card mb-4">
       <div id="cont" style="padding-bottom:0px">
-         <section id="r_section">
-            <div class="col">
-               <div class="card mb-4">
-                  <div class="card-header">
-                     <i class="fas fa-tachometer-alt"></i> 제품 입고 조회
-                  </div>
-				<div class="card-body" id="vendModal">
+				<div class="col">
+				<div class="card-body">
                      <form name="IstSearchFrm" id="IstSearchFrm">
-                      <div class="r_input">
-                        <div class="mb-3">
-                           <label for="edctsLotNo" class="form-label">완제품LOT번호</label>
-    						<input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo" style="width:200px;" readonly>
-    						<!-- 모달버튼 -->
-    						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal"><i class="fas fa-search"></i></button>	
-                        </div> 
-                        <div class="mb-4">
-                           <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
-                           <input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;"><br>
-                           <button type="button" class="btn btn-primary" id="optionSearchBtn" style="margin-top:20px;"><i class="fas fa-search"></i> 검색</button>
-                        </div>
-                       </div>
+                     <table class="table" style="vertical-align : middle;">
+                     	<colgroup>
+                     	<col style="width: 150px;">
+                     	<col>
+                     	<col style="width: 150px;">
+                     	<col>
+                     	</colgroup>
+                     	<tbody>
+                     		<tr>
+                     			<th>완제품LOT번호</th>
+                     			<td><input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo" style="width:200px;" readonly>
+		    						<!-- 모달버튼 -->
+		    						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal" style="margin-bottom: 3px;"><i class="fas fa-search"></i></button></td>
+		    				</tr>
+		    				<tr>		
+								<th>제품 입고일자</th>
+								<td><input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;">
+								<button type="button" class="btn btn-primary" id="optionSearchBtn" style="margin-top: 0px;margin-bottom: 3px;"><i class="fas fa-search"></i> 검색</button></td>                        			
+                     		</tr>
+                     	</tbody>
+                     </table>
                      </form>
-                  </div>
-               </div>
+                  </div>   
             </div>
-         </section>
+            </div>
+            </div>
+                  <div id="grid" class="card mb-4"></div>
 		<!-- 완제품LOT번호 모달 -->
 		<div class="modal fade" id="lotModal" tabindex="-1" aria-labelledby="elLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-lg">xampleModa
@@ -68,14 +72,12 @@
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-		        <button type="button" class="btn btn-primary">확인</button>
 		      </div>
 		    </div>
 		  </div>
 		</div> <!-- 모달 div끝 -->
       </div>
     </div>
-      <div id="grid" class="card mb-4"></div>
    </div>
    
   <script>
@@ -200,13 +202,23 @@
 			let rowInfo = lotNoGrid.getCheckedRows(e);
 			edctsLotNo.value = rowInfo[0].edctsLotNo;
 		})
+		//모달 그리드 더블클릭시 완제품LOT번호 가져오기
+		 lotNoGrid.on('dblclick', (ev) => {
+    					var rowKey = ev.rowKey;
+    					console.log(rowKey);
+    					lotNoGrid.check(rowKey);
+    					var rowKeyData = lotNoGrid.getCheckedRows(ev);
+    					console.log(rowKeyData);
+    					edctsLotNo.value = rowKeyData[0].edctsLotNo;
+					});
 		
 		//입고 목록 조건별 조회
 		$("#optionSearchBtn").on("click",function(istList) {
 			var edctsLotNo = $("#edctsLotNo").val();
 			var edctsIstDtStart = $("#edctsIstDtStart").val();
 			var edctsIstDtEnd = $("#edctsIstDtEnd").val();
-			$.ajax({
+			if($("#edctsIstDtStart").val()<=$("#edctsIstDtEnd").val()) {
+				$.ajax({
 				url:"istOptionList",
 				method:"post",
 				dataType:"json",
@@ -215,6 +227,11 @@
 					grid.resetData(istList);
 				}
 			})
+			}else {
+				toastr.error('검색범위가 올바르지 않습니다.');
+				grid.clear();
+			}
+			
 		})
 		
 		
