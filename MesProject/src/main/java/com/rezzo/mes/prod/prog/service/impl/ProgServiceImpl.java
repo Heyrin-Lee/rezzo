@@ -103,6 +103,25 @@ public class ProgServiceImpl implements ProgService {
 	public List<ProgVO> getNoOprEqm() {
 		return mapper.getNoOprEqm();
 	}
+
+	@Override
+	public void insertOprEqm(List<ProgVO> list) {
+		for(ProgVO vo : list) {
+			mapper.insertOprEqm(vo);
+		}
+	}
+
+	@Override
+	public List<ProgVO> getNoOprEqm2() {
+		return mapper.getNoOprEqm2();
+	}
+
+	@Override
+	public void updateOprEqm(List<ProgVO> list) {
+		for(ProgVO vo : list) {
+			mapper.updateOprEqm(vo);
+		}
+	}
 	
 	
 	

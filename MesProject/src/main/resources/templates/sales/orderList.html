@@ -31,33 +31,35 @@
       <div id="cont" style="padding-bottom:0px">
          <section id="r_section">
             <div class="col">
-               <div class="card mb-4">
-                  <div class="card-header">
-                     <i class="fas fa-tachometer-alt"></i> 주문서 조회
-                  </div>
-				<div class="card-body" id="vendModal">
-                     <form name="searchFrm" id="searchFrm">
+				
+                     
                       <div class="r_input">
                         <div class="mb-3">
+                        <div class="card-body" id="vendModal">
                            <!-- <label for="no" class="form-label">진행상황</label>&nbsp;
                            
                            <input type="radio" id="progAppe" name="progAppe" value="진행"/>진행
                            <input type="radio" id="progAppe" name="progAppe" value="완료"/>완료
                            <input type="radio" id="progAppe" name="progAppe" value="전체"/>전체 -->
-                           
-                        </div>
+						<div class="linelist" style="float:right;margin-top: 150px;">
+					   		<button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> 추가</button>
+					   		<button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
+					   		<button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
+					   		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 검색</button>
+					   </div>
+					   <form name="searchFrm" id="searchFrm">
                         <div class="mb-3">
                            <label for="vendNm" class="form-label">거래처명</label>
     						<input type="text" class="form-control" id="vendNm" name="vendNm" style="width:150px;">
                             <button type="button" class="btn btn-primary" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal"><i class="fas fa-search"></i></button>	
                         </div>
                         <div class="mb-3">
-                           <label for="prdtNm" class="form-label">제품명</label> 
+                           <label for="prdtNm" class="form-label">제품명</label>
                            <input type="text" class="form-control" id="prdtNm" name="prdtNm" style="width:150px;margin-left: 15px;">
                            <button type="button" class="btn btn-primary" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal"><i class="fas fa-search"></i></button>	
                         </div>
-                        <div class="mb-4">
-                           <label for="email" class="form-label">주문일자</label> 
+                        <div class="mb-3">
+                           <label for="email" class="form-label">주문일자</label>
                            <input type="date" id="start" name="start" class="form-control" style="width:150px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;"> 
                         </div>
                        </div>
@@ -67,12 +69,7 @@
             </div>
          </section>
       </div>
-       <div class="linelist">
-   		<button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> 추가</button>
-   		<button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
-   		<button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
-   		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 검색</button>
-   </div>
+       
    </div>
 
    		<div id="grid" class="card mb-4"></div>   		
@@ -81,17 +78,18 @@
    
    <!-- 제품코드 모달(등록) -->
    <div class="modal fade" id="edctsCdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">거래처 목록</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">제품 목록</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                 	<div id="CdModal"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                <!-- <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button> -->                 
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -107,7 +105,7 @@
                 </div>
                 <div id="proGrid" class="modal-body"></div>
                 <div class="modal-footer">
-                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -115,7 +113,7 @@
  	
  	<!-- 거래처 모달(등록)-->
   <div class="modal fade" id="vendGridModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">거래처 목록</h5>
@@ -125,14 +123,14 @@
                 	<div id="vendGrid"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
     </div>
     
   <!-- 거래처 모달(조회)-->
-  <div class="modal fade" id="comModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="comModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> 
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -141,7 +139,7 @@
                 </div>
                 <div id="comGrid" class="modal-body"></div>
                 <div class="modal-footer">
-                    <button type="button" class="c_btn" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -152,7 +150,7 @@
     <script>
 
 		$(function() {
-			search();
+			searchAll();
 			comList();
 			proList();
 		})
@@ -466,12 +464,50 @@
 			console.log(rowInfo);
 			vendNm.value =  rowInfo[0].vendNm;
 		})
+		//모달 그리드 더블클릭시 거래처명 가져오기
+		 comGrid.on('dblclick', (ev) => {
+    					var rowKey = ev.rowKey;
+    					console.log(rowKey);
+    					comGrid.check(rowKey);
+    					var rowKeyData = comGrid.getCheckedRows(ev);
+    					console.log(rowKeyData);
+    					vendNm.value = rowKeyData[0].vendNm;
+					});
 		
 		//체크박스 선택시 제품명 가져오기
 		proGrid.on('click', e => {
 			let rowInfo = proGrid.getCheckedRows(e)
 			prdtNm.value = rowInfo[0].prdtNm;
 		})
+		//모달 그리드 더블클릭시 제품명 가져오기
+		 proGrid.on('dblclick', (ev) => {
+    					var rowKey = ev.rowKey;
+    					console.log(rowKey);
+    					proGrid.check(rowKey);
+    					var rowKeyData = proGrid.getCheckedRows(ev);
+    					console.log(rowKeyData);
+    					prdtNm.value = rowKeyData[0].prdtNm;
+					});
+		
+		function search() {
+			var searchData = $("#searchFrm").serialize();
+			var tf = true;
+			$.ajax({
+				url:"findOrdr",
+				dataType:"json",
+				method:"post",
+				data: searchData,
+				success:function(result) {
+				if($("#start").val() > $("#end").val()) {
+						tf = false;
+						toastr.error('검색범위가 올바르지 않습니다');
+					}
+					grid.resetData(result);
+					
+					
+				}
+			})
+		};
 		
 		//조건별 주문서 조회
 		let ordrBtn = document.getElementById("ordrBtn");
@@ -479,19 +515,22 @@
 			search();
 		})
 		
-		function search() {
+		//현재날짜 기준 주문서 조회(첫페이지)
+		function searchAll() {
 			var searchData = $("#searchFrm").serialize();
-			
 			$.ajax({
-				url:"findOrdr",
-				dataType:"json",
+				url:"orderSelect",
 				method:"post",
-				data: searchData,
+				dataType:"json",
+				data:searchData,
 				success:function(result) {
+					
 					grid.resetData(result);
 				}
 			})
-		};
+		}
+		
+		
 		
 		//주문서 삭제
 		let delBtn = document.getElementById("delBtn");
@@ -506,7 +545,6 @@
 				contentType:"application/json",
 				success:function() {
 					toastr.success('삭제되었습니다');
-					//grid.clear();
 					search();
 				},
 				error:function(er) {

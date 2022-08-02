@@ -64,14 +64,14 @@
  	<!-- 출고 조회 페이지 -->
  	<!-- 조건별 조회 -->
  	<select id="optionSearch" resultType="SalesOustVO">
- 		SELECT DISTINCT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
+ 		SELECT E.EDCTS_OUST_NO, O.VEND_NM, E.EDCTS_LOT_NO, E.EDCTS_CD, O.PRDT_NM, O.ORDER_NO, E.EDCTS_OUST_DT, E.EDCTS_OUST_CNT
 		FROM EDCTS_OUST E JOIN ORDER_SHEET O
 		ON O.EDCTS_CD = E.EDCTS_CD
 		WHERE o.prog_appe = '출고완료'
 		<if test="prdtNm != null and prdtNm != ''">and O.PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
 		<if test="vendNm != null and vendNm != ''">and O.VEND_NM LIKE '%'||#{vendNm}||'%'</if>
-		<if test="edctsOustDt != null and edctsOustDt != ''">and E.EDCTS_OUST_DT BETWEEN #{oustStart} AND #{oustEnd}</if> 
-		
+		<if test="oustStart != null"><![CDATA[and E.EDCTS_OUST_DT >= #{oustStart}]]></if> 
+		<if test="oustEnd != null"><![CDATA[and E.EDCTS_OUST_DT <= #{oustEnd}]]></if> 
  	</select>
 
  </mapper>

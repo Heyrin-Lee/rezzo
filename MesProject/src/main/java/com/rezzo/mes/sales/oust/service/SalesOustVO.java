@@ -17,7 +17,7 @@ public class SalesOustVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date edctsOustDt;
-	int edctsOustCnt;
+	Integer edctsOustCnt;
 	String edctsCd;
 	
 	String orderNo;
