@@ -53,18 +53,18 @@
          <div class="card mb-4">
 			<div class="card-body">
             <div id="pDate">
-                <label>생산계획일자</label>
-                <div class="tui-datepicker-input tui-datetime-input tui-has-focus">
-                    <input type="text" id="tui-date-picker-target" aria-label="Date-Time" />
+	                <label>생산계획일자</label>
+                <div class="tui-datepicker-input tui-datetime-input tui-has-focus" style="height: 40px; border-radius: 5px;">
+                    <input type="text" id="tui-date-picker-target" aria-label="Date-Time" >
                     <span class="tui-ico-date"></span>
                 	<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>
                 </div>
             </div>
             <div class="linelist">
-                <input type="button" data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
-                    value="주문서조회"></input>
-                <button class="btn btn-primary" id="regiBtn">계획등록</button>
-                <button class="btn btn-primary"id="osBtn">저장</button>
+                <button data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
+                  ><i class="fas fa-search"></i> 주문서</button>
+                <button class="btn btn-primary" id="regiBtn"><i class="fas fa-file"></i> 새계획</button>
+                <button class="btn btn-primary"id="osBtn"><i class="fas fa-save"></i> 저장</button>
             </div>
 			</div>
 			</div>
@@ -184,20 +184,24 @@
                 scrollY: false,
                 columns: [{
                         header: '계획코드',
-                        name: 'planCd'
+                        name: 'planCd',
+                        align: 'center'
                     },
                     {
                         header: '주문번호',
-                        name: 'orderNo'
+                        name: 'orderNo',
+                        align: 'center'
                     },
                     {
                         header: '필요수량',
                         name: 'orderCnt',
-                        editor : 'text'
+                        editor : 'text',
+                        align: 'center'
                     },
                     {
                         header: '납기일자',
-                        name: 'paprdDt'
+                        name: 'paprdDt',
+                        align: 'center'
                     }
                 ]
             });
@@ -206,9 +210,13 @@
             	// 지시수량은 주문수량*1.05를 초과할 수 없음 
             	let oCnt = grid.getData()[0].orderCnt*1.05
             	let iCnt = grid2.getData()[0].indicaCnt
-            	
+				let edctsCd            	
             	if(key.keyCode == 13) {
-		           	let edctsCd = grid2.getData()[0].edctsCd;
+            		if(grid2.getData()[0].edctsCd == null) {
+            			edctsCd= grid2.getData()[0].prdtNm
+            		} else {
+			           	edctsCd = grid2.getData()[0].edctsCd;
+            		}
 		           	// grid2에는 공정코드가 없음 
 		           	// 제품 코드(String)를 보내고 그 제품코드에 해당하는 공정코드 리스트를 리턴받음
 		           	$.ajax({
@@ -258,12 +266,13 @@
                     {
                         header: '제품명',
                         name: 'prdtNm',
+                        align: 'center',
                         editor: {
                             type: 'select',
                             options: {
                                 listItems: [{
                                         text: '유자차',
-                                        value: '유자차'
+                                        value: 'RZP001'
                                     },
                                     {
                                         text: '자몽차',
@@ -276,6 +285,7 @@
                     {
                         header: '라인번호',
                         name: 'lineCd',
+                        align: 'center',
                         editor: {
                             type: 'select',
                             options: {
@@ -298,26 +308,31 @@
                     {
                         header: '시작일자',
                         name: 'wkFrDt',
-                        editor: 'datePicker'
+                        editor: 'datePicker',
+                        align: 'center'
                     },
                     {
                         header: '종료일자',
                         name: 'wkToDt',
-                        editor: 'datePicker'
+                        editor: 'datePicker',
+                        align: 'center'
                     },
                     {
                         header: '생산수량',
                         name: 'indicaCnt',
-                        editor: 'text'
+                        editor: 'text',
+                        align: 'center'
                     },
                     {
                         header: '작업우선순위',
                         name: 'prefRank',
-                        editor: 'text'
+                        editor: 'text',
+                        align: 'center'
                     },
                     {
                         header: '계획코드',
-                        name: 'planCd'
+                        name: 'planCd',
+                        align: 'center'
                     }
                 ]
             });
@@ -333,19 +348,23 @@
                 scrollY: true,
                 columns: [{
                         header: '제품코드',
-                        name: 'edctsCd'
+                        name: 'edctsCd',
+                        align: 'center'
                     },
                     {
                         header: '라인번호',
-                        name: 'lineCd'
+                        name: 'lineCd',
+                        align: 'center'
                     },
                     {
                         header: '공정코드',
-                        name: 'prcsCd'
+                        name: 'prcsCd',
+                        align: 'center'
                     },
                     {
                         header: '계획코드',
-                        name: 'planCd'
+                        name: 'planCd',
+                        align: 'center'
                     }
                 ]
             });
@@ -361,24 +380,29 @@
            		rowHeaders: ['checkbox'],
                 columns: [{
                         header: '자재코드',
-                        name: 'rscCd'
+                        name: 'rscCd',
+                        align: 'center'
                     },
                     {
                         header: '자재LOT',
-                        name: 'rscLotCd'
+                        name: 'rscLotCd',
+                        align: 'center'
                     },
                     {
                         header: '사용가능수량',
-                        name: 'lotRmnCnt'
+                        name: 'lotRmnCnt',
+                        align: 'center'
                     },
                     {
                         header: '출고수량',
                         name: 'holdCnt',
-                        editor : 'text'
+                        editor : 'text',
+                        align: 'center'
                     },
                     {
                         header: '사용량',
-                        name: 'useCnt'
+                        name: 'useCnt',
+                        align: 'center'
                     }
                 ]
             });
@@ -402,19 +426,23 @@
                 scrollY: true,
                 columns: [{
                         header: '자재코드',
-                        name: 'rscCd'
+                        name: 'rscCd',
+                        align: 'center'
                     },
                     {
                         header: '공정코드',
-                        name: 'prcsCd'
+                        name: 'prcsCd',
+                        align: 'center'
                     },
                     {
                         header: '출고수량',
-                        name: 'holdCnt'
+                        name: 'holdCnt',
+                        align: 'center'
                     },
                     {
                         header: '계획코드',
-                        name: 'planCd'
+                        name: 'planCd',
+                        align: 'center'
                     }
                 ]
             });
