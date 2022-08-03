@@ -31,6 +31,7 @@ public interface InspMapper {
     List<RscInfVO> getRscInfHistByCd(RscInspVO rscInspVO);
 
     void updRscInspHist(RscInspVO rscInspVO);
+    RscInspVO getRscInspInfoByCd(RscInspVO rscInspVO); // 입고정보
 
     // 입고검사조회
     List<RscVO> getResources(RscVO rscVO);

@@ -19,6 +19,8 @@
             height: 25px;
         }
     </style>
+
+
 </head>
 
 <body>
@@ -868,6 +870,7 @@
 
         function getOrdrList() {
             // initiate inf list
+
             infData.clear();
             getInfList();
 
@@ -996,6 +999,11 @@
             }).then(res => res.json()).then(res => {
                 grid.hideColumn('rmnCnt')
 
+                inspDt.value = res[0].inspDt;
+                inspTstr.value = res[0].inspTstr;
+
+                res.shift();
+
                 // initiate inf grid
                 infData.clear();
                 getInfList();
@@ -1058,6 +1066,8 @@
         reloadBtn.addEventListener('click', e => {
             location.reload();
         })
+
+
     </script>
 </th:block>
 </body>
