@@ -38,30 +38,60 @@
    <!-- 헤더부분 -->
    <div id="container">
      <section>
+         <div class="card mb-4">
             <div class="col">
-               <div class="card mb-4">
-                  
                   <div class="card-body">
-                     
-                     <form>
-                        <div class="mb-3">
-                           <label for="frDate">지시일자</label> 
-                           <input type="date"  class="form-control" id="start-input" name="start-input" style="width: 150px"> - <input type="date" class="form-control" id="end-input" name="end-input" style="width: 150px">
-                        </div>
-                        <div class="mb-3">
-                           <label for="all">지시상태</label> 
-                            <label><input class="form-check-input" type="radio" name="status" value="전체"> 전체</label>
-                            <label><input class="form-check-input" type="radio" name="status" value="지시"> 지시</label>
-                            <label><input class="form-check-input" type="radio" name="status" value="미지시"> 미지시</label>
-                        </div>
-                        <div class="mb-3">
-                           <label for="name">제품명</label> 
-                           <input type="text" style="width: 150px" class="form-control" id="name" name="name">
-                        </div>
-     					<div class="linelist">
+	                <div class="linelist">
                         <button type="button" class="btn btn-primary" id="sBtn"><i class="fas fa-search"></i> 조회</button>
                      </div>
-              	
+	           		 <br>
+                   	 <br>
+                   	 <br>
+                     <form>
+                       <table class="table" style="vertical-align : middle;">
+					   	<colgroup>
+					   		<col style="width: 150px;">
+                     		<col>
+	                     	<col style="width: 150px;">
+	                     	<col>
+	                     	<col style="width: 150px;">
+	                     	<col>
+					   	</colgroup>
+					   	<tbody>
+					   		<tr>
+	                           <th>계획일자</th> 
+	                           		<td> 
+                           				<input type="date"  class="form-control" id="start-input" name="start-input" style="width: 150px"> - <input type="date" class="form-control" id="end-input" name="end-input" style="width: 150px">
+                           			</td>
+	                           <th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>
+					   		</tr>
+					   		<tr>	
+                           		<th>지시상태</th>
+                           		<td style="height : 55px">
+		                            <input class="form-check-input" type="radio" name="status" value="전체"> 전체
+		                            <input class="form-check-input" type="radio" name="status" value="지시"> 지시
+		                            <input class="form-check-input" type="radio" name="status" value="미지시"> 미지시
+                        		</td>
+                        		<th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>
+                       		</tr>
+                       		<tr>
+                       			<th>제품이름</th>
+                       			<td>
+                           			<input type="text" style="width: 150px" class="form-control" id="name" name="name">
+                        	    </td>
+     							<th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>
+				   			</tr>
+			   			</tbody>
+			   			</table>
                      </form>
                   </div>
                </div>
@@ -69,15 +99,17 @@
          </section>
          <div class="card mb-4">
 			<div class="card-body">
-          <div class="linelist">
-              <button type="button" class="btn btn-primary" id="dBtn"><i class="fas fa-minus"></i> 삭제</button>
-           </div>
-           <br><br>
+           <div class="linelist">
+	             	 	<button type="button" class="btn btn-primary" id="dBtn"><i class="fas fa-minus"></i> 취소</button>
+	           		 </div>   
+           <br><br><br>
    <div id='grid'></div>
    </div> 
    </div>
    </div>
    <script>
+ 
+   
    const gridData = [];
 
    const grid = new tui.Grid({
@@ -105,12 +137,12 @@
 	        {
 	          header: '지시수량',
 	          name: 'indicaCnt',
-	          align: 'center'
+	          align: 'right'
 	        },
 	        {
 	          header: '필요수량',
 	          name: 'orderCnt',
-	          align: 'center'
+	          align: 'right'
 	        },
 	        {
 	          header: '작업시작일',
@@ -119,14 +151,17 @@
 	        }
 	      ]
 	    });
-	    
+   grid.on('dblclick', ev => {
+		grid.check(ev.rowKey);
+	}) 
+   
     /* 조회하기  */
    $("#sBtn").on("click", function(){
 	   let indicaDt = $("#start-input").val();
 	   let indicaDt2 = $("#end-input").val();
 	   let nowSt = $("input[type=radio]:checked").val();
 	   let prdtNm = $("#name").val();
-	  
+	   
 	   $.ajax({
 		 url : 'getIndicaList',
 		 method : 'POST',
@@ -147,24 +182,29 @@
 	   let prdtNm = $("#name").val();
 	   // 삭제 ajax에서 쓰는 거
 	   let indicaDt3 = grid.getData()[0].indicaDt;
-	       	   
-	   $.ajax({
-	   		url : 'deleteIndica',
-	   		method : 'GET',
-	   		contentType:'application/text',
-	   		data : {"indicaDt3" : indicaDt3},
-	   		success : function(result){
-	   			 $.ajax({
-		 			url : 'getIndicaList',
-					method : 'POST',
-		 			data : {"indicaDt" : indicaDt, "indicaDt2" : indicaDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
-		 			success : function(result) {
-			 			grid.resetData(result)
-		 			}
-	   			 })
-	   		} 
-	   })
-	  
+	   let checkSt = grid.getCheckedRows()[0].nowSt
+		
+	   if(checkSt == '미지시') {
+		   $.ajax({
+		   		url : 'deleteIndica',
+		   		method : 'GET',
+		   		contentType:'application/text',
+		   		data : {"indicaDt3" : indicaDt3},
+		   		success : function(result){
+		   			 $.ajax({
+			 			url : 'getIndicaList',
+						method : 'POST',
+			 			data : {"indicaDt" : indicaDt, "indicaDt2" : indicaDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
+			 			success : function(result) {
+			 				toastr.error("삭제되었습니다.")
+				 			grid.resetData(result)
+			 			}
+		   			 })
+		   		} 
+		   })
+	   } else {
+			toastr.error("이미 생산된 지시입니다.")		   
+	   }
    })
    
    

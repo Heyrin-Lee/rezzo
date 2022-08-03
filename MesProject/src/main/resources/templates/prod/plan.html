@@ -135,6 +135,10 @@
    	         //let index
    	         let code
    			 planDt = $("#tui-date-picker-target").val();
+       		
+   			modGrid.on('dblclick', ev => {
+   				modGrid.check(ev.rowKey);
+ 			})  
        			
    			//순번 받아오기 (계획일자 indicaDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
         	$.ajax({
@@ -206,7 +210,7 @@
                         header: '필요수량',
                         name: 'orderCnt',
                         editor : 'text',
-                        align: 'center'
+                        align: 'right'
                     },
                     {
                         header: '납기일자',
@@ -217,9 +221,12 @@
             });
             
             $("#grid2").on("keyup", function(key){
-            	// 지시수량은 주문수량*1.05를 초과할 수 없음 
+            	// 지시수량은 주문수량*1.05를 초과할 수 없음
+            	// 종료일자는 시작일자 이전일 수 없음
             	let oCnt = grid.getData()[0].orderCnt*1.05
             	let iCnt = grid2.getData()[0].indicaCnt
+            	let wkFrDt = grid2.getData()[0].wkFrDt
+            	let wkToDt = grid2.getData()[0].wkToDt
 				let edctsCd            	
             	if(key.keyCode == 13) {
             		if(grid2.getData()[0].edctsCd == null) {
@@ -257,8 +264,11 @@
 		            			})
 		            			
 		            		} else {
-		            			toastr.info("생산 수량이 초과되었습니다.")
+		            			toastr.error("생산 수량이 초과되었습니다.")
 		            		}
+		           			if(wkToDt<wkFrDt){
+		           				toastr.error("종료일자는 시작일자보다 빠를 수 없습니다.")
+		           			}
 		           		}
 		           	})
 		        }
@@ -536,7 +546,11 @@
             		data : JSON.stringify(grid5Data)
             	}).done(function(){
             		toastr.success("저장되었습니다.")  
-            		window.location.reload()
+            		grid.clear()
+			   		grid2.clear()
+			   		grid3.clear()
+			   		grid4.clear()
+			   		grid5.clear()
             	})
             	
             	  

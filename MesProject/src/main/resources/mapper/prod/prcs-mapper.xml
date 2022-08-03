@@ -19,8 +19,8 @@
 </select>
 
 <!-- 공정등록 -->
-<insert id="prcsInsert" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">
-	<!-- MERGE INTO PRCS p
+<update id="prcsInsert" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">
+	MERGE INTO PRCS p
 		USING DUAL ON (p.PRCS_CD = #{prcsCd})
 	WHEN MATCHED THEN
 		UPDATE 
@@ -36,8 +36,8 @@
 		VALUES (#{prcsCd}, 
 				#{prcsNm}, 
 				#{prcsFg}, 
-				#{prcsCtnt})  -->
-		
+				#{prcsCtnt})  
+		<!-- 
 		INSERT into prcs (PRCS_CD, 
 			   PRCS_NM, 
 			   PRCS_FG, 
@@ -45,8 +45,8 @@
 		VALUES (#{prcsCd}, 
 				#{prcsNm}, 
 				#{prcsFg}, 
-				#{prcsCtnt})			 	
-</insert>	
+				#{prcsCtnt}) -->			 	
+</update>	
 
 <!-- 공정삭제 -->
 <delete id="prcsDelete" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">

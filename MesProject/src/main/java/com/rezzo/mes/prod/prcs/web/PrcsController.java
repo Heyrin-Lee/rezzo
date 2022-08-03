@@ -49,10 +49,9 @@ public class PrcsController {
 	/* 새로운 공정등록 */
 	@GetMapping("/prcsInsert")
 	@ResponseBody
-	public PrcsVO prcsInsert(PrcsVO vo) {
+	public void prcsInsert(PrcsVO vo) {
 		System.out.println(vo);
 		service.prcsInsert(vo); 
-		return vo;
 	}
 	
 	/* 공정삭제 */

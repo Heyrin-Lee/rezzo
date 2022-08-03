@@ -3,7 +3,7 @@
 <mapper namespace="com.rezzo.mes.prod.pdtl.mapper.PlanSrhMapper">
 
 <select id="getList" resultType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO">
-	SELECT P.PLAN_CD, P.LINE_CD, P.EDCTS_CD, P.ORDER_CNT, P.INDICA_CNT, P.WK_FR_DT, E.PRDT_NM
+	SELECT P.PLAN_CD, P.LINE_CD, P.EDCTS_CD, P.ORDER_CNT, P.INDICA_CNT, P.WK_FR_DT, E.PRDT_NM, N.NOW_ST
 	FROM PLAN_DTL P
 	JOIN EDCTS E
 	ON P.EDCTS_CD = E.EDCTS_CD
@@ -34,6 +34,7 @@
 <delete id="deletePlan" parameterType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO" >
 DELETE FROM PLAN
 WHERE PLAN_CD = #{planCd}
+AND NOW_ST != '진행'
 </delete>
 
 <delete id="deletePlanDtl" parameterType="com.rezzo.mes.prod.pdtl.service.PlanSrhVO">

@@ -6,9 +6,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-body {
-   background: #eee
-}
 
 #container {
    width : 98%;
@@ -45,7 +42,6 @@ body {
                <div class="card mb-4">
            
                   <div class="card-body">
-                     
                      <form>
                         <div class="mb-3">
                            <label for="name">공정구분</label> 
@@ -53,10 +49,10 @@ body {
                					<option selected value=''>--선택--</option>
                					<option th:each="code : ${ccds['PRC']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtlNm}"></option>
                				</select>
-                        </div>
-     					<div class="linelist">
                         <button id="sBtn" class="btn btn-primary" form=""><i class="fas fa-search"></i> 검색</button>
-                     </div>
+                        </div>
+     					<!-- <div class="linelist"> -->
+                     <!-- </div> -->
               	
                      </form>
                   </div>
@@ -72,6 +68,8 @@ body {
 	          </div>
 	          <br>
 	          <br>
+	          <br>
+	          
 	          <div id='grid'>
 	         </div>
 			</div> 
@@ -118,7 +116,7 @@ body {
             {
               header: '공정명',
               name: 'prcsNm',
-              align : 'center',
+              align : 'left',
               editor: 'text'
             },
             {
@@ -191,6 +189,10 @@ body {
 			   })
 		   })
 	   })
+	   
+	   $('#grid').mouseleave(ev => {
+    		grid.finishEditing();
+		})
 
    })
 
