@@ -346,6 +346,11 @@
 			grid.setValue(ev.rowKey, "edctsLotNo", $('#edctsLotNo').val());
 	 })
 		
+	 //그리드 영역 벗어나면 수정 종료
+	 $('#grid').mouseleave(ev => {
+	     grid.finishEditing();
+	 })
+ 
 		//초기화버튼
 		$('#newBtn').click(ev => {
 			$('#dataForm')[0].reset();
@@ -367,42 +372,44 @@
  		}); */
  		
  		
- 		//form 데이터 obj로 만들기
- 		$.fn.serializeObject = function() {
-    var obj = null;
-    try {
-        if ( this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) {
-            var arr = this.serializeArray();
-            if ( arr ) {
-                obj = {};
-                jQuery.each(arr, function() {
-                    obj[this.name] = this.value;
-                });            
-            }
-        }
-    }
-    catch(e) {alert(e.message);}
-    finally  {}
-    return obj;
-		};
-
-		var datas = grid.getCheckedRows();
-		datas.unshift($('#dataForm').serializeObject());
  		
  		//저장
  		$('#saveBtn').click(ev => {
  			if ($('#inspJm').val() == '') {
  				toastr.warning('최종판정은 필수 값입니다.');
- 			} else { 			
+ 			} else { 
+ 				//form 데이터 obj로 만들기
+		 		$.fn.serializeObject = function() {
+		    var obj = null;
+		    try {
+		        if ( this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) {
+		            var arr = this.serializeArray();
+		            if ( arr ) {
+		                obj = {};
+		                jQuery.each(arr, function() {
+		                    obj[this.name] = this.value;
+		                });            
+		            }
+		        }
+		    }
+		    catch(e) {alert(e.message);}
+		    finally  {}
+		    return obj;
+				};
+		
+				var datas = grid.getCheckedRows();
+				datas.unshift($('#dataForm').serializeObject());
+ 				
+ 				//데이터 전달		
 	 			$.ajax({
 				 	url: "savePrdtInsp",
 				  method: "POST",
 		      data: JSON.stringify(datas),
-		      dataType: 'json',
 		      contentType: 'application/json',
-				    success: function (result) {
+				    success: function () {
 				    	toastr.success('정상적으로 저장되었습니다.');
-				    	grid.resetData(result);
+				    	$('#dataForm')[0].reset();
+							grid.clear();
 				    }
 				});
  			}

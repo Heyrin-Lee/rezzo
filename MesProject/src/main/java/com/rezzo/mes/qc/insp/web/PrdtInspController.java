@@ -65,7 +65,7 @@ public class PrdtInspController {
 	}
 
 	@RequestMapping("savePrdtInsp")
-	public void savePrdtInsp(@RequestBody List<PrdtInspVO> prdtInspList) {
+	public void savePrdtInsp(@RequestBody List<PrdtInspVO> prdtInspList, Model model) {
 		service.savePrdtInsp(prdtInspList);
 	}
 
@@ -101,7 +101,7 @@ public class PrdtInspController {
 	public ModelAndView prdtInspPdf(@RequestParam Map<String,Object> pram) throws Exception {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("filename", "/jasper/reports/aaa.jrxml");
+		map.put("filename", "/jasper/reports/prdtReport.jrxml");
 		map.put("params", pram);
 		
 		return new ModelAndView(commonPdfView, map);
