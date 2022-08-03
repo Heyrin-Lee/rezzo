@@ -46,7 +46,7 @@
  	   <div class="card mb-4">
 			<div class="card-body">
      <div class="linelist">
-       <!-- <button class="btn btn-primary" form="">초기화</button>  -->
+       <button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button> 
        <button data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
                     ><i class="fas fa-search"></i> 계획조회</button>
        <button class="btn btn-primary" id="regiBtn"><i class="fas fa-save"></i> 저장</button>
@@ -159,6 +159,11 @@
    		
    	})
    	
+   	$("#clearBtn").on("click", function(){
+   		grid.clear()
+   		grid2.clear()
+   		grid3.clear()
+   	})  	
    	
    	 const modGrid = new tui.Grid({
                 el: document.getElementById('modGrid'),
