@@ -3,11 +3,13 @@ package com.rezzo.mes.comm.flow.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.rezzo.mes.comm.flow.service.PrcsFlowService;
 import com.rezzo.mes.comm.flow.service.PrcsFlowVO;
@@ -33,9 +35,8 @@ public class PrcsFlowController {
 	}
 	
 	@RequestMapping("delFlow")
-	@ResponseBody
-	public List<PrcsFlowVO> delFlow(PrcsFlowVO flowVO) {
+	@ResponseStatus(value = HttpStatus.OK)
+	public void delFlow(PrcsFlowVO flowVO) {
 		service.delFlow(flowVO);
-		return service.getFlowList(flowVO);
 	}
 }

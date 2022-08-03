@@ -370,6 +370,7 @@ $('#delBtn').click(ev => {
       dataType: 'json',
 		    success: function (result) {
 		    	toastr.success('정상적으로 삭제되었습니다.');
+		    	$('#dataForm')[0].reset();
 		    	grid.resetData(result);
 		    }
 			})

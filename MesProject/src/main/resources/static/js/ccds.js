@@ -239,7 +239,6 @@
              url: "ccdsInsert",
              type: "POST",
              data: $('#dataForm').serialize(),
-             dataType: 'json',
              success: function(result) {
              	grid.resetData(result);
              	$('#ccd').attr("readonly", true);
@@ -253,7 +252,6 @@
              url: "ccdsUpdate",
              type: "POST",
              data: $('#dataForm').serialize(),
-             dataType: 'json',
              success: function() { search();
              toastr.success('성공적으로 저장되었습니다.');
              }

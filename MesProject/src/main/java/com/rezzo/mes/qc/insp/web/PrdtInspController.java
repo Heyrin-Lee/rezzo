@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rezzo.mes.CommonExcelView;
 import com.rezzo.mes.CommonPdfView;
 import com.rezzo.mes.qc.insp.service.PrdtInspService;
 import com.rezzo.mes.qc.insp.service.PrdtInspVO;
@@ -35,11 +36,10 @@ import net.sf.jasperreports.engine.JasperReport;
 @Controller
 public class PrdtInspController {
 
-	@Autowired
-	PrdtInspService service;
-	@Autowired
-	DataSource dataSource;
+	@Autowired PrdtInspService service;
+	@Autowired DataSource dataSource;
 	@Autowired CommonPdfView commonPdfView;
+	@Autowired CommonExcelView commonExcelView;
 
 	@RequestMapping("prdtInsp")
 	public String prdtInsp(Model model) {
@@ -65,7 +65,7 @@ public class PrdtInspController {
 	}
 
 	@RequestMapping("savePrdtInsp")
-	public void savePrdtInsp(@RequestBody List<PrdtInspVO> prdtInspList, Model model) {
+	public void savePrdtInsp(@RequestBody List<PrdtInspVO> prdtInspList) {
 		service.savePrdtInsp(prdtInspList);
 	}
 
@@ -101,7 +101,7 @@ public class PrdtInspController {
 	public ModelAndView prdtInspPdf(@RequestParam Map<String,Object> pram) throws Exception {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("filename", "/jasper/reports/prdtReport.jrxml");
+		map.put("filename", "/jasper/reports/aaa.jrxml");
 		map.put("params", pram);
 		
 		return new ModelAndView(commonPdfView, map);
@@ -116,7 +116,7 @@ public class PrdtInspController {
 		map.put("headers", header);
 		map.put("filename", "prdtInspList");
 		map.put("datas", list);
-		return new ModelAndView("commonExcelView", map);
+		return new ModelAndView(commonExcelView, map);
 	}
 
 }

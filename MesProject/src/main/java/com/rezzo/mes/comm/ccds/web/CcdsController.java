@@ -46,6 +46,7 @@ public class CcdsController {
 	 }
 	
 	@PostMapping("ccdsInsert")
+	@ResponseBody
 	public List<CcdsVO> ccdsInsert(CcdsVO ccdsVO) {
 		service.ccdsInsert(ccdsVO);
 		return service.ccdsList(null);
