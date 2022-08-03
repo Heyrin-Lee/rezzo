@@ -34,15 +34,11 @@ dependencies {
 	// excel
 	implementation 'org.apache.poi:poi-ooxml:3.14'
 	// pdf
-	implementation 'net.sf.jasperreports:jasperreports:6.19.1'
-	implementation 'com.itextpdf:itextpdf:5.5.13.3'
+	implementation 'net.sf.jasperreports:jasperreports:6.9.0'
+	implementation 'com.lowagie:itext:2.1.7'
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-
-	//
-	implementation group: 'org.apache.poi', name: 'poi', version: '5.2.2'
-
 }
 
 tasks.named('test') {
