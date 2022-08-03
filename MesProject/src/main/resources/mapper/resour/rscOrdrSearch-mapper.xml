@@ -13,7 +13,7 @@ join vend v on r.vend_cd = v.vend_cd
 from rsc_ordr r 
 join vend v on r.vend_cd = v.vend_cd
 	<if test="vendNm != null"> AND v.VEND_NM LIKE '%'||#{vendNm}||'%'</if>
-	<if test="frDt != null"><![CDATA[ AND r.ordr_req_dt >= #{frDt}]]></if>
+	<if test="frDt != null"><![CDATA[ AND r.ordr_req_dt >= to_date(#{frDt}+1)]]></if>
 	<if test="toDt != null"><![CDATA[ AND r.ordr_req_dt <= to_date(#{toDt}+1)]]></if>
 </select>
 
@@ -24,7 +24,7 @@ from rsc_ordr_dtl dt
 join rsc_ordr ord on dt.ordr_cd=ord.ordr_cd
 join vend v on ord.vend_cd = v.vend_cd
 join rsc r on dt.rsc_cd = r.rsc_cd
-FULL join rsc_stc rsc on r.rsc_cd = rsc.rsc_cd
+join rsc_stc rsc on r.rsc_cd = rsc.rsc_cd
 where dt.ordr_cd = #{ordrCd}
 </select>
 

@@ -596,7 +596,7 @@
 						if(result[0].imgPath==null || result[0].imgPath==''){
 							$('#preview').attr('src',"assets/img/add-image.png");
 							} else{
-							$('#preview').attr("src", "image/" + result[0].imgPath);}
+							$('#preview').attr("src", "download?path=" + result[0].imgPath);}
 					}
 				})
 			});

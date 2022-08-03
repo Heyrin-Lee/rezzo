@@ -7,7 +7,6 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<style>
-
 		uploadResult {
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr;
@@ -52,9 +51,9 @@
 			width: 100px;
 			float: left;
 		}
-		
-		.tui-grid-cell.addClass{
-			background-color:rgba(255,0,0,0.3);
+
+		.tui-grid-cell.addClass {
+			background-color: rgba(255, 0, 0, 0.3);
 		}
 	</style>
 </head>
@@ -67,8 +66,7 @@
 		<div class="container-fluid px-4">
 			<h1 class="mt-4">자재발주</h1>
 			<ol class="breadcrumb mb-4">
-				<li class="breadcrumb-item"><a href="/"><i
-						class="fas fa-home"></i></a></li>
+				<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
 				<li class="breadcrumb-item">> 자재관리</li>
 				<li class="breadcrumb-item active">> 자재발주조회</li>
 			</ol>
@@ -83,6 +81,7 @@
 						<td><input class="form-control" type="date" id="frDt" name="frDt" style="width: 150px"> ~</td>
 						<td><input class="form-control" type="date" id="toDt" name="toDt" style="width: 150px"></td>
 						<button style="margin-bottom:3px" class="btn btn-primary" id="rscSearchBtn"><i class="fas fa-search"></i></button>
+														
 						&nbsp&nbsp
 					</tr>
 
@@ -95,8 +94,10 @@
 			<div class="card mb-4">
 				<div class="card-body">
 
-						<div class="linelist" style="float: right;">
-						<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 수정</button>
+					<div class="linelist" style="float: right;">
+							<input type="hidden" id="ordrCd" name="ordrCd">
+							<button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 수정</button>
+							<button id="pdfBtn" name="pdfBtn" type="button" class="btn btn-primary"><i class="fas fa-download"></i> PDF</button>
 						<br> <br>
 
 					</div>
@@ -107,6 +108,18 @@
 
 
 			<script>
+			
+			$('#pdfBtn').on('click',function(){
+				var ordrCd = $('#ordrCd').val();
+				var url ='reports?ordrCd='+ordrCd
+				window.open(url,'','width=700')
+					/*$.ajax({
+						url:'reports',
+						method : 'POST',
+						data : {ordrCd:ordrCd}
+					})*/
+				})
+
 				// 상단 그리드 출력 
 				const gridData = [];
 
@@ -159,8 +172,8 @@
 						method: 'POST',
 						data: {
 							vendNm: vendNm,
-							frDt : frDt,
-							toDt : toDt
+							frDt: frDt,
+							toDt: toDt
 						},
 						success: function (result) {
 							grid.resetData(result);
@@ -169,92 +182,94 @@
 				})
 
 
-			grid.on('click', ev => {
-				var ordrCd = grid.getValue(ev.rowKey, 'ordrCd')
-				var vendCd = grid.getValue(ev.rowKey,'vendCd')
-				var vendNm = grid.getValue(ev.rowKey,'vendNm')
+				grid.on('click', ev => {
+					var ordrCd = grid.getValue(ev.rowKey, 'ordrCd')
+					var vendCd = grid.getValue(ev.rowKey, 'vendCd')
+					var vendNm = grid.getValue(ev.rowKey, 'vendNm')
 					$.ajax({
-					url: "ordrDtlList",
-					method: 'Post',
-					dataType: 'JSON',
-					data : {ordrCd:ordrCd,
-							vendCd : vendCd,
-							vendNm : vendNm
-							},
-					success: function (result) {
-						grid2.resetData(result)
-						for (var all of result){
-							var rscStc = all.rscStc
-							if (rscStc ==null || rscStc == 0 || rscStc == ''){
-								rscStc = 0;
+						url: "ordrDtlList",
+						method: 'Post',
+						dataType: 'JSON',
+						data: {
+							ordrCd: ordrCd,
+							vendCd: vendCd,
+							vendNm: vendNm
+						},
+						success: function (result) {
+							grid2.resetData(result)
+							for (var all of result) {
+								var rscStc = all.rscStc
+								if (rscStc == null || rscStc == 0 || rscStc == '') {
+									rscStc = 0;
+								}
+								var allStc = Number(all.ordrCnt) + Number(all.rscStc)
+								grid2.setValue(all.rowKey, 'allStc', allStc)
+								grid2.setValue(all.rowKey, 'rscStc', rscStc)
+								$('#ordrCd').val(ordrCd)
 							}
-							var allStc = Number(all.ordrCnt)+Number(all.rscStc)
-							grid2.setValue(all.rowKey, 'allStc', allStc)
-							grid2.setValue(all.rowKey, 'rscStc', rscStc)
 						}
-						}
+					})
 				})
-			})
 
-						const grid2 = new tui.Grid({
-							el: document.getElementById('grid2'),
-							bodyHeight: 200,
-							rowHeight: 35,
-							rowHeaders: ['checkbox'],
-							header: {
-								height: 40
-							},
-							columns: [{
-								header: '자재코드',
-								align: 'center',
-								name: 'rscCd'
-							}, {
-								header: '자재명',
-								align: 'center',
-								name: 'rscNm'
-							}, {
-								header: '업체코드',
-								align: 'center',
-								name: 'vendCd'
-							}, {
-								header: '업체명',
-								align: 'center',
-								name: 'vendNm'
-							}, {
-								header: '발주코드',
-								align: 'center',
-								name: 'ordrCd'
-							}, {
-								header: '발주수량',
-								align: 'center',
-								name: 'ordrCnt',
-								editor: 'text'
-							}, {
-								header: '현재재고',
-								align: 'center',
-								name: 'rscStc'
-							}, {
-								header: '안전재고',
-								align: 'center',
-								name: 'safStc'
-							}, {
-								header: '예상재고량',
-								align: 'center',
-								name: 'allStc'
-							}, {
-								header: '납기요청일',
-								align: 'center',
-								name: 'paprdCmndDt',
-							    editor: {
-							        type: 'datePicker',
-							        options: {
-							        datetimeFormat: "yyyy-MM-dd"
-							        }
-							      }
-							}],
-						});
-						
-					grid2.on('editingFinish',function (ev){
+				const grid2 = new tui.Grid({
+					el: document.getElementById('grid2'),
+					bodyHeight: 200,
+					rowHeight: 35,
+					rowHeaders: ['checkbox'],
+					header: {
+						height: 40
+					},
+					columns: [{
+						header: '자재코드',
+						align: 'center',
+						name: 'rscCd'
+					}, {
+						header: '자재명',
+						align: 'center',
+						name: 'rscNm'
+					}, {
+						header: '업체코드',
+						align: 'center',
+						name: 'vendCd'
+					}, {
+						header: '업체명',
+						align: 'center',
+						name: 'vendNm'
+					}, {
+						header: '발주코드',
+						align: 'center',
+						name: 'ordrCd'
+					}, {
+						header: '발주수량',
+						align: 'center',
+						name: 'ordrCnt',
+						editor: 'text'
+					}, {
+						header: '현재재고',
+						align: 'center',
+						name: 'rscStc'
+					}, {
+						header: '안전재고',
+						align: 'center',
+						name: 'safStc'
+					}, {
+						header: '예상재고량',
+						align: 'center',
+						name: 'allStc'
+					}, {
+						header: '납기요청일',
+						align: 'center',
+						name: 'paprdCmndDt',
+						editor: {
+							type: 'datePicker',
+							options: {
+								datetimeFormat: "yyyy-MM-dd"
+							}
+						}
+					}],
+				});
+
+				grid2.on('editingFinish', function (ev) {
 					var ordrCnt = grid2.getValue(ev.rowKey, 'ordrCnt')
 					var rscStc = grid2.getValue(ev.rowKey, 'rscStc')
 					var safStc = grid2.getValue(ev.rowKey, 'safStc')
@@ -264,41 +279,43 @@
 					rscStc = Number(rscStc);
 
 					var allStc = ordrCnt + rscStc
-					
+
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
-					
-					if(Number(allStc)<Number(safStc)){
+
+					if (Number(allStc) < Number(safStc)) {
 						grid2.addRowClassName(ev.rowKey, 'addClass')
 					}
-					if(Number(allStc)>=Number(safStc)){
+					if (Number(allStc) >= Number(safStc)) {
 						grid2.removeRowClassName(ev.rowKey, 'addClass')
 					}
-					
-						})
-						
+
+				})
+
 				// 수정 버튼
 
 				$('#saveBtn').click(ev => {
 					var data = grid2.getCheckedRows();
 					var isValid = true;
-					
-					if(data.length == null || data.length == 0){
+
+					if (data.length == null || data.length == 0) {
 						toastr.warning('체크된 발주 내역이 없습니다.');
 						isValid = false;
 						return false;
 					}
-					
+
 					for (i = 0; i < data.length; i++) {
-					if (Number(data[i].allStc)<Number(data[i].safStc)) {
-						toastr.warning('안전재고 이상으로 발주를 진행해주세요.');
-						isValid = false;
-						return false;
-					}} 
-					
-					
-					
+						if (Number(data[i].allStc) < Number(data[i].safStc)) {
+							toastr.warning('안전재고 이상으로 발주를 진행해주세요.');
+							isValid = false;
+							return false;
+						}
+					}
+
+
+
 					for (i = 0; i < data.length; i++) {
-						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].ordrCnt == '' || data[0].paprdCmndDt == null || data[0].paprdCmndDt == '' || data[0].paprdCmndDt == '0') {
+						if (data[i].ordrCnt == null || data[i].ordrCnt == '0' || data[i].ordrCnt == '' || data[0].paprdCmndDt ==
+							null || data[0].paprdCmndDt == '' || data[0].paprdCmndDt == '0') {
 							toastr.warning('발주신청 내역 내 공란이 존재합니다.');
 							isValid = false;
 							return false;
@@ -315,9 +332,8 @@
 							})
 						}
 					}
-						toastr.success('발주내역 수정이 완료되었습니다.');
+					toastr.success('발주내역 수정이 완료되었습니다.');
 				})
-						
 			</script>
 
 	</th:block>
