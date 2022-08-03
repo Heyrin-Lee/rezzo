@@ -311,20 +311,27 @@ $('#saveBtn').click(ev => {
 	} else if($('#nav-flow').hasClass("active")) {
 		//흐름도 저장&수정
 		var data = grid2.getCheckedRows();
-      $.ajax({
-          url: "saveFlow/" + edctsCd,
-          type: "POST",
-          data: JSON.stringify(data),
-          contentType: 'application/json',
-          success: function (result) {
-              setTimeout(function () {
-                  grid2.refreshLayout()
-                  grid2.uncheckAll()
-              }, 300);
-              grid2.resetData(result);
-              toastr.success('성공적으로 저장되었습니다.');
-          }
-      })
+			for (var i=0; i<data.length; i++) {
+				//흐름도 순서 저장 예외처리
+				if (data[i].prcsOrd == null || data[i].prcsCd == null) {
+					toastr.warning('공정순서와 공정코드는 필수값입니다.')
+					return;
+				}
+			}
+			$.ajax({
+         url: "saveFlow/" + edctsCd,
+         type: "POST",
+         data: JSON.stringify(data),
+         contentType: 'application/json',
+         success: function (result) {
+             setTimeout(function () {
+                 grid2.refreshLayout()
+                 grid2.uncheckAll()
+             }, 300);
+             grid2.resetData(result);
+             toastr.success('성공적으로 저장되었습니다.');
+         }
+     })
 	}
  });
 
@@ -345,24 +352,24 @@ $('#delBtn').click(ev => {
 	} else if($('#nav-flow').hasClass("active")) {
 		//흐름도 체크된 셀 삭제
 		var check = grid2.getCheckedRows();
- 		check.forEach(obj => {
- 		 if(grid2.getValue(obj.edctsCd) != null) {
- 		 		$.ajax({
+		for (var i=0; i<check.length; i++) {
+			//흐름도 순서 저장 예외처리
+			if (check[i].prcsCd == null) {
+				grid2.removeRow(check[i].rowKey);
+			} else {
+				$.ajax({
 				 	url: "delFlow",
 				  method: "POST",
-		      data: obj,
-		      dataType: 'json',
-				  success: function (result) {
-					  grid.resetData(result);
+			    data: {prcsOrd : check[i].prcsOrd , edctsCd : check[i].edctsCd},
+				  success: function () {
 			    	toastr.success('정상적으로 삭제되었습니다.');
-		    	}
+			    	grid2.removeRow(check[i].rowKey);
+			   	}
 				})
- 		 } else { 			 
- 			grid2.removeRow(obj.rowKey);
- 		 }
- 		})
-	}
- });
+			}	
+		}
+ 	}
+});
  
  	//체크
  grid2.on('editingStart', ev => {
