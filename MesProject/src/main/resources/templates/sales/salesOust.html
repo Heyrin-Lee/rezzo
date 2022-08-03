@@ -22,8 +22,8 @@
 	<div class="container-fluid px-4">
 		<h1 class="mt-4" style="margin-left: 20px;">영업관리</h1>
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do" style="margin-left: 25px;">홈</a></li>
-			<li class="breadcrumb-item">> 제품 출고관리</li>
+			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item">> 영업관리</li>
 			<li class="breadcrumb-item active">> 제품 출고 등록</li>
 		</ol>
 <!-- 본문내용 끝 -->
@@ -76,6 +76,7 @@
                 	주문수량<input type="text" id="orderCntOut" name="orderCntOut" class="form-control" style="width: 150px" disabled>
                 	<input type="text" id="edctsOustCntOut" class="form-control" placeholder="출고수량 입력" style="width: 150px">
                     <button class="btn btn-primary" id="addBtn"><i class="fas fa-save"></i> 등록</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
@@ -101,24 +102,29 @@
 	      columns: [
 	        {
 	          header: '주문번호',
-	          name: 'orderNo'
+	          name: 'orderNo',
+	          align:'center'
 	        },
 	        {
 	          header: '거래처',
-	          name: 'vendNm'
+	          name: 'vendNm',
+	          align:'left'
 	        },
 	        {
 	          header: '제품코드',
-	          name: 'edctsCd'
+	          name: 'edctsCd',
+	          align:'center'
 	        },
 	        {
 		      header: '제품명',
-		      name: 'prdtNm'
+		      name: 'prdtNm',
+		      align:'left'
 		        },
 		    {
 			  header: '주문수량',
-			  name: 'orderCnt'
-			        }
+			  name: 'orderCnt',
+			  align:'right'
+			}
 	      ]
 	    });
 	    
@@ -133,18 +139,22 @@
 	          {
 	            header: '제품코드',
 	            name: 'edctsCd',
+	            align:'center'
 	          },
 	          {
 	            header: '완제품LOT번호',
-	            name: 'edctsLotNo'
+	            name: 'edctsLotNo',
+	            align:'center'
 	          },
 	          {
 	            header: '출고일자',
-	            name: 'edctsOustDt'
+	            name: 'edctsOustDt',
+	            align:'center'
 	          },
 	          {
 	            header: '출고수량',
-	            name: 'edctsOustCnt'
+	            name: 'edctsOustCnt',
+	            align:'right'
 	          }
 	        ]
 	      });
@@ -169,12 +179,12 @@
 	            {
 	                header: '제품명',
 	                name: 'prdtNm',
-	                align:'center'
+	                align:'left'
 	            },
 	            {
 	                header: '완제품 재고량',
 	                name: 'lotCnt',
-	                align:'center'
+	                align:'right'
 	            }
 	        ]
 	    });
@@ -265,8 +275,8 @@
 				dataType:"json",
 				data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsOustCnt":edctsOustCnt,"orderNo":orderNo},
 				success:function(list) {
-					$("#StcGridModal").modal('hide');
 					grid2.resetData(list);
+					$("#StcGridModal").modal('hide');
 				}
 			})
 			//주문서 진행상황 출고완료로 변경

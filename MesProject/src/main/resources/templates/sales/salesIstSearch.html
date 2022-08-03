@@ -22,8 +22,8 @@
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">영업관리</h1>
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 제품 입고 관리</li>
+			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item">> 영업관리</li>
 			<li class="breadcrumb-item active">> 제품 입고 조회</li>
 		</ol>
 		
@@ -49,7 +49,7 @@
 		    				<tr>		
 								<th>제품 입고일자</th>
 								<td><input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;">
-								<button type="button" class="btn btn-primary" id="optionSearchBtn" style="margin-top: 0px;margin-bottom: 3px;"><i class="fas fa-search"></i> 검색</button></td>                        			
+								<button type="button" class="btn btn-primary" id="optionSearchBtn" style="margin-top: 0px;margin-bottom: 3px;"><i class="fas fa-search"></i> 조회</button></td>                        			
                      		</tr>
                      	</tbody>
                      </table>
@@ -71,6 +71,7 @@
 		        <div id="lotNoGrid"></div>
 		      </div>
 		      <div class="modal-footer">
+		      	<button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
 		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 		      </div>
 		    </div>
@@ -108,7 +109,7 @@
 	        {
 	          header: '제품 입고수량',
 	          name: 'edctsIstCnt',
-	          align:'center'
+	          align:'right'
 	        },
 	        {
 	          header: '제품코드',
@@ -149,22 +150,22 @@
 	            {
 	                header: '제품명',
 	                name: 'prdtNm',
-	                align:'center'
+	                align:'left'
 	            }, 
 	            {
-	                header: '검사수량',
+	                header: '입고완료수량',
 	                name: 'inspCnt',
-	                align:'center'
+	                align:'right'
 	            },
 	             {
 	                header: '최종판정',
 	                name: 'inspJm',
-	                align:'center'
+	                align:'left'
 	            },
 	            {
 	               	header: '검사 담당자',
 	                name: 'inspPsch',
-	                align:'center'
+	                align:'left'
 	            }
 	        ]
 	    }); 

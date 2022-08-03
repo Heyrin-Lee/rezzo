@@ -22,8 +22,8 @@
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">영업관리</h1>
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 제품 출고 관리</li>
+			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item">> 영업관리</li>
 			<li class="breadcrumb-item active">> 제품 출고 조회</li>
 		</ol>
 		
@@ -42,6 +42,9 @@
 	                     	<col>
                      	</colgroup>
                      	<tbody>
+                     	<button type="button" class="btn btn-primary" id="dtSearchBtn" style="float:right;margin-bottom: 15px;margin-left: 5px;"><i class="fas fa-search"></i>조회</button>
+                     	<button class="btn btn-primary" id="ReBtn" style="float:right;margin-bottom: 15px;"><i class="fas fa-search"></i> 새자료</button>
+                     	</td>
                      		<tr>
                      			<th>제품명</th>
                      			<td><input type="text" class="form-control" id="prdtNm" name="prdtNm" style="width:150px"></td>
@@ -61,7 +64,6 @@
                      		<tr>
                      			<th>제품 출고일자</th>
                      			<td><input type="date" id="oustStart" name="oustStart" class="form-control" style="width:150px"> - <input type="date" id="oustEnd" name="oustEnd" class="form-control" style="width:150px">
-                     			<button type="button" class="btn btn-primary" id="dtSearchBtn" style="float:right;margin-right: 465px;"><i class="fas fa-search"></i>검색</button></td>
                      			<th></th>
                      			<td></td>
                      			<th></th>
@@ -96,7 +98,7 @@
 	          header: '거래처',
 	          name: 'vendNm',
 	          editor: 'text',
-	          align:'center'
+	          align:'left'
 	        },
 	        {
 	          header: '완제품LOT번호',
@@ -114,7 +116,7 @@
 	          header: '제품명',
 	          name: 'prdtNm',
 	          editor: 'text',
-	          align:'center'
+	          align:'right'
 	        },
 	        {
 	          header: '주문번호',
@@ -132,7 +134,7 @@
 	          header: '출고수량',
 	          name: 'edctsOustCnt',
 	          editor: 'datePicker',
-	          align:'center'
+	          align:'right'
 	        }
 		  ]   
 	    });
@@ -160,9 +162,14 @@
 	    	
 	    });
 	    
-	    //제품출고조회 출고일자 기본값을 현재날짜로 설정
-	    document.getElementById("oustStart").valueAsDate = new Date();
-	    document.getElementById("oustEnd").valueAsDate = new Date();
+	    //새자료 버튼 클릭 -> 폼 input 비우기
+		$("#ReBtn").on("click",function() {
+			$("#searchFrm").each(function() {
+				this.reset();
+			})
+		})
+	    
+	    
      </script>
      
 </body>

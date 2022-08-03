@@ -23,7 +23,7 @@
 		<h1 class="mt-4">영업관리</h1>
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
-			<li class="breadcrumb-item">> 주문서관리</li>
+			<li class="breadcrumb-item">> 영업관리</li>
 			<li class="breadcrumb-item active">> 주문서 관리</li>
 		</ol>
 		
@@ -41,6 +41,7 @@
 					   		<button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
 					   		<button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
 					   		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 조회</button>
+					   		<button class="btn btn-primary" id="ReBtn"><i class="fas fa-search"></i> 새자료</button>
 					   </div>
 					   <form name="searchFrm" id="searchFrm">
 					   <table class="table" style="vertical-align : middle;">
@@ -221,7 +222,6 @@
 	      bodyHeight: 300,
 	      rowHeight: 35,
 	      rowHeaders: ['checkbox'],
-	      editingEvent : 'gridout',
 	      header: {
 	        height: 40
 	      },
@@ -248,7 +248,7 @@
 	          header: '거래처',
 	          name: 'vendNm',
 	          editor: 'text',
-	          align:'center'
+	          align:'left'
 	        },
 	        {
 	          header: '주문일자',
@@ -259,7 +259,7 @@
 	        {
 			    header: '진행상황',
 			    name: 'progAppe',
-			    align:'center',
+			    align:'left',
 			    defaultValue: '접수완료'
               },
 	        {
@@ -272,13 +272,13 @@
 		       header: '제품명',
 		       name: 'prdtNm',
 		       editor: 'text',
-		       align:'center'
+		       align:'left'
 		        },
 			{
 			    header: '주문수량',
-	          name: 'orderCnt',
-	          editor: 'text',
-	          align:'center'
+	          	name: 'orderCnt',
+	          	editor: 'text',
+	          	align:'right'
 			},	
 		  ]   
 	    });
@@ -299,8 +299,8 @@
 	            {
 	                header: '제품명',
 	                name: 'prdtNm',
-	                width: 200,
-	                align:'center'
+	                align:'left',
+	               	width: 200
 	            }
 	        ]
 	    });
@@ -321,8 +321,8 @@
 	            {
 	                header: '제품명',
 	                name: 'prdtNm',
-	                width: 200,
-	                align:'center'
+	                align:'left',
+	                width: 200	                
 	            }
 	        ]
 	    });
@@ -343,8 +343,8 @@
 	            {
 	                header: '거래처명',
 	                name: 'vendNm',
-	                width: 100,
-	                align:'center'
+	                align:'left',
+	                width: 100
 	            },
 	            {
 	                header: '사업자등록번호',
@@ -369,19 +369,23 @@
       	columns: [
         {
           header: '거래처코드',
-          name: 'vendCd'
+          name: 'vendCd',
+           align:'center'
         },
         {
           header: '거래처명',
-          name: 'vendNm'
+          name: 'vendNm',
+          align:'left'
         },
         {
           header: '사업자등록번호',
-          name: 'bizNo'
+          name: 'bizNo',
+           align:'center'
         },
         {
           header: '전화번호',
-          name: 'telNo'
+          name: 'telNo',
+           align:'center'
         }
       	]
    		});
@@ -416,9 +420,10 @@
 		   	
 		   	
 		   	//거래처코드 칸 클릭 -> 거래처 목록 모달창 띄우기
+		   		var vendCdRowKey = '';
 		   		grid.on("click",(e) => {
 				const {columnName} = e;
-				vendCdRowKey = e.rowKey;
+				var vendCdRowKey = e.rowKey;
 				if(columnName == 'vendCd') {
 					$("#vendGridModal").modal("show");
 					$.ajax({
@@ -437,16 +442,14 @@
 		   	
 		   	
 		   		//거래처 목록 모달창에서 거래처 선택 -> 추가된 행 거래처명,코드에 값 들어가기
-		   		vendGrid.on("click",ev => {
-		   			let row = vendGrid.getCheckedRowKeys(ev);
-		   			console.log(row);
-		   			let nmInfo = vendGrid.getValue(row,'vendNm');
-		   			console.log(nmInfo);
-		   			let cdInfo = vendGrid.getValue(row,'vendCd');
-		   			console.log(cdInfo);
-		   			grid.setValue(vendCdRowKey, 'vendNm', nmInfo);
-		   			grid.setValue(vendCdRowKey, 'vendCd', cdInfo);
-		   		})
+		   		vendGrid.on("click", ev => {
+				console.log(ev);
+				let outVendCd = vendGrid.getValue(ev.rowKey,'vendCd');
+				let outVendNm  = vendGrid.getValue(ev.rowKey,'vendNm');
+				console.log(outVendNm);
+				grid.setValue(vendCdRowKey, 'vendCd', outVendCd);
+				grid.setValue(vendCdRowKey, 'vendNm', outVendNm);
+			});
 		   
 			
 			//제품코드 칸 클릭 -> 제품코드 모달창 띄우기
@@ -485,12 +488,12 @@
     					grid.check(rowKey);
 					});
 		   
-		
+		   
 		//체크박스 선택시 거래처명 가져오기
 		comGrid.on('click', e => {
 			let rowInfo = comGrid.getCheckedRows(e)
 			console.log(rowInfo);
-			vendNm.value =  rowInfo[0].vendNm;
+			vendNm2.value =  rowInfo[0].vendNm;
 		})
 		//모달 그리드 더블클릭시 거래처명 가져오기 *조회 거래처모달*
 		 comGrid.on('dblclick', (ev) => {
@@ -506,7 +509,7 @@
 		//체크박스 선택시 제품명 가져오기
 		proGrid.on('click', e => {
 			let rowInfo = proGrid.getCheckedRows(e)
-			prdtNm.value = rowInfo[0].prdtNm;
+			prdtNm2.value = rowInfo[0].prdtNm;
 		})
 		//모달 그리드 더블클릭시 제품명 가져오기 *조회 제품모달*
 		 proGrid.on('dblclick', (ev) => {
@@ -538,9 +541,30 @@
 			console.log(outProdCd);
 			grid.setValue(prdtRowKey, 'prdtNm', outProdNm);
 			grid.setValue(prdtRowKey, 'edctsCd', outProdCd);
+			$("#edctsCdModal").modal('hide');
 		});
 		
-		//모달 그리드 더블클릭시 거리처명 가죠오기 *등록 거래처모달*
+		//모달 그리드 더블클릭시 거리처명 가져오기 *등록 거래처모달*
+		grid.on('click', (e) => {
+			const {columnName} =e;
+			vendRowKey = e.rowKey;
+			console.log(vendRowKey);
+		})
+		vendGrid.on("dblclick",(ev) => {
+			var rowKey = ev.rowKey;
+			console.log(rowKey);
+			vendGrid.check(rowKey);
+			var rowKeyData = vendGrid.getCheckedRows(ev);
+			console.log(rowKeyData);
+			var outVendData = vendGrid.getValue(rowKeyData,'prdtNm');
+			var outVendNm = rowKeyData[0].vendNm;
+			var outVendCd = rowKeyData[0].vendCd;
+			console.log(outVendNm);
+			console.log(outVendCd);
+			grid.setValue(vendRowKey, 'vendNm', outVendNm);
+			grid.setValue(vendRowKey, 'vendCd', outVendCd);
+			$("#vendGridModal").modal('hide');
+		});
 		
 		
 		function search() {
@@ -629,6 +653,12 @@
 				})
 			})
 			
+		//새자료 버튼 클릭 -> 폼 input 비우기
+		$("#ReBtn").on("click",function() {
+			$("#searchFrm").each(function() {
+				this.reset();
+			})
+		})
 			
 		//Date start & Date end 오늘 날짜로 설정
 		document.getElementById("start").valueAsDate = new Date();
