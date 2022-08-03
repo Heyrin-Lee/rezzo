@@ -139,6 +139,12 @@
           and substr(ordr_cd, 1, 3) = 'NOR'
     </select>
 
+    <select id="getRscInspInfoByCd" parameterType="RscInspVO" resultType="RscInspVO">
+        select RSC_INSP_CD, to_char(INSP_DT, 'yyyy-mm-dd') inspDt, INSP_TSTR
+        from RSC_INSP
+        where RSC_INSP_CD = #{rscInspCd}
+    </select>
+
     <select id="getRscInfHistByCd" parameterType="RscInspVO" resultType="RscInfVO">
         select ri.CCD_DTL, ri.INF_CNT, cd.CCD_DTL_NM
         from RSC_INFER ri,
@@ -180,7 +186,8 @@
 
     <select id="getRscInspHist" parameterType="RscInspVO" resultType="RscInspVO">
 
-        select rid.RSC_INSP_CD, to_char(ri.INSP_DT, 'yyyy-mm-dd') as inspDt, rid.RSC_CD, rsc.RSC_NM, rsc.RSC_SPEC, rsc.MNG_UNIT,
+        select rid.RSC_INSP_CD, to_char(ri.INSP_DT, 'yyyy-mm-dd') as inspDt, rid.RSC_CD, rsc.RSC_NM, rsc.RSC_SPEC,
+        rsc.MNG_UNIT,
         rid.INSP_CNT, rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT, rsc.RSC_TYP, rid.ORDR_CD, rid.PASS_RMN_CNT
         from RSC_INSP ri, RSC_INSP_DTL rid, RSC_ORDR ro, RSC_ORDR_DTL rod, RSC rsc, VEND
         where rid.RSC_CD = rsc.RSC_CD
@@ -199,7 +206,8 @@
 
         union
 
-        select rid.RSC_INSP_CD, to_char(ri.INSP_DT, 'yyyy-mm-dd') as inspDt, rid.RSC_CD, RSC_NM, rsc.RSC_SPEC, rsc.MNG_UNIT,
+        select rid.RSC_INSP_CD, to_char(ri.INSP_DT, 'yyyy-mm-dd') as inspDt, rid.RSC_CD, RSC_NM, rsc.RSC_SPEC,
+        rsc.MNG_UNIT,
         rid.INSP_CNT, rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT, rsc.RSC_TYP, rid.ORDR_CD, rid.PASS_RMN_CNT
         from RSC_INSP ri, RSC_INSP_DTL rid, RSC rsc
         where ri.rsc_insp_cd = rid.rsc_insp_cd

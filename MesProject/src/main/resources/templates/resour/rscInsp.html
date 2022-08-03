@@ -870,6 +870,7 @@
 
         function getOrdrList() {
             // initiate inf list
+
             infData.clear();
             getInfList();
 
@@ -997,6 +998,11 @@
                 body: JSON.stringify(rowInfo)
             }).then(res => res.json()).then(res => {
                 grid.hideColumn('rmnCnt')
+
+                inspDt.value = res[0].inspDt;
+                inspTstr.value = res[0].inspTstr;
+
+                res.shift();
 
                 // initiate inf grid
                 infData.clear();

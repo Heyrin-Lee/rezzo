@@ -74,6 +74,7 @@ public class InspServiceImpl implements InspService {
             List<RscInfVO> rscInfVOS = mapper.getRscInfHistByCd(vo);
             vo.setRscInfList(rscInfVOS);
         }
+        rscInspVOS.add(0, mapper.getRscInspInfoByCd(rscInspVO));
         return rscInspVOS;
     }
 
