@@ -33,7 +33,7 @@ dependencies {
 	// excel
 	implementation 'org.apache.poi:poi-ooxml:3.14'
 	// pdf
-	implementation 'net.sf.jasperreports:jasperreports:6.19.1'
+	implementation 'net.sf.jasperreports:jasperreports:6.9.0'
 	implementation 'com.lowagie:itext:2.1.7'
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
