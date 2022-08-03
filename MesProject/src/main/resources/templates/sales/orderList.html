@@ -22,58 +22,80 @@
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">영업관리</h1>
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
+			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
 			<li class="breadcrumb-item">> 주문서관리</li>
 			<li class="breadcrumb-item active">> 주문서 관리</li>
 		</ol>
 		
 		<div class="card mb-4">
-      <div id="cont" style="padding-bottom:0px">
-         <section id="r_section">
-            <div class="col">
-				
-                     
-                      <div class="r_input">
-                        <div class="mb-3">
-                        <div class="card-body" id="vendModal">
+      		<div id="cont" style="padding-bottom:0px">
+       			<div class="col">
+                    <div class="card-body">
                            <!-- <label for="no" class="form-label">진행상황</label>&nbsp;
                            
                            <input type="radio" id="progAppe" name="progAppe" value="진행"/>진행
                            <input type="radio" id="progAppe" name="progAppe" value="완료"/>완료
                            <input type="radio" id="progAppe" name="progAppe" value="전체"/>전체 -->
-						<div class="linelist" style="float:right;margin-top: 150px;">
+						<div class="linelist" style="float:right;margin-bottom: 13px;">
 					   		<button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> 추가</button>
 					   		<button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
 					   		<button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
-					   		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 검색</button>
+					   		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 조회</button>
 					   </div>
 					   <form name="searchFrm" id="searchFrm">
-                        <div class="mb-3">
-                           <label for="vendNm" class="form-label">거래처명</label>
-    						<input type="text" class="form-control" id="vendNm" name="vendNm" style="width:150px;">
-                            <button type="button" class="btn btn-primary" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal"><i class="fas fa-search"></i></button>	
-                        </div>
-                        <div class="mb-3">
-                           <label for="prdtNm" class="form-label">제품명</label>
-                           <input type="text" class="form-control" id="prdtNm" name="prdtNm" style="width:150px;margin-left: 15px;">
-                           <button type="button" class="btn btn-primary" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal"><i class="fas fa-search"></i></button>	
-                        </div>
-                        <div class="mb-3">
-                           <label for="email" class="form-label">주문일자</label>
-                           <input type="date" id="start" name="start" class="form-control" style="width:150px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;"> 
-                        </div>
+					   <table class="table" style="vertical-align : middle;">
+					   	<colgroup>
+					   		<col style="width: 150px;">
+                     		<col>
+	                     	<col style="width: 150px;">
+	                     	<col>
+	                     	<col style="width: 150px;">
+	                     	<col>
+					   	</colgroup>
+					   	<tbody>
+					   		<tr>
+					   			<th>거래처명</th>
+					   			<td>
+					   				<input type="text" class="form-control" id="vendNm2" name="vendNm2" style="width:150px;">
+                            		<button type="button" class="btn btn-primary" id="openCompany" data-bs-toggle="modal" data-bs-target="#comModal"><i class="fas fa-search"></i></button>	
+					   			</td>
+					   			<th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>
+					   		</tr>
+					   		<tr>
+					   			<th>제품명</th>
+					   			<td>
+					   				<input type="text" class="form-control" id="prdtNm2" name="prdtNm2" style="width:150px;">
+                           			<button type="button" class="btn btn-primary" id="openProduct" data-bs-toggle="modal" data-bs-target="#proModal"><i class="fas fa-search"></i></button>	
+					   			</td>
+					   			<th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>
+					   		</tr>
+					   		<tr>
+					   			<th>주문일자</th>
+					   			<td>
+					   				<input type="date" id="start" name="start" class="form-control" style="width:150px;"> - <input type="date" id="end" name="end" class="form-control" style="width:150px;"> 
+					   			</td>
+					   			<th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>
+					   		</tr>
+					   	</tbody>
+					   </table>
                        </div>
                      </form>
                   </div>
                </div>
             </div>
-         </section>
       </div>
-       
-   </div>
-
+      <div class="card-body">
    		<div id="grid" class="card mb-4"></div>   		
-
+	 </div>
 
    
    <!-- 제품코드 모달(등록) -->
@@ -88,8 +110,9 @@
                 	<div id="CdModal"></div>
                 </div>
                 <div class="modal-footer">
-                <!-- <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button> -->                 
+                	<button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -105,6 +128,7 @@
                 </div>
                 <div id="proGrid" class="modal-body"></div>
                 <div class="modal-footer">
+                	<button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
@@ -123,6 +147,7 @@
                 	<div id="vendGrid"></div>
                 </div>
                 <div class="modal-footer">
+                	<button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
@@ -139,14 +164,12 @@
                 </div>
                 <div id="comGrid" class="modal-body"></div>
                 <div class="modal-footer">
+                	<button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
     </div>
-    
-    
-    
     <script>
 
 		$(function() {
@@ -198,6 +221,7 @@
 	      bodyHeight: 300,
 	      rowHeight: 35,
 	      rowHeaders: ['checkbox'],
+	      editingEvent : 'gridout',
 	      header: {
 	        height: 40
 	      },
@@ -387,27 +411,31 @@
 		   			
 		   		}
 		   	})
+		   	
+		   	});
+		   	
+		   	
 		   	//거래처코드 칸 클릭 -> 거래처 목록 모달창 띄우기
 		   		grid.on("click",(e) => {
-		   			const { columnName } = e;
-		   			vendRowKey = e.rowKey;
-		   			if(columnName == 'vendCd') {
-		   				$("#vendGridModal").modal('show');
-		   				$.ajax({
-		   					url:"comSearch",
-							method:"get",
-							datatype:"json",
-							success:function(vendlist) {
-							setTimeout(function () {
-								vendGrid.refreshLayout()
-								}, 300);
-								vendGrid.resetData(vendlist);
-							}
-		   					
-		   				})
-		   			}
-		   		})
-		   	});
+				const {columnName} = e;
+				vendCdRowKey = e.rowKey;
+				if(columnName == 'vendCd') {
+					$("#vendGridModal").modal("show");
+					$.ajax({
+						url:"comSearch",
+						dataType:"json",
+						method:"get",
+						success:function(vendlist) {
+							setTimeout(function() {
+								vendGrid.refreshLayout();
+							},300);
+							vendGrid.resetData(vendlist);
+						}
+					})
+				}
+			})
+		   	
+		   	
 		   		//거래처 목록 모달창에서 거래처 선택 -> 추가된 행 거래처명,코드에 값 들어가기
 		   		vendGrid.on("click",ev => {
 		   			let row = vendGrid.getCheckedRowKeys(ev);
@@ -416,12 +444,13 @@
 		   			console.log(nmInfo);
 		   			let cdInfo = vendGrid.getValue(row,'vendCd');
 		   			console.log(cdInfo);
-		   			grid.setValue(vendRowKey, 'vendNm', nmInfo);
-		   			grid.setValue(vendRowKey, 'vendCd', cdInfo);
+		   			grid.setValue(vendCdRowKey, 'vendNm', nmInfo);
+		   			grid.setValue(vendCdRowKey, 'vendCd', cdInfo);
 		   		})
 		   
 			
 			//제품코드 칸 클릭 -> 제품코드 모달창 띄우기
+			var edctsCdRowKey = '';
 			grid.on("click",(e) => {
 				const {columnName} = e;
 				edctsCdRowKey = e.rowKey;
@@ -442,13 +471,12 @@
 			})
 			//제품코드 모달창에서 제품코드 선택 -> 추가된 행 제품명,코드에 값 들어가기
 			CdModal.on("click", ev => {
-				let row = CdModal.getCheckedRowKeys(ev);
-				let cdInfo = CdModal.getValue(row,'edctsCd');
-				console.log(cdInfo);
-				let nmInfo = CdModal.getValue(row,'prdtNm');
-				console.log(nmInfo);
-				grid.setValue(edctsCdRowKey, 'edctsCd', cdInfo);
-				grid.setValue(edctsCdRowKey, 'prdtNm', nmInfo)
+				console.log(ev);
+				let outProdCd = CdModal.getValue(ev.rowKey,'edctsCd');
+				let outProdNm  = CdModal.getValue(ev.rowKey,'prdtNm');
+				
+				grid.setValue(edctsCdRowKey, 'edctsCd', outProdCd);
+				grid.setValue(edctsCdRowKey, 'prdtNm', outProdNm)
 			})
 		   
 		   //더블클릭 하면 체크박스 체크
@@ -464,14 +492,15 @@
 			console.log(rowInfo);
 			vendNm.value =  rowInfo[0].vendNm;
 		})
-		//모달 그리드 더블클릭시 거래처명 가져오기
+		//모달 그리드 더블클릭시 거래처명 가져오기 *조회 거래처모달*
 		 comGrid.on('dblclick', (ev) => {
     					var rowKey = ev.rowKey;
     					console.log(rowKey);
     					comGrid.check(rowKey);
     					var rowKeyData = comGrid.getCheckedRows(ev);
     					console.log(rowKeyData);
-    					vendNm.value = rowKeyData[0].vendNm;
+    					vendNm2.value = rowKeyData[0].vendNm;
+    					$("#comModal").modal('hide');
 					});
 		
 		//체크박스 선택시 제품명 가져오기
@@ -479,15 +508,40 @@
 			let rowInfo = proGrid.getCheckedRows(e)
 			prdtNm.value = rowInfo[0].prdtNm;
 		})
-		//모달 그리드 더블클릭시 제품명 가져오기
+		//모달 그리드 더블클릭시 제품명 가져오기 *조회 제품모달*
 		 proGrid.on('dblclick', (ev) => {
     					var rowKey = ev.rowKey;
     					console.log(rowKey);
     					proGrid.check(rowKey);
     					var rowKeyData = proGrid.getCheckedRows(ev);
     					console.log(rowKeyData);
-    					prdtNm.value = rowKeyData[0].prdtNm;
+    					prdtNm2.value = rowKeyData[0].prdtNm;
+    					$("#proModal").modal('hide');
 					});
+		
+		//모달 그리드 더블클릭시 제품명 가져오기 *등록 제품모달*
+		grid.on('click', (e) => {
+			const {columnName} =e;
+			prdtRowKey = e.rowKey;
+			console.log(prdtRowKey);
+		})
+		CdModal.on("dblclick",(ev) => {
+			var rowKey = ev.rowKey;
+			console.log(rowKey);
+			CdModal.check(rowKey);
+			var rowKeyData = CdModal.getCheckedRows(ev);
+			console.log(rowKeyData);
+			var outProdData = CdModal.getValue(rowKeyData,'prdtNm');
+			var outProdNm = rowKeyData[0].prdtNm;
+			var outProdCd = rowKeyData[0].edctsCd;
+			console.log(outProdNm);
+			console.log(outProdCd);
+			grid.setValue(prdtRowKey, 'prdtNm', outProdNm);
+			grid.setValue(prdtRowKey, 'edctsCd', outProdCd);
+		});
+		
+		//모달 그리드 더블클릭시 거리처명 가죠오기 *등록 거래처모달*
+		
 		
 		function search() {
 			var searchData = $("#searchFrm").serialize();
@@ -545,6 +599,7 @@
 				contentType:"application/json",
 				success:function() {
 					toastr.success('삭제되었습니다');
+					console.log(data);
 					search();
 				},
 				error:function(er) {
@@ -566,6 +621,7 @@
 				success:function() {
 					grid.uncheckAll();
 					toastr.success('저장되었습니다');
+					console.log(data);
 					},
 					error:function(er){
 						console.log(er);
