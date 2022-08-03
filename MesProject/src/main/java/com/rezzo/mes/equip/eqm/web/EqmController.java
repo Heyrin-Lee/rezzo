@@ -86,7 +86,7 @@ public class EqmController {
 
 	@PostMapping("eqmSelect")
 	@ResponseBody
-	public List<EqmVO> eqmSelect(@RequestParam(value = "keyword") String keyword, @RequestParam(value="opN") int opN) {
+	public List<EqmVO> eqmSelect(@Param(value = "keyword") String keyword, @Param(value="opN") int opN) {
 		return eqmService.eqmSelect(opN,keyword);
 	}
 	

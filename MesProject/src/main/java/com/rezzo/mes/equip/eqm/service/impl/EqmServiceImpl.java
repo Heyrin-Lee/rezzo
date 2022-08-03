@@ -61,7 +61,7 @@ public class EqmServiceImpl implements EqmService {
 
 	@Override
 	public List<EqmVO> eqmSelect(int opN, String keyword) {
-		return map.eqmSelect(opN,keyword);
+		return map.eqmSelect(keyword, opN);
 	}
 
 

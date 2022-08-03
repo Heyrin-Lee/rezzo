@@ -418,7 +418,7 @@
 					var chckCd = $('#chckCd').val()
 					var eqmCd = $('#eqmCd').val()
 					if(eqmCd ==null || eqmCd==''){
-						toastr.warning('삭제할 설비내역을 선택해주세요.');
+						toastr.warning('삭제할 점검내역을 선택해주세요.');
 						isValid = false;
 						return false;
 					}
@@ -445,6 +445,7 @@
 								grid.resetData(result);
 								$('#dataForm').each(function () {
 									this.reset();
+									toastr.success('점검 내역이 삭제되었습니다.');
 								});
 							}
 						});
