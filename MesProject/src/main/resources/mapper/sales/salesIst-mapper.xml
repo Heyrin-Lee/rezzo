@@ -10,20 +10,37 @@
 	</update>
 	
 	<!-- 입고 목록 날짜 기준 조회(첫페이지)  -->
-	<select id="salesIstList" resultType="SalesIstVO">
+	<!--<select id="salesIstList" resultType="SalesIstVO">
 	SELECT * FROM EDCTS_IST
 	 WHERE EDCTS_IST_DT BETWEEN #{edctsIstDtStart} AND #{edctsIstDtEnd}
+	</select> -->
+	<select id="salesIstList" resultType="SalesIstVO">
+		SELECT i.edcts_ist_no, i.edcts_ist_dt, i.edcts_ist_cnt, i.edcts_cd, i.edcts_lot_no, e.prdt_nm
+		FROM edcts_ist i JOIN edcts e
+		ON i.edcts_cd = e.edcts_cd 
+		WHERE  i.edcts_ist_dt BETWEEN #{edctsIstDtStart} AND #{edctsIstDtEnd}
 	</select>
 	
+	
 	<!-- 입고 목록 조건별 조회 -->
-	<select id="istOptionList" resultType="SalesIstVO">
+	<!-- <select id="istOptionList" resultType="SalesIstVO">
 		SELECT * FROM edcts_ist
 		WHERE 1=1
 		<if test="edctsLotNo != null and edctsLotNo != ''">and EDCTS_LOT_NO = #{edctsLotNo}</if>
 		<if test="edctsIstDtStart != null"><![CDATA[and EDCTS_IST_DT >= #{edctsIstDtStart}]]></if>
-		<if test="edctsIstDtEnd != null"><![CDATA[and EDCTS_IST_DT >= #{edctsIstDtEnd}]]></if>
+		<if test="edctsIstDtEnd != null"><![CDATA[and EDCTS_IST_DT <= #{edctsIstDtEnd}]]></if>
 		ORDER BY edcts_ist_no
+	</select> -->
+	<select id="istOptionList" resultType="SalesIstVO">
+		SELECT i.edcts_ist_no, i.edcts_ist_dt, i.edcts_ist_cnt, i.edcts_cd, i.edcts_lot_no, e.prdt_nm
+		FROM edcts_ist i JOIN edcts e
+		ON i.edcts_cd = e.edcts_cd
+		<if test="edctsLotNo != null and edctsLotNo != ''">and EDCTS_LOT_NO = #{edctsLotNo}</if>
+		<if test="edctsIstDtStart != null"><![CDATA[and EDCTS_IST_DT >= #{edctsIstDtStart}]]></if>
+		<if test="edctsIstDtEnd != null"><![CDATA[and EDCTS_IST_DT <= #{edctsIstDtEnd}]]></if>
+		ORDER BY edcts_ist_no 
 	</select>
+	
 
 	
 	<!-- 완제품LOT번호 모달 조회 -->

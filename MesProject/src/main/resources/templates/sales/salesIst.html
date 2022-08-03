@@ -22,8 +22,8 @@
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">영업관리</h1>                                                         
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="home.do">홈</a></li>
-			<li class="breadcrumb-item">> 제품 입고 관리</li>
+			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item">> 영업관리</li>
 			<li class="breadcrumb-item active">> 제품 입고 등록 및 수정</li>
 		</ol>
 		
@@ -78,8 +78,9 @@
                            <label for="edctsIstDt" class="form-label">제품 입고일자</label> 
                            <input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;margin-left: 5px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;">
                            <div class="linelist" style="float:right;">
-                           <button type="button" class="btn btn-primary" id="dtSearchBtn"><i class="fas fa-search"></i> 검색</button>
+                           <button type="button" class="btn btn-primary" id="dtSearchBtn"><i class="fas fa-search"></i> 조회</button>
                            <button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 등록</button>
+                           <button class="btn btn-primary" id="ReBtn"><i class="fas fa-search"></i> 새자료</button>
                        </div>                  
                         </div>
                        </div>
@@ -100,6 +101,7 @@
 		        <div id="lotNoGrid"></div>
 		      </div>
 		      <div class="modal-footer">
+		      <button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
 		      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 		      </div>
 		    </div>
@@ -139,7 +141,7 @@
 	        {
 	          header: '제품 입고수량',
 	          name: 'edctsIstCnt',
-	          align:'center'
+	          align:'right'
 	        },
 	        {
 	          header: '제품코드',
@@ -150,6 +152,11 @@
 	          header: '완제품LOT번호',
 	          name: 'edctsLotNo',
 	          align:'center'
+	        },
+	        {
+	          header: '제품명',
+	          name: 'prdtNm',
+	          align:'left'
 	        }
 		  ]   
 	    });
@@ -180,22 +187,22 @@
 	            {
 	                header: '제품명',
 	                name: 'prdtNm',
-	                align:'center'
+	                align:'left'
 	            }, 
 	            {
 	                header: '검사수량',
 	                name: 'inspCnt',
-	                align:'center'
+	                align:'right'
 	            },
 	             {
 	                header: '최종판정',
 	                name: 'inspJm',
-	                align:'center'
+	                align:'left'
 	            },
 	            {
 	               	header: '검사 담당자',
 	                name: 'inspPsch',
-	                align:'center'
+	                align:'left'
 	            }
 	        ]
 	    }); 
@@ -327,6 +334,13 @@
 	    
 		$("#dtSearchBtn").on("click",function() {
 			istOptionList();
+		})
+		
+		//새자료 버튼 클릭 -> 폼 input 비우기
+		$("#ReBtn").on("click",function() {
+			$("#IstSearchFrm").each(function() {
+				this.reset();
+			})
 		})
 		
 	    //제품 입고일자 현재 날짜로 설정
