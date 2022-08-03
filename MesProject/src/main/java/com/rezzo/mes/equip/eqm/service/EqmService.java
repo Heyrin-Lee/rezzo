@@ -5,7 +5,7 @@ import java.util.List;
 public interface EqmService {
 	public List<EqmVO> eqmList(EqmVO vo);
 
-	public List<EqmVO> eqmSelect(String keyword);
+	public List<EqmVO> eqmSelect(int opN,String keyword);
 
 	public void eqmInsert(EqmVO vo);
 	

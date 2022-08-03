@@ -18,10 +18,12 @@
  	<insert id="eqmLineInsert" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
 		insert into eqm_line(line_cd, uph_cnt, eqm_psch, use_yn, line_nm)
 		values (<![CDATA[CRE_LINE_CD('LNE')]]>, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
-		
 	</insert>
-	 -->
+-->
 	<update id="eqmLineUpdate" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
+		<selectKey keyProperty="lineCd" order="BEFORE" resultType="String">
+			select CRE_LINE_CD('LNE') from dual
+		</selectKey>
 		MERGE INTO eqm_line e
 			USING dual ON (e.line_cd = #{lineCd})
 		WHEN MATCHED THEN
@@ -33,7 +35,8 @@
 			where line_cd = #{lineCd}
 		WHEN NOT MATCHED THEN
 			insert (line_cd, uph_cnt, eqm_psch, use_yn, line_nm)
-			values (<![CDATA[CRE_LINE_CD('LNE')]]>, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
+			values (#{lineCd}, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
+	
 	</update>
 	
 

@@ -36,10 +36,6 @@ public class EqmServiceImpl implements EqmService {
 		map.eqmDelete(vo);
 	}
 
-	@Override
-	public List<EqmVO> eqmSelect(String keyword) {
-		return map.eqmSelect(keyword);
-	}
 
 	@Override
 	public void eqmImgInsert(EqmVO vo) {
@@ -61,6 +57,11 @@ public class EqmServiceImpl implements EqmService {
 	@Override
 	public void eqmUsUpdate(EqmVO vo) {
 		map.eqmUsUpdate(vo);
+	}
+
+	@Override
+	public List<EqmVO> eqmSelect(int opN, String keyword) {
+		return map.eqmSelect(opN,keyword);
 	}
 
 
