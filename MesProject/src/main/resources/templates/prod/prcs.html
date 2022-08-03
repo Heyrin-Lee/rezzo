@@ -50,8 +50,8 @@ body {
                         <div class="mb-3">
                            <label for="name">공정구분</label> 
                				<select id="prcs" class="dataTable-selector">
-               					<option selected value="">--선택--</option>
-               					<option th:each="code : ${ccds['PRC']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtl}"></option>
+               					<option selected value=''>--선택--</option>
+               					<option th:each="code : ${ccds['PRC']}" th:value="${code.ccdDtlNm}" th:text="${code.ccdDtlNm}"></option>
                				</select>
                         </div>
      					<div class="linelist">
@@ -124,7 +124,6 @@ body {
             {
               header: '공정설명',
               name: 'prcsCtnt',
-              
               editor: 'text'
             }
           ]
@@ -159,16 +158,18 @@ body {
 	   			$.ajax({
 					   url:'prcsList'
 				   }).done(function(result){
+				   	   toastr.success("저장되었습니다.")
 					   grid.resetData(result);
 				   })
+				
 	   		})
 	   })
 	   
 	   $("#sBtn").on("click", function(e){
-	   var option = $("#prcs option:selected").text() // sql문 where 조건으로 들어가야 하는 값
+	   var option = $("#prcs option:selected").val() // sql문 where 조건으로 들어가야 하는 값
 		   $.ajax({
 			   url: 'prcsList/' + option,
-			   data : {prcsCtnt : option}
+			   data : {prcsNm : option}
 		   }).done(function(result) {
 			   grid.resetData(result);
 		   })
@@ -185,6 +186,7 @@ body {
 			   $.ajax({
 				   url:'prcsList'
 			   }).done(function(result){
+			   	   toastr.error("삭제되었습니다.")	
 				   grid.resetData(result);
 			   })
 		   })

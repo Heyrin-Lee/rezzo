@@ -408,14 +408,23 @@
             });
 
             const gridData5 = [];
-           	
+           	//grid2.on('editingStart', ev => {
+			//	grid2.check(gridRowKey);
+ 			//})
+ 				
+ 		 	//$("#grid4").on('editingStart', ev => {
+ 			//	grid4.check(gridRowKey);
+ 			//})  	
+ 			
            	$("#grid4").on("keyup", function(key) {
            		if(key.keyCode == 13) {
-	           		let data = grid4.getCheckedRows()
+	          		let data = grid4.getCheckedRows()
 	           		console.log(data)
 	           		grid5.resetData(data)
            		}
            	})
+           
+          
            	
            	
             const grid5 = new tui.Grid({
@@ -517,15 +526,20 @@
             		url : 'grid5Update',
             		method: 'POST',
             		contentType:'application/json',
-            		data : JSON.stringify(grid5Data),
-            	})    
+            		data : JSON.stringify(grid5Data)
+            	}).done(function(){
+            		toastr.success("저장되었습니다.")  
+            		window.location.reload()
+            	})
+            	
+            	  
             	
             	$.ajax({
             		url : 'orderUpdate',
             		data : {"orderNo" : orderNo }
             	})
             	
-            	window.location.reload()
+            	
             })
             
             function makeDate(idt) {
@@ -570,7 +584,7 @@
             	})
             })
             
-            $("#grid").on("keyup", function(key) {
+            $("#grid").on("keyup", function() {
             	if(key.keyCode==13) {
             		grid2.appendRow()
             		grid2.setValue(0, 'planCd', code)

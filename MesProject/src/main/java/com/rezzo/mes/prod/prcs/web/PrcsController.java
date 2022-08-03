@@ -50,6 +50,7 @@ public class PrcsController {
 	@GetMapping("/prcsInsert")
 	@ResponseBody
 	public PrcsVO prcsInsert(PrcsVO vo) {
+		System.out.println(vo);
 		service.prcsInsert(vo); 
 		return vo;
 	}

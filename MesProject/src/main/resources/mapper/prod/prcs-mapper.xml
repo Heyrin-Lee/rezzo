@@ -12,11 +12,10 @@
 <select id="prcsFind" resultType="com.rezzo.mes.prod.prcs.service.PrcsVO" parameterType="com.rezzo.mes.prod.prcs.service.PrcsVO">
 	SELECT * 
 	FROM PRCS 
-	<where>
-		<if test="prcsFg != null">
-			AND PRCS_FG = #{prcsFg}
-		</if>
-	</where>
+	WHERE 1=1
+	<if test="prcsNm != null">
+	AND PRCS_NM = #{prcsNm}
+	</if>
 </select>
 
 <!-- 공정등록 -->
@@ -37,8 +36,8 @@
 		VALUES (#{prcsCd}, 
 				#{prcsNm}, 
 				#{prcsFg}, 
-				#{prcsCtnt}) -->
-				
+				#{prcsCtnt})  -->
+		
 		INSERT into prcs (PRCS_CD, 
 			   PRCS_NM, 
 			   PRCS_FG, 
@@ -46,7 +45,7 @@
 		VALUES (#{prcsCd}, 
 				#{prcsNm}, 
 				#{prcsFg}, 
-				#{prcsCtnt})				
+				#{prcsCtnt})			 	
 </insert>	
 
 <!-- 공정삭제 -->
