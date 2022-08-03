@@ -282,34 +282,31 @@
 
 
 
-			// 메인화면 그리드 검색
+			
 
-		$('#sTtn').on('click', function(){
-				let keyword = $("#keyword").val();
-				let opN  = $('[name="opN"]').val();
-				console.log(opN)
-			$.ajax({
-				url: "eqmSelect",
-				method : "post",
-				data: {
-					"opN" : opN, 
-					"keyword" : keyword
-				},
-				dataType:"JSON",
-				success: function (result) {
-					grid.resetData(result);
-				}
+// 메인화면 그리드 검색 (버튼)
+		$('#sTtn').click(ev=>{
+			let keyword = $("#keyword").val();
+			let opN  = $('[name="opN"]').val();
+		$.ajax({
+			url: "eqmSelect",
+			method : "post",
+			data: {"opN" : opN, "keyword" : keyword},
+			dataType:"JSON",
+			success: function (result) {
+				grid.resetData(result);
+			}
 			})
+		});
+
+
+//취소버튼
+	$('#initBtn').on('click', function () {
+		$('#dataForm').each(function () {
+			this.reset()
+		$('#preview').attr('src',"assets/img/add-image.png");
 		})
-
-
-			//취소버튼
-			$('#initBtn').on('click', function () {
-				$('#dataForm').each(function () {
-					this.reset()
-					$('#preview').attr('src',"assets/img/add-image.png");
-				})
-			})
+	})
 
 			//등록버튼
 			$('#insertBtn').on('click', function () {

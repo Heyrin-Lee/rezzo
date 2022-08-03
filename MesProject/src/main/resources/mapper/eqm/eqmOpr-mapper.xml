@@ -113,8 +113,8 @@
 			join eqm_opr o 
 			on e.eqm_cd = o.eqm_cd
 			where 1=1
-			<if test="frDt != null"><![CDATA[ AND fr_dt <= #{frDt}]]></if>
-			<if test="toDt != null"><![CDATA[ AND to_dt <= #{toDt}]]></if>
+			<if test="frDt != null"><![CDATA[ AND fr_dt <= to_date(#{fr_dt}-1)]]></if>
+			<if test="toDt != null"><![CDATA[ AND to_dt <= to_date(#{toDt}+1)]]></if>
 			<if test="eqmNm != null and eqmNm !=''">and e.eqm_nm Like '%'||#{eqmNm}||'%'</if>
 			<if test="eqmCd != null and eqmCd !=''">and e.eqm_cd = #{eqmCd}</if>
 	</select>
