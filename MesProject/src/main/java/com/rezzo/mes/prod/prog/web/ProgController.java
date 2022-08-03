@@ -127,6 +127,9 @@ public class ProgController {
 		List<ProgVO> list = service.getNoOprEqm2();
 		service.updateOprEqm(list);
 		
+//		Scheduler scheduler = new Scheduler();
+//		scheduler.start();
+		
 		return list;
 	}
 
@@ -151,7 +154,7 @@ public class ProgController {
 			for(int i=1 ; i<list.size(); i++) {
 				service.schedule(list.get(i-1), list.get(i));
 				try {
-					this.sleep(8000);
+					this.sleep(5000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -27,7 +27,7 @@
             display:inline-block;
         }
 
-        #rbtn{
+        .rbtn{
             float:right;
             display:inline-block;
         }
@@ -36,6 +36,12 @@
             float: right;
             margin-top: 0px;
         }
+        
+        .linelist {
+		   float: right;
+		   margin-top: 0px;
+		   margin-right: 150px;
+		}
     </style>
 </head>
 <body>
@@ -54,10 +60,11 @@
    </div>
 
 <div id="container">   
-
-   <button data-bs-toggle="modal"  class="btn btn-primary"  id="modalBtn" data-bs-target="#exampleModal"
-                    ><i class="fas fa-search"></i> 지시조회</button>
-   <a href="prcsReport"><button id="rbtn" name="rbtn"  class="btn btn-primary"  form="">공정이동표</button></a>
+	<div class="rbtn">
+	   <button data-bs-toggle="modal"  class="btn btn-primary"  id="modalBtn" data-bs-target="#exampleModal"
+	                    ><i class="fas fa-search"></i> 지시조회</button>
+	   <a href="prcsReport"><button id="rbtn" name="rbtn"  class="btn btn-primary"  form=""><i class="fa-solid fa-file-pdf"></i> 공정이동표</button></a>
+	</div>
    <br>
    <br>
       <div class="card mb-4">
@@ -112,6 +119,9 @@
    
    //지시 계획 모달에 띄우기
    $("#modalBtn").on("click", function(){
+	   modGrid.on('dblclick', ev => {
+			modGrid.check(ev.rowKey);
+		})  
    		$.ajax({
    			url : "indicaListModal",
    			method : 'GET',
@@ -238,29 +248,34 @@
 			url : 'insertProgPrcs',
 			method : 'post',
 			data : JSON.stringify(data),
-			contentType : 'application/json'
+			contentType : 'application/json',
+			success : function(){
+				toastr.success("생산이 종료되었습니다.")
+				grid.clear()
+		   		grid2.clear()
+			}
 		})
 
 		//자재 업데이트			
-		$.ajax({
-			url : 'getHolding',
-			method : 'post',
-			data : {"planCd" : planCd},
-			success : function(result) {
-					let today = new Date()
-					today = today.toISOString().substring(0, 10)
-					console.log(today)
-					let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
-					result.unshift(obj)
-				console.log(result)
-				$.ajax({
-					url : 'setRscOust',
-					method : 'post',
-					data : JSON.stringify(result),
-					contentType : 'application/json'
-				})
-			}
-		})
+		//$.ajax({
+		//	url : 'getHolding',
+		//	method : 'post',
+		//	data : {"planCd" : planCd},
+		//	success : function(result) {
+		//			let today = new Date()
+		//			today = today.toISOString().substring(0, 10)
+		//			console.log(today)
+		//			let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
+		//			result.unshift(obj)
+		//		console.log(result)
+		//		$.ajax({
+		//			url : 'setRscOust',
+		//			method : 'post',
+		//			data : JSON.stringify(result),
+		//			contentType : 'application/json'
+		//		})
+		//	}
+		//})
 		
 		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt
@@ -279,6 +294,8 @@
 				data : iGrid
 			})
 		}
+		
+		
    	} 
    }, 1000)
 
@@ -321,7 +338,7 @@
 					   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
 					   let lineCd = grid.getData()[0].lineCd
 					   let valueI = i
-					   let interval = setInterval(interFn , 3000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
+					   let interval = setInterval(interFn , 1000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
 		               arrTest.push(interval)
    				 }
    				 //clearInterval(arrTest[i])
@@ -344,7 +361,7 @@
 			 url : 'insertEqmCd',
 			 data : {"eqmCd" : eqmCd, "lineCd" : lineCd , "seqNo" : i+1},
 			 success : function(){
-			 	let interval = setInterval(interFn , 3000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
+			 	let interval = setInterval(interFn , 1000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
                 arrTest.push(interval)
 			 }  //end of success
 		   })  //end of ajax
@@ -530,6 +547,10 @@
                 modGrid.refreshLayout()
             }, 300);
         });
+        
+        $('#grid2').mouseleave(ev => {
+    		grid2.finishEditing();
+    	})
     </script>
 </th:block>
 </body>
