@@ -293,7 +293,7 @@
 				  for(j=0; j<result.length; j++) {
 					  if(grid2.getValue(i, 'eqmCd') == result[j].eqmCd){
 					  	grid2.setValue(i, 'nowSt', '긴급중지');
-					  	//prcsPsch : grid2.getValue(i, 'prcsPsch')
+					  	
 					  }
 				  }
 	            clearInterval(arrTest[i])
@@ -305,11 +305,17 @@
    
    //재시작
    $("#restartBtn").on("click", function(){
+   		let array = grid2.getData()
+   		$.each(array, function(index, item) {
+            if(item.nowSt === '긴급중지') {
+            	console.log(item.rowKey)
+            }
+		 })
    		$.ajax({
    			url : 'updateYn2',
    			success : function(result){
-   					console.log(result)
    				 for(i=0; i<grid2.getRowCount(); i++) {
+   				 	
    				 	let eqmCd = grid2.getValue(i, 'eqmCd')
 					   let indicaCnt = grid.getData()[0].indicaCnt
 					   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
@@ -397,6 +403,8 @@
 				            			} else{
 				            				indicaCnt = grid2.getValue(i-1, 'prodCnt')
 				            				if(i < 5) {
+				            					console.log(result.wkToTm)
+				            					console.log(indicaCnt)
 					            				grid2.setValue(i, 'wkToTm', result.wkToTm)
 						            			grid2.setValue(i, 'inferCnt', 0)
 						            			grid2.setValue(i, 'prodCnt', indicaCnt)

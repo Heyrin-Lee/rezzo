@@ -2,6 +2,7 @@ package com.rezzo.mes.prod.prog.web;
 
 import java.io.InputStream;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ import net.sf.jasperreports.engine.JasperReport;
 public class ProgController {
 	@Autowired ProgService service;
 	@Autowired CcdsService ccdsService;
-	@Autowired Scheduler scheduler;
+	
 	@Autowired DataSource dataSource;
 	
 	
@@ -61,10 +62,8 @@ public class ProgController {
 	public void insertEqmCd(ProgVO vo) {
 		service.insertEqmCd(vo);
 		service.updateEqm1(vo);
-		if(scheduler.isAlive()) {
-			scheduler.interrupt();
-		}
-		scheduler = new Scheduler();
+		
+		Scheduler scheduler = new Scheduler();
 		scheduler.start();
 	}
 	
@@ -141,5 +140,23 @@ public class ProgController {
 		//HashMap<String,Object> map = new HashMap<>();
 		//map.put("p_departmentId", request.getParameter("dept"));
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, conn);
-		JasperExportManager.exportReportToPdfStream( jasperPrint, response.getOutputStream());}
+		JasperExportManager.exportReportToPdfStream( jasperPrint, response.getOutputStream());
+	}
+	
+	class Scheduler extends Thread {
+
+		@Override
+		public void run() {
+			List<String> list = Arrays.asList(null, "QHT001","MDC001","FUL001", "CPP001", "QCD001", "OPG001", null);
+			for(int i=1 ; i<list.size(); i++) {
+				service.schedule(list.get(i-1), list.get(i));
+				try {
+					this.sleep(8000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
 }
