@@ -14,7 +14,10 @@
 		select l.line_cd, l.line_nm, e.eqm_cd, e.line_cd, e.prcs_cd, e.eqm_fg, e.eqm_nm, e.min_temp, e.max_temp, e.eqm_ist_dt, e.chck_perd, e.use_yn, e.prcs_nm, m.img_path, m.eqm_img
 			from eqm e join eqm_line l on e.line_cd = l.line_cd
 			join eqm_img m on e.eqm_cd = m.eqm_cd
-		where e.eqm_nm Like '%'||#{keyword}||'%'
+			where 1=1 
+			<if test="#{opN}==1">and e.eqm_cd Like '%'||#{keyword}||'%' </if>
+			<if test="#{opN}==2">and e.eqm_nm Like '%'||#{keyword}||'%' </if>
+			<if test="#{opN}==3">and e.prcs_nm Like '%'||#{keyword}||'%' </if>
 	</select>
 	
 	<select id="eqmCdSelect" resultType="com.rezzo.mes.equip.eqm.service.EqmVO">

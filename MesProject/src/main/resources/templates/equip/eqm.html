@@ -81,12 +81,16 @@
 							<div>
 								<tbody>
 								<tr>
-								<th>설비코드</th>
-									<td>
-								<input class="form-control"  type="text" id="keyword" name="keyword" placeholder="설비명" style="width:250px"></input>
-								<button type="button" style="margin-bottom:3px" class="btn btn-primary" data-bs-toggle="modal" 
-									data-bs-target="#exampleModal" id="modalBtn" name="modalBtn"><i class="fas fa-search"></i></button>
-								<button type="button" onclick="eqmSelect()" class="btn btn-primary" style="margin-bottom:3px"><i class="fas fa-search"></i> 검색</button>
+								
+								<td>
+								<select class="dataTable-selector" id="opN" name="opN" style="width:150px">
+									<option selected value="">==선택==</option>
+									<option value=1>설비코드</option>
+									<option value=2>설비명</option>
+									<option value=3>공정명</option>
+								</select>
+								<input class="form-control"  type="text" id="keyword" name="keyword" placeholder="설비명" style="width:180px"></input>
+								<button type="button" id="sTtn" class="btn btn-primary" style="margin-bottom:3px"><i class="fas fa-search"></i> 검색</button>
 							</td>
 							</tr>
 							</div>
@@ -198,31 +202,7 @@
 				</div>
 			</div>
 
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">설비명 검색</h5>
-						<br> <br>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-					</div><br>
-					<div class="ms-3">
-						<th>설비명</th>
-						<td>
-						<input type="text" id="keyword2" name="keyword2" placeholder="설비명" class="form-control" style="width: 250px">
-						</td>
-						<button type="button" onclick="eqmSelect2()" class="c_btn btn-dark btn-primary btn-sm">검색</button>
-					</div>
-					<div id="modGrid" class="modal-body"></div>
-
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 
 
 		<br>
@@ -301,85 +281,26 @@
 			});
 
 
-			//모달 그리드
-			$.ajax({
-				url: "eqmList",
-				method: "GET",
-				dataType: "JSON",
-				success: function (result) {
-					modGrid.resetData(result);
-					console.log(result);
-				}
-			});
-			
-			
-
-
-
-			const modGrid = new tui.Grid({
-				el: document.getElementById('modGrid'),
-				rowHeaders: ['rowNum'],
-				columns: [{
-					header: '설비명',
-					name: 'eqmNm',
-					align: 'center',
-				}, {
-					header: '설비코드',
-					name: 'eqmCd',
-					align: 'center'
-				}, {
-					header: '공정코드',
-					name: 'prcsCd',
-					align: 'center',
-				}, {
-					header: '공정명',
-					name: 'prcsNm',
-					align: 'center',
-				}, {
-					header: '사용여부',
-					name: 'useYN',
-					align: 'center',
-				}]
-			})
-
-			modalBtn.addEventListener('click', function () {
-
-				setTimeout(function () {
-					modGrid.refreshLayout()
-				}, 300);
-			});
-
 
 			// 메인화면 그리드 검색
-			function eqmSelect() {
+
+		$('#sTtn').on('click', function(){
 				let keyword = $("#keyword").val();
-				$.ajax({
-					url: "eqmSelect",
-					type: "post",
-					data: {
-						"keyword": keyword
-					},
-					dataType: "JSON",
-					success: function (result) {
-						grid.resetData(result);
-					}
-				})
-			}
-			// 모달 그리드 검색
-			function eqmSelect2() {
-				let keyword = $("#keyword2").val();
-				$.ajax({
-					url: "eqmSelect",
-					type: "post",
-					data: {
-						"keyword": keyword
-					},
-					dataType: "JSON",
-					success: function (result) {
-						modGrid.resetData(result);
-					}
-				})
-			}
+				let opN  = $('[name="opN"]').val();
+				console.log(opN)
+			$.ajax({
+				url: "eqmSelect",
+				method : "post",
+				data: {
+					"opN" : opN, 
+					"keyword" : keyword
+				},
+				dataType:"JSON",
+				success: function (result) {
+					grid.resetData(result);
+				}
+			})
+		})
 
 
 			//취소버튼
@@ -502,7 +423,6 @@
 						success: function (result) {
 							grid.resetData(result)
 							$('#dataForm').each(function () {
-								this.reset()
 								$('#preview').attr('src',"assets/img/add-image.png");
 							})
 						}
@@ -601,12 +521,6 @@
 				})
 			});
 			
-			// 그리드 더블클릭
-			modGrid.on('dblclick', (ev) => {
-				var eqmNm = modGrid.getValue(ev.rowKey, 'eqmNm');
-				$('#keyword').val(eqmNm)
-				$('#exampleModal').modal('hide');
-			});
 
 			// 공정명 change event
 			$('#prcsNm').on('change', function () {

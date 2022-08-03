@@ -13,6 +13,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -85,8 +86,8 @@ public class EqmController {
 
 	@PostMapping("eqmSelect")
 	@ResponseBody
-	public List<EqmVO> eqmSelect(@RequestParam(value = "keyword") String keyword, Model model) {
-		return eqmService.eqmSelect(keyword);
+	public List<EqmVO> eqmSelect(@RequestParam(value = "keyword") String keyword, @RequestParam(value="opN") int opN) {
+		return eqmService.eqmSelect(opN,keyword);
 	}
 	
 	// 코드 조회	
@@ -106,17 +107,6 @@ public class EqmController {
 		return vo;
 	};
 
-	/*
-	 * //이미지 파일
-	 * 
-	 * @GetMapping(value = "image/{imagename}") public ResponseEntity<byte[]>
-	 * userSearch(@PathVariable("imagename") String imagename, HttpServletResponse
-	 * response) throws IOException {
-	 * response.setContentType("application/octet-stream"); InputStream imageStream
-	 * = new FileInputStream(uploadPath + imagename); byte[] imageByteArray =
-	 * IOUtils.toByteArray(imageStream); imageStream.close(); return new
-	 * ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK); }
-	 */
 	//추가
 	
 	@PostMapping("eqmInsert")
@@ -147,8 +137,6 @@ public class EqmController {
 	
 	@GetMapping("/download")
 	public ResponseEntity<Object> download(String path) {
-		//String path = "F:/uploadFile/jarzip.PNG";
-		
 		try {
 			Path filePath = Paths.get(uploadPath, path);
 			Resource resource = new InputStreamResource(Files.newInputStream(filePath)); // 파일 resource 얻기
@@ -156,7 +144,8 @@ public class EqmController {
 			File file = new File(path);
 			
 			HttpHeaders headers = new HttpHeaders();
-			headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());  // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
+			headers.setContentDisposition(ContentDisposition.builder("attachment").filename(file.getName()).build());  
+			// 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
 			
 			return new ResponseEntity<Object>(resource, headers, HttpStatus.OK);
 		} catch(Exception e) {
