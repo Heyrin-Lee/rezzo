@@ -180,44 +180,54 @@
             columns: [
                 {
                     header: 'LOT번호',
-                    name: 'rscLotCd'
+                    name: 'rscLotCd',
+                    align: 'center'
                 },
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '자재명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '자재구분',
-                    name: 'rscTyp'
+                    name: 'rscTyp',
+                    align: 'center'
                 },
                 {
                     header: '규격',
-                    name: 'rscSpec'
+                    name: 'rscSpec',
+                    align: 'center'
                 },
                 {
                     header: '단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 },
 
                 {
                     header: '홀딩수량',
-                    name: 'holdCnt'
+                    name: 'holdCnt',
+                    align: 'right'
                 },
                 {
                     header: '입고량',
-                    name: 'istCnt'
+                    name: 'istCnt',
+                    align: 'right'
                 },
                 {
                     header: '출고량',
-                    name: 'oustCnt'
+                    name: 'oustCnt',
+                    align: 'right'
                 },
                 {
                     header: '현재고',
-                    name: 'lotRmnCnt'
+                    name: 'lotRmnCnt',
+                    align: 'right'
                 }
             ]
         });
@@ -233,15 +243,18 @@
             columns: [
                 {
                     header: '자재코드',
-                    name: 'rscCd'
+                    name: 'rscCd',
+                    align: 'center'
                 },
                 {
                     header: '자재명',
-                    name: 'rscNm'
+                    name: 'rscNm',
+                    align: 'center'
                 },
                 {
                     header: '자재단위',
-                    name: 'mngUnit'
+                    name: 'mngUnit',
+                    align: 'center'
                 }
             ]
         })
@@ -304,6 +317,19 @@
         //////////////////////////// referesh btn //////////////////////////////////
         reloadBtn.addEventListener('click', e => {
             location.reload();
+        })
+
+        /////////////////////////// excel ////////////////////////////////////////////
+        let excelBtn = document.getElementById('excelBtn')
+        excelBtn.addEventListener('click', function () {
+
+            let today = new Date();
+            const options = {
+                includeHiddenColumns: true,
+                fileName: 'resource-lot-list',
+            }
+
+            grid.export('xlsx', options);
         })
 
     </script>

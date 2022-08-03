@@ -4,6 +4,7 @@ import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.comm.rsc.service.RscVO;
 import com.rezzo.mes.comm.vend.service.VendVO;
+import com.rezzo.mes.qc.insp.service.PrdtInspVO;
 import com.rezzo.mes.resour.insp.service.InspService;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
@@ -13,8 +14,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @AllArgsConstructor
@@ -94,4 +100,5 @@ public class InspController {
     public List<CcdsVO> getInfCdList() {
         return sv.getInfCdList();
     }
+
 }

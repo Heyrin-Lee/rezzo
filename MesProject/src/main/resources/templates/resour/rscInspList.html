@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>자재수입검사조회</title>
+
     <style>
         tr {
             height: 50px;
@@ -428,6 +429,21 @@
         reloadBtn.addEventListener('click', e => {
             location.reload();
         })
+
+        ///////////////////////////// excel /////////////////////////////////////
+        let excelBtn = document.getElementById('excelBtn')
+        excelBtn.addEventListener('click', function () {
+
+
+            const options = {
+                includeHiddenColumns: true,
+                fileName: 'resource-inspection-list',
+            }
+
+            grid.export('xlsx', options);
+        })
+
+
     </script>
 
 </th:block>

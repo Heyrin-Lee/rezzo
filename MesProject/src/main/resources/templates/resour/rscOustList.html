@@ -305,6 +305,19 @@
         reloadBtn.addEventListener('click', e => {
             location.reload();
         })
+
+        /////////////////////////// excel ////////////////////////////////////////////
+        let excelBtn = document.getElementById('excelBtn')
+        excelBtn.addEventListener('click', function () {
+
+            let today = new Date();
+            const options = {
+                includeHiddenColumns: true,
+                fileName: 'resource-out-store-list',
+            }
+
+            grid.export('xlsx', options);
+        })
     </script>
 
 </th:block>

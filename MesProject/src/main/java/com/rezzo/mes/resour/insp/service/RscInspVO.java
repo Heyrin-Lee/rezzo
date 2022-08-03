@@ -19,7 +19,7 @@ public class RscInspVO {
     private String rscNm; // 자재품명
     private String rscSpec; // 자재규격
     private String mngUnit; // 관리단위
-    private String rscTyp; // 자재 유형
+    private String rscTyp; // 자재 유형s
 
     private String ordrCd; // 발주코드
     private String vendCd; // 공급업체 코드
