@@ -9,6 +9,7 @@ import com.rezzo.mes.resour.ordr.service.RscOrdrVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -17,7 +18,7 @@ public interface InspMapper {
     // 입고검사등록
     List<VendVO> getRscVendList(VendVO vendVO);
     List<RscOrdrVO> getRscOrdrList(RscOrdrVO rscOrdrVO);
-    void setRscInsp(@Param("rscInspCd") String rscInspCd, @Param("inspDt") String inspDt, @Param("inspTstr") String inspTstr);
+    void setRscInsp(@Param("rscInspCd") String rscInspCd, @Param("inspDt") Date inspDt, @Param("inspTstr") String inspTstr);
     void setRscInspList(RscInspVO rscInspVOS);
     void updRscOrdrRmnCnt(RscInspVO rscInspVO);
     String genRscInspCd();
@@ -42,8 +43,6 @@ public interface InspMapper {
     void setRscInfList(@Param("insp") RscInspVO rscInspVO, @Param("inf")RscInfVO rscInfVO);
 
     // 삭제
+    void delRscInspHist(RscInspVO rscInspVO);
     void delRscInspHistSingle(RscInspVO rscInspVO);
-
-    void delRscInspHistAll(RscInspVO rscInspVO);
-
 }

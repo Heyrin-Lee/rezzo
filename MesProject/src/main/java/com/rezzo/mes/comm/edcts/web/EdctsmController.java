@@ -22,6 +22,7 @@ public class EdctsmController {
 	@RequestMapping("edcts")
 	public String edcts(Model model) {
 		model.addAttribute("ccds", ccdsService.getCodes("WHS"));
+		model.addAttribute("edcts", edctmService.getEdctsCd());
 		return "comm/edcts";
 	}
 	

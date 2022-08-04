@@ -29,4 +29,9 @@ public class EdctsmServiceImpl implements EdctsmService {
 		mapper.delEdcts(edctsVO);
 	}
 
+	@Override
+	public EdctsmVO getEdctsCd() {
+		return mapper.getEdctsCd();
+	}
+
 }

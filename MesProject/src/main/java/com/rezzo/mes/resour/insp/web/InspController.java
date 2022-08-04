@@ -104,9 +104,9 @@ public class InspController {
         sv.delRscInspHistSingle(rscInspVOS);
     }
 
-    @RequestMapping("delRscInspHistAll")
+    @RequestMapping("delRscInspHist")
     @ResponseBody
-    public void delRscInspHistAll(@RequestBody RscInspVO rscInspVO) {
-        sv.delRscInspHistAll(rscInspVO);
+    public void delRscInspHist(@RequestBody List<RscInspVO> rscInspVOS) {
+        sv.delRscInspHistAll(rscInspVOS);
     }
 }

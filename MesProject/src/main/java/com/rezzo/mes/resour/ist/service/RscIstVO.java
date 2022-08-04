@@ -1,5 +1,6 @@
 package com.rezzo.mes.resour.ist.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rezzo.mes.resour.insp.service.RscInspVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,12 +26,18 @@ public class RscIstVO {
     private int lotCnt; // lot 수량
     private int lotRmnCnt; // lot 잔여수량
     private int holdCnt; // 생산홀딩
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date regDt; // lot등록일자
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date expDt; // 유통기한
 
     // 자재 입고관리
     private String rscIstCd; // 입고코드
-    private String istDt; // 입고일자
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date istDt; // 입고일자
     private int istCnt; // 입고수량
     private int passRmnCnt; //
 
@@ -38,7 +45,11 @@ public class RscIstVO {
     private String vendNm;
     private String vendCd;
     private String rscNm;
-    private String startDt;
-    private String endDt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date startDt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date endDt;
 
 }

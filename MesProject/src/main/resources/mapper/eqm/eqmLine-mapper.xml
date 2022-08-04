@@ -20,10 +20,12 @@
 		values (<![CDATA[CRE_LINE_CD('LNE')]]>, #{uphCnt}, #{eqmPsch}, #{useYn}, #{lineNm})
 	</insert>
 -->
+
+	<select id="getLineCd" resultType="com.rezzo.mes.equip.line.service.EqmLineVO">
+		select CRE_LINE_CD('LNE') as line_cd from dual
+	</select>
+
 	<update id="eqmLineUpdate" parameterType="com.rezzo.mes.equip.line.service.EqmLineVO">
-		<selectKey keyProperty="lineCd" order="BEFORE" resultType="String">
-			select CRE_LINE_CD('LNE') from dual
-		</selectKey>
 		MERGE INTO eqm_line e
 			USING dual ON (e.line_cd = #{lineCd})
 		WHEN MATCHED THEN
