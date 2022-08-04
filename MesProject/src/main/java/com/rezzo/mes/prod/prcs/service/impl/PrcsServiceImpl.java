@@ -25,8 +25,10 @@ public class PrcsServiceImpl implements PrcsService {
 	}
 
 	@Override
-	public void prcsInsert(PrcsVO vo) {
-		mapper.prcsInsert(vo);
+	public void prcsInsert(List<PrcsVO> list) {
+		for(PrcsVO vo : list) {
+			mapper.prcsInsert(vo);
+		}
 	}
 
 	@Override
