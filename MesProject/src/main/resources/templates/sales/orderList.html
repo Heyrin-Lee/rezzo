@@ -32,11 +32,8 @@
        			<div class="col">
                     <div class="card-body">
 						<div class="linelist" style="float:right;margin-bottom: 13px;">
-					   		<button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> 추가</button>
-					   		<button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
-					   		<button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
 					   		<button class="btn btn-primary" id="ordrBtn"><i class="fas fa-search"></i> 조회</button>
-					   		<button class="btn btn-primary" id="ReBtn"><i class="fas fa-search"></i> 새자료</button>
+					   		<button class="btn btn-primary" id="ReBtn"><i class="fas fa-file"></i> 초기화</button>
 					   </div>
 					   <form name="searchFrm" id="searchFrm">
 					   <table class="table" style="vertical-align : middle;">
@@ -90,6 +87,11 @@
             </div>
       </div>
       <div class="card-body">
+      <div class="linelist" style="margin-left: 1010px;">
+      	<button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> 추가</button>
+	    <button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
+	    <button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
+      </div>
    		<div id="grid" class="card mb-4"></div>   		
 	 </div>
 
@@ -386,7 +388,6 @@
    		});
    
    		//행추가 버튼
-   			let vendRowKey = null;
 		   $('#addBtn').click(ev => {
 		   	var row = grid.getRowCount();
 		   				grid.appendRow();
@@ -418,7 +419,7 @@
 		   		var vendCdRowKey = '';
 		   		grid.on("click",(e) => {
 				const {columnName} = e;
-				var vendCdRowKey = e.rowKey;
+				vendCdRowKey = e.rowKey;
 				if(columnName == 'vendCd') {
 					$("#vendGridModal").modal("show");
 					$.ajax({
@@ -437,7 +438,7 @@
 		   	
 		   	
 		   		//거래처 목록 모달창에서 거래처 선택 -> 추가된 행 거래처명,코드에 값 들어가기
-		   		vendGrid.on("click", ev => {
+		   	vendGrid.on("click", ev => {
 				console.log(ev);
 				let outVendCd = vendGrid.getValue(ev.rowKey,'vendCd');
 				let outVendNm  = vendGrid.getValue(ev.rowKey,'vendNm');
@@ -445,7 +446,10 @@
 				grid.setValue(vendCdRowKey, 'vendCd', outVendCd);
 				grid.setValue(vendCdRowKey, 'vendNm', outVendNm);
 			});
-		   
+			
+			vendGrid.on("dblclick",(ev) => {
+				$("#vendGridModal").modal('hide');
+			});
 			
 			//제품코드 칸 클릭 -> 제품코드 모달창 띄우기
 			var edctsCdRowKey = '';
@@ -538,28 +542,7 @@
 			grid.setValue(prdtRowKey, 'edctsCd', outProdCd);
 			$("#edctsCdModal").modal('hide');
 		});
-		
-		//모달 그리드 더블클릭시 거리처명 가져오기 *등록 거래처모달*
-		grid.on('click', (e) => {
-			const {columnName} =e;
-			vendRowKey = e.rowKey;
-			console.log(vendRowKey);
-		})
-		vendGrid.on("dblclick",(ev) => {
-			var rowKey = ev.rowKey;
-			console.log(rowKey);
-			vendGrid.check(rowKey);
-			var rowKeyData = vendGrid.getCheckedRows(ev);
-			console.log(rowKeyData);
-			var outVendData = vendGrid.getValue(rowKeyData,'prdtNm');
-			var outVendNm = rowKeyData[0].vendNm;
-			var outVendCd = rowKeyData[0].vendCd;
-			console.log(outVendNm);
-			console.log(outVendCd);
-			grid.setValue(vendRowKey, 'vendNm', outVendNm);
-			grid.setValue(vendRowKey, 'vendCd', outVendCd);
-			$("#vendGridModal").modal('hide');
-		});
+	
 		
 		//조건별 주문서 조회 function
 		function search() {
