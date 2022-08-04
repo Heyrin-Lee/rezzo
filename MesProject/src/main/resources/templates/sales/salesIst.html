@@ -177,6 +177,7 @@
 	            {
 	                header: '완제품LOT번호',
 	                name: 'edctsLotNo',
+	                width:120,
 	                align:'center'
 	            },
 	            {
@@ -294,14 +295,15 @@
 	    	var edctsLotNo = $("#edctsLotNo").val();
 	    	console.log(edctsLotNo);
 	    	console.log(inspData);
-	    	var edctsCd = lotNoGrid.getValue(inspData,'edctsCd');
+	    	var edctsCd = lotNoGrid.getValue(inspData[0].rowKey,'edctsCd');
 	    	console.log(edctsCd);
 	    	var edctsIstDt = $("#edctsIstDtStart").val();
 	    	var edctsIstCnt = $("#edctsIstCnt").val();
 	    	console.log(edctsIstCnt);
 	    	var edctsIstNo = $("#edctsIstNo").val();
+	    	var orderNo = lotNoGrid.getValue(inspData[0].rowKey,'orderNo');
 	    	//var orderNo = inspData[0].orderNo;
-			//console.log(orderNo);
+			console.log(orderNo);
 			if($("#edctsIstCnt").val() == '') {
 				toastr.warning('입고수량을 입력해주세요');
 			}else{
@@ -329,10 +331,7 @@
 	    			})
 	    		}
 	    	})
-			}
-				
-		 
-	    	
+			}	
 	   })
 	    
 		$("#dtSearchBtn").on("click",function() {
