@@ -102,7 +102,7 @@ public class PrdtInspController {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("filename", "/jasper/reports/aaa.jrxml");
-		map.put("params", pram);
+		//map.put("params", pram);
 		
 		return new ModelAndView(commonPdfView, map);
 	}

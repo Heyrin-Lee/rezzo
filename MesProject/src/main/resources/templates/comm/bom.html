@@ -21,7 +21,7 @@
 				<div class="linelist" style="float: right;">
 					<button class="btn btn-primary" id="newBtn"><i class="fas fa-file"></i> 초기화</button>
 					<button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장</button>
-					<button class="btn btn-primary" id="delBtn"><i class="fas fa-trash"></i> 삭제</button>
+					<button class="btn btn-primary" id="delBtn2"><i class="fas fa-trash"></i> 삭제</button>
 					<br> <br>
 				</div>
 				<form id="dataForm" name="dataForm" action="#" method="post">
@@ -132,7 +132,32 @@
 			</div>
 		</div>
 	</div>
-	
+ <script type="text/javascript" src="/js/alertBox.js"></script>
+  <script type="text/javascript">
+    $('#delBtn2').on('click', function () {
+      $('body').alertBox({
+        title: '정말로 삭제하시겠습니까?',
+        lTxt: 'Back',
+        rTxt: 'Okey',
+        rCallback: function(){
+
+				  $.ajax({
+					 	url: "delBom",
+					  method: "POST",
+			      data: $('#dataForm').serialize(),
+			      dataType: 'json',
+				    success: function (result) {
+				    	toastr.success('정상적으로 삭제되었습니다.');
+				    	$('#dataForm')[0].reset();
+				    	grid.resetData(result);
+							//grid.clear();
+				    }
+					})
+
+        }
+      })
+    })
+  </script>   
 <script>
 const grid = new tui.Grid({
     el: document.getElementById('grid'),
@@ -163,18 +188,18 @@ const grid = new tui.Grid({
       {
         header: '자재명',
         name: 'rscNm',
-        align: 'center',
+        align: 'left',
       	sortable: true,
         sortingType: 'desc'
       },
       {
           header: '사용량',
           name: 'useCnt',
+          align: 'right',
           editor: 'text',
           validation: {
              required: true
          },
-          align: 'center',
         	sortable: true,
           sortingType: 'desc'
       },
@@ -204,7 +229,7 @@ const grid = new tui.Grid({
       {
           header: '사용공정명',
           name: 'prcsNm',
-          align: 'center',
+          align: 'left',
         	sortable: true,
           sortingType: 'desc'
       },
@@ -212,7 +237,7 @@ const grid = new tui.Grid({
           header: '비고',
           name: 'remk',
           editor: 'text',
-          align: 'center',
+          align: 'left',
         	sortable: true,
           sortingType: 'desc'
       }
@@ -352,27 +377,6 @@ $('#saveBtn').click(ev => {
 			})
 	}
  });
-
-//삭제버튼
-$('#delBtn').click(ev => {
-		if(confirm("BOM데이터가 모두 삭제됩니다. 계속하시겠습니까?") == false){
-     return;   
-		} else {
-		  $.ajax({
-			 	url: "delBom",
-			  method: "POST",
-	      data: $('#dataForm').serialize(),
-	      dataType: 'json',
-			    success: function (result) {
-			    	toastr.success('정상적으로 삭제되었습니다.');
-			    	$('#dataForm')[0].reset();
-			    	grid.resetData(result);
-						//grid.clear();
-			    }
-			})
-		}
- });
- 
  
 /* 사용공정명 모달 그리드 */
 const prcsModalGrid = new tui.Grid({
@@ -387,6 +391,7 @@ const prcsModalGrid = new tui.Grid({
     {
       header: '공정명',
       name: 'prcsNm',
+      align: 'left',
     },
     {
       header: '공정구분',
@@ -395,6 +400,7 @@ const prcsModalGrid = new tui.Grid({
     {
       header: '공정설명',
       name: 'prcsCtnt',
+      align: 'left',
     }
   ]
 });
@@ -453,19 +459,19 @@ const rscModalGrid = new tui.Grid({
       {
         header: '자재명',
         name: 'rscNm',
-        align: 'center',
+        align: 'left',
       	sortable: true,
         sortingType: 'desc'
       },
       {
-        header: '자재명',
+        header: '규격',
         name: 'rscSpec',
         align: 'center',
       	sortable: true,
         sortingType: 'desc'
       },
       {
-        header: '자재명',
+        header: '단위',
         name: 'mngUnit',
         align: 'center',
       	sortable: true,
@@ -474,7 +480,7 @@ const rscModalGrid = new tui.Grid({
       {
         header: '입고업체명',
         name: 'vendNm',
-        align: 'center',
+        align: 'left',
       	sortable: true,
         sortingType: 'desc'
       }
@@ -550,7 +556,7 @@ function getRscList(state, keyword) {
       {
         header: '제품명',
         name: 'prdtNm',
-        align: 'center',
+        align: 'left',
       	sortable: true,
         sortingType: 'desc'
       },
@@ -562,6 +568,13 @@ function getRscList(state, keyword) {
           sortingType: 'desc'
       },
       {
+          header: '안전재고',
+          name: 'safStc',
+          align: 'right',
+        	sortable: true,
+          sortingType: 'desc'
+      },
+      {
           header: '단위',
           name: 'unit',
           align: 'center',
@@ -569,16 +582,9 @@ function getRscList(state, keyword) {
           sortingType: 'desc'
       },
       {
-          header: '안전재고',
-          name: 'safStc',
-          align: 'center',
-        	sortable: true,
-          sortingType: 'desc'
-      },
-      {
           header: '보관창고',
           name: 'ccdDtlNm',
-          align: 'center',
+          align: 'left',
         	sortable: true,
           sortingType: 'desc'
       }
