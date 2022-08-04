@@ -61,7 +61,7 @@
     </select>
 
     <select id="getRscStcList" parameterType="RscStcVO" resultType="RscStcVO">
-        select rsc.RSC_CD,
+        select distinct rsc.RSC_CD,
         rsc.RSC_NM,
         rsc.RSC_TYP,
         rsc.RSC_SPEC,
@@ -77,6 +77,7 @@
         full join RSC_OUST ro on (ro.RSC_CD = rsc.RSC_CD and ro.OUST_DT between trunc(#{inqDt}, 'MM') and #{inqDt})
         full join RSC_STC rs on (rs.RSC_CD = rsc.RSC_CD)
         where rsc.RSC_CD is not null
+        order by rsc.RSC_CD
         <if test="rscCd != null and rscCd != ''">and rsh.RSC_CD = #{rscCd}</if>
 
     </select>
