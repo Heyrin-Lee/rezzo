@@ -99,7 +99,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">생산지시조회</h5>
                         <br> <br>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
@@ -302,6 +302,8 @@
 
     //긴급 중지
    $("#stopBtn").on("click", function(){
+		  toastr.error("생산을 긴급 중지합니다.")
+
    		$.ajax({
    			url : 'updateYn',
 			success : function(result){
@@ -323,6 +325,7 @@
    
    //재시작
    $("#restartBtn").on("click", function(){
+	   toastr.info("생산을 다시 시작합니다.")
    		let array = grid2.getData()
    		$.each(array, function(index, item) {
             if(item.nowSt === '긴급중지') {
@@ -351,6 +354,7 @@
 	let arrTest = []
    // 생산지시	
    $("#startBtn").on("click", function(){
+	  toastr.info("생산을 시작합니다.")
 	  for(i=0; i<grid2.getRowCount(); i++) {
 		   let eqmCd = grid2.getValue(i, 'eqmCd')
 		   let indicaCnt = grid.getData()[0].indicaCnt

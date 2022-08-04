@@ -402,8 +402,8 @@
                 scrollY: true,
            		rowHeaders: ['checkbox'],
                 columns: [{
-                        header: '자재코드',
-                        name: 'rscCd',
+                        header: '자재명',
+                        name: 'rscNm',
                         align: 'center'
                     },
                     {
@@ -440,12 +440,14 @@
            		if(key.keyCode == 13) {
 	          		let data = grid4.getCheckedRows()
 	          		console.log(data)
-	          		if(data[0].holdCnt > data[0].lotRmnCnt && data[0].holdCnt == data[0].useCnt){
-	          			toastr.error("자재 재고가 부족합니다")
-	          		} else if (data[0].holdCnt > data[0].lotRmnCnt && data[0].holdCnt < data[0].useCnt) {
-	          			toastr.error("출고 수량이 부족합니다")
-	          		} 
-	          		else {
+	          		if(data[0].holdCnt > data[0].lotRmnCnt ){
+	          			toastr.error("자재 재고가 부족합니다.")
+	          		} else if (data[0].holdCnt < data[0].useCnt) {
+	          			toastr.error("출고 수량이 부족합니다.")
+	          		} else if (data[0].holdCnt <= data[0].lotRmnCnt && data[0].holdCnt != data[0].useCnt) {
+	          			toastr.error("출고 수량이 사용량을 초과합니다.")
+	          		}
+	          		else if (data[0].holdCnt <= data[0].lotRmnCnt && data[0].holdCnt == data[0].useCnt) {
 		           		grid5.resetData(data)
 	          		}
            		}
