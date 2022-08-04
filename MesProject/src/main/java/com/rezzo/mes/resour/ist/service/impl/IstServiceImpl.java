@@ -30,7 +30,10 @@ public class IstServiceImpl implements RscIstService {
             rscIstVO.setRscIstCd(rscIstCd); // ist key set
             mapper.setRscIstLotEach(rscIstVO); // lot 입고 등록
         }
-        mapper.setRscIst(rscIstCd, istDt);
+        RscIstVO vo = new RscIstVO();
+        vo.setIstDt(istDt);
+        vo.setRscIstCd(rscIstCd);
+        mapper.setRscIst(vo);
     }
 
     @Override

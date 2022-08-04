@@ -14,7 +14,7 @@ public interface RscIstMapper {
     String getRscIstCd(); // 입고 코드 발급
     String getRscIstLotCd(RscIstVO rscIstVO); // lot key 발급
     void setRscIstLotEach(RscIstVO rscIstVO);
-    void setRscIst(@Param("rscIstCd") String rscIstcd, @Param("istDt") Date istDt);
+    void setRscIst(RscIstVO rscIst);
 
     // grid search
     RscVO getRscSingle(RscVO rscVO);
