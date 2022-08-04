@@ -141,6 +141,7 @@
         ///////////////////////////// init ////////////////////////////////
         window.addEventListener('load', function () {
             getRscListInit();
+            getIOList();
         })
 
         ///////////////////////////// date picker ////////////////////////////////
@@ -267,7 +268,9 @@
 
         ///////////////////////////// main search ////////////////////////////////
         let schBtn = document.getElementById('schBtn');
-        schBtn.addEventListener('click', function () {
+        schBtn.addEventListener('click', getIOList);
+
+        function getIOList () {
             let url = 'getIOList'
             let data = new FormData(schParam)
             fetch(url, {
@@ -276,7 +279,7 @@
             }).then(res => res.json()).then(res => {
                 grid.resetData(res);
             })
-        });
+        }
 
         //////////////////////////// referesh btn //////////////////////////////////
         reloadBtn.addEventListener('click', e => {

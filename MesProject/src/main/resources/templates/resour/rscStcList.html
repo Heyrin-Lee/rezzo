@@ -10,9 +10,12 @@
         tr {
             height: 50px;
         }
+
+        .tui-grid-cell.lowStock {
+            background-color: rgba(255, 0, 0, 0.3);
+        }
     </style>
 </head>
-
 
 <body>
 <th:block layout:fragment="main">
@@ -62,18 +65,6 @@
                                         class="fas fa-search"></i></button>
                             </td>
                         </tr>
-<!--                        <tr>-->
-<!--                            <th>-->
-<!--                                <b>정렬구분</b>-->
-<!--                            </th>-->
-<!--                            <td>-->
-<!--                                <div id="sortBtn">-->
-<!--                                    <label><input type="radio" class="form-check-input" name="sortTyp"-->
-<!--                                                  value="prcsDt" checked> 처리일자</label>-->
-<!--                                    <label><input type="radio" class="form-check-input" name="sortTyp" value="rscCd"> 자재</label>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                        </tr>-->
                         </tbody>
                     </table>
                 </form>
@@ -136,6 +127,7 @@
         ///////////////////////////// init ////////////////////////////////
         window.addEventListener('load', function () {
             getRscListInit();
+            getRscStcList();
         })
 
         ///////////////////////////// date picker ////////////////////////////////
@@ -188,10 +180,6 @@
                 {
                     header: '안전재고',
                     name: 'safStc'
-                },
-                {
-                    header: '가용수량',
-                    name: 'avalStc'
                 }
             ]
         });
@@ -263,7 +251,9 @@
 
         ///////////////////////////// main search ////////////////////////////////
         let schBtn = document.getElementById('schBtn');
-        schBtn.addEventListener('click', function () {
+        schBtn.addEventListener('click', getRscStcList);
+
+        function getRscStcList() {
             let url = 'getRscStcList'
             let data = new FormData(schParam)
             fetch(url, {
@@ -272,7 +262,7 @@
             }).then(res => res.json()).then(res => {
                 grid.resetData(res)
             })
-        });
+        }
 
         //////////////////////////// referesh btn //////////////////////////////////
         reloadBtn.addEventListener('click', e => {
@@ -288,12 +278,22 @@
                 includeHiddenColumns: true,
                 fileName: 'resource-stock-list',
             }
-
             grid.export('xlsx', options);
         })
 
-    </script>
+        /////////////////////////////////////////////////////////////////////////////////
+        grid.on('onGridUpdated', function (ev) {
+            let rowCnt = grid.getRowCount();
+            let stcCnt = grid.getColumnValues('stcCnt')
+            let safStc = grid.getColumnValues('safStc')
 
+            for (let i = 0; i < rowCnt; i++) {
+                if(safStc[i] > stcCnt[i]) {
+                    grid.addRowClassName(i, 'lowStock')
+                }
+            }
+        })
+    </script>
 </th:block>
 </body>
 </html>
