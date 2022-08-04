@@ -205,7 +205,9 @@
 
 		<br>
 
+		 <script type="text/javascript" src="/js/alertBox.js"></script>
 		<script>
+		   
 		// 이미지 클릭 시 파일 첨부
 		$('#preview').click(function(){
 			$('[name="file"]').click();
@@ -459,29 +461,34 @@
 				if ($('#eqmCd').val() == null || $('#eqmCd').val() == '') {
 					toastr.warning('삭제할 설비를 선택해주세요.');
 				} else{
-					var result = confirm("해당 설비를 정말 삭제할까요?")
-				if (!result)
-					return;
-				$.ajax({
-					url: "eqmDelete/" + eqmCd,
-					type: 'POST',
-					dataType: 'json'
-				}).done(function (xhr) {
-					$.ajax({
-						url: "eqmList",
-						method: "GET",
-						dataType: "JSON",
-						success: function (result) {
-							grid.resetData(result);
-							toastr.success('설비삭제가 완료되었습니다.');
-							$('#dataForm').each(function () {
-								this.reset()
-								$('#preview').attr('src',"assets/img/add-image.png");
+					$('body').alertBox({
+				        title: '정말로 삭제하시겠습니까?',
+				        lTxt: 'Back',
+				        rTxt: 'Okey',
+				        rCallback: function(){
+
+							$.ajax({
+								url: "eqmDelete/" + eqmCd,
+								type: 'POST',
+								dataType: 'json'
+							}).done(function (xhr) {
+								$.ajax({
+									url: "eqmList",
+									method: "GET",
+									dataType: "JSON",
+									success: function (result) {
+										grid.resetData(result);
+										toastr.success('설비삭제가 완료되었습니다.');
+										$('#dataForm').each(function () {
+											this.reset()
+											$('#preview').attr('src',"assets/img/add-image.png");
+										})
+									}
+								})
 							})
-						}
-					})
-				})
-			}})
+						  }
+				      })
+					}})
 
 
 

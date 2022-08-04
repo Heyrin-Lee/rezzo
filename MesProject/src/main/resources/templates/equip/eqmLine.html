@@ -116,7 +116,7 @@
 					</div>
 
 
-
+ <script type="text/javascript" src="/js/alertBox.js"></script>
 		<script>
 			//취소
 			$('#initBtn').on('click', function () {
@@ -182,44 +182,51 @@
 				
 				var lCd= $('#lineCd').val()
 				var lineNm= $('#lineNm').val()
-				$.ajax({
-					url: "eqmLineList",
-					method: "GET",
-					dataType: "JSON",
-					success: function (result) {
+				
 					if(lineNm == null || lineNm == ''){
 							toastr.warning('삭제할 라인을 선택해주세요.');
 							return false;
 						} else {
-					var result = confirm("라인코드를 정말 삭제할까요?")
-					var lineCd = $('#lineCd').val()
-					if (!result)
-						return;
+							
+					 $('body').alertBox({
+						title: '정말로 삭제하시겠습니까?',
+						lTxt: 'Back',
+						rTxt: 'Okey',
+						rCallback: function(){
+							$.ajax({
+								url: "eqmLineList",
+								method: "GET",
+								dataType: "JSON",
+								success: function (result) {
+								if(lineNm == null || lineNm == ''){
+										toastr.warning('삭제할 라인을 선택해주세요.');
+										return false;
+									} else {
+								var lineCd = $('#lineCd').val()
 
-					$.ajax({
-						url: "eqmLineDelete/" + lineCd,
-						type: 'POST',
-						dataType: 'json'
-					}).done(function (xhr) {
-						$.ajax({
-							url: "eqmLineList",
-							method: "GET",
-							dataType: "JSON",
-							success: function (result) {
-								toastr.success('라인코드가 정상 삭제되었습니다.');
-								$('#dataForm')[0].reset();
-								grid.resetData(result);
+								$.ajax({
+									url: "eqmLineDelete/" + lineCd,
+									type: 'POST',
+									dataType: 'json'
+								}).done(function (xhr) {
+									$.ajax({
+										url: "eqmLineList",
+										method: "GET",
+										dataType: "JSON",
+										success: function (result) {
+											toastr.success('라인코드가 정상 삭제되었습니다.');
+											$('#dataForm')[0].reset();
+											grid.resetData(result);
+										}
+									});
+								})
 							}
-						});
-					})
-				}
-					} 
-				
-				}
-				)
+								} 
+							
+							}
+							)}})}})
 				 
 				
-			})
 
 
 			// 저장
