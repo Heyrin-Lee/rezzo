@@ -13,7 +13,7 @@
      }, {
          header: '공통코드명',
          name: 'ccdNm',
-         align: 'center',
+         align: 'left',
          sortable: true,
          sortingType: 'desc'
      }]
@@ -58,7 +58,7 @@
      }, {
          header: '코드명',
          name: 'ccdDtlNm',
-         align: 'center',
+         align: 'left',
          editor: 'text',
          validation: {
              required: true
@@ -68,7 +68,7 @@
      }, {
          header: '코드설명',
          name: 'ccdDtlDesct',
-         align: 'center',
+         align: 'left',
          editor: 'text',
          sortable: true,
          sortingType: 'desc'

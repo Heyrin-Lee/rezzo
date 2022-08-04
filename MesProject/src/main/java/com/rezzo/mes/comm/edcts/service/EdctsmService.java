@@ -10,5 +10,6 @@ public interface EdctsmService {
 	public void saveEdcts(EdctsmVO edctsVO);
 	//삭제
 	public void delEdcts(EdctsmVO edctsVO);
-
+	//제품코드 받아오기
+	public EdctsmVO getEdctsCd();
 }
