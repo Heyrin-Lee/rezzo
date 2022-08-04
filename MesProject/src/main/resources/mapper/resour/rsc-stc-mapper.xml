@@ -35,10 +35,6 @@
           prcsDt >= #{startDt}
           and prcsDt <= #{endDt}
         ]]>
-        <if test="rscCd != null and rscCd != ''">and RSC_CD = #{rscCd}</if>
-        order by
-        <if test="sortTyp == 'prcsDt'">prcsDt desc, RSC_CD, CD desc</if>
-        <if test="sortTyp == 'rscCd'">RSC_CD, prcsDt desc, CD desc</if>
     </select>
 
     <select id="getRscLotList" parameterType="RscLotVO" resultType="RscLotVO">
