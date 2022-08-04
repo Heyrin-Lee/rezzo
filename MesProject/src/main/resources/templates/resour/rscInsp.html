@@ -918,14 +918,11 @@
                 gridVal[0].inspDt = inspDt.value;
                 gridVal[0].inspTstr = inspTstr.value;
                 setRscInspList(gridVal);
-
-                schRscInspHist();
                 toastr.success('저장이 완료되었습니다.')
             } else {
                 updRscInspHist(gridVal);
                 grid.clear();
                 saveFlag === 0;
-                schRscInspHist();
                 toastr.success('수정이 완료되었습니다.')
             }
         })
@@ -938,6 +935,8 @@
                 body: JSON.stringify(data)
             }).then(res => {
                 getOrdrList();
+            }).then(res => {
+                schRscInspHist();
             })
         }
 
@@ -947,6 +946,8 @@
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify(data)
+            }).then(res => {
+                schRscInspHist();
             })
         }
 
@@ -985,7 +986,7 @@
             let url = 'schRscInspHist'
             fetch(url).then(res => res.json()).then(res => {
                 mdfyGrid.resetData(res);
-            }).then(res=>{
+            }).then(res => {
                 mdfyGrid.refreshLayout();
             })
         }
@@ -1070,7 +1071,7 @@
                     body: JSON.stringify(data)
                 }).then(res => {
                     toastr.success('삭제되었습니다.');
-                }).then(res => {
+
                     schRscInspHist();
                     grid.removeRows(rowKeys);
                     grid.refreshLayout();
