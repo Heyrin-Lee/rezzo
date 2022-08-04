@@ -54,13 +54,13 @@
 
                 loop
                     insert into RSC_OUST (RSC_OUST_CD, OUST_DT, RSC_CD, OUST_CNT, OUST_TYP, note)
-                    values (#{rscOustCd}, to_date(#{oustDt}, 'yyyy-mm-dd'), v_values.RSC_CD, v_values.oust_cnt, #{oustTyp}, #{note});
+                    values (#{rscOustCd}, #{oustDt}, v_values.RSC_CD, v_values.oust_cnt, #{oustTyp}, #{note});
                 end loop;
         end;
     </insert>
 
     <select id="schRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
-        select ro.RSC_OUST_CD, count(*) oustCnt, to_char(ro.OUST_DT, 'yyyy-MM-dd') as oustDt
+        select ro.RSC_OUST_CD, count(*) oustCnt, ro.OUST_DT
         from RSC_OUST_DTL rod,
              RSC_OUST ro
         where rod.RSC_OUST_CD = ro.RSC_OUST_CD
@@ -123,7 +123,7 @@
     </update>
 
     <select id="getRscOustList" parameterType="RscOustVO" resultType="RscOustVO">
-        select to_char(ro.OUST_DT, 'yyyy-mm-dd') as oustDt,
+        select ro.OUST_DT,
         ro.RSC_OUST_CD,
         rod.RSC_CD,
         rsc.RSC_NM,

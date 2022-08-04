@@ -42,28 +42,6 @@
                         <tbody>
                         <tr>
                             <th>
-                                <b>조회일자</b>
-                            </th>
-                            <td>
-                                <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
-                                     style="height: 40px; border-radius: 5px;">
-                                    <input id="startpicker-input" class="form-control" type="text" aria-label="Date"
-                                           name="startDt">
-                                    <span class="tui-ico-date"></span>
-                                    <div id="startpicker-container" style="margin-left: -1px;"></div>
-                                </div>
-                                <span></span>
-                                <div class="tui-datepicker-input tui-datetime-input tui-has-focus"
-                                     style="height: 40px; border-radius: 5px;">
-                                    <input id="endpicker-input" class="form-control" type="text" aria-label="Date"
-                                           name="endDt">
-                                    <span class="tui-ico-date"></span>
-                                    <div id="endpicker-container" style="margin-left: -1px;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
                                 <label for="rscNm"><b>자재명</b></label>
                             </th>
                             <td>
@@ -152,23 +130,6 @@
         window.addEventListener('load', function () {
             getRscListInit();
         })
-
-        ///////////////////////////// date picker ////////////////////////////////
-        let today = new Date();
-        let picker = tui.DatePicker.createRangePicker({
-            startpicker: {
-                date: today,
-                input: '#startpicker-input',
-                container: '#startpicker-container'
-            },
-            endpicker: {
-                date: today,
-                input: '#endpicker-input',
-                container: '#endpicker-container'
-            },
-            type: 'date',
-            format: 'yyyy-MM-dd'
-        });
 
         ///////////////////////////// grid ////////////////////////////////
         // main grid
