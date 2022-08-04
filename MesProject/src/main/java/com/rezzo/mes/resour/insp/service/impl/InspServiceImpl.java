@@ -112,6 +112,7 @@ public class InspServiceImpl implements InspService {
 
     // 삭제
     @Override
+    @Transactional
     public void delRscInspHistSingle(List<RscInspVO> rscInspVOS) {
         for (RscInspVO vo : rscInspVOS) {
             mapper.delRscInspHistSingle(vo);
@@ -119,6 +120,7 @@ public class InspServiceImpl implements InspService {
     }
 
     @Override
+    @Transactional
     public void delRscInspHistAll(List<RscInspVO> rscInspVOS) {
         for (RscInspVO vo : rscInspVOS) {
             mapper.delRscInspHistSingle(vo);

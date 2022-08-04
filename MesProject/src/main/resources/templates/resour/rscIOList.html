@@ -69,17 +69,6 @@
                                 <button id="rscModBtn" type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
                             </td>
                         </tr>
-                        <tr>
-                            <th>
-                                <b>정렬구분</b>
-                            </th>
-                            <td>
-                                <div id="sortBtn">
-                                    <label><input type="radio" class="form-check-input" name="sortTyp" value="prcsDt" checked> 처리일자</label>
-                                    <label><input type="radio" class="form-check-input" name="sortTyp" value="rscCd"> 자재</label>
-                                </div>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </form>
@@ -141,6 +130,7 @@
         ///////////////////////////// init ////////////////////////////////
         window.addEventListener('load', function () {
             getRscListInit();
+            getIOList();
         })
 
         ///////////////////////////// date picker ////////////////////////////////
@@ -170,30 +160,37 @@
             columns: [
                 {
                     header: '처리일자',
+                    align: 'center',
                     name: 'prcsDt'
                 },
                 {
                     header: '자재코드',
+                    align: 'center',
                     name: 'rscCd'
                 },
                 {
                     header: '자재명',
+                    align: 'left',
                     name: 'rscNm'
                 },
                 {
                     header: '규격',
+                    align: 'center',
                     name: 'rscSpec'
                 },
                 {
                     header: '단위',
+                    align: 'center',
                     name: 'mngUnit'
                 },
                 {
                     header: '입고수량',
+                    align: 'right',
                     name: 'istCnt'
                 },
                 {
                     header: '출고수량',
+                    align: 'right',
                     name: 'oustCnt'
                 }
             ]
@@ -267,7 +264,9 @@
 
         ///////////////////////////// main search ////////////////////////////////
         let schBtn = document.getElementById('schBtn');
-        schBtn.addEventListener('click', function () {
+        schBtn.addEventListener('click', getIOList);
+
+        function getIOList () {
             let url = 'getIOList'
             let data = new FormData(schParam)
             fetch(url, {
@@ -276,7 +275,7 @@
             }).then(res => res.json()).then(res => {
                 grid.resetData(res);
             })
-        });
+        }
 
         //////////////////////////// referesh btn //////////////////////////////////
         reloadBtn.addEventListener('click', e => {
