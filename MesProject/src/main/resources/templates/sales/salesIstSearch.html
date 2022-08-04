@@ -24,7 +24,7 @@
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
 			<li class="breadcrumb-item">> 영업관리</li>
-			<li class="breadcrumb-item active">> 제품 입고 조회</li>
+			<li class="breadcrumb-item active">> 제품입고조회</li>
 		</ol>
 		
 		<div class="card mb-4">
@@ -33,7 +33,7 @@
 				<div class="card-body">
 				<div class="linelist" style="float:right;margin-bottom: 13px;">
 					<button type="button" class="btn btn-primary" id="optionSearchBtn"><i class="fas fa-search"></i> 조회</button></td>
-					<button class="btn btn-primary" id="ReBtn"><i class="fas fa-search"></i> 새자료</button>
+					<button class="btn btn-primary" id="ReBtn"><i class="fas fa-file"></i> 초기화</button>
 				</div>
                      <form name="IstSearchFrm" id="IstSearchFrm">
                      <table class="table" style="vertical-align : middle;">
@@ -131,7 +131,12 @@
 	          header: '완제품LOT번호',
 	          name: 'edctsLotNo',
 	          align:'center'
-	        }
+	        },
+	        {
+		      header: '제품명',
+		      name: 'prdtNm',
+		      align:'center'
+		        }
 		  ]   
 	    });
 	    

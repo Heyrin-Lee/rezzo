@@ -45,7 +45,7 @@
 	
 	<!-- 완제품LOT번호 모달 조회 -->
 	<select id="getLotList" resultType="PrdtInspVO">
-	SELECT  p.order_no, p.edcts_lot_no, p.edcts_cd, o.prdt_nm, p.insp_cnt
+	SELECT DISTINCT p.order_no, p.edcts_lot_no, p.edcts_cd, o.prdt_nm, p.insp_cnt
 	FROM PRDT_INSP p, ORDER_SHEET o
 	      WHERE p.EDCTS_CD = o.EDCTS_CD
 	      AND o.PROG_APPE = '검사완료'
