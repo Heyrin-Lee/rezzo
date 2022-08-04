@@ -46,10 +46,10 @@
  	   <div class="card mb-4">
 			<div class="card-body">
      <div class="linelist">
+       <button id="clearBtn" class="btn btn-primary" form=""><i class="fas fa-file"></i> 초기화</button> 
        <button data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
                     ><i class="fas fa-search"></i> 계획조회</button>
        <button class="btn btn-primary" id="regiBtn"><i class="fas fa-save"></i> 저장</button>
-       <button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button> 
      </div>
      
 	 <div id="grid"></div>
@@ -214,7 +214,7 @@
 	        {
 	          header: '제품명',
 	          name: 'prdtNm',
-	          align : 'center'
+	          align : 'left'
 	        },
 	        {
 	          header: '계획번호',
@@ -234,21 +234,21 @@
 	        {
 	          header: '라인책임자',
 	          name: 'linePsch',
-	          align : 'center',
+	          align : 'left',
 	          editor: {
                   type: 'select',
                   options: {
                       listItems: [{
-                              text: '이마크',
-                              value: '이마크'
+                              text: '강길동',
+                              value: '강길동'
                           },
                           {
-                              text: '이동혁',
-                              value: '이동혁'
+                              text: '유길동',
+                              value: '유길동'
                           },
                           {
-                              text: '치타리',
-                              value: '치타리'
+                              text: '장길동',
+                              value: '장길동'
                           }
                       ]
                   }
@@ -257,12 +257,12 @@
 	        {
 	          header: '필요수량',
 	          name: 'orderCnt',
-	          align : 'center'
+	          align : 'right'
 	        },
 	        {
 	          header: '지시수량',
 	          name: 'indicaCnt',
-	          align : 'center'
+	          align : 'right'
 	        },
 	        {
 	          header: '작업지시일',
@@ -291,9 +291,9 @@
 	          align : 'center'
 	        },
 	        {
-	          header: '자재코드',
-	          name: 'rscCd',
-	          align : 'center'
+	          header: '자재명',
+	          name: 'rscNm',
+	          align : 'left'
 	        },
 	        {
 	          header: 'LOT번호',
@@ -303,17 +303,17 @@
 	        {
 	          header: '출고수량',
 	          name: 'holdCnt',
-	          align : 'center'
+	          align : 'right'
 	        },
 	        {
 	          header: '재고수량',
 	          name: 'lotRmnCnt',
-	          align : 'center'
+	          align : 'right'
 	        },
 	        {
 	          header: '사용량',
 	          name: 'useCnt',
-	          align : 'center'
+	          align : 'right'
 	        }
 	      ]
 	    });
@@ -342,7 +342,7 @@
 	        {
 	          header: '출고수량',
 	          name: 'holdCnt',
-	          align : 'center'
+	          align : 'right'
 	        }
 	      ]
 	    });

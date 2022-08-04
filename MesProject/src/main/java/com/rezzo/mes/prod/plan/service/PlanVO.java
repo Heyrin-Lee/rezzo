@@ -42,6 +42,7 @@ public class PlanVO{
 	String rscCd;
 	String rscLotCd;
 	int lotRmnCnt;
+	String rscNm;
 	
 	// bom  
 	int useCnt;
