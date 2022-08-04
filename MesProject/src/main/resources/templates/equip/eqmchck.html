@@ -95,30 +95,27 @@
 											<td><input class="form-control" type="date" id="chckDt" name="chckDt" style="width: 250px" /></td>
 										</tr>
 										<tr>
+										
 											<th>판정</th>
 											<td>
-												<select class="dataTable-selector" name="jdgmnt" id="jdgmnt" style="width: 250px">
-													<option selected value="">==등록시필수선택==</option>
-													<option value="적합">적합</option>
-													<option value="부적합">부적합</option>
-												</select>
+												<input type="radio" name="jdgmnt" value="적합"> 적합
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input type="radio" name="jdgmnt" value="부적합"> 부적합
 											</td>
 											<th>조치사항</th>
 											<td>
-												<select class="dataTable-selector" name="dispoMatter" id="dispoMatter" style="width: 250px">
-													<option selected value="">==등록시필수선택==</option>
-													<option value="수리">수리</option>
-													<option value="점검">점검</option>
-												</select>
+												<input type="radio" name="dispoMatter" value="수리"> 수리
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input type="radio" name="dispoMatter" value="점검"> 점검
 											</td>
 											<th>점검구분</th>
 											<td>
-												<select class="dataTable-selector" name="chckFg" id="chckFg" style="width: 250px; ">
-													<option selected value="">==등록시필수선택==</option>
-													<option value="상시점검">상시점검</option>
-													<option value="정기점검">정기점검</option>
-												</select>
+												<input type="radio" name="chckFg" value="적합"> 적합
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+												<input type="radio" name="chckFg" value="부적합"> 부적합
+												
 										</tr>
+										
 										<tr>
 
 											<th>조치내역</th>
@@ -194,8 +191,7 @@
 				</div>
 			</div>
 
-		
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+		 <script type="text/javascript" src="/js/alertBox.js"></script>
 			<script>
 			
 				// 로딩 시 점검 리스트 그리드 데이터 실행
@@ -243,7 +239,7 @@
 						}, {
 							header: '설비명',
 							name: 'eqmNm',
-							align: 'center',
+							align: 'left',
 						},
 						{
 							header: '점검일자',
@@ -257,11 +253,11 @@
 						}, {
 							header: '판정',
 							name: 'jdgmnt',
-							align: 'center'
+							align: 'left'
 						}, {
 							header: '조치사항',
 							name: 'dispoMatter',
-							align: 'center'
+							align: 'left'
 						}
 					]
 				});
@@ -279,12 +275,13 @@
 					var dispoCtnt = grid.getValue(ev.rowKey, 'dispoCtnt');
 					var chckPsch = grid.getValue(ev.rowKey, 'chckPsch');
 					var chckCd = grid.getValue(ev.rowKey, 'chckCd');
+					
 					$('#eqmCd').val(eqmCd)
 					$('#eqmNm').val(eqmNm)
 					$('#chckDt').val(chckDt)
-					$('[name="jdgmnt"]').val(jdgmnt)
-					$('[name="dispoMatter"]').val(dispoMatter)
-					$('[name="chckFg"]').val(chckFg)
+					$('[name="jdgmnt"]').val([jdgmnt])
+					$('[name="dispoMatter"]').val([dispoMatter])
+					$('[name="chckFg"]').val([chckFg])
 					$('#dispoCtnt').val(dispoCtnt)
 					$('#chckPsch').val(chckPsch)
 					$('#chckCd').val(chckCd)
@@ -357,7 +354,7 @@
 					columns: [{
 						header: '설비명',
 						name: 'eqmNm',
-						align: 'center',
+						align: 'left',
 					}, {
 						header: '설비코드',
 						name: 'eqmCd',
@@ -369,7 +366,7 @@
 					}, {
 						header: '공정명',
 						name: 'prcsNm',
-						align: 'center',
+						align: 'left',
 					}, {
 						header: '사용여부',
 						name: 'useYN',
@@ -423,10 +420,11 @@
 						return false;
 					}
 					
-					var result = confirm('삭제시 내역 복구가 불가능합니다. 정말 삭제할까요?')	
-					if(!result){
-						return;
-					}
+					  $('body').alertBox({
+					        title: '정말로 삭제하시겠습니까?',
+					        lTxt: 'Back',
+					        rTxt: 'Okey',
+					        rCallback: function(){
 
 	
 					  $.ajax({
@@ -450,8 +448,8 @@
 							}
 						});
 					})
-		  }
-		)
+		  }}
+		)})
 
 					
 

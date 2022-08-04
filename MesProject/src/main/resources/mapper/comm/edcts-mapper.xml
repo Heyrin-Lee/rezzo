@@ -6,7 +6,6 @@
 		SELECT * 
 		FROM vw_edcts
 		WHERE 1=1
-		<if test="edctsCd != null and edctsCd !=''">and EDCTS_CD = #{edctsCd}</if>
 		<if test="prdtNm != null and prdtNm !=''">and PRDT_NM LIKE '%'||#{prdtNm}||'%'</if>
 		<if test="wrhousCd != null and wrhousCd !=''">and WRHOUS_CD LIKE '%'||#{wrhousCd}||'%'</if>
 	</select>
@@ -21,5 +20,11 @@
 			DELETE FROM EDCTS
 			WHERE EDCTS_CD = #{edctsCd}
 	</delete>
+	
+	<!-- 제품번호 받기 -->
+	<select id="getEdctsCd" resultType="EdctsmVO">
+		SELECT fn_edcts_cd AS edcts_cd
+		FROM DUAL
+	</select>
 	
 </mapper>

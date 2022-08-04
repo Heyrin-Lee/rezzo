@@ -86,7 +86,7 @@
 
 
 					<br><br>
-					<div id="grid"></div>
+					<div id="grid">자재목록</div>
 				</div>
 			</div>
 
@@ -101,7 +101,7 @@
 
 					<br><br>
 					
-					<div id="grid2"></div>
+					<div id="grid2">자재발주<br></div>
 				</div>
 			</div>
 
@@ -137,7 +137,7 @@
 						name: 'rscCd'
 					}, {
 						header: '자재명',
-						align: 'center',
+						align: 'left',
 						name: 'rscNm'
 					}, {
 						header: '업체코드',
@@ -145,35 +145,51 @@
 						name: 'vendCd'
 					}, {
 						header: '업체명',
-						align: 'center',
+						align: 'left',
 						name: 'vendNm'
 					}, {
 						header: '현재재고',
-						align: 'center',
+						align: 'right',
 						name: 'rscStc'
 					}, {
 						header: '안전재고',
-						align: 'center',
+						align: 'right',
 						name: 'safStc'
 					}]
 				});
 
 
+				var isValid = true;
 				$.ajax({
 					url: "rscCOrdrList",
 					method: 'GET',
 					dataType: 'JSON',
 					success: function (result) {
-						for (res in result){
-						var rscStc = result[res].rscStc
+					for (res in result){
+					var rscStc = result[res].rscStc
 								console.log(result[res].rscStc)
-							if(rscStc == null || rscStc == ''|| rscStc == 0){
+					grid.resetData(result);
+						if(rscStc == null || rscStc == ''|| rscStc == 0){
 								result[res].rscStc=0
+							var rscStc = grid.getValue(res, 'rscStc')
+							var safStc = grid.getValue(res, 'safStc')
+						if(Number(rscStc)<Number(safStc)){
+							grid.addRowClassName(res, 'addClass')
+								}
 							}
 						}
-						grid.resetData(result);
+
 					}
 				})
+				
+				 //그리드 영역 벗어나면 수정 종료
+ $('#grid').mouseleave(ev => {
+     grid.finishEditing();
+ })
+ 
+ $('#grid2').mouseleave(ev => {
+     grid2.finishEditing();
+ })
 
 				grid.on('dblclick', ev => {
 					var rscCd = grid.getValue(ev.rowKey, 'rscCd')
@@ -228,10 +244,7 @@
 							ordrSCnt: ordrSCnt
 						},
 						success: function (result) {
-							console.log(ordrSCnt + '----')
-							console.log(result[0].ordrSCnt);
 							index = result[0].ordrSCnt;
-							console.log(index);
 
 							function makeCd() {
 								var reCd = 'ORD' + ordrSCnt + String(Number(index) + 1).padStart(3, '0');
@@ -281,7 +294,7 @@
 						name: 'rscCd'
 					}, {
 						header: '자재명',
-						align: 'center',
+						align: 'left',
 						name: 'rscNm'
 					}, {
 						header: '업체코드',
@@ -289,7 +302,7 @@
 						name: 'vendCd'
 					}, {
 						header: '업체명',
-						align: 'center',
+						align: 'left',
 						name: 'vendNm'
 					}, {
 						header: '발주코드',
@@ -297,20 +310,20 @@
 						name: 'ordrCd'
 					}, {
 						header: '발주수량',
-						align: 'center',
+						align: 'right',
 						name: 'ordrCnt',
 						editor: 'text'
 					}, {
 						header: '현재재고',
-						align: 'center',
+						align: 'right',
 						name: 'rscStc'
 					}, {
 						header: '안전재고',
-						align: 'center',
+						align: 'right',
 						name: 'safStc'
 					}, {
 						header: '예상재고량',
-						align: 'center',
+						align: 'right',
 						name: 'allStc'
 					}, {
 						header: '납기요청일',
@@ -338,7 +351,7 @@
 					var allStc = ordrCnt + rscStc
 					
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
-					
+					grid2.check(ev);
 					if(Number(allStc)<Number(safStc)){
 						grid2.addRowClassName(ev.rowKey, 'addClass')
 					}

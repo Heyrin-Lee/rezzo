@@ -1,8 +1,12 @@
 package com.rezzo.mes.resour.stc.service;
 
-import com.rezzo.mes.comm.rsc.service.RscVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 
 @Data
 @NoArgsConstructor
@@ -17,7 +21,9 @@ public class RscStcVO {
     private int avalStc;
     private int prvmmStc; // 전월재고(기초재고)
     private int stcCnt; // 재고량
-    
-    private String inqDt; // 조회일자
-    
+
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private Date inqDt; // 조회일자
+
 }

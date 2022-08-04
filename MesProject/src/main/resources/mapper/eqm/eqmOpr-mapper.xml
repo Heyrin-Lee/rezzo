@@ -36,7 +36,7 @@
 		
 	<select id = "OprList" resultMap="eqmMap">
 			select 
-			e.eqm_cd, e.line_cd, e.prcs_cd, 
+			e.eqm_cd, e.line_cd, e.prcs_cd,  
 			e.eqm_nm, e.use_yn, to_char(o.fr_dt, 'yyyy-mm-dd') as "fr_dt", to_char(o.to_dt, 'yyyy-mm-dd') as "to_dt", o.eqm_psch, 
 			o.opert_ctnt, o.nopr_cd
 			from eqm e 

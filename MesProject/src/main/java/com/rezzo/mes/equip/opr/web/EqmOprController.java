@@ -14,11 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rezzo.mes.CommonExcelView;
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.equip.eqm.service.EqmService;
@@ -47,8 +49,9 @@ public class EqmOprController {
 	private String uploadPath;
 	@Autowired
 	EqmOprService service;
+	@Autowired CommonExcelView commonExcelView;
 
-	@RequestMapping("eqmOpr")
+	@RequestMapping("equipOpr")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public String eqmOpr(Model model, EqmVO vo, EqmLineVO lineVo, PrcsVO prcsVo, CcdsVO ccdsVO) {
 		List<EqmLineVO> eqmLineSelectList = lineService.eqmLineSelectList(lineVo);
@@ -62,7 +65,7 @@ public class EqmOprController {
 
 		model.addAttribute("ccds", ccdsService.getCodes("EQM"));
 
-		return "equip/eqmOpr";
+		return "equip/equipopr";
 	}
 
 	//전체목록
@@ -100,9 +103,9 @@ public class EqmOprController {
 
 	@PostMapping("OprDelete")
 	@ResponseBody
-	public EqmOprVO eqmDelete(EqmOprVO vo) {
-		service.OprDelete(vo);
-		return vo;
+	public void eqmDelete(@RequestBody List<EqmOprVO> eqmOprList, EqmOprVO vo) {
+		System.out.println(eqmOprList);
+		service.OprDelete(eqmOprList);
 	};
 	
 	//세부내역 업데이트
@@ -133,7 +136,7 @@ public class EqmOprController {
 		map.put("headers", header);
 		map.put("filename", "eqmOpr_list");
 		map.put("datas", list);
-		return new ModelAndView("commonExcelView", map);
+		return new ModelAndView(commonExcelView, map);
 	}
 	
 	

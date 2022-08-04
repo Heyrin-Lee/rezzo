@@ -38,10 +38,6 @@ public class EqmOprServiceImpl implements EqmOprService {
 		return map.OprSelectList(keyword);
 	}
 
-	@Override
-	public void OprDelete(EqmOprVO vo) {
-		map.OprDelete(vo);
-	}
 
 	@Override
 	public void oprUpdate(EqmOprVO vo) {
@@ -61,6 +57,14 @@ public class EqmOprServiceImpl implements EqmOprService {
 	@Override
 	public List<Map<String, Object>> getOprListMap(EqmOprVO vo) {
 		return map.getOprListMap(vo);
+	}
+
+
+	@Override
+	public void OprDelete(List<EqmOprVO> eqmOprList) {
+		for (EqmOprVO vo : eqmOprList) {		
+			map.OprDelete(vo);
+		}	
 	}
 
 

@@ -185,11 +185,9 @@
 											<td><input class="form-control" type="date" id="eqmIstDt" name="eqmIstDt" style="width: 250px" /></td>
 										<th>가동여부 *</th>
 										<td>
-											<select class="dataTable-selector" name="useYN" id="useYN" style="width: 250px">
-													<option selected value="">==등록시필수선택==</option>
-													<option value="Y">가동</option>
-													<option value="N">미가동</option>
-											</select>
+										<input type="radio" name="useYN" value="Y"> 가동
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="radio" name="useYN" value="N"> 미가동
 										</td>
 										</tr>
 									</tbody>
@@ -207,7 +205,9 @@
 
 		<br>
 
+		 <script type="text/javascript" src="/js/alertBox.js"></script>
 		<script>
+		   
 		// 이미지 클릭 시 파일 첨부
 		$('#preview').click(function(){
 			$('[name="file"]').click();
@@ -244,7 +244,7 @@
 				columns: [{
 					header: '설비명',
 					name: 'eqmNm',
-					align: 'center',
+					align: 'left',
 				}, {
 					header: '설비코드',
 					name: 'eqmCd',
@@ -256,7 +256,7 @@
 				}, {
 					header: '공정명',
 					name: 'prcsNm',
-					align: 'center'
+					align: 'left'
 				}, {
 					header: '사용여부',
 					name: 'useYN',
@@ -264,11 +264,11 @@
 				}, {
 					header: '최소온도',
 					name: 'minTemp',
-					align: 'center'
+					align: 'right'
 				}, {
 					header: '최대온도',
 					name: 'maxTemp',
-					align: 'center'
+					align: 'right'
 				}, {
 					header: '점검주기(일)',
 					name: 'chckPerd',
@@ -450,32 +450,45 @@
 			//삭제버튼
 			$('#delBtn').on('click', function () {
 				var eqmCd = $('#eqmCd').val()
+				var useYN = $("[name=useYN]:checked").val();
+				console.log(useYN)
+				var isValid = true;
+				if(useYN == 'Y'){
+					toastr.error('사용중인 설비는 삭제할 수 없습니다.');
+					isValid = false;
+					return false;
+				} 
 				if ($('#eqmCd').val() == null || $('#eqmCd').val() == '') {
 					toastr.warning('삭제할 설비를 선택해주세요.');
 				} else{
-					var result = confirm("해당 설비를 정말 삭제할까요?")
-				if (!result)
-					return;
-				$.ajax({
-					url: "eqmDelete/" + eqmCd,
-					type: 'POST',
-					dataType: 'json'
-				}).done(function (xhr) {
-					$.ajax({
-						url: "eqmList",
-						method: "GET",
-						dataType: "JSON",
-						success: function (result) {
-							grid.resetData(result);
-							toastr.success('설비삭제가 완료되었습니다.');
-							$('#dataForm').each(function () {
-								this.reset()
-								$('#preview').attr('src',"assets/img/add-image.png");
+					$('body').alertBox({
+				        title: '정말로 삭제하시겠습니까?',
+				        lTxt: 'Back',
+				        rTxt: 'Okey',
+				        rCallback: function(){
+
+							$.ajax({
+								url: "eqmDelete/" + eqmCd,
+								type: 'POST',
+								dataType: 'json'
+							}).done(function (xhr) {
+								$.ajax({
+									url: "eqmList",
+									method: "GET",
+									dataType: "JSON",
+									success: function (result) {
+										grid.resetData(result);
+										toastr.success('설비삭제가 완료되었습니다.');
+										$('#dataForm').each(function () {
+											this.reset()
+											$('#preview').attr('src',"assets/img/add-image.png");
+										})
+									}
+								})
 							})
-						}
-					})
-				})
-			}})
+						  }
+				      })
+					}})
 
 
 

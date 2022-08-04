@@ -17,7 +17,7 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h2 class="mt-2">자재입/출고조회</h2>
+        <h1 class="mt-4">자재입/출고조회</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
@@ -67,17 +67,6 @@
                                        class="form-control" required readonly>
                                 <input id="rscCd" type="hidden" name="rscCd">
                                 <button id="rscModBtn" type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <b>정렬구분</b>
-                            </th>
-                            <td>
-                                <div id="sortBtn">
-                                    <label><input type="radio" class="form-check-input" name="sortTyp" value="prcsDt" checked> 처리일자</label>
-                                    <label><input type="radio" class="form-check-input" name="sortTyp" value="rscCd"> 자재</label>
-                                </div>
                             </td>
                         </tr>
                         </tbody>
@@ -141,6 +130,7 @@
         ///////////////////////////// init ////////////////////////////////
         window.addEventListener('load', function () {
             getRscListInit();
+            getIOList();
         })
 
         ///////////////////////////// date picker ////////////////////////////////
@@ -170,30 +160,37 @@
             columns: [
                 {
                     header: '처리일자',
+                    align: 'center',
                     name: 'prcsDt'
                 },
                 {
                     header: '자재코드',
+                    align: 'center',
                     name: 'rscCd'
                 },
                 {
                     header: '자재명',
+                    align: 'left',
                     name: 'rscNm'
                 },
                 {
                     header: '규격',
+                    align: 'center',
                     name: 'rscSpec'
                 },
                 {
                     header: '단위',
+                    align: 'center',
                     name: 'mngUnit'
                 },
                 {
                     header: '입고수량',
+                    align: 'right',
                     name: 'istCnt'
                 },
                 {
                     header: '출고수량',
+                    align: 'right',
                     name: 'oustCnt'
                 }
             ]
@@ -267,7 +264,9 @@
 
         ///////////////////////////// main search ////////////////////////////////
         let schBtn = document.getElementById('schBtn');
-        schBtn.addEventListener('click', function () {
+        schBtn.addEventListener('click', getIOList);
+
+        function getIOList () {
             let url = 'getIOList'
             let data = new FormData(schParam)
             fetch(url, {
@@ -276,7 +275,7 @@
             }).then(res => res.json()).then(res => {
                 grid.resetData(res);
             })
-        });
+        }
 
         //////////////////////////// referesh btn //////////////////////////////////
         reloadBtn.addEventListener('click', e => {

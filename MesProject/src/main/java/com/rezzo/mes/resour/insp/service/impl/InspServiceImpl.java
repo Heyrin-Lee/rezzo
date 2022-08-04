@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,7 +37,7 @@ public class InspServiceImpl implements InspService {
     public void setRscInspList(List<RscInspVO> rscInspVOS) {
         // rsc_insp insert
         String rscInspCd = mapper.genRscInspCd();
-        String inspDt = rscInspVOS.get(0).getInspDt();
+        Date inspDt = rscInspVOS.get(0).getInspDt();
         String inspTstr = rscInspVOS.get(0).getInspTstr();
         mapper.setRscInsp(rscInspCd, inspDt, inspTstr);
 
@@ -92,7 +93,6 @@ public class InspServiceImpl implements InspService {
         }
     }
 
-    // 입고검사조회
     @Override
     public List<RscVO> getResources(RscVO rscVO) {
         return mapper.getResources(rscVO);
@@ -112,13 +112,20 @@ public class InspServiceImpl implements InspService {
 
     // 삭제
     @Override
+    @Transactional
     public void delRscInspHistSingle(List<RscInspVO> rscInspVOS) {
         for (RscInspVO vo : rscInspVOS) {
             mapper.delRscInspHistSingle(vo);
         }
     }
+
     @Override
-    public void delRscInspHistAll(RscInspVO rscInspVO) {
-        mapper.delRscInspHistAll(rscInspVO);
+    @Transactional
+    public void delRscInspHistAll(List<RscInspVO> rscInspVOS) {
+        for (RscInspVO vo : rscInspVOS) {
+            mapper.delRscInspHistSingle(vo);
+        }
+        mapper.delRscInspHist(rscInspVOS.get(0));
     }
+
 }

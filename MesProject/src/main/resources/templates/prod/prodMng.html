@@ -67,6 +67,7 @@
 	</div>
    <br>
    <br>
+   <br>
       <div class="card mb-4">
 			<div class="card-body">
    <div id="grid">진행생산지시</div>
@@ -98,7 +99,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">생산지시조회</h5>
                         <br> <br>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
@@ -257,25 +258,25 @@
 		})
 
 		//자재 업데이트			
-		//$.ajax({
-		//	url : 'getHolding',
-		//	method : 'post',
-		//	data : {"planCd" : planCd},
-		//	success : function(result) {
-		//			let today = new Date()
-		//			today = today.toISOString().substring(0, 10)
-		//			console.log(today)
-		//			let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
-		//			result.unshift(obj)
-		//		console.log(result)
-		//		$.ajax({
-		//			url : 'setRscOust',
-		//			method : 'post',
-		//			data : JSON.stringify(result),
-		//			contentType : 'application/json'
-		//		})
-		//	}
-		//})
+		$.ajax({
+			url : 'getHolding',
+			method : 'post',
+			data : {"planCd" : planCd},
+			success : function(result) {
+					let today = new Date()
+					today = today.toISOString().substring(0, 10)
+					console.log(today)
+					let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
+					result.unshift(obj)
+				console.log(result)
+				$.ajax({
+					url : 'setRscOust',
+					method : 'post',
+					data : JSON.stringify(result),
+					contentType : 'application/json'
+				})
+			}
+		})
 		
 		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt
@@ -301,6 +302,8 @@
 
     //긴급 중지
    $("#stopBtn").on("click", function(){
+		  toastr.error("생산을 긴급 중지합니다.")
+
    		$.ajax({
    			url : 'updateYn',
 			success : function(result){
@@ -322,6 +325,7 @@
    
    //재시작
    $("#restartBtn").on("click", function(){
+	   toastr.info("생산을 다시 시작합니다.")
    		let array = grid2.getData()
    		$.each(array, function(index, item) {
             if(item.nowSt === '긴급중지') {
@@ -335,7 +339,7 @@
    				 	
    				 	let eqmCd = grid2.getValue(i, 'eqmCd')
 					   let indicaCnt = grid.getData()[0].indicaCnt
-					   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02))
+					   let inferCnt = Math.floor(Math.random()*(indicaCnt*0.02)+1)
 					   let lineCd = grid.getData()[0].lineCd
 					   let valueI = i
 					   let interval = setInterval(interFn , 1000, valueI, eqmCd, indicaCnt, inferCnt, lineCd);
@@ -350,6 +354,7 @@
 	let arrTest = []
    // 생산지시	
    $("#startBtn").on("click", function(){
+	  toastr.info("생산을 시작합니다.")
 	  for(i=0; i<grid2.getRowCount(); i++) {
 		   let eqmCd = grid2.getValue(i, 'eqmCd')
 		   let indicaCnt = grid.getData()[0].indicaCnt
@@ -551,6 +556,15 @@
         $('#grid2').mouseleave(ev => {
     		grid2.finishEditing();
     	})
+    	
+    	 let hoverOption = {
+	     row: {
+	         hover: {
+	             background: 'rgba(19,78,94,0.2)'
+	         }
+     	}
+		 }
+		 tui.Grid.applyTheme('default', hoverOption);
     </script>
 </th:block>
 </body>

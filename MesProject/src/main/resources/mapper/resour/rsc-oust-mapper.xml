@@ -7,7 +7,8 @@
     <select id="getLotByRscCd" parameterType="RscOustVO" resultType="RscOustVO">
         select RSC_LOT_CD,
                LOT_RMN_CNT,
-               substr(RSC_LOT_CD, 6, 4) || '-' || substr(RSC_LOT_CD, 10, 2) || '-' || substr(RSC_LOT_CD, 12, 2) expDt
+               to_date(substr(RSC_LOT_CD, 6, 4) || '-' || substr(RSC_LOT_CD, 10, 2) || '-' ||
+                       substr(RSC_LOT_CD, 12, 2)) as expDt
         from RSC_LOT
         where RSC_CD = #{rscCd}
           and LOT_RMN_CNT != 0
@@ -54,22 +55,19 @@
 
                 loop
                     insert into RSC_OUST (RSC_OUST_CD, OUST_DT, RSC_CD, OUST_CNT, OUST_TYP, note)
-                    values (#{rscOustCd}, to_date(#{oustDt}, 'yyyy-mm-dd'), v_values.RSC_CD, v_values.oust_cnt, #{oustTyp}, #{note});
+                    values (#{rscOustCd}, #{oustDt}, v_values.RSC_CD, v_values.oust_cnt, #{oustTyp}, #{note});
                 end loop;
         end;
     </insert>
 
     <select id="schRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
-        select ro.RSC_OUST_CD, count(*) oustCnt, to_char(ro.OUST_DT, 'yyyy-MM-dd') as oustDt
+        select ro.RSC_OUST_CD, count(*) oustCnt, ro.OUST_DT
         from RSC_OUST_DTL rod,
              RSC_OUST ro
         where rod.RSC_OUST_CD = ro.RSC_OUST_CD
           and rod.RSC_CD = ro.RSC_CD
-           <![CDATA[
-          and ro.OUST_DT >= #{startDt}
-          and ro.OUST_DT <= #{endDt}
-        ]]>
         group by ro.OUST_DT, ro.RSC_oust_CD
+        order by ro.RSC_OUST_CD desc
     </select>
 
     <select id="getRscOustHist" parameterType="RscOustVO" resultType="RscOustVO">
@@ -123,7 +121,7 @@
     </update>
 
     <select id="getRscOustList" parameterType="RscOustVO" resultType="RscOustVO">
-        select to_char(ro.OUST_DT, 'yyyy-mm-dd') as oustDt,
+        select ro.OUST_DT,
         ro.RSC_OUST_CD,
         rod.RSC_CD,
         rsc.RSC_NM,

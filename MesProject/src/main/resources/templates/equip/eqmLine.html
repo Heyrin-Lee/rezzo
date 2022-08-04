@@ -86,7 +86,7 @@
 								<hr>
 								<form id="dataForm" action="#">
 									<div class="mb-3">
-										<label for="no" class="form-label">라인코드</label> <input type="text" placeholder="등록시 자동부여됩니다." readonly class="form-control" id="lineCd"
+										<label for="no" class="form-label">라인코드</label> <input type="text" th:value="${lineCode.lineCd}" readonly class="form-control" id="lineCd"
 											name="lineCd">
 									</div>
 									<div class="mb-3">
@@ -105,10 +105,9 @@
 									</div>
 									<div class="mb-4">
 										<label for="email" class="form-label">사용여부</label><br>
-										<select class="dataTable-selector" name="useYn" id="useYn" style="width: 150px">
-											<option value="Y">사용</option>  
-											<option value="N">미사용</option>
-										</select>
+										<input type="radio" name="useYn" value="Y"> 사용
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="radio" name="useYn" value="N"> 미사용
 
 									</div>
 								</form>
@@ -117,7 +116,7 @@
 					</div>
 
 
-
+ <script type="text/javascript" src="/js/alertBox.js"></script>
 		<script>
 			//취소
 			$('#initBtn').on('click', function () {
@@ -144,15 +143,15 @@
 				}, {
 					header: '라인명',
 					name: 'lineNm',
-					align: 'center',
-				}, {
-					header: 'UPH생산량',
-					name: 'uphCnt',
-					align: 'center'
+					align: 'left',
 				}, {
 					header: '담당자',
 					name: 'eqmPsch',
-					align: 'center'
+					align: 'left'
+				}, {
+					header: 'UPH생산량',
+					name: 'uphCnt',
+					align: 'right'
 				}, {
 					header: '사용여부',
 					name: 'useYn',
@@ -165,52 +164,72 @@
 			$('tbody').on('click', 'tr', function () {
 				let lineCd = $(this).find('td').eq(0).text()
 				let lineNm = $(this).find('td').eq(1).text()
-				let uph = $(this).find('td').eq(2).text()
-				let psch = $(this).find('td').eq(3).text()
+				let uph = $(this).find('td').eq(3).text()
+				let psch = $(this).find('td').eq(2).text()
 				let yn = $(this).find('td').eq(4).text()
 
 				$('#lineCd').val(lineCd).attr("readonly", true);
 				$('#lineNm').val(lineNm)
 				$('#uphCnt').val(uph)
 				$('#eqmPsch').val(psch)
-				$('#useYn').val([yn])
+				$('[name="useYn"]').val([yn])
 
 
 			})
 			// 삭제
 
-			$('#delBtn').on('click', function () {
+			$('#delBtn').on('click', function() {
+				
+				var lCd= $('#lineCd').val()
+				var lineNm= $('#lineNm').val()
+				
+					if(lineNm == null || lineNm == ''){
+							toastr.warning('삭제할 라인을 선택해주세요.');
+							return false;
+						} else {
+							
+					 $('body').alertBox({
+						title: '정말로 삭제하시겠습니까?',
+						lTxt: 'Back',
+						rTxt: 'Okey',
+						rCallback: function(){
+							$.ajax({
+								url: "eqmLineList",
+								method: "GET",
+								dataType: "JSON",
+								success: function (result) {
+								if(lineNm == null || lineNm == ''){
+										toastr.warning('삭제할 라인을 선택해주세요.');
+										return false;
+									} else {
+								var lineCd = $('#lineCd').val()
 
-				if ($('#lineCd').val() == null || $('#lineCd').val() == '') {
-					toastr.warning('삭제할 라인을 선택해주세요.');
-				} else {
-					var result = confirm("라인코드를 정말 삭제할까요?")
-					var lineCd = $('#lineCd').val()
-					if (!result)
-						return;
-
-					$.ajax({
-						url: "eqmLineDelete/" + lineCd,
-						type: 'POST',
-						dataType: 'json'
-					}).done(function (xhr) {
-						$.ajax({
-							url: "eqmLineList",
-							method: "GET",
-							dataType: "JSON",
-							success: function (result) {
-								toastr.success('라인코드가 정상 삭제되었습니다.');
-								$('#dataForm')[0].reset();
-								grid.resetData(result);
+								$.ajax({
+									url: "eqmLineDelete/" + lineCd,
+									type: 'POST',
+									dataType: 'json'
+								}).done(function (xhr) {
+									$.ajax({
+										url: "eqmLineList",
+										method: "GET",
+										dataType: "JSON",
+										success: function (result) {
+											toastr.success('라인코드가 정상 삭제되었습니다.');
+											$('#dataForm')[0].reset();
+											grid.resetData(result);
+										}
+									});
+								})
 							}
-						});
-					})
-				}
-			})
+								} 
+							
+							}
+							)}})}})
+				 
+				
 
 
 			// 저장
-
 
 			$('#saveBtn').on('click', function () {
 				var lineNm = $('#lineNm').val();

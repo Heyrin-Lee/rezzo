@@ -16,7 +16,7 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h2 class="mt-2">자재수입검사조회</h2>
+        <h1 class="mt-4">자재수입검사조회</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
@@ -77,18 +77,6 @@
                                 <input id="rscNm" style="width: 300px;" type="text" class="form-control" placeholder="검색버튼을 이용하세요" required readonly>
                                 <input id="rscCd" type="hidden" name="rscCd">
                                 <button id="rscModBtn" type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <b>정렬기준</b>
-                            </th>
-                            <td>
-                                <div id="sortBtn">
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="date" checked> 일자</label>
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="rscInspCd"> 검사번호</label>
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="rsc"> 자재</label>
-                                </div>
                             </td>
                         </tr>
                         </tbody>
@@ -256,7 +244,7 @@
         // main grid
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
-            bodyHeight: 400,
+            bodyHeight: 450,
             scrollX: false,
             scrollY: true,
             columns: [
@@ -303,6 +291,11 @@
                 {
                     header: '불량량',
                     name: 'inspFailCnt',
+                    align: 'right'
+                },
+                {
+                    header: '미입고수량',
+                    name: 'passRmnCnt',
                     align: 'right'
                 }
             ]
