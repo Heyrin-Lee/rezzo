@@ -20,6 +20,7 @@ SELECT NVL(LPAD(MAX(SUBSTR(PLAN_CD, 12))+1, 3, '0'), 0) as "index"
 	JOIN PRCS P
 	ON B.PRCS_CD = P.PRCS_CD
 	WHERE EDCTS_CD = #{edctsCd}
+	ORDER BY B.BOM_SQ
 </select>
 
 <select id="getRscInfo" resultType="com.rezzo.mes.prod.plan.service.PlanVO">
@@ -29,6 +30,7 @@ SELECT NVL(LPAD(MAX(SUBSTR(PLAN_CD, 12))+1, 3, '0'), 0) as "index"
 	ON R.RSC_CD = B.RSC_CD
 	WHERE EDCTS_CD = #{edctsCd}
 	AND R.LOT_RMN_CNT > 0
+	ORDER BY R.RSC_CD
 </select> 
 
 <insert id="grid1Insert" parameterType="PlanVO">

@@ -47,11 +47,10 @@ public class PrcsController {
 	}
 	
 	/* 새로운 공정등록 */
-	@GetMapping("/prcsInsert")
+	@PostMapping("/prcsInsert")
 	@ResponseBody
-	public void prcsInsert(PrcsVO vo) {
-		System.out.println(vo);
-		service.prcsInsert(vo); 
+	public void prcsInsert(@RequestBody List<PrcsVO> list) {
+		service.prcsInsert(list); 
 	}
 	
 	/* 공정삭제 */

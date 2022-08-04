@@ -116,7 +116,7 @@
             {
               header: '공정명',
               name: 'prcsNm',
-              align : 'left',
+              align : 'center',
               editor: 'text'
             },
             {
@@ -146,12 +146,19 @@
 	  		})
 	   
 	   $("#saveBtn").on("click", function(e){
+	   		var prcsCd = grid.getCheckedRows() 
+	   
 	   		$.ajax({
 	   			url:'prcsInsert',
-	   			data : {prcsCd : grid.getModifiedRows().createdRows[0].prcsCd,
-	   			 		prcsNm : grid.getModifiedRows().createdRows[0].prcsNm,
-	   			 		prcsFg : grid.getModifiedRows().createdRows[0].prcsFg,
-	   			 		prcsCtnt : grid.getModifiedRows().createdRows[0].prcsCtnt}
+	   			method:'POST',
+	   			contentType:'application/json',
+			   	data : JSON.stringify(prcsCd)
+	   			//data : {grid.
+	   					//prcsCd : grid.getModifiedRows().createdRows[0].prcsCd,
+	   			 		//prcsNm : grid.getModifiedRows().createdRows[0].prcsNm,
+	   			 		//prcsFg : grid.getModifiedRows().createdRows[0].prcsFg,
+	   			 		//prcsCtnt : grid.getModifiedRows().createdRows[0].prcsCtnt
+	   			 		//}
 	   		}).done(function(result){
 	   			$.ajax({
 					   url:'prcsList'
@@ -184,7 +191,7 @@
 			   $.ajax({
 				   url:'prcsList'
 			   }).done(function(result){
-			   	   toastr.error("삭제되었습니다.")	
+			   	   toastr.success("삭제되었습니다.")	
 				   grid.resetData(result);
 			   })
 		   })
@@ -193,8 +200,30 @@
 	   $('#grid').mouseleave(ev => {
     		grid.finishEditing();
 		})
+		
+		let hoverOption = {
+	     row: {
+	         hover: {
+	             background: 'rgba(19,78,94,0.2)'
+	         }
+     	}
+		 }
+		 tui.Grid.applyTheme('default', hoverOption);
 
    })
+   
+   	grid.on('dblclick', ev => {
+ 		grid.check(ev.rowKey);
+ 	})  	
+   	
+    grid.on('check', (ev) => {
+   		grid.addRowClassName(ev.rowKey, 'highlight2');
+ 	});
+ 	
+ 	 grid.on('uncheck', (ev) => {
+	   grid.removeRowClassName(ev.rowKey, 'highlight2');
+	 });
+	 
 
    </script>
 </th:block>
