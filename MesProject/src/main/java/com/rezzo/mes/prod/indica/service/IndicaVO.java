@@ -18,6 +18,8 @@ public class IndicaVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date planDt;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date wkFrDt; 
 	Date wkToDt;
 	String lineCd;

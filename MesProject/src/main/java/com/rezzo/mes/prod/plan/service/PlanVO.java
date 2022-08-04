@@ -15,7 +15,7 @@ public class PlanVO{
 	
 	// plan
 	String planCd;
-	int prefRank;
+	Integer prefRank;
 	String nowSt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -23,13 +23,15 @@ public class PlanVO{
 	Date wkFrDt; 
 	Date wkToDt;
 	String lineCd;
-	int indicaCnt;
+	Integer indicaCnt;
 	
 	// orderSheet
 	String orderNo;
 	Date orderDt;
 	String vendNm;
 	int orderCnt;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date paprdDt;
 	
 	// edcts

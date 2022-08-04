@@ -10,6 +10,9 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+ 
+h1, ol { font-family: 'Nanum Gothic', sans-serif;
+font-family: 'Nanum Gothic Coding', monospace;}
 
 /*추가*/
 .highlight {background-color: rgba(19,78,94,0.2) !important;}
@@ -7718,7 +7721,7 @@ keyframes placeholder-wave { 100% {
 }
 
 .mt-4 {
-	margin-top: 1.5rem !important;
+	margin-top: 1.6rem !important;
 	margin-bottom: 0.9rem !important;
 }
 
@@ -7859,8 +7862,8 @@ keyframes placeholder-wave { 100% {
 }
 
 .px-4 {
-	padding-right: 1.5rem !important;
-	padding-left: 1.5rem !important;
+	padding-right: 2.5rem !important;
+	padding-left: 2.5rem !important;
 }
 
 .px-5 {

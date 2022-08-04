@@ -50,7 +50,7 @@
 
     <insert id="setRscInsp" parameterType="RscInspVO">
         insert into RSC_INSP (RSC_INSP_CD, INSP_DT, INSP_TSTR)
-        values (#{rscInspCd}, to_date(#{inspDt}, 'yyyy-mm-dd'), #{inspTstr})
+        values (#{rscInspCd}, #{inspDt}, #{inspTstr})
     </insert>
 
     <insert id="setRscInspList" parameterType="RscInspVO">
@@ -81,14 +81,12 @@
     </update>
 
     <select id="schRscInspHist" parameterType="RscInspVO" resultType="RscInspVO">
-        select to_char(ri.INSP_DT, 'yyyy-MM-dd') as inspDt, count(*) inspCnt, ri.RSC_INSP_CD
+        select ri.INSP_DT, count(*) inspCnt, ri.RSC_INSP_CD
         from RSC_INSP ri,
              RSC_INSP_DTL rid
         where ri.RSC_INSP_CD = rid.RSC_INSP_CD
-          and <![CDATA[ ri.INSP_DT >= #{startDt}
-          and ri.INSP_DT <= #{endDt}
         group by INSP_DT, ri.RSC_INSP_CD
-        ]]>
+        order by RSC_INSP_CD desc
     </select>
 
     <select id="getRscInspHistByCd" parameterType="RscInspVO" resultType="RscInspVO">
@@ -140,7 +138,7 @@
     </select>
 
     <select id="getRscInspInfoByCd" parameterType="RscInspVO" resultType="RscInspVO">
-        select RSC_INSP_CD, to_char(INSP_DT, 'yyyy-mm-dd') inspDt, INSP_TSTR
+        select RSC_INSP_CD, INSP_DT, INSP_TSTR
         from RSC_INSP
         where RSC_INSP_CD = #{rscInspCd}
     </select>
@@ -186,7 +184,7 @@
 
     <select id="getRscInspHist" parameterType="RscInspVO" resultType="RscInspVO">
 
-        select rid.RSC_INSP_CD, to_char(ri.INSP_DT, 'yyyy-mm-dd') as inspDt, rid.RSC_CD, rsc.RSC_NM, rsc.RSC_SPEC,
+        select rid.RSC_INSP_CD, ri.INSP_DT, rid.RSC_CD, rsc.RSC_NM, rsc.RSC_SPEC,
         rsc.MNG_UNIT,
         rid.INSP_CNT, rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT, rsc.RSC_TYP, rid.ORDR_CD, rid.PASS_RMN_CNT
         from RSC_INSP ri, RSC_INSP_DTL rid, RSC_ORDR ro, RSC_ORDR_DTL rod, RSC rsc, VEND
@@ -206,7 +204,7 @@
 
         union
 
-        select rid.RSC_INSP_CD, to_char(ri.INSP_DT, 'yyyy-mm-dd') as inspDt, rid.RSC_CD, RSC_NM, rsc.RSC_SPEC,
+        select rid.RSC_INSP_CD, ri.INSP_DT, rid.RSC_CD, RSC_NM, rsc.RSC_SPEC,
         rsc.MNG_UNIT,
         rid.INSP_CNT, rid.INSP_PASS_CNT, rid.INSP_FAIL_CNT, rsc.RSC_TYP, rid.ORDR_CD, rid.PASS_RMN_CNT
         from RSC_INSP ri, RSC_INSP_DTL rid, RSC rsc
@@ -229,7 +227,21 @@
     </select>
 
     <delete id="delRscInspHistSingle" parameterType="RscInspVO">
+        declare
+            v_insp_cnt number(35);
         begin
+            select INSP_CNT
+            into v_insp_cnt
+            from RSC_INSP_DTL
+            where RSC_INSP_CD = #{rscInspCd}
+              and ORDR_CD = #{ordrCd}
+              and RSC_CD = #{rscCd};
+
+            update RSC_ORDR_DTL
+            set RMN_CNT = RMN_CNT + v_insp_cnt
+            where RSC_CD = #{rscCd}
+              and ORDR_CD = #{ordrCd};
+
             delete
             from RSC_INSP_DTL
             where RSC_INSP_CD = #{rscInspCd}
@@ -244,21 +256,9 @@
         end;
     </delete>
 
-    <delete id="delRscInspHistAll" parameterType="RscInspVO">
-        begin
-            begin
-                delete
-                from RSC_INSP
-                where RSC_INSP_CD = #{rscInspCd};
-
-                delete
-                from RSC_INSP_DTL
-                where RSC_INSP_CD = #{rscInspCd};
-
-                delete
-                from RSC_INFER
-                where RSC_INSP_CD = #{rscInspCd};
-            end;
-        end;
+    <delete id="delRscInspHist" parameterType="RscInspVO">
+        delete
+        from RSC_INSP
+        where RSC_INSP_CD = #{rscInspCd}
     </delete>
 </mapper>

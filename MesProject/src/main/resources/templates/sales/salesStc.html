@@ -145,10 +145,6 @@
 	        ]
 	    });
      	 
-     	 $(function() {
-     	 	getStcAllList();
-     	 })
-     	 
      	 //제품명 조회 모달
      	 $("#prdtSearchBtn").on("click",function(list){
      		 setTimeout(function () {
@@ -180,22 +176,11 @@
     					$("#proModal").modal('hide');
 					});
 	    
-	    function getStcAllList() {
-	    	$.ajax({
-	    		url:"getStcAllList",
-	    		method:"get",
-	    		dataType:"json",
-	    		success:function(result) {
-	    			grid.resetData(result);
-	    		}
-	    	})
-	    }
-	    
 	    //완제품 재고 조건별 조회
 	    $("#searchBtn").on("click",function() {
 	    	var searchOption = $("#searchFrm").serialize();
 	    	if($("#prdtNm").val() == '' && $("#edctsLotNo").val() == '') {
-	    		toastr.error('제품명 혹은 완제품LOT번호를 입력해주세요');
+	    		toastr.warning('검색조건을 선택해주세요');
 	    	}else {
 	    		$.ajax({
 	    		url:"getLotStcList",

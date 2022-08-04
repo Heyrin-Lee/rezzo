@@ -29,6 +29,5 @@ public interface InspService {
     // 삭제
     void delRscInspHistSingle(List<RscInspVO> rscInspVOS);
 
-    void delRscInspHistAll(RscInspVO rscInspVO);
-
+    void delRscInspHistAll(List<RscInspVO> rscInspVOS);
 }

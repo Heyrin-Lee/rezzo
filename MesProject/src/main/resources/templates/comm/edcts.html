@@ -69,7 +69,7 @@
 									<tbody>
 										<tr>
 											<th>완제품코드 <strong class="blue">*</strong></th>
-											<td><input class="form-control" type="text" id="edctsCd" name="edctsCd" style="width: 250px" maxlength="20"
+											<td><input class="form-control" type="text" th:value="${edcts.edctsCd}" id="edctsCd" name="edctsCd" style="width: 250px" maxlength="20"
 												placeholder="등록시 자동부여됩니다." readonly /></td>
 											<th>제품명 <strong class="blue">*</strong></th>
 											<td><input class="form-control" type="text" id="prdtNm" name="prdtNm" style="width: 250px" maxlength="50" /></td>
@@ -141,7 +141,7 @@ const grid = new tui.Grid({
       {
         header: '제품명',
         name: 'prdtNm',
-        align: 'center',
+        align: 'left',
       	sortable: true,
         sortingType: 'desc'
       }
@@ -178,14 +178,14 @@ const grid = new tui.Grid({
       {
         header: '공정명',
         name: 'prcsNm',
-        align: 'center',
+        align: 'left',
       	sortable: true,
         sortingType: 'desc'
       },
       {
         header: '공정내용',
         name: 'prcsCtnt',
-        align: 'center',
+        align: 'left',
       	sortable: true,
         sortingType: 'desc'
       },
@@ -398,24 +398,29 @@ grid2.on('click', ev => {
 /* 사용공정명 모달 그리드 */
 const prcsModalGrid = new tui.Grid({
   el: document.getElementById('prcsModalGrid'),
+  scrollX: false,
   bodyHeight: 350,
   rowHeaders: ['checkbox'],
   columns: [
     {
       header: '공정코드',
       name: 'prcsCd',
+      align: 'center'
     },
     {
       header: '공정명',
       name: 'prcsNm',
+      align: 'left'
     },
     {
       header: '공정구분',
-      name: 'prcsFg'
+      name: 'prcsFg',
+      align: 'center'
     },
     {
       header: '공정설명',
       name: 'prcsCtnt',
+      align: 'left'
     }
   ]
 });
