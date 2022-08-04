@@ -236,7 +236,7 @@
 				</div>
 			</div>
 			<div>
-
+<script type="text/javascript" src="/js/alertBox.js"></script>
 				<script>
 					$.ajax({
 						url: "OprList",
@@ -326,10 +326,11 @@
 							return false;
 						}
 
-						var result = confirm("해당 내역을 정말 삭제할까요?")
-
-						if (!result)
-							return;
+					     $('body').alertBox({
+					         title: '정말로 삭제하시겠습니까?',
+					         lTxt: 'Back',
+					         rTxt: 'Okey',
+					         rCallback: function(){
 						$.ajax({
 								url: "OprDelete",
 								type: 'POST',
@@ -348,7 +349,7 @@
 									}
 								});
 							})
-					})
+					}})})
 
 					// 모달 데이터 저장
 

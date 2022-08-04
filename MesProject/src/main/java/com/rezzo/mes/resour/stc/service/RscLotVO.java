@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Date;
+
 @Data
 @NoArgsConstructor
 public class RscLotVO {
@@ -24,9 +26,9 @@ public class RscLotVO {
     // misc
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    private String startDt;
+    private Date startDt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    private String endDt;
+    private Date endDt;
     private String noZeroLot;
 }

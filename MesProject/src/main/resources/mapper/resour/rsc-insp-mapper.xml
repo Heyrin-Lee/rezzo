@@ -56,21 +56,21 @@
     <insert id="setRscInspList" parameterType="RscInspVO">
         insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, PASS_RMN_CNT,
                                   INSP_FAIL_CNT, PRE_IST_CNT)
-        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, #{inspPassCnt}, #{inspPassCnt}, nvl(#{inspFailCnt}, 0),
+        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, to_number(#{inspPassCnt}), to_number(#{inspPassCnt}), to_number(#{inspFailCnt}),
                 #{preIstCnt})
     </insert>
 
     <insert id="setRscInfList">
-        merge into RSC_INFER
-        using dual
-        on (RSC_CD = #{insp.rscCd} and RSC_INSP_CD = #{insp.rscInspCd}
+            merge into RSC_INFER
+            using dual
+            on (RSC_CD = #{insp.rscCd} and RSC_INSP_CD = #{insp.rscInspCd}
             and ORDR_CD = #{insp.ordrCd} and CCD_DTL = #{inf.ccdDtl})
-        when matched then
+            when matched then
             update
             set INF_CNT = #{inf.infCnt}
-        when not matched then
+            when not matched then
             insert (CCD_DTL, RSC_CD, RSC_INSP_CD, INF_CNT, ORDR_CD)
-            values (#{inf.ccdDtl}, #{insp.rscCd}, #{insp.rscInspCd}, #{inf.infCnt}, #{insp.ordrCd})
+            values (#{inf.ccdDtl}, #{insp.rscCd}, #{insp.rscInspCd}, to_number(#{inf.infCnt}), #{insp.ordrCd})
     </insert>
 
     <update id="updRscOrdrRmnCnt" parameterType="RscInspVO">

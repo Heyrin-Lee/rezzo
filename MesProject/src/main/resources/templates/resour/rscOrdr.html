@@ -181,6 +181,15 @@
 
 					}
 				})
+				
+				 //그리드 영역 벗어나면 수정 종료
+ $('#grid').mouseleave(ev => {
+     grid.finishEditing();
+ })
+ 
+ $('#grid2').mouseleave(ev => {
+     grid2.finishEditing();
+ })
 
 				grid.on('dblclick', ev => {
 					var rscCd = grid.getValue(ev.rowKey, 'rscCd')
@@ -342,7 +351,7 @@
 					var allStc = ordrCnt + rscStc
 					
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
-					
+					grid2.check(ev);
 					if(Number(allStc)<Number(safStc)){
 						grid2.addRowClassName(ev.rowKey, 'addClass')
 					}

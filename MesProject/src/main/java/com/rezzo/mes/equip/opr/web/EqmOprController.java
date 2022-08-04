@@ -51,7 +51,7 @@ public class EqmOprController {
 	EqmOprService service;
 	@Autowired CommonExcelView commonExcelView;
 
-	@RequestMapping("eqmOpr")
+	@RequestMapping("equipOpr")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public String eqmOpr(Model model, EqmVO vo, EqmLineVO lineVo, PrcsVO prcsVo, CcdsVO ccdsVO) {
 		List<EqmLineVO> eqmLineSelectList = lineService.eqmLineSelectList(lineVo);
@@ -65,7 +65,7 @@ public class EqmOprController {
 
 		model.addAttribute("ccds", ccdsService.getCodes("EQM"));
 
-		return "equip/eqmOpr";
+		return "equip/equipopr";
 	}
 
 	//전체목록
