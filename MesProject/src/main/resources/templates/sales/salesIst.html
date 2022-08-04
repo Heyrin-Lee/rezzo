@@ -102,7 +102,7 @@
 		      </div>
 		      <div class="modal-footer">
 		      <button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
-		      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		      <button type="button" id="cancleLotBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 		      </div>
 		    </div>
 		  </div>
@@ -275,7 +275,7 @@
 			inspCnt.value = rowInfo[0].inspCnt;
 		})
 		//모달 그리드 더블클릭시 완제품LOT번호 가져오기
-		 lotNoGrid.on('dblclick', (ev) => {
+		  lotNoGrid.on('dblclick', (ev) => {
     					var rowKey = ev.rowKey;
     					console.log(rowKey);
     					lotNoGrid.check(rowKey);
@@ -283,6 +283,7 @@
     					console.log(rowKeyData);
     					edctsLotNo.value = rowKeyData[0].edctsLotNo;
     					inspCnt.value = rowKeyData[0].inspCnt;
+    					$("#lotModal").modal('hide');
 					});
 		
 	    //제품 입고 등록&수정
@@ -299,9 +300,11 @@
 	    	var edctsIstCnt = $("#edctsIstCnt").val();
 	    	console.log(edctsIstCnt);
 	    	var edctsIstNo = $("#edctsIstNo").val();
-	    	var orderNo = inspData[0].orderNo;
-			console.log(orderNo);
-			if($("#edctsIstCnt").val() != '') {
+	    	//var orderNo = inspData[0].orderNo;
+			//console.log(orderNo);
+			if($("#edctsIstCnt").val() == '') {
+				toastr.warning('입고수량을 입력해주세요');
+			}else{
 				$.ajax({
 	    		url:"saveIst",
 	    		dataType:"json",
@@ -326,9 +329,9 @@
 	    			})
 	    		}
 	    	})
-		 }else {
-		 	toastr.error('입고수량을 입력해주세요');
-		 }
+			}
+				
+		 
 	    	
 	   })
 	    
@@ -341,6 +344,12 @@
 			$("#IstSearchFrm").each(function() {
 				this.reset();
 			})
+		})
+		
+		//완제품LOT번호 모달창 닫기 버튼 클릭 -> 폼 input 데이터값 지우기
+		$("#cancleLotBtn").on("click",function() {
+			edctsLotNo.value = '';
+			inspCnt.value = '';
 		})
 		
 	    //제품 입고일자 현재 날짜로 설정

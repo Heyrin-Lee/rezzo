@@ -31,6 +31,10 @@
       <div id="cont" style="padding-bottom:0px">
 				<div class="col">
 				<div class="card-body">
+				<div class="linelist" style="float:right;margin-bottom: 13px;">
+					<button type="button" class="btn btn-primary" id="optionSearchBtn"><i class="fas fa-search"></i> 조회</button></td>
+					<button class="btn btn-primary" id="ReBtn"><i class="fas fa-search"></i> 새자료</button>
+				</div>
                      <form name="IstSearchFrm" id="IstSearchFrm">
                      <table class="table" style="vertical-align : middle;">
                      	<colgroup>
@@ -45,11 +49,18 @@
                      			<td><input type="text" class="form-control" id="edctsLotNo" name="edctsLotNo" style="width:200px;" readonly>
 		    						<!-- 모달버튼 -->
 		    						<button type="button" class="btn btn-primary" id="lotSearchBtn" data-bs-toggle="modal" data-bs-target="#lotModal" style="margin-bottom: 3px;"><i class="fas fa-search"></i></button></td>
+		    					<th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>	
 		    				</tr>
 		    				<tr>		
 								<th>제품 입고일자</th>
 								<td><input type="date" id="edctsIstDtStart" name="edctsIstDtStart" class="form-control" style="width:150px;"> - <input type="date" id="edctsIstDtEnd" name="edctsIstDtEnd" class="form-control" style="width:150px;">
-								<button type="button" class="btn btn-primary" id="optionSearchBtn" style="margin-top: 0px;margin-bottom: 3px;"><i class="fas fa-search"></i> 조회</button></td>                        			
+								<th></th>
+					   			<td></td>
+					   			<th></th>
+					   			<td></td>                       			
                      		</tr>
                      	</tbody>
                      </table>
@@ -72,7 +83,7 @@
 		      </div>
 		      <div class="modal-footer">
 		      	<button type="button" id="confirmBtn" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
-		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+		        <button type="button" id="cancleLotBtn" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 		      </div>
 		    </div>
 		  </div>
@@ -211,6 +222,7 @@
     					var rowKeyData = lotNoGrid.getCheckedRows(ev);
     					console.log(rowKeyData);
     					edctsLotNo.value = rowKeyData[0].edctsLotNo;
+    					$("#lotModal").modal('hide');
 					});
 		
 		//입고 목록 조건별 조회
@@ -235,6 +247,18 @@
 			
 		})
 		
+		//완제품LOT번호 모달창 닫기 버튼 클릭 -> 폼 input 데이터값 지윅
+		 $("#cancleLotBtn").on("click",function() {
+		 	edctsLotNo.value = '';
+		 })
+		 
+		 //새자료 버튼 클릭 -> 폼 input 비우기
+		 $("#ReBtn").on("click",function() {
+		 	$("#IstSearchFrm").each(function() {
+		 		this.reset();
+		 		grid.clear();
+		 	})
+		 })
 		
 		//제품 입고일자 현재 날짜로 설정
 	    document.getElementById("edctsIstDtStart").valueAsDate = new Date();

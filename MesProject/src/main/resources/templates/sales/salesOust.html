@@ -22,7 +22,7 @@
 	<div class="container-fluid px-4">
 		<h1 class="mt-4" style="margin-left: 20px;">영업관리</h1>
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item" style="margin-left: 25px;"><a href="/"><i class="fas fa-home"></i></a></li>
 			<li class="breadcrumb-item">> 영업관리</li>
 			<li class="breadcrumb-item active">> 제품 출고 등록</li>
 		</ol>
@@ -261,26 +261,26 @@
 	  
 	  //완제품 재고 목록 모달에서 출고량 입력하여 완제품 출고 테이블에 저장
 		$("#addBtn").click(ev => {
-			var ordrData = StcGrid.getCheckedRows();
-			var edctsLotNo = ordrData[0].edctsLotNo;
-			//var edctsOustCnt = ordrData[0].edctsOustCnt;
-			var edctsOustCnt = $("#edctsOustCntOut").val();
-			console.log(edctsCd);
-			console.log(edctsLotNo);
-			console.log(edctsOustCnt);
-			if($("#edctsOustCntOut").val() != ''){
+			if( StcGrid.getCheckedRows().length == 0){
+				toastr.warning('출고할 제품을 선택해주세요');
+			}else if($("#edctsOustCntOut").val() == '') {
+				toastr.warning('출고수량을 선택해주세요');
+			} else{
+				var edctsLotNo = ordrData.edctsLotNo;
+				var edctsOustCnt = ordrData.edctsOustCnt;
+				var edctsOustCnt = $("#edctsOustCntOut").val();
+				
+						$.ajax({
+					url:"saveSalesOust",
+					method:"post",
+					dataType:"json",
+					data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsOustCnt":edctsOustCnt,"orderNo":orderNo},
+					success:function(list) {
+						grid2.resetData(list);
+						$("#StcGridModal").modal('hide');
+					}
+				})
 				$.ajax({
-				url:"saveSalesOust",
-				method:"post",
-				dataType:"json",
-				data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsOustCnt":edctsOustCnt,"orderNo":orderNo},
-				success:function(list) {
-					grid2.resetData(list);
-					$("#StcGridModal").modal('hide');
-				}
-			})
-			//주문서 진행상황 출고완료로 변경
-			$.ajax({
 				url:"updateProg",
 				method:"put",
 				dataType:"json",
@@ -288,12 +288,9 @@
 				success:function(result) {
 					findOrder();
 					toastr.success('출고등록되었습니다');
-				}
-			})
-			}else {
-				toastr.error('출고수량을 입력해주세요');
+					}
+				})	
 			}
-			
 		})
 	  	
 </script>
