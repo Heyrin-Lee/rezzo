@@ -22,7 +22,7 @@
 	<div class="container-fluid px-4">
 		<h1 class="mt-4">영업관리</h1>
 		<ol class="breadcrumb mb-4">
-			<li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+			<li class="breadcrumb-item" style="margin-left: 5px;"><a href="/"><i class="fas fa-home"></i></a></li>
 			<li class="breadcrumb-item">> 영업관리</li>
 			<li class="breadcrumb-item active">> 제품 출고 조회</li>
 		</ol>
@@ -157,7 +157,7 @@
 	    			}
 	    		})	
 			}else {
-				toastr.error('검색범위가 올바르지 않습니다');
+				toastr.warning('검색범위가 올바르지 않습니다');
 			}
 	    	
 	    });
