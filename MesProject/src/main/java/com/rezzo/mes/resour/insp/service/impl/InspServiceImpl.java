@@ -110,5 +110,15 @@ public class InspServiceImpl implements InspService {
         return mapper.getInfCdList();
     }
 
-
+    // 삭제
+    @Override
+    public void delRscInspHistSingle(List<RscInspVO> rscInspVOS) {
+        for (RscInspVO vo : rscInspVOS) {
+            mapper.delRscInspHistSingle(vo);
+        }
+    }
+    @Override
+    public void delRscInspHistAll(RscInspVO rscInspVO) {
+        mapper.delRscInspHistAll(rscInspVO);
+    }
 }

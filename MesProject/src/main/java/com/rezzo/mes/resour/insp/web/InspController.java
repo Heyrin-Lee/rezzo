@@ -60,10 +60,6 @@ public class InspController {
         sv.setRscInspList(rscInspVOS);
     }
 
-    @RequestMapping("setRscInsp")
-    public void setRscInsp(@RequestBody RscInspVO rscInsp) {
-    }
-
     @RequestMapping("getRscOrdrList")
     @ResponseBody
     public List<RscOrdrVO> getRscOrdrList(@ModelAttribute RscOrdrVO rscOrdrVO) {
@@ -101,4 +97,16 @@ public class InspController {
         return sv.getInfCdList();
     }
 
+    //삭제
+    @RequestMapping("delRscInspHistSingle")
+    @ResponseBody
+    public void delRscInspHistSingle(@RequestBody List<RscInspVO> rscInspVOS) {
+        sv.delRscInspHistSingle(rscInspVOS);
+    }
+
+    @RequestMapping("delRscInspHistAll")
+    @ResponseBody
+    public void delRscInspHistAll(@RequestBody RscInspVO rscInspVO) {
+        sv.delRscInspHistAll(rscInspVO);
+    }
 }

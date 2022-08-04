@@ -26,4 +26,9 @@ public interface InspService {
     // 검사상세
     List<CcdsVO> getInfCdList();
 
+    // 삭제
+    void delRscInspHistSingle(List<RscInspVO> rscInspVOS);
+
+    void delRscInspHistAll(RscInspVO rscInspVO);
+
 }

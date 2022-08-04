@@ -227,4 +227,38 @@
         WHERE CCD = 'INF'
         ORDER BY CCD_DTL
     </select>
+
+    <delete id="delRscInspHistSingle" parameterType="RscInspVO">
+        begin
+            delete
+            from RSC_INSP_DTL
+            where RSC_INSP_CD = #{rscInspCd}
+              and ORDR_CD = #{ordrCd}
+              and RSC_CD = #{rscCd};
+
+            delete
+            from RSC_INFER
+            where RSC_INSP_CD = #{rscInspCd}
+              and ORDR_CD = #{ordrCd}
+              and RSC_CD = #{rscCd};
+        end;
+    </delete>
+
+    <delete id="delRscInspHistAll" parameterType="RscInspVO">
+        begin
+            begin
+                delete
+                from RSC_INSP
+                where RSC_INSP_CD = #{rscInspCd};
+
+                delete
+                from RSC_INSP_DTL
+                where RSC_INSP_CD = #{rscInspCd};
+
+                delete
+                from RSC_INFER
+                where RSC_INSP_CD = #{rscInspCd};
+            end;
+        end;
+    </delete>
 </mapper>

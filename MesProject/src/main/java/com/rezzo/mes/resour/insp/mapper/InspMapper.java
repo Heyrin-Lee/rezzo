@@ -41,4 +41,9 @@ public interface InspMapper {
     List<CcdsVO> getInfCdList();
     void setRscInfList(@Param("insp") RscInspVO rscInspVO, @Param("inf")RscInfVO rscInfVO);
 
+    // 삭제
+    void delRscInspHistSingle(RscInspVO rscInspVO);
+
+    void delRscInspHistAll(RscInspVO rscInspVO);
+
 }
