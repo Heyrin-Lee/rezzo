@@ -87,7 +87,7 @@
 
 
 					<br><br>
-					<div id="grid"></div>
+					<div id="grid">자재목록</div>
 				</div>
 			</div>
 
@@ -101,7 +101,7 @@
 						<br> <br>
 
 					</div>
-					<div id="grid2"></div>
+					<div id="grid2">자재발주</div>
 				</div>
 			</div>
 
@@ -137,7 +137,7 @@
 						name: 'vendCd'
 					}, {
 						header: '업체명',
-						align: 'center',
+						align: 'left',
 						name: 'vendNm'
 					}, {
 						header: '발주신청일',
@@ -154,6 +154,9 @@
 					success: function (result) {
 						grid.resetData(result);
 					}
+
+					
+					
 				})
 
 				// 상단 그리드 검색
@@ -220,7 +223,7 @@
 						name: 'rscCd'
 					}, {
 						header: '자재명',
-						align: 'center',
+						align: 'left',
 						name: 'rscNm'
 					}, {
 						header: '업체코드',
@@ -228,7 +231,7 @@
 						name: 'vendCd'
 					}, {
 						header: '업체명',
-						align: 'center',
+						align: 'left',
 						name: 'vendNm'
 					}, {
 						header: '발주코드',
@@ -236,20 +239,20 @@
 						name: 'ordrCd'
 					}, {
 						header: '발주수량',
-						align: 'center',
+						align: 'right',
 						name: 'ordrCnt',
 						editor: 'text'
 					}, {
 						header: '현재재고',
-						align: 'center',
+						align: 'right',
 						name: 'rscStc'
 					}, {
 						header: '안전재고',
-						align: 'center',
+						align: 'right',
 						name: 'safStc'
 					}, {
 						header: '예상재고량',
-						align: 'center',
+						align: 'right',
 						name: 'allStc'
 					}, {
 						header: '납기요청일',

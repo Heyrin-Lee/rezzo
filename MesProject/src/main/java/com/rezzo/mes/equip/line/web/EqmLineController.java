@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.rezzo.mes.equip.line.service.EqmLineService;
 import com.rezzo.mes.equip.line.service.EqmLineVO;
 
+
 @Controller
 public class EqmLineController {
 
@@ -20,7 +22,8 @@ public class EqmLineController {
 	EqmLineService service;
 
 	@RequestMapping("eqmLine")
-	public String line() {
+	public String line(Model model) {
+		model.addAttribute("lineCode", service.getLineCd());
 		return "equip/eqmLine";
 	}
 

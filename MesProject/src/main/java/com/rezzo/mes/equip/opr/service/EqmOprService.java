@@ -20,7 +20,7 @@ public interface EqmOprService {
 		
 		public void eqmOprInsert (EqmOprVO vo);
 		
-		public void OprDelete(EqmOprVO vo);
+		public void OprDelete(List<EqmOprVO> eqmOprList);
 		
 		public List<Map<String, String>> OprSelectList(String keyword);
 		
