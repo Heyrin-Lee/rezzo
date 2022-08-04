@@ -34,7 +34,7 @@
         end;
     </insert>
 
-    <insert id="setRscIst" parameterType="String">
+    <insert id="setRscIst" parameterType="RscIstVO">
         declare
             v_values rsc_ist%rowtype;
         begin
