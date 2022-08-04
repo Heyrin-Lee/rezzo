@@ -181,14 +181,13 @@
 			$('#delBtn').on('click', function() {
 				
 				var lCd= $('#lineCd').val()
+				var lineNm= $('#lineNm').val()
 				$.ajax({
 					url: "eqmLineList",
 					method: "GET",
 					dataType: "JSON",
 					success: function (result) {
-					for (res in result){
-						var lineCd = result[res].lineCd;
-						if(lineCd != lCd){
+					if(lineNm == null || lineNm == ''){
 							toastr.warning('삭제할 라인을 선택해주세요.');
 							return false;
 						} else {
@@ -217,7 +216,7 @@
 					} 
 				
 				}
-				})
+				)
 				
 				
 			})
