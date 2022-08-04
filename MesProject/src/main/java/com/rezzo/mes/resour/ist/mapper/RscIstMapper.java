@@ -5,6 +5,7 @@ import com.rezzo.mes.resour.ist.service.RscIstVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -13,7 +14,7 @@ public interface RscIstMapper {
     String getRscIstCd(); // 입고 코드 발급
     String getRscIstLotCd(RscIstVO rscIstVO); // lot key 발급
     void setRscIstLotEach(RscIstVO rscIstVO);
-    void setRscIst(@Param("rscIstCd") String rscIstcd, @Param("istDt") String istDt);
+    void setRscIst(@Param("rscIstCd") String rscIstcd, @Param("istDt") Date istDt);
 
     // grid search
     RscVO getRscSingle(RscVO rscVO);

@@ -79,18 +79,6 @@
                                 <button id="rscModBtn" type="button" class="btn btn-primary"><i class="fas fa-search"></i></button>
                             </td>
                         </tr>
-                        <tr>
-                            <th>
-                                <b>정렬기준</b>
-                            </th>
-                            <td>
-                                <div id="sortBtn">
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="date" checked> 일자</label>
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="rscInspCd"> 검사번호</label>
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="rsc"> 자재</label>
-                                </div>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </form>
@@ -256,7 +244,7 @@
         // main grid
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
-            bodyHeight: 400,
+            bodyHeight: 450,
             scrollX: false,
             scrollY: true,
             columns: [

@@ -5,7 +5,7 @@
 <mapper namespace="com.rezzo.mes.resour.stc.mapper.RscStcMapper">
     <select id="getIOList" parameterType="RscIOVO" resultType="RscIOVO">
         select *
-        from (select to_char(IST_DT, 'yyyy-mm-dd') as prcsDt,
+        from (select IST_DT as prcsDt,
         ri.RSC_IST_CD as cd,
         ri.RSC_CD,
         rsc.RSC_NM,
@@ -19,7 +19,7 @@
 
         union
 
-        select to_char(OUST_DT, 'yyyy-mm-dd') as prcsDt,
+        select OUST_DT as prcsDt,
         ro.RSC_OUST_CD as cd,
         ro.RSC_CD,
         rsc.RSC_NM,
@@ -82,8 +82,8 @@
         and rsh.RSC_CD = rsc.RSC_CD
         and rsh.RSC_CD = rs.RSC_CD
         <if test="rscCd != null and rscCd != ''">and rsh.RSC_CD = #{rscCd}</if>
-        and (IST_DT between trunc(to_date(#{inqDt}), 'MM') and to_date(#{inqDt})
-        or OUST_DT between trunc(to_date(#{inqDt}), 'MM') and to_date(#{inqDt}))
+        and (IST_DT between trunc(#{inqDt}, 'MM') and #{inqDt}
+        or OUST_DT between trunc(#{inqDt}, 'MM') and #{inqDt})
     </select>
 
     <insert id="stcStack">
