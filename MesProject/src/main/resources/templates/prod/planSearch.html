@@ -44,11 +44,12 @@
                   <div class="card-body">
                   	 <div class="linelist">
                       <button type="button" class="btn btn-primary" id="sBtn"><i class="fas fa-search"></i> 조회</button>
+                      <button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button>
                    	 </div>
                    	 <br>
                    	 <br>
                    	 <br>
-                     <form>
+                     <form name="planform" id="planform">
                       <table class="table" style="vertical-align : middle;">
 					   	<colgroup>
 					   		<col style="width: 150px;">
@@ -111,6 +112,9 @@
    	</div>
    	</div>
    <script>
+   $("#clearBtn").on("click", function(){
+	   		 $('#planform')[0].reset();
+	})
    const gridData = [];
   
    const grid = new tui.Grid({
@@ -189,7 +193,7 @@
 						method : 'POST',
 			 			data : {"planDt" : planDt, "planDt2" : planDt2, "nowSt" : nowSt, "prdtNm" : prdtNm},
 			 			success : function(result) {
-			 				toastr.error("삭제되었습니다.")
+			 				toastrsuccess("삭제되었습니다.")
 				 			grid.resetData(result)
 			 			}
 		   			 })
@@ -200,6 +204,14 @@
 	   }
    })
   
+   let hoverOption = {
+	     row: {
+	         hover: {
+	             background: 'rgba(19,78,94,0.2)'
+	         }
+     	}
+		 }
+		 tui.Grid.applyTheme('default', hoverOption);
    </script>
 </th:block>
 </body>

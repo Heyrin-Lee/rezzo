@@ -22,7 +22,7 @@ public class IstServiceImpl implements RscIstService {
     @Override
     @Transactional
     public void setRscIstLot(List<RscIstVO> rscIstVOS) {
-        String istDt = rscIstVOS.get(0).getIstDt(); // 입고날짜
+        Date istDt = rscIstVOS.get(0).getIstDt(); // 입고날짜
         String rscIstCd = mapper.getRscIstCd(); // 입고코드
         for (RscIstVO rscIstVO : rscIstVOS) {
             String lotKey = mapper.getRscIstLotCd(rscIstVO);
@@ -30,7 +30,10 @@ public class IstServiceImpl implements RscIstService {
             rscIstVO.setRscIstCd(rscIstCd); // ist key set
             mapper.setRscIstLotEach(rscIstVO); // lot 입고 등록
         }
-        mapper.setRscIst(rscIstCd, istDt);
+        RscIstVO vo = new RscIstVO();
+        vo.setIstDt(istDt);
+        vo.setRscIstCd(rscIstCd);
+        mapper.setRscIst(vo);
     }
 
     @Override

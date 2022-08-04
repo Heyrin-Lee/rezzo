@@ -32,6 +32,11 @@ public class EqmLineServiceImpl implements EqmLineService {
 	@Override
 	public List<EqmLineVO> eqmLineSelectList(EqmLineVO vo) {
 		return map.eqmLineSelectList(vo);		
+	}
+
+	@Override
+	public EqmLineVO getLineCd() {
+		return map.getLineCd();
 	};
 
 }

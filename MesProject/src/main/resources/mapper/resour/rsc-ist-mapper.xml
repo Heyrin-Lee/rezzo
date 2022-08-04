@@ -34,7 +34,7 @@
         end;
     </insert>
 
-    <insert id="setRscIst" parameterType="String">
+    <insert id="setRscIst" parameterType="RscIstVO">
         declare
             v_values rsc_ist%rowtype;
         begin
@@ -46,7 +46,7 @@
 
                 loop
                     insert into RSC_IST (rsc_ist_cd, ist_dt, rsc_cd, ist_cnt)
-                    values (#{rscIstCd}, to_date(#{istDt}, 'yyyy-mm-dd'), v_values.RSC_CD, v_values.IST_CNT);
+                    values (#{rscIstCd}, #{istDt}, v_values.RSC_CD, v_values.IST_CNT);
                 end loop;
         end;
     </insert>
@@ -57,7 +57,7 @@
         rl.lot_cnt,
         rl.rsc_ist_cd,
         rl.ordr_cd,
-        to_char(ri.ist_dt, 'yyyy-mm-dd') as istDt,
+        ri.ist_dt,
         vend.vend_nm,
         rsc.rsc_nm
         from rsc_lot rl,
@@ -87,7 +87,7 @@
     </select>
 
     <select id="getRscIstHistList" parameterType="RscIstVO" resultType="RscIstVO">
-        select ri.RSC_IST_CD, count(*) istCnt, to_char(ri.IST_DT, 'yyyy-MM-dd') as istDt
+        select ri.RSC_IST_CD, count(*) istCnt, ri.IST_DT
         from RSC_IST ri,
              RSC_LOT rl
         where ri.RSC_IST_CD = rl.RSC_IST_CD
@@ -111,7 +111,7 @@
                rl.RSC_INSP_CD,
                rl.RSC_IST_CD,
                rid.PASS_RMN_CNT,
-               to_char(ri.IST_DT, 'yyyy-MM-dd') as istDt
+               ri.IST_DT
         from RSC,
              RSC_ORDR_DTL rod,
              RSC_INSP_DTL rid,
@@ -139,7 +139,7 @@
                rl.RSC_INSP_CD,
                rl.RSC_IST_CD,
                rid.PASS_RMN_CNT,
-               to_char(ri.IST_DT, 'yyyy-MM-dd') as istDt
+               ri.IST_DT
         from RSC,
              rsc_lot rl,
              RSC_INSP_DTL rid,

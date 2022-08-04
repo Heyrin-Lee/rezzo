@@ -185,11 +185,9 @@
 											<td><input class="form-control" type="date" id="eqmIstDt" name="eqmIstDt" style="width: 250px" /></td>
 										<th>가동여부 *</th>
 										<td>
-											<select class="dataTable-selector" name="useYN" id="useYN" style="width: 250px">
-													<option selected value="">==등록시필수선택==</option>
-													<option value="Y">가동</option>
-													<option value="N">미가동</option>
-											</select>
+										<input type="radio" name="useYN" value="Y"> 가동
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="radio" name="useYN" value="N"> 미가동
 										</td>
 										</tr>
 									</tbody>
@@ -244,7 +242,7 @@
 				columns: [{
 					header: '설비명',
 					name: 'eqmNm',
-					align: 'center',
+					align: 'left',
 				}, {
 					header: '설비코드',
 					name: 'eqmCd',
@@ -256,7 +254,7 @@
 				}, {
 					header: '공정명',
 					name: 'prcsNm',
-					align: 'center'
+					align: 'left'
 				}, {
 					header: '사용여부',
 					name: 'useYN',
@@ -264,11 +262,11 @@
 				}, {
 					header: '최소온도',
 					name: 'minTemp',
-					align: 'center'
+					align: 'right'
 				}, {
 					header: '최대온도',
 					name: 'maxTemp',
-					align: 'center'
+					align: 'right'
 				}, {
 					header: '점검주기(일)',
 					name: 'chckPerd',
@@ -450,6 +448,14 @@
 			//삭제버튼
 			$('#delBtn').on('click', function () {
 				var eqmCd = $('#eqmCd').val()
+				var useYN = $("[name=useYN]:checked").val();
+				console.log(useYN)
+				var isValid = true;
+				if(useYN == 'Y'){
+					toastr.error('사용중인 설비는 삭제할 수 없습니다.');
+					isValid = false;
+					return false;
+				} 
 				if ($('#eqmCd').val() == null || $('#eqmCd').val() == '') {
 					toastr.warning('삭제할 설비를 선택해주세요.');
 				} else{

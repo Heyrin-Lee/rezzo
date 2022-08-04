@@ -53,19 +53,19 @@
          <div class="card mb-4">
 			<div class="card-body">
             <div id="pDate">
+                <!--<div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
 	                <label>생산계획일자</label>
-                <div class="tui-datepicker-input tui-datetime-input tui-has-focus" style="height: 40px; border-radius: 5px;">
-                    <input type="text" id="tui-date-picker-target" aria-label="Date-Time" >
-                    <span class="tui-ico-date"></span>
-                	<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>
-                </div>
+                    <input type="date" id="tui-date-picker-target" class="form-control" style="width: 150px">
+                    <!--<span class="tui-ico-date"></span>-->
+                	<!--<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>-->
+                <!--</div>-->
             </div>
             <div class="linelist">
-            	<button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button>
                 <button data-bs-toggle="modal" class="btn btn-primary" id="modalBtn" data-bs-target="#exampleModal"
                   ><i class="fas fa-search"></i> 주문서</button>
                 <button class="btn btn-primary" id="regiBtn"><i class="fas fa-file"></i> 새계획</button>
                 <button class="btn btn-primary"id="osBtn"><i class="fas fa-save"></i> 저장</button>
+            	<button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button>
             </div>
 			</div>
 			</div>
@@ -246,7 +246,7 @@
 		            			item.lineCd = grid2.getData()[0].lineCd;
 		            			item.planCd = grid2.getData()[0].planCd;
 		            		}) 
-		            		if(oCnt >= iCnt) {
+		            		if(oCnt >= iCnt && wkToDt >= wkFrDt) {
 		            			grid3.resetData(result)
 		            			
 		            			$.ajax({
@@ -263,12 +263,15 @@
 		            			
 		            			})
 		            			
-		            		} else {
+		            		} else if(oCnt < iCnt && wkToDt >= wkFrDt){
 		            			toastr.error("생산 수량이 초과되었습니다.")
+		            		} else if(oCnt >= iCnt && wkToDt < wkFrDt){
+		            			toastr.error("종료일자가 시작일자보다 빠릅니다.")
+		            		} else if(oCnt < iCnt &&  wkToDt < wkFrDt){
+		            			toastr.error("생산 수량이 초과되었습니다.")
+		            			toastr.error("종료일자가 시작일자보다 빠릅니다.")
 		            		}
-		           			if(wkToDt<wkFrDt){
-		           				toastr.error("종료일자는 시작일자보다 빠를 수 없습니다.")
-		           			}
+		           			
 		           		}
 		           	})
 		        }
@@ -286,7 +289,7 @@
                     {
                         header: '제품명',
                         name: 'prdtNm',
-                        align: 'center',
+                        align: 'left',
                         editor: {
                             type: 'select',
                             options: {
@@ -341,13 +344,13 @@
                         header: '생산수량',
                         name: 'indicaCnt',
                         editor: 'text',
-                        align: 'center'
+                        align: 'right'
                     },
                     {
                         header: '작업우선순위',
                         name: 'prefRank',
                         editor: 'text',
-                        align: 'center'
+                        align: 'right'
                     },
                     {
                         header: '계획코드',
@@ -411,27 +414,24 @@
                     {
                         header: '사용가능수량',
                         name: 'lotRmnCnt',
-                        align: 'center'
+                        align: 'right'
                     },
                     {
                         header: '출고수량',
                         name: 'holdCnt',
                         editor : 'text',
-                        align: 'center'
+                        align: 'right'
                     },
                     {
                         header: '사용량',
                         name: 'useCnt',
-                        align: 'center'
+                        align: 'right'
                     }
                 ]
             });
 
             const gridData5 = [];
-           	//grid2.on('editingStart', ev => {
-			//	grid2.check(gridRowKey);
- 			//})
- 				
+          
  		 	grid4.on('editingStart', ev => {
  				grid4.check(ev.rowKey);
  			})  	
@@ -439,8 +439,15 @@
  			$("#grid4").on("keyup", function(key) {
            		if(key.keyCode == 13) {
 	          		let data = grid4.getCheckedRows()
-	           		console.log(data)
-	           		grid5.resetData(data)
+	          		console.log(data)
+	          		if(data[0].holdCnt > data[0].lotRmnCnt && data[0].holdCnt == data[0].useCnt){
+	          			toastr.error("자재 재고가 부족합니다")
+	          		} else if (data[0].holdCnt > data[0].lotRmnCnt && data[0].holdCnt < data[0].useCnt) {
+	          			toastr.error("출고 수량이 부족합니다")
+	          		} 
+	          		else {
+		           		grid5.resetData(data)
+	          		}
            		}
            	})
  			
@@ -463,7 +470,7 @@
                     {
                         header: '출고수량',
                         name: 'holdCnt',
-                        align: 'center'
+                        align: 'right'
                     },
                     {
                         header: '계획코드',
@@ -473,15 +480,15 @@
                 ]
             });
 
-            var datepicker = new tui.DatePicker('#tui-date-picker-container1', {
-                language: 'ko',
-                date: new Date(),
-                input: {
-                    element: '#tui-date-picker-target',
-                    format: 'yyyy-MM-dd'
-               }
-            });
-
+            //var datepicker = new tui.DatePicker('#tui-date-picker-container1', {
+            //    language: 'ko',
+            //    date: new Date(),
+            //   input: {
+            //       element: '#tui-date-picker-target',
+            //        format: 'yyyy-MM-dd'
+            //   }
+            //});
+           
 
             const modGrid = new tui.Grid({
                 el: document.getElementById('modGrid'),
@@ -495,11 +502,11 @@
                 }, {
                     header: '거래처명',
                     name: 'vendNm',
-                    align: 'center'
+                    align: 'left'
                 }, {
                     header: '제품명',
                     name: 'prdtNm',
-                    align: 'center',
+                    align: 'left',
                 }]
             })
 
@@ -511,9 +518,10 @@
             
              $("#osBtn").on("click", function(){
              	let iDt= $("#tui-date-picker-target").val();
-             	
+             	console.log(iDt)
              	let gridData = grid.getData();
              	gridData[0].planDt = iDt
+             	console.log(gridData[0].planDt = iDt)
              	
              	let grid2Data = grid2.getData()
              	grid2Data[0].planDt = iDt
@@ -611,6 +619,29 @@
             		grid2.setValue(0, 'planCd', code)
             	}
             })
+            
+            let hoverOption = {
+		     row: {
+			         hover: {
+			             background: 'rgba(19,78,94,0.2)'
+			         }
+		     	}
+			 }
+		 	tui.Grid.applyTheme('default', hoverOption);
+		 	
+		 	 grid.on('dblclick', ev => {
+		 		grid.check(ev.rowKey);
+		 	})  	
+	   	
+		    grid.on('check', (ev) => {
+		   		grid.addRowClassName(ev.rowKey, 'highlight2');
+		 	});
+		 	
+		 	 grid.on('uncheck', (ev) => {
+			   grid.removeRowClassName(ev.rowKey, 'highlight2');
+			 });
+			 
+			
         </script>
     </th:block>
 </body>

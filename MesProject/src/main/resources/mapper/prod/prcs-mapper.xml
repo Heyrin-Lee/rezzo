@@ -24,7 +24,7 @@
 		USING DUAL ON (p.PRCS_CD = #{prcsCd})
 	WHEN MATCHED THEN
 		UPDATE 
-		SET p.PRCS_CD = #{prcsCd},
+		SET
 			p.PRCS_NM = #{prcsNm},
 			p.PRCS_FG = #{prcsFg},
 			p.PRCS_CTNT = #{prcsCtnt}

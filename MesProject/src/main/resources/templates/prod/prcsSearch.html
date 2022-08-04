@@ -43,10 +43,11 @@
                   <div class="card-body">
                   <div class="linelist">
                      <button class="btn btn-primary" id="sBtn" form=""><i class="fas fa-search"></i> 검색</button>
+                     <button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button>
                   </div>
                    <br>
                    <br>   
-                     <form>
+                     <form name="prcsSearchform" id="prcsSearchform">
                      	<table class="table" style="vertical-align : middle;">
 					   	<colgroup>
 					   		<col style="width: 150px;">
@@ -107,6 +108,10 @@
 		   </div>		
    </div> 
    <script>
+   
+    $("#clearBtn").on("click", function(){
+	   		 $('#prcsSearchform')[0].reset();
+	}) 
    
    const gridData = [];
    
@@ -184,6 +189,26 @@
 	   })
    })
    
+    let hoverOption = {
+	     row: {
+	         hover: {
+	             background: 'rgba(19,78,94,0.2)'
+	         }
+     	}
+		 }
+		 tui.Grid.applyTheme('default', hoverOption);
+		 
+	 grid.on('dblclick', ev => {
+ 		grid.check(ev.rowKey);
+ 	})  	
+   	
+    grid.on('check', (ev) => {
+   		grid.addRowClassName(ev.rowKey, 'highlight2');
+ 	});
+ 	
+ 	 grid.on('uncheck', (ev) => {
+	   grid.removeRowClassName(ev.rowKey, 'highlight2');
+	 });
    
    </script>
 </th:block>

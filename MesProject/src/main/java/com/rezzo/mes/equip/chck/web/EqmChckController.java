@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rezzo.mes.CommonExcelView;
 import com.rezzo.mes.comm.ccds.service.CcdsService;
 import com.rezzo.mes.comm.ccds.service.CcdsVO;
 import com.rezzo.mes.equip.chck.service.EqmChckService;
@@ -49,7 +50,8 @@ public class EqmChckController {
 	EqmOprService EqmOprservice;
 	@Autowired
 	EqmChckService service;
-
+	@Autowired CommonExcelView commonExcelView;
+	
 	@RequestMapping("eqmChck")
 	public String eqmChck(Model model, EqmVO vo, EqmLineVO lineVo, PrcsVO prcsVo, CcdsVO ccdsVO) {
 
@@ -93,7 +95,7 @@ public class EqmChckController {
 		map.put("headers", header);
 		map.put("filename", "eqmChck_list");
 		map.put("datas", list);
-		return new ModelAndView("commonExcelView", map);
+		return new ModelAndView(commonExcelView, map);
 	}
 	
 }
