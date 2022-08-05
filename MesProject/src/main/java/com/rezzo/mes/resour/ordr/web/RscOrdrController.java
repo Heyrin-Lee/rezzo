@@ -65,7 +65,6 @@ public class RscOrdrController {
 	@PostMapping("rscOrdrInsert")
 	@ResponseBody
 	public List<RscOrdrVO> rscOrdrInsert(@RequestBody List<RscOrdrVO> OrdrList, RscOrdrVO vo){
-		service.rscOrdrFInsert(OrdrList);
 		service.rscOrdrInsert(OrdrList);
 		return service.rscCOrdrList(vo);
 	}
