@@ -47,6 +47,12 @@ public class SalesIstServiceImpl implements SalesIstService{
 		mapper.modifyProg(vo);
 		
 	}
+	
+	//입고조회페이지 완제품LOT번호 모달
+	@Override
+	public List<PrdtInspVO> searchGetLotList(PrdtInspVO vo) {
+		return mapper.searchGetLotList(vo);
+	}
 
 
 }

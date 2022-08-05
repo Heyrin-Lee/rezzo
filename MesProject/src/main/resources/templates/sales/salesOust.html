@@ -217,12 +217,23 @@
 	  grid.on("click", (e) => {
 	  	const { columnName } = e;
 	  	OustRowKey = e.rowKey;
+	  	//console.log(orderNo)
 	  	if(columnName == 'orderNo') {
+		  	let orderNo = grid.getValue(OustRowKey, 'orderNo')
+		  	console.log(orderNo)
+		  	
+		  	//let data = StcGrid.getData()[0]
+		  	//console.log(data)
+		  	//data.orderNo = orderNo
+		  	
 	  		let edctsCd = grid.getValue(OustRowKey,'edctsCd');
 	  		let orderCnt = grid.getValue(OustRowKey, 'orderCnt');
-	  		console.log(orderCnt);
-	  		console.log(edctsCd);
+	  		//console.log(orderCnt);
+	  		//console.log(edctsCd);
 	  		$("#StcGridModal").modal('show');
+	  			//let data = StcGrid.getData()
+		  		//console.log(data)
+	  		
 	  			$.ajax({
 	  			url:"salesStcList",
 	  			dataType:"json",

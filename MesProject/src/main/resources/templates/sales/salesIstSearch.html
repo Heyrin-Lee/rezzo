@@ -173,16 +173,6 @@
 	                header: '입고완료수량',
 	                name: 'inspCnt',
 	                align:'right'
-	            },
-	             {
-	                header: '최종판정',
-	                name: 'inspJm',
-	                align:'left'
-	            },
-	            {
-	               	header: '검사 담당자',
-	                name: 'inspPsch',
-	                align:'left'
 	            }
 	        ]
 	    }); 
@@ -207,7 +197,7 @@
 							lotNoGrid.refreshLayout()
 							}, 300);
 				$.ajax({
-					url:"getLotList",
+					url:"searchGetLotList",
 					method:"get",
 					dataType:"json",
 					success:function(lotList) {
