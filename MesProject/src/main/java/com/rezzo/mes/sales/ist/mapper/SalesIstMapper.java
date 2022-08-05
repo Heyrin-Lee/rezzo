@@ -18,4 +18,6 @@ public interface SalesIstMapper {
 	public List<PrdtInspVO> getLotList(PrdtInspVO vo);
 	//입고등록 후 입고완료로 진행상황 변경
 	public void modifyProg(OrderVO vo);
+	//입고조회페이지 완제품LOt번호 모달
+	public List<PrdtInspVO> searchGetLotList(PrdtInspVO vo);
 }
