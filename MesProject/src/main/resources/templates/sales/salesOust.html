@@ -4,7 +4,6 @@
       layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
-<title>출고 관리</title>
 <style>
 	.c_btn {
    color: #fff;
@@ -20,7 +19,7 @@
 <!-- 본문내용 -->
 <th:block layout:fragment="main">  
 	<div class="container-fluid px-4">
-		<h1 class="mt-4" style="margin-left: 20px;">영업관리</h1>
+		<h1 class="mt-4" style="margin-left: 20px;">제품출고등록</h1>
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item" style="margin-left: 25px;"><a href="/"><i class="fas fa-home"></i></a></li>
 			<li class="breadcrumb-item">> 영업관리</li>
@@ -214,26 +213,18 @@
 	  }
 	  
 	  //진행중 주문서 주문번호 칸 클릭 -> 완제품 재고 목록 모달 띄우기
+	  let orderNo = '';
 	  grid.on("click", (e) => {
 	  	const { columnName } = e;
 	  	OustRowKey = e.rowKey;
-	  	//console.log(orderNo)
 	  	if(columnName == 'orderNo') {
-		  	let orderNo = grid.getValue(OustRowKey, 'orderNo')
-		  	console.log(orderNo)
 		  	
-		  	//let data = StcGrid.getData()[0]
-		  	//console.log(data)
-		  	//data.orderNo = orderNo
-		  	
+		  	orderNo = grid.getValue(OustRowKey, 'orderNo');
+		  	console.log(orderNo);
 	  		let edctsCd = grid.getValue(OustRowKey,'edctsCd');
 	  		let orderCnt = grid.getValue(OustRowKey, 'orderCnt');
-	  		//console.log(orderCnt);
-	  		//console.log(edctsCd);
+
 	  		$("#StcGridModal").modal('show');
-	  			//let data = StcGrid.getData()
-		  		//console.log(data)
-	  		
 	  			$.ajax({
 	  			url:"salesStcList",
 	  			dataType:"json",
@@ -250,7 +241,7 @@
 	  			}
 	  		})
 	  	}
-	  })
+	  });
 	  
 	  //더블클릭 하면 체크박스 체크
 	  StcGrid.on('dblclick', (e) => {
@@ -265,7 +256,7 @@
 	   	if(columnName == 'orderNo') {
 	   		edctsCd = grid.getValue(ordrRowKey,'edctsCd');
 	   		orderNo = grid.getValue(ordrRowKey,'orderNo');
-	   		console.log(edctsCd);
+	   		console.log(orderNo);
 	   		}
 	   	})
 	   	
@@ -288,7 +279,6 @@
 				console.log(edctsRow);
 				var edctsLotNo = edctsRow[0].edctsLotNo;
 				console.log(edctsLotNo);
-				console.log(orderNo);
 						$.ajax({
 					url:"saveSalesOust",
 					method:"post",
