@@ -289,7 +289,7 @@
 				var edctsLotNo = edctsRow[0].edctsLotNo;
 				console.log(edctsLotNo);
 				console.log(orderNo);
-						$.ajax({
+					$.ajax({
 					url:"saveSalesOust",
 					method:"post",
 					dataType:"json",
@@ -308,7 +308,7 @@
 					findOrder();
 					toastr.success('출고등록되었습니다');
 					}
-				})	
+				})
 			}
 		})
 	  	

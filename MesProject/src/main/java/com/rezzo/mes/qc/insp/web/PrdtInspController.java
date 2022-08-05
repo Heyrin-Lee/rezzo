@@ -34,6 +34,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 @Controller
 public class PrdtInspController {
@@ -99,8 +100,20 @@ public class PrdtInspController {
 
 	}
 	
-	//공통뷰 상속받기
+	//컴파일된 파일 이용
 	@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
+	public void report2(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("application/pdf");
+		Connection conn = dataSource.getConnection();
+		InputStream jasperStream = getClass().getResourceAsStream("/jasper/reports/aaa.jasper");
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, conn);
+		JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+	}
+	
+	//공통뷰 상속받기
+	//@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
 	public ModelAndView prdtInspPdf(@RequestParam Map<String,Object> pram) throws Exception {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
