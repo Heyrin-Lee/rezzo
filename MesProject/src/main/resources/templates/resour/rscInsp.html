@@ -47,6 +47,8 @@
         .body {
             grid-area: body;
         }
+
+        .highlight {background-color: rgba(19,78,94,0.2) !important;}
     </style>
 
 
@@ -497,10 +499,12 @@
         // grid theme
         let gridOption = {
             row: {
-                hover: {background: 'coral'}
+                hover: {background: 'rgba(19,78,94,0.2)'}
             }
         }
         tui.Grid.applyTheme('default', gridOption);
+
+
 
         // main grid section
         let grid = new tui.Grid({
@@ -1124,6 +1128,26 @@
                     grid.clear();
                 })
             }
+        });
+
+        ///////////////////////////////////// misc ///////////////////////////
+        //셀 클릭시 로우 하이라이팅
+        let gridKey = null;
+        grid.on('click', ev => {
+            if (gridKey != ev.rowKey) {
+                grid.removeRowClassName(gridKey, 'highlight');
+            }
+            gridKey = ev.rowKey
+            grid.addRowClassName(gridKey, 'highlight')
+        });
+
+        let mdfyKey = null;
+        mdfyGrid.on('click', ev => {
+            if (mdfyKey != ev.rowKey) {
+                mdfyGrid.removeRowClassName(mdfyKey, 'highlight');
+            }
+            mdfyKey = ev.rowKey
+            mdfyGrid.addRowClassName(mdfyKey, 'highlight')
         });
     </script>
 </th:block>
