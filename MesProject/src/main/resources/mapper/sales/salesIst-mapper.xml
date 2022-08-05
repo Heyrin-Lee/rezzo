@@ -46,9 +46,9 @@
 	<!-- 완제품LOT번호 모달 조회 -->
 	<select id="getLotList" resultType="PrdtInspVO">
 	SELECT DISTINCT p.order_no, p.edcts_lot_no, p.edcts_cd, o.prdt_nm, p.insp_cnt
-	FROM PRDT_INSP p, ORDER_SHEET o
-	      WHERE p.EDCTS_CD = o.EDCTS_CD
-	      AND o.PROG_APPE = '검사완료'
+	FROM PRDT_INSP p JOIN ORDER_SHEET o
+	      ON p.order_no = o.order_no
+	      WHERE o.PROG_APPE = '검사완료'
 	</select>
 	
 	<!-- 입고등록 후 입고완료로 진행상황 변경 -->
