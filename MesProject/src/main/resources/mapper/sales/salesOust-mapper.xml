@@ -58,8 +58,8 @@
  	
  	<!-- 출고현황 조회 -->
  	<select id="findOust" resultType="SalesOustVO">
- 		SELECT * FROM edcts_oust
-		WHERE edcts_oust_dt = sysdate
+ 		select * from edcts_oust
+		where edcts_oust_dt = to_char(sysdate, 'yyyy-mm-dd')
  	</select>
  	
  	<!-- 출고 조회 페이지 -->

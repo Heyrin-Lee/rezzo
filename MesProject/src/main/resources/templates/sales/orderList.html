@@ -80,21 +80,16 @@
 					   		</tr>
 					   	</tbody>
 					   </table>
-                       </div>
                      </form>
                   </div>
                </div>
-            </div>
+           </div>
       </div>
-      <div class="card-body">
-      <div class="linelist" style="margin-left: 1010px;">
-      	<button class="btn btn-primary" id="addBtn"><i class="fas fa-plus"></i> 추가</button>
+      	<button class="btn btn-primary" id="addBtn" style="margin-left: 1350px;"><i class="fas fa-plus"></i> 추가</button>
 	    <button class="btn btn-primary" id="okBtn"><i class="fas fa-save"></i> 저장</button>
 	    <button class="btn btn-primary" id="delBtn"><i class="fas fa-minus"></i> 삭제</button>
-      </div>
-   		<div id="grid" class="card mb-4"></div>   		
-	 </div>
-
+   		<div id="grid" class="card mb-4"></div>  
+	</div>
    
    <!-- 제품코드 모달(등록) -->
    <div class="modal fade" id="edctsCdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -546,6 +541,9 @@
 		
 		//조건별 주문서 조회 function
 		function search() {
+			setTimeout(function () {
+							grid.refreshLayout()
+							}, 300);
 			var searchData = $("#searchFrm").serialize();
 			var tf = true;
 			$.ajax({
