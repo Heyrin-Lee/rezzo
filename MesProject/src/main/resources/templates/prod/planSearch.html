@@ -4,7 +4,6 @@
       layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <style>
@@ -43,8 +42,8 @@
             <div class="col">
                   <div class="card-body">
                   	 <div class="linelist">
+                      <button id="clearBtn" class="btn btn-primary" form=""><i class="fas fa-file"></i> 초기화</button>
                       <button type="button" class="btn btn-primary" id="sBtn"><i class="fas fa-search"></i> 조회</button>
-                      <button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button>
                    	 </div>
                    	 <br>
                    	 <br>
@@ -126,27 +125,33 @@
 	      columns: [
 	        {
 	          header: '계획코드',
-	          name: 'planCd'
+	          name: 'planCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '라인코드',
-	          name: 'lineCd'
+	          name: 'lineCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '제품코드',
-	          name: 'edctsCd'
+	          name: 'edctsCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '필요수량',
-	          name: 'orderCnt'
+	          name: 'orderCnt',
+	          align : 'right'
 	        },
 	        {
 	          header: '지시수량',
-	          name: 'indicaCnt'
+	          name: 'indicaCnt',
+	          align : 'right'
 	        },
 	        {
 	          header: '작업시작일',
-	          name: 'wkFrDt'
+	          name: 'wkFrDt',
+	          align : 'center'
 	        }
 	      ]
 	    });

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.rezzo.mes.CommonExcelView;
@@ -32,6 +34,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 @Controller
 public class PrdtInspController {
@@ -65,6 +68,7 @@ public class PrdtInspController {
 	}
 
 	@RequestMapping("savePrdtInsp")
+	@ResponseStatus(value = HttpStatus.OK)
 	public void savePrdtInsp(@RequestBody List<PrdtInspVO> prdtInspList) {
 		service.savePrdtInsp(prdtInspList);
 	}
@@ -96,8 +100,20 @@ public class PrdtInspController {
 
 	}
 	
-	//공통뷰 상속받기
+	//컴파일된 파일 이용
 	@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
+	public void report2(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		response.setContentType("application/pdf");
+		Connection conn = dataSource.getConnection();
+		InputStream jasperStream = getClass().getResourceAsStream("/jasper/reports/aaa.jasper");
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, conn);
+		JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+	}
+	
+	//공통뷰 상속받기
+	//@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
 	public ModelAndView prdtInspPdf(@RequestParam Map<String,Object> pram) throws Exception {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();

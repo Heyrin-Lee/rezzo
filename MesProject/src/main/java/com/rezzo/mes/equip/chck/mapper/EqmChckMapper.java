@@ -9,7 +9,7 @@ public interface EqmChckMapper {
 	
 	public List<EqmChckVO> eqmChckList(EqmChckVO vo);
 	public void eqmChckSave(EqmChckVO vo);
-	public void eqmChckDelete(EqmChckVO vo);
+	public void eqmChckDelete(EqmChckVO eqmChckList);
 	public List<EqmChckVO> eqmChckSearch(EqmChckVO vo);
 	public List<Map<String, Object>> getEqmListMap(EqmChckVO vo);
 	

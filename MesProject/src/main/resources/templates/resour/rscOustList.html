@@ -72,22 +72,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <tr>
-                            <th>
-                                <b>정렬기준</b>
-                            </th>
-                            <td>
-                                <div id="sortBtn">
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="date"
-                                                  checked>
-                                        일자</label>
-                                    <label><input type="radio" class="form-check-input" name="ordrBy" value="vend">
-                                        업체</label>
-                                    <label><input type="radio" class="form-check-input" name="odByRs" value="rsc">
-                                        자재</label>
-                                </div>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </form>
@@ -180,22 +164,30 @@
                 {
                     header: '출고번호',
                     name: 'rscOustCd',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '출고일자',
                     name: 'oustDt',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '자재코드',
                     name: 'rscCd',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '자재명',
                     name: 'rscNm',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '출고량',
@@ -205,7 +197,9 @@
                 {
                     header: 'LOT번호',
                     name: 'rscLotCd',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '출고유형',
@@ -218,6 +212,13 @@
                 }
             ]
         });
+
+        let gridOption = {
+            row: {
+                hover: {background: 'rgba(19,78,94,0.2)'}
+            }
+        }
+        tui.Grid.applyTheme('default', gridOption);
 
 
         ///////////////////////////// resource ////////////////////////////////
@@ -318,6 +319,17 @@
 
             grid.export('xlsx', options);
         })
+
+        ///////////////////////////////////// misc ///////////////////////////
+        //셀 클릭시 로우 하이라이팅
+        let gridKey = null;
+        grid.on('click', ev => {
+            if (gridKey != ev.rowKey) {
+                grid.removeRowClassName(gridKey, 'highlight');
+            }
+            gridKey = ev.rowKey
+            grid.addRowClassName(gridKey, 'highlight')
+        });
     </script>
 
 </th:block>

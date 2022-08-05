@@ -4,7 +4,6 @@
       layout:decorate="~{layouts/layout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
 <style>
 
 #container {
@@ -116,7 +115,7 @@
             {
               header: '공정명',
               name: 'prcsNm',
-              align : 'center',
+              align : 'left',
               editor: 'text'
             },
             {
@@ -153,12 +152,6 @@
 	   			method:'POST',
 	   			contentType:'application/json',
 			   	data : JSON.stringify(prcsCd)
-	   			//data : {grid.
-	   					//prcsCd : grid.getModifiedRows().createdRows[0].prcsCd,
-	   			 		//prcsNm : grid.getModifiedRows().createdRows[0].prcsNm,
-	   			 		//prcsFg : grid.getModifiedRows().createdRows[0].prcsFg,
-	   			 		//prcsCtnt : grid.getModifiedRows().createdRows[0].prcsCtnt
-	   			 		//}
 	   		}).done(function(result){
 	   			$.ajax({
 					   url:'prcsList'

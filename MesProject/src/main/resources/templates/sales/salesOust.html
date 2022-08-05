@@ -24,7 +24,7 @@
 		<ol class="breadcrumb mb-4">
 			<li class="breadcrumb-item" style="margin-left: 25px;"><a href="/"><i class="fas fa-home"></i></a></li>
 			<li class="breadcrumb-item">> 영업관리</li>
-			<li class="breadcrumb-item active">> 제품 출고 등록</li>
+			<li class="breadcrumb-item active">> 제품출고등록</li>
 		</ol>
 <!-- 본문내용 끝 -->
 
@@ -217,12 +217,23 @@
 	  grid.on("click", (e) => {
 	  	const { columnName } = e;
 	  	OustRowKey = e.rowKey;
+	  	//console.log(orderNo)
 	  	if(columnName == 'orderNo') {
+		  	let orderNo = grid.getValue(OustRowKey, 'orderNo')
+		  	console.log(orderNo)
+		  	
+		  	//let data = StcGrid.getData()[0]
+		  	//console.log(data)
+		  	//data.orderNo = orderNo
+		  	
 	  		let edctsCd = grid.getValue(OustRowKey,'edctsCd');
 	  		let orderCnt = grid.getValue(OustRowKey, 'orderCnt');
-	  		console.log(orderCnt);
-	  		console.log(edctsCd);
+	  		//console.log(orderCnt);
+	  		//console.log(edctsCd);
 	  		$("#StcGridModal").modal('show');
+	  			//let data = StcGrid.getData()
+		  		//console.log(data)
+	  		
 	  			$.ajax({
 	  			url:"salesStcList",
 	  			dataType:"json",
@@ -266,11 +277,19 @@
 			}else if($("#edctsOustCntOut").val() == '') {
 				toastr.warning('출고수량을 선택해주세요');
 			} else{
-				var edctsLotNo = ordrData.edctsLotNo;
-				var edctsOustCnt = ordrData.edctsOustCnt;
+				//var edctsLotNo = StcGrid[0].edctsLotNo;
+				//console.log(edctsLotNo);
+				//var edctsOustCnt = StcGrid[0].edctsOustCnt;
+				//console.log(edctsOustCnt);
+				console.log(edctsCd)
 				var edctsOustCnt = $("#edctsOustCntOut").val();
-				
-						$.ajax({
+				console.log(edctsOustCnt);
+				var edctsRow = StcGrid.getCheckedRows();
+				console.log(edctsRow);
+				var edctsLotNo = edctsRow[0].edctsLotNo;
+				console.log(edctsLotNo);
+				console.log(orderNo);
+					$.ajax({
 					url:"saveSalesOust",
 					method:"post",
 					dataType:"json",
@@ -289,7 +308,7 @@
 					findOrder();
 					toastr.success('출고등록되었습니다');
 					}
-				})	
+				})
 			}
 		})
 	  	

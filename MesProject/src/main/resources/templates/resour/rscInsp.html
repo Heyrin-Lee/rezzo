@@ -21,7 +21,7 @@
 
         .layout {
             width: 1628px;
-            height: 900px;
+            height: 750px;
 
             display: grid;
             grid:
@@ -47,6 +47,8 @@
         .body {
             grid-area: body;
         }
+
+        .highlight {background-color: rgba(19,78,94,0.2) !important;}
     </style>
 
 
@@ -66,7 +68,16 @@
             <div class="header">
                 <div class="card" id="card-1">
                     <div class="card-body">
-
+                        <div style="display: inline-block; margin: auto 0; float: right;">
+                            <button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장
+                            </button>
+                            <button class="btn btn-primary" id="delDataBtn"><i class="fas fa-file"></i>
+                                삭제
+                            </button>
+                            <button class="btn btn-primary" id="reloadBtn"><i class="fas fa-file"></i>
+                                새자료
+                            </button>
+                        </div>
                         <table style="vertical-align : middle; text-align: center">
                             <colgroup>
                                 <col style="width: 120px">
@@ -102,16 +113,7 @@
                                     <input type="text" id="inspTstr" class="form-control" style="width: 168px;">
                                 </td>
                             </tr>
-                            <div style="display: inline-block; margin: auto 0; float: right;">
-                                <button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 저장
-                                </button>
-                                <button class="btn btn-primary" id="delDataBtn"><i class="fas fa-file"></i>
-                                    삭제
-                                </button>
-                                <button class="btn btn-primary" id="reloadBtn"><i class="fas fa-file"></i>
-                                    새자료
-                                </button>
-                            </div>
+
                             </tbody>
                         </table>
 
@@ -404,15 +406,21 @@
             }
 
             getElement() {
-                grid.check(this.rowKey);
-                this.el.value = '';
-                return this.el;
+                let rscNm = grid.getValue(this.rowKey, 'rscNm')
+                if (rscNm == null || rscNm === '') {
+                    toastr.error('자재를 먼저 선택하세요.');
+                } else {
+                    grid.check(this.rowKey);
+                    this.el.value = '';
+                    return this.el;
+                }
             }
 
             getValue() {
                 let val = this.el.value.replace(/[^0-9]/g, '')
                 grid.setValue(this.rowKey, 'inspCnt', val);
                 grid.setValue(this.rowKey, 'inspPassCnt', val);
+                grid.setValue(this.rowKey, 'inspFailCnt', '');
                 return val;
             }
 
@@ -432,15 +440,20 @@
             }
 
             getElement() {
-                grid.check(this.rowKey);
-                this.el.value = ''
-                return this.el;
+                let preIstCnt = grid.getValue(this.rowKey, 'preIstCnt')
+                if (preIstCnt === '' || preIstCnt == null) {
+                    toastr.error('가입고량을 먼저 입력하세요');
+                } else {
+                    grid.check(this.rowKey);
+                    this.el.value = ''
+                    return this.el;
+                }
             }
 
             getValue() {
                 let val = this.el.value.replace(/[^0-9]/g, '')
                 let preIstCnt = grid.getValue(this.rowKey, 'preIstCnt')
-                if (parseInt(val) > parseInt(preIstCnt) || preIstCnt === '') {
+                if (parseInt(val) > parseInt(preIstCnt)) {
                     toastr.error('검사량이 입고량 보다 많습니다.');
                     grid.setValue(this.rowKey, 'inspPassCnt', '');
                     grid.setValue(this.rowKey, 'inspFailCnt', '');
@@ -487,10 +500,12 @@
         // grid theme
         let gridOption = {
             row: {
-                hover: {background: 'coral'}
+                hover: {background: 'rgba(19,78,94,0.2)'}
             }
         }
         tui.Grid.applyTheme('default', gridOption);
+
+
 
         // main grid section
         let grid = new tui.Grid({
@@ -504,12 +519,16 @@
                     header: '자재코드',
                     name: 'rscCd',
                     editor: customInput,
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '품명',
                     name: 'rscNm',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '규격',
@@ -531,17 +550,23 @@
                 {
                     header: '발주번호',
                     name: 'ordrCd',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '발주량',
                     name: 'ordrCnt',
-                    align: 'right'
+                    align: 'right',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '미입고량',
                     name: 'rmnCnt',
-                    align: 'right'
+                    align: 'right',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '가입고량',
@@ -756,18 +781,18 @@
         function getRscSingle(val, rowKey) {
             let url = 'getRscSingle'
             if (val === '' || val == null) {
-
+            } else {
+                let data = {rscCd: val}
+                fetch(url, {
+                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                }).then(res => res.json()).then(res => {
+                    grid.setRow(rowKey, res)
+                }).catch(err => {
+                    toastr.error('해당하는 자재가 없습니다.');
+                })
             }
-            let data = {rscCd: val}
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => res.json()).then(res => {
-                grid.setRow(rowKey, res)
-            }).catch(err => {
-                toastr.error('해당하는 자재가 없습니다.');
-            })
         }
 
         //////////////////////////////// inspection detail /////////////////////////
@@ -838,7 +863,7 @@
             let data = infData.get(rowKey)
             if (data === undefined) { // initiate
                 infGrid.setColumnValues('infCnt', '')
-            } else if (data.length != 0) {
+            } else if (data.length !== 0) {
                 infGrid.resetData(data)
             } else {
                 infGrid.setColumnValues('infCnt', '')
@@ -847,26 +872,33 @@
         })
 
         infModal.addEventListener('hidden.bs.modal', e => {
-            let rowKey = infModal.dataset.rowKey;
-            let data = infGrid.getData();
-            infData.set(rowKey, data);
             infGrid.refreshLayout();
         })
 
         let calInfCnt = document.getElementById('calInfCnt');
         calInfCnt.addEventListener('click', function () {
             let rowKey = infModal.dataset.rowKey;
-            let colVal = infGrid.getColumnValues('infCnt')
-            let infSum = colVal.reduce((a, b) => (a + b));
             let inspCnt = grid.getValue(rowKey, 'inspCnt')
-
-            if (infSum > parseInt(inspCnt)) {
-                toastr.error('불량수량이 검사량 보다 많습니다.');
+            if (inspCnt === '' || inspCnt == null) {
+                toastr.error('검사량을 먼저 입력하세요.');
+                iModal.hide(infModal);
             } else {
-                grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
-                grid.setValue(rowKey, 'inspFailCnt', infSum)
+                let colVal = infGrid.getColumnValues('infCnt')
+                let infSum = colVal.reduce((a, b) => ((+a) + (+b)));
+                let inspCnt = grid.getValue(rowKey, 'inspCnt')
+
+                if (infSum > parseInt(inspCnt)) {
+                    toastr.error('불량수량이 검사량 보다 많습니다.');
+                } else {
+                    grid.setValue(rowKey, 'inspPassCnt', (inspCnt - infSum))
+                    grid.setValue(rowKey, 'inspFailCnt', infSum)
+                    let data = infGrid.getData();
+                    infData.set(rowKey, data);
+                    infGrid.refreshLayout();
+
+                }
+                iModal.hide(infModal);
             }
-            iModal.hide(infModal);
         })
 
         function getInfList() {
@@ -909,6 +941,10 @@
         ///////////////////////////// insert or update inspection result /////////////////
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
+            // let passCnt = grid.getColumnValues('inspPassCnt')
+            // if (passCnt.includes(null)) {
+            //     toastr.error('검사 항목이 비어있습니다.');
+            // } else {}
             let gridVal = grid.getCheckedRows();
             gridVal.forEach(el => {
                 let rowKey = el.rowKey.toString();
@@ -918,16 +954,14 @@
                 gridVal[0].inspDt = inspDt.value;
                 gridVal[0].inspTstr = inspTstr.value;
                 setRscInspList(gridVal);
-
-                schRscInspHist();
                 toastr.success('저장이 완료되었습니다.')
             } else {
                 updRscInspHist(gridVal);
                 grid.clear();
                 saveFlag === 0;
-                schRscInspHist();
                 toastr.success('수정이 완료되었습니다.')
             }
+
         })
 
         function setRscInspList(data) {
@@ -938,6 +972,8 @@
                 body: JSON.stringify(data)
             }).then(res => {
                 getOrdrList();
+            }).then(res => {
+                schRscInspHist();
             })
         }
 
@@ -947,6 +983,8 @@
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify(data)
+            }).then(res => {
+                schRscInspHist();
             })
         }
 
@@ -985,7 +1023,7 @@
             let url = 'schRscInspHist'
             fetch(url).then(res => res.json()).then(res => {
                 mdfyGrid.resetData(res);
-            }).then(res=>{
+            }).then(res => {
                 mdfyGrid.refreshLayout();
             })
         }
@@ -1059,7 +1097,7 @@
 
         delRow.addEventListener('click', function () {
             let rowKeys = grid.getCheckedRowKeys()
-            if (saveFlag == 0) {
+            if (saveFlag === 0) {
                 grid.removeRows(rowKeys)
             } else {
                 let data = grid.getCheckedRows();
@@ -1070,7 +1108,7 @@
                     body: JSON.stringify(data)
                 }).then(res => {
                     toastr.success('삭제되었습니다.');
-                }).then(res => {
+
                     schRscInspHist();
                     grid.removeRows(rowKeys);
                     grid.refreshLayout();
@@ -1085,7 +1123,7 @@
 
         ////////////////////////// delete /////////////////////////////////////
         delDataBtn.addEventListener('click', function () {
-            if (saveFlag == 0) {
+            if (saveFlag === 0) {
                 toastr.warning('등록모드에서는 삭제할 수 없습니다.');
             } else {
                 let data = grid.getData();
@@ -1101,6 +1139,26 @@
                     grid.clear();
                 })
             }
+        });
+
+        ///////////////////////////////////// misc ///////////////////////////
+        //셀 클릭시 로우 하이라이팅
+        let gridKey = null;
+        grid.on('click', ev => {
+            if (gridKey != ev.rowKey) {
+                grid.removeRowClassName(gridKey, 'highlight');
+            }
+            gridKey = ev.rowKey
+            grid.addRowClassName(gridKey, 'highlight')
+        });
+
+        let mdfyKey = null;
+        mdfyGrid.on('click', ev => {
+            if (mdfyKey != ev.rowKey) {
+                mdfyGrid.removeRowClassName(mdfyKey, 'highlight');
+            }
+            mdfyKey = ev.rowKey
+            mdfyGrid.addRowClassName(mdfyKey, 'highlight')
         });
     </script>
 </th:block>

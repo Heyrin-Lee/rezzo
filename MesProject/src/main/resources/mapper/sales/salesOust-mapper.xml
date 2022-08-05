@@ -8,7 +8,7 @@
  	<select id="findOrder" resultType="OrderVO">
  		SELECT ORDER_NO, VEND_NM, EDCTS_CD, PRDT_NM, ORDER_CNT, PAPRD_DT
 		FROM ORDER_SHEET
-		WHERE PROG_APPE = '검사완료'
+		WHERE PROG_APPE = '입고완료'
  	</select>
  	
  	<resultMap type="SalesStcVO" id="SalesStcVO">
@@ -58,7 +58,8 @@
  	
  	<!-- 출고현황 조회 -->
  	<select id="findOust" resultType="SalesOustVO">
- 		SELECT * FROM EDCTS_OUST
+ 		select * from edcts_oust
+		where edcts_oust_dt = to_char(sysdate, 'yyyy-mm-dd')
  	</select>
  	
  	<!-- 출고 조회 페이지 -->

@@ -87,16 +87,13 @@
     </select>
 
     <select id="getRscIstHistList" parameterType="RscIstVO" resultType="RscIstVO">
-        select ri.RSC_IST_CD, count(*) istCnt, ri.IST_DT
+        select distinct ri.RSC_IST_CD, count(*) istCnt, ri.IST_DT
         from RSC_IST ri,
              RSC_LOT rl
         where ri.RSC_IST_CD = rl.RSC_IST_CD
           and ri.RSC_CD = rl.RSC_CD
-            <![CDATA[
-          and IST_DT >= #{startDt}
-          and IST_DT <= #{endDt}
-            ]]>
         group by ri.RSC_IST_CD, ri.IST_DT
+        order by ri.RSC_IST_CD desc
     </select>
 
     <select id="getRscIstHistMdfy" parameterType="RscIstVO" resultType="RscIstVO">

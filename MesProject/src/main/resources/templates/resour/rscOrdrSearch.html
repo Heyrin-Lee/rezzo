@@ -5,7 +5,6 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Insert title here</title>
 	<style>
 		uploadResult {
 			display: grid;
@@ -87,27 +86,41 @@
 
 
 					<br><br>
-					<div id="grid">자재목록</div>
+					<div id="grid"></div>
 				</div>
 			</div>
 
-			<div class="card mb-4">
-				<div class="card-body">
 
-					<div class="linelist" style="float: right;">
-							<input type="hidden" id="ordrCd" name="ordrCd">
-							<button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 수정</button>
-							<button id="pdfBtn" name="pdfBtn" type="button" class="btn btn-primary"><i class="fas fa-download"></i> PDF</button>
-						<br> <br>
 
-					</div>
-					<div id="grid2">자재발주</div>
+</button>
+			
+<!-- Modal -->
+<div  class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">자재발주내역조회</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <label style="margin-top:5px">자재코드</label>
+					<input class="form-control" type="text" id="ordrCd" name="ordrCd" style="width:180px; margin-bottom:10px" readonly/>
+        	<div class="linelist" style="float: right;">
+					
+					<button type="button" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> 수정</button>
+					<button id="pdfBtn" name="pdfBtn" type="button" class="btn btn-primary"><i class="fas fa-download"></i> PDF</button>
+								</div>
+					<div id="grid2"></div>
 				</div>
 			</div>
+      </div>
+    </div>
+  </div>
 
 
 
 			<script>
+
 			
 			$('#pdfBtn').on('click',function(){
 				var ordrCd = $('#ordrCd').val();
@@ -121,7 +134,7 @@
 				const grid = new tui.Grid({
 					el: document.getElementById('grid'),
 					scrollX: false,
-					bodyHeight: 150,
+					bodyHeight: 600,
 					rowHeight: 35,
 					rowHeaders: ['rowNum'],
 					header: {
@@ -179,6 +192,18 @@
 					})
 				})
 
+				
+				
+				
+$('#grid').mouseleave(ev => {
+     grid.finishEditing();
+ })
+ 
+ $('#grid2').mouseleave(ev => {
+     grid2.finishEditing();
+ })
+
+
 
 				grid.on('click', ev => {
 					var ordrCd = grid.getValue(ev.rowKey, 'ordrCd')
@@ -205,6 +230,12 @@
 								grid2.setValue(all.rowKey, 'rscStc', rscStc)
 								$('#ordrCd').val(ordrCd)
 							}
+							$('#exampleModal').modal('show');
+							setTimeout(function() {
+								grid2.refreshLayout()	
+							},300);
+							
+							
 						}
 					})
 				})
@@ -279,7 +310,7 @@
 					var allStc = ordrCnt + rscStc
 
 					grid2.setValue(ev.rowKey, 'allStc', allStc)
-
+					grid2.check(ev);
 					if (Number(allStc) < Number(safStc)) {
 						grid2.addRowClassName(ev.rowKey, 'addClass')
 					}
@@ -332,6 +363,9 @@
 					}
 					toastr.success('발주내역 수정이 완료되었습니다.');
 				})
+				
+				
+				
 			</script>
 
 	</th:block>

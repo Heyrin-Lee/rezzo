@@ -10,7 +10,7 @@ public interface EqmChckService {
 	
 	public void eqmChckSave(EqmChckVO vo);
 	
-	public void eqmChckDelete(EqmChckVO vo);
+	public void eqmChckDelete(List<EqmChckVO> eqmChckList);
 	
 	public List<EqmChckVO> eqmChckSearch(EqmChckVO vo);
 	

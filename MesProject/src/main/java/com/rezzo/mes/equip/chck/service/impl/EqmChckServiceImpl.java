@@ -27,8 +27,10 @@ public class EqmChckServiceImpl implements EqmChckService{
 	}
 
 	@Override
-	public void eqmChckDelete(EqmChckVO vo) {
-		map.eqmChckDelete(vo);
+	public void eqmChckDelete(List<EqmChckVO> eqmChckList) {
+		for(EqmChckVO vo : eqmChckList) {
+			map.eqmChckDelete(vo);
+		}
 	}
 
 	@Override

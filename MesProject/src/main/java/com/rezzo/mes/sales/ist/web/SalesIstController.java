@@ -68,4 +68,11 @@ public class SalesIstController {
 		return vo;
 	}
 	
+	//입고조회페이지 완제품LOT번호 모달
+	@RequestMapping("searchGetLotList")
+	@ResponseBody
+	public List<PrdtInspVO> searchGetLotList(PrdtInspVO vo) {
+		return service.searchGetLotList(vo);
+	}
+	
 }

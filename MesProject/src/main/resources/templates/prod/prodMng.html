@@ -4,7 +4,6 @@
       layout:decorate="~{layouts/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <style>
@@ -99,7 +98,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">생산계획조회</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">생산지시조회</h5>
                         <br> <br>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div><br>
@@ -258,25 +257,25 @@
 		})
 
 		//자재 업데이트			
-		$.ajax({
-			url : 'getHolding',
-			method : 'post',
-			data : {"planCd" : planCd},
-			success : function(result) {
-					let today = new Date()
-					today = today.toISOString().substring(0, 10)
-					console.log(today)
-					let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
-					result.unshift(obj)
-				console.log(result)
-				$.ajax({
-					url : 'setRscOust',
-					method : 'post',
-					data : JSON.stringify(result),
-					contentType : 'application/json'
-				})
-			}
-		})
+		//$.ajax({
+		//	url : 'getHolding',
+		//	method : 'post',
+		//	data : {"planCd" : planCd},
+		//	success : function(result) {
+		//			let today = new Date()
+		//			today = today.toISOString().substring(0, 10)
+		//			console.log(today)
+		//			let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
+		//			result.unshift(obj)
+		//		console.log(result)
+		//		$.ajax({
+		//			url : 'setRscOust',
+		//			method : 'post',
+		//			data : JSON.stringify(result),
+		//			contentType : 'application/json'
+		//		})
+		//	}
+		//})
 		
 		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt
@@ -302,6 +301,8 @@
 
     //긴급 중지
    $("#stopBtn").on("click", function(){
+		  toastr.error("생산을 긴급 중지합니다.")
+
    		$.ajax({
    			url : 'updateYn',
 			success : function(result){
@@ -323,6 +324,7 @@
    
    //재시작
    $("#restartBtn").on("click", function(){
+	   toastr.info("생산을 다시 시작합니다.")
    		let array = grid2.getData()
    		$.each(array, function(index, item) {
             if(item.nowSt === '긴급중지') {
@@ -351,6 +353,7 @@
 	let arrTest = []
    // 생산지시	
    $("#startBtn").on("click", function(){
+	  toastr.info("생산을 시작합니다.")
 	  for(i=0; i<grid2.getRowCount(); i++) {
 		   let eqmCd = grid2.getValue(i, 'eqmCd')
 		   let indicaCnt = grid.getData()[0].indicaCnt

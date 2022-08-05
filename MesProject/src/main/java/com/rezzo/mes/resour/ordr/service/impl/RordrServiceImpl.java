@@ -44,6 +44,8 @@ public class RordrServiceImpl implements RscOrdrService {
 	@Override
 	public void rscOrdrInsert(List<RscOrdrVO> ordrList) {
 		System.out.println(ordrList+"--------");
+		RscOrdrVO vo = ordrList.get(0);
+		mapper.rscOrdrFInsert(vo);
 		for (RscOrdrVO ordrDtl : ordrList) {
 			mapper.rscOrdrInsert(ordrDtl);
 		}

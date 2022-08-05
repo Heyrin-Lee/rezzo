@@ -14,10 +14,12 @@ WHERE P.NOW_ST = '미진행'
 </select>
 
 <select id="getRsc" resultType="com.rezzo.mes.prod.indica.service.IndicaVO">
-SELECT B.PRCS_CD, B.RSC_CD, L.RSC_LOT_CD, L.LOT_RMN_CNT, L.HOLD_CNT, B.USE_CNT
+SELECT B.PRCS_CD, B.RSC_CD, L.RSC_LOT_CD, L.LOT_RMN_CNT, L.HOLD_CNT, B.USE_CNT, C.RSC_NM
 FROM  BOM B
 JOIN  RSC_LOT L
 ON B.RSC_CD = L.RSC_CD
+JOIN RSC C
+ON L.RSC_CD = C.RSC_CD
 WHERE B.EDCTS_CD = #{edctsCd}
 AND L.HOLD_CNT > 0
 </select>
