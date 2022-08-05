@@ -286,6 +286,13 @@
             ]
         });
 
+        let gridOption = {
+            row: {
+                hover: {background: 'rgba(19,78,94,0.2)'}
+            }
+        }
+        tui.Grid.applyTheme('default', gridOption);
+
         ///////////////////////////// date picker ////////////////////////////////
         let today = new Date();
         let picker = tui.DatePicker.createRangePicker({
@@ -302,6 +309,8 @@
             type: 'date',
             format: 'yyyy-MM-dd'
         });
+
+
 
         ///////////////////////////// vendor ////////////////////////////////
         // declare vendor modal
@@ -420,6 +429,18 @@
 
             grid.export('xlsx', options);
         })
+
+        ///////////////////////////////////// misc ///////////////////////////
+        //셀 클릭시 로우 하이라이팅
+        let gridKey = null;
+        grid.on('click', ev => {
+            if (gridKey != ev.rowKey) {
+                grid.removeRowClassName(gridKey, 'highlight');
+            }
+            gridKey = ev.rowKey
+            grid.addRowClassName(gridKey, 'highlight')
+        });
+
     </script>
 
 </th:block>
