@@ -104,7 +104,6 @@ public class EqmOprController {
 	@PostMapping("OprDelete")
 	@ResponseBody
 	public void eqmDelete(@RequestBody List<EqmOprVO> eqmOprList, EqmOprVO vo) {
-		System.out.println(eqmOprList);
 		service.OprDelete(eqmOprList);
 	};
 	

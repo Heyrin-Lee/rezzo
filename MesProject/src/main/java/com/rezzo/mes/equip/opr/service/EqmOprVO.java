@@ -26,4 +26,7 @@ public class EqmOprVO {
 	String opertCtnt;
 	String frmUseYN;
 	String eqmPsch;	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")	
+	Date chckPerd;
 }

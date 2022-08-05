@@ -206,21 +206,15 @@
 						for (var i in result){
 						const chckD = grid.getValue(i,'chckDt');
 						var chckDt = new Date(chckD)
-						
 						const chckPerd = grid.getValue(i,'chckPerd');
-						
-						console.log(chckPerd)
 						chckDt.setDate(chckDt.getDate()+Number(chckPerd))
-						
 						var year = chckDt.getFullYear();
 						var month = ('0' + (chckDt.getMonth() + 1)).slice(-2);
 						var day = ('0' + chckDt.getDate()).slice(-2);
 						
 						var dateString = year + '-' + month  + '-' + day;
-						
 						grid.setValue(i,'chckPerd',dateString)
 						}
-						
 					}
 				})
 
@@ -413,27 +407,32 @@
 
 			$('#delBtn').on('click', ev => {
 
-						var data = grid.getCheckedRows();
-						
+						let arr = [];
+						let obj = {};
+						let data = grid.getCheckedRows();
 						var isValid = true;
 						var chckCd = $('#chckCd').val()
 						var eqmCd = $('#eqmCd').val()
+						
 						if(grid.getCheckedRows()=='' || grid.getCheckedRows()=='0'){
 							toastr.warning('삭제할 점검내역을 선택해주세요.');
 							isValid = false;
-							return false;
-					}
+							return false;}
+						for (i in data){
+							arr.push({chckCd:data[i].chckCd});
+						}
+							console.log(arr)
 
-					     $('body').alertBox({
+					$('body').alertBox({
 					         title: '정말로 삭제하시겠습니까?',
 					         lTxt: 'Back',
 					         rTxt: 'Okey',
 					         rCallback: function(){
-						 $.ajax({
-						url: "eqmChckDelete",
+					$.ajax({
+						url: 'eqmChckDelete',
 						type: 'POST',
 						contentType : 'application/json',
-						data: JOSN.stringify({chckCd: chckCd})
+						data: JSON.stringify(arr)
 					})
 					.done(function (xhr) {
 						$.ajax({
@@ -441,12 +440,10 @@
 							method: "GET",
 							dataType: "JSON",
 							success: function (result) {
-								console.log(result);
 								grid.resetData(result);
 								$('#dataForm').each(function () {
 									this.reset();
 									toastr.success('점검 내역이 삭제되었습니다.');
-									
 								});
 							}
 						});
@@ -471,7 +468,6 @@
 					var eqmNm = $('#keyword3').val()
 					var toDt = $('#toDt').val()
 					var stDt = $('#stDt').val()
-					console.log(eqmNm, toDt, stDt)
 					$.ajax({
 						url: "eqmChckSearch",
 						method: 'post',
@@ -489,7 +485,6 @@
 								
 								const chckPerd = grid.getValue(i,'chckPerd');
 								
-								console.log(chckPerd)
 								chckDt.setDate(chckDt.getDate()+Number(chckPerd))
 								
 								var year = chckDt.getFullYear();
