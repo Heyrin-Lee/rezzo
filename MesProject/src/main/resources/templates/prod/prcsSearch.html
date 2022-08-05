@@ -42,8 +42,8 @@
             <div class="col">
                   <div class="card-body">
                   <div class="linelist">
+                     <button id="clearBtn" class="btn btn-primary" form=""><i class="fas fa-file"></i> 초기화</button>
                      <button class="btn btn-primary" id="sBtn" form=""><i class="fas fa-search"></i> 검색</button>
-                     <button id="clearBtn" class="btn btn-primary" form=""><i class="fa-solid fa-broom"></i> 초기화</button>
                   </div>
                    <br>
                    <br>   
@@ -123,51 +123,64 @@
 	      columns: [
 	        {
 	          header: '생산지시일자',
-	          name: 'indicaDt'
+	          name: 'indicaDt',
+	          align : 'center'
 	        },
 	        {
 	          header: '생산계획코드',
-	          name: 'planCd'
+	          name: 'planCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '공정명',
-	          name: 'prcsCd'
+	          name: 'prcsCd',
+	          align : 'left'
+	          
 	        },
 	        {
 	          header: '설비코드',
-	          name: 'eqmCd'
+	          name: 'eqmCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '설비명',
-	          name: 'eqmNm'
+	          name: 'eqmNm',
+	          align : 'left'
 	        },
 	        {
 	          header: '투입량',
-	          name: 'indicaCnt'
+	          name: 'indicaCnt',
+	          align : 'right'
 	        },
 	        {
 	          header: '생산량',
-	          name: 'prodCnt'
+	          name: 'prodCnt',
+	          align : 'right'
 	        },
 	        {
 	          header: '불량량',
-	          name: 'inferCnt'
+	          name: 'inferCnt',
+	          align : 'right'
 	        },
 	        {
 	          header: '불량코드',
-	          name: 'inferCd'
+	          name: 'inferCd',
+	          align : 'center'
 	        },
 	        {
 	          header: '시작시간',
-	          name: 'wkFrTm'
+	          name: 'wkFrTm',
+	          align : 'center'
 	        },
 	        {
 	          header: '종료시간',
-	          name: 'wkToTm'
+	          name: 'wkToTm',
+	          align : 'center'
 	        },
 	        {
 	          header: '담당자',
-	          name: 'prcsPsch'
+	          name: 'prcsPsch',
+	          align : 'left'
 	        }
 	      ]
 	    });
