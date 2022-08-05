@@ -605,6 +605,16 @@
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify(val)
+            }).then(res => {
+                if (res.ok) {
+                    toastr.success('저장이 완료되었습니다.')
+                    grid.clear();
+                    return res.text();
+                } else {
+                    toastr.error('서버 응답이 없습니다.')
+                    grid.clear();
+                }
+                saveFlag === 0;
             })
         }
 
@@ -667,6 +677,16 @@
                 headers: {'Content-Type': 'application/json'},
                 method: 'POST',
                 body: JSON.stringify(val)
+            }).then(res => {
+                if (res.ok) {
+                    toastr.success('수정이 완료되었습니다.')
+                    grid.clear();
+                    return res.text();
+                } else {
+                    toastr.error('출고가능수량을 초과했습니다.')
+                    grid.clear();
+                }
+                saveFlag === 0;
             })
         }
 

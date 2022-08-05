@@ -515,6 +515,7 @@
                     body: JSON.stringify(data)
                 }).then(res => {
                     getRscInspHist();
+                    toastr.success('저장이 완료되었습니다.')
                 })
             } else {
                 let url = 'updRscIstHist'
@@ -522,9 +523,18 @@
                     headers: {'Content-Type': 'application/json'},
                     method: 'POST',
                     body: JSON.stringify(data)
+                }).then(res => {
+                    if (res.ok) {
+                        toastr.success('수정이 완료되었습니다.')
+                        grid.clear();
+                        return res.text();
+                    } else {
+                        toastr.error('입고가능수량을 초과했습니다.')
+                        grid.clear();
+                    }
+                    saveFlag === 0;
                 })
             }
-
         });
 
         ////////////////////////////// delelte row ////////////////////////////
