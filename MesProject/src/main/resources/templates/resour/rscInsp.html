@@ -420,6 +420,7 @@
                 let val = this.el.value.replace(/[^0-9]/g, '')
                 grid.setValue(this.rowKey, 'inspCnt', val);
                 grid.setValue(this.rowKey, 'inspPassCnt', val);
+                grid.setValue(this.rowKey, 'inspFailCnt', '');
                 return val;
             }
 
@@ -518,12 +519,16 @@
                     header: '자재코드',
                     name: 'rscCd',
                     editor: customInput,
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '품명',
                     name: 'rscNm',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '규격',
@@ -545,17 +550,23 @@
                 {
                     header: '발주번호',
                     name: 'ordrCd',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '발주량',
                     name: 'ordrCnt',
-                    align: 'right'
+                    align: 'right',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '미입고량',
                     name: 'rmnCnt',
-                    align: 'right'
+                    align: 'right',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '가입고량',

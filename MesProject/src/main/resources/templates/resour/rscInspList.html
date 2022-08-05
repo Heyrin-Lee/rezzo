@@ -16,11 +16,11 @@
 <body>
 <th:block layout:fragment="main">
     <div class="container-fluid px-4">
-        <h1 class="mt-4">자재수입검사조회</h1>
+        <h1 class="mt-4">자재입고검사조회</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="home.do"><i class="fas fa-home"></i></a></li>
             <li class="breadcrumb-item">> 자재관리</li>
-            <li class="breadcrumb-item active">> 자재수입검사조회</li>
+            <li class="breadcrumb-item active">> 자재입고검사조회</li>
         </ol>
         <div class="card">
             <div class="card-body">
@@ -251,22 +251,30 @@
                 {
                     header: '검사번호',
                     name: 'rscInspCd',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '검사일자',
                     name: 'inspDt',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'desc',
+                    sortable: true
                 },
                 {
                     header: '자재코드',
                     name: 'rscCd',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '품명',
                     name: 'rscNm',
-                    align: 'center'
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 },
                 {
                     header: '규격',
@@ -281,7 +289,7 @@
                 {
                     header: '검사량',
                     name: 'inspCnt',
-                    align: 'right'
+                    align: 'right',
                 },
                 {
                     header: '합격량',
