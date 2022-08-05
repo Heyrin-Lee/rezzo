@@ -87,7 +87,7 @@
     </select>
 
     <select id="getRscIstHistList" parameterType="RscIstVO" resultType="RscIstVO">
-        select ri.RSC_IST_CD, count(*) istCnt, ri.IST_DT
+        select distinct ri.RSC_IST_CD, count(*) istCnt, ri.IST_DT
         from RSC_IST ri,
              RSC_LOT rl
         where ri.RSC_IST_CD = rl.RSC_IST_CD
