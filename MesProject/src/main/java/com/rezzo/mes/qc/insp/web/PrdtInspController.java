@@ -101,7 +101,7 @@ public class PrdtInspController {
 	}
 	
 	//컴파일된 파일 이용
-	@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
+	//@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
 	public void report2(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		response.setContentType("application/pdf");
 		Connection conn = dataSource.getConnection();
@@ -113,7 +113,7 @@ public class PrdtInspController {
 	}
 	
 	//공통뷰 상속받기
-	//@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
+	@RequestMapping(path = "prdtInspPdf", produces = { MediaType.APPLICATION_PDF_VALUE })
 	public ModelAndView prdtInspPdf(@RequestParam Map<String,Object> pram) throws Exception {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
