@@ -13,7 +13,17 @@
 	WHERE I.NOW_ST = '미지시'
 </select>
 <select id="getPrcsProg" resultType="com.rezzo.mes.prod.prog.service.ProgVO" >
-	SELECT B.PRCS_CD, P.PRCS_NM, E.EQM_CD, E.EQM_NM
+	SELECT P.PRCS_CD, P.PRCS_NM, E.EQM_CD, E.EQM_NM
+	FROM PRCS P
+    JOIN EQM E
+    ON P.PRCS_CD = E.PRCS_CD
+    JOIN PRCS_FLOW F
+    ON P.PRCS_CD = F.PRCS_CD
+    WHERE EDCTS_CD = #{edctsCd}
+    AND E.LINE_CD = 'LNE001'
+    ORDER BY f.prcs_ord
+	
+	<!-- SELECT B.PRCS_CD, P.PRCS_NM, E.EQM_CD, E.EQM_NM
 	FROM BOM B
 	JOIN PRCS P
 	ON B.PRCS_CD = P.PRCS_CD
@@ -21,7 +31,7 @@
 	ON P.PRCS_CD = E.PRCS_CD
 	WHERE EDCTS_CD = #{edctsCd}
 	AND E.LINE_CD = 'LNE001'
-	ORDER BY B.BOM_SQ
+	ORDER BY B.BOM_SQ -->
 </select>
 <insert id="insertEqmCd">
 	INSERT INTO DUM VALUES (#{eqmCd}, NULL, NULL, 'Y', #{seqNo})
