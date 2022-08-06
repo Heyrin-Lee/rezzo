@@ -47,7 +47,9 @@
             grid-area: body;
         }
 
-        .highlight {background-color: rgba(19,78,94,0.2) !important;}
+        .highlight {
+            background-color: rgba(19, 78, 94, 0.2) !important;
+        }
     </style>
 
 
@@ -505,7 +507,6 @@
         tui.Grid.applyTheme('default', gridOption);
 
 
-
         // main grid section
         let grid = new tui.Grid({
             el: document.getElementById('grid'),
@@ -940,28 +941,44 @@
         ///////////////////////////// insert or update inspection result /////////////////
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
-            // let passCnt = grid.getColumnValues('inspPassCnt')
-            // if (passCnt.includes(null)) {
-            //     toastr.error('검사 항목이 비어있습니다.');
-            // } else {}
             let gridVal = grid.getCheckedRows();
-            gridVal.forEach(el => {
-                let rowKey = el.rowKey.toString();
-                el.rscInfList = infData.get(rowKey)
-            })
-            if (saveFlag === 0) {
-                gridVal[0].inspDt = inspDt.value;
-                gridVal[0].inspTstr = inspTstr.value;
-                setRscInspList(gridVal);
-                toastr.success('저장이 완료되었습니다.')
+            let test = validVal(gridVal);
+            if (test === 0) {
+                gridVal.forEach(el => {
+                    if (el.inspFailCnt === '') {
+                        el.inspFailCnt = 0;
+                    }
+                    let rowKey = el.rowKey.toString();
+                    el.rscInfList = infData.get(rowKey)
+                })
+                if (saveFlag === 0) {
+                    gridVal[0].inspDt = inspDt.value;
+                    gridVal[0].inspTstr = inspTstr.value;
+                    setRscInspList(gridVal);
+                    toastr.success('저장이 완료되었습니다.')
+                } else {
+                    updRscInspHist(gridVal);
+                    grid.clear();
+                    saveFlag = 0;
+                    toastr.success('수정이 완료되었습니다.')
+                }
             } else {
-                updRscInspHist(gridVal);
-                grid.clear();
-                saveFlag === 0;
-                toastr.success('수정이 완료되었습니다.')
+                toastr.error('비어있는 항목이 있습니다.');
             }
-
         })
+
+        function validVal(val) {
+            let errCnt = 0;
+            val.forEach(el => {
+                if (el.rscNm == null) {
+                    errCnt++;
+                } else if (el.inspPassCnt == null) {
+                    errCnt++;
+                }
+            })
+            return errCnt;
+        }
+
 
         function setRscInspList(data) {
             let url = 'setRscInspList';
@@ -1099,18 +1116,24 @@
             if (saveFlag === 0) {
                 grid.removeRows(rowKeys)
             } else {
-                let data = grid.getCheckedRows();
-                let url = 'delRscInspHistSingle'
-                fetch(url, {
-                    headers: {'Content-Type': 'application/json'},
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                }).then(res => {
-                    toastr.success('삭제되었습니다.');
-
-                    schRscInspHist();
-                    grid.removeRows(rowKeys);
-                    grid.refreshLayout();
+                $('body').alertBox({
+                    title: '정말로 삭제하시겠습니까?',
+                    lTxt: 'Back',
+                    rTxt: 'Okey',
+                    rCallback: function () {
+                        let data = grid.getCheckedRows();
+                        let url = 'delRscInspHistSingle'
+                        fetch(url, {
+                            headers: {'Content-Type': 'application/json'},
+                            method: 'POST',
+                            body: JSON.stringify(data)
+                        }).then(res => {
+                            toastr.success('삭제되었습니다.');
+                            schRscInspHist();
+                            grid.removeRows(rowKeys);
+                            grid.refreshLayout();
+                        })
+                    }
                 })
             }
         })
@@ -1125,18 +1148,26 @@
             if (saveFlag === 0) {
                 toastr.warning('등록모드에서는 삭제할 수 없습니다.');
             } else {
-                let data = grid.getData();
-                let url = 'delRscInspHist'
-                fetch(url, {
-                    headers: {'Content-Type': 'application/json'},
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                }).then(res => {
-                    toastr.success('삭제되었습니다.');
-                }).then(res => {
-                    schRscInspHist();
-                    grid.clear();
+                $('body').alertBox({
+                    title: '정말로 삭제하시겠습니까?',
+                    lTxt: 'Back',
+                    rTxt: 'Okey',
+                    rCallback: function () {
+                        let data = grid.getData();
+                        let url = 'delRscInspHist'
+                        fetch(url, {
+                            headers: {'Content-Type': 'application/json'},
+                            method: 'POST',
+                            body: JSON.stringify(data)
+                        }).then(res => {
+                            toastr.success('삭제되었습니다.');
+                        }).then(res => {
+                            schRscInspHist();
+                            grid.clear();
+                        })
+                    }
                 })
+
             }
         });
 
