@@ -282,7 +282,6 @@
 						$.ajax({
 					url:"saveSalesOust",
 					method:"post",
-					dataType:"json",
 					data:{"edctsCd":edctsCd,"edctsLotNo":edctsLotNo,"edctsOustCnt":edctsOustCnt,"orderNo":orderNo},
 					success:function(list) {
 						grid2.resetData(list);
