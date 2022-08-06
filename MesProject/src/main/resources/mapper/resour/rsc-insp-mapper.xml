@@ -56,19 +56,20 @@
     <insert id="setRscInspList" parameterType="RscInspVO">
         insert into RSC_INSP_DTL (RSC_CD, RSC_INSP_CD, ORDR_CD, INSP_CNT, INSP_PASS_CNT, PASS_RMN_CNT,
                                   INSP_FAIL_CNT, PRE_IST_CNT)
-        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, to_number(#{inspPassCnt}), to_number(#{inspPassCnt}), to_number(#{inspFailCnt}),
+        values (#{rscCd}, #{rscInspCd}, #{ordrCd}, #{inspCnt}, to_number(#{inspPassCnt}), to_number(#{inspPassCnt}),
+                to_number(#{inspFailCnt}),
                 #{preIstCnt})
     </insert>
 
     <insert id="setRscInfList">
-            merge into RSC_INFER
-            using dual
-            on (RSC_CD = #{insp.rscCd} and RSC_INSP_CD = #{insp.rscInspCd}
+        merge into RSC_INFER
+        using dual
+        on (RSC_CD = #{insp.rscCd} and RSC_INSP_CD = #{insp.rscInspCd}
             and ORDR_CD = #{insp.ordrCd} and CCD_DTL = #{inf.ccdDtl})
-            when matched then
+        when matched then
             update
             set INF_CNT = #{inf.infCnt}
-            when not matched then
+        when not matched then
             insert (CCD_DTL, RSC_CD, RSC_INSP_CD, INF_CNT, ORDR_CD)
             values (#{inf.ccdDtl}, #{insp.rscCd}, #{insp.rscInspCd}, to_number(#{inf.infCnt}), #{insp.ordrCd})
     </insert>
@@ -144,14 +145,14 @@
     </select>
 
     <select id="getRscInfHistByCd" parameterType="RscInspVO" resultType="RscInfVO">
-        select ri.CCD_DTL, ri.INF_CNT, cd.CCD_DTL_NM
-        from RSC_INFER ri,
-             CCDS_DTL cd
-        where ri.RSC_CD = #{rscCd}
-          and ri.RSC_INSP_CD = #{rscInspCd}
-          and ri.ORDR_CD = #{ordrCd}
-          and cd.CCD = 'INF'
-          and cd.CCD_DTL = ri.CCD_DTL
+        select distinct cd.CCD_DTL, ri.INF_CNT
+        from CCDS_DTL cd
+                 full join RSC_INFER ri on
+            (cd.CCD_DTL = ri.CCD_DTL
+                and RSC_CD = #{rscCd}
+                and RSC_INSP_CD = #{rscInspCd}
+                and ORDR_CD = #{ordrCd})
+        where CCD = 'INF'
     </select>
 
     <update id="updRscInspHist" parameterType="RscInspVO">
@@ -200,7 +201,6 @@
         ]]>
         <if test="vendCd != '' and vendCd != null">and ro.VEND_CD = #{vendCd}</if>
         <if test="rscCd != '' and rscCd != null">and rid.RSC_CD = #{rscCd}</if>
-        and rid.PASS_RMN_CNT != 0
 
         union
 
@@ -216,7 +216,6 @@
           and ri.INSP_DT <= #{endDt}
         ]]>
         <if test="rscCd != '' and rscCd != null">and rid.RSC_CD = #{rscCd}</if>
-        and rid.PASS_RMN_CNT != 0
     </select>
 
     <select id="getInfCdList" resultType="CcdsVO">

@@ -257,25 +257,25 @@
 		})
 
 		//자재 업데이트			
-		//$.ajax({
-		//	url : 'getHolding',
-		//	method : 'post',
-		//	data : {"planCd" : planCd},
-		//	success : function(result) {
-		//			let today = new Date()
-		//			today = today.toISOString().substring(0, 10)
-		//			console.log(today)
-		//			let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
-		//			result.unshift(obj)
-		//		console.log(result)
-		//		$.ajax({
-		//			url : 'setRscOust',
-		//			method : 'post',
-		//			data : JSON.stringify(result),
-		//			contentType : 'application/json'
-		//		})
-		//	}
-		//})
+		$.ajax({
+			url : 'getHolding',
+			method : 'post',
+			data : {"planCd" : planCd},
+			success : function(result) {
+					let today = new Date()
+					today = today.toISOString().substring(0, 10)
+					console.log(today)
+					let obj = {oustDt:today, oustTyp:'공정출고', from:'prod', planCd:planCd}
+					result.unshift(obj)
+				console.log(result)
+				$.ajax({
+					url : 'setRscOust',
+					method : 'post',
+					data : JSON.stringify(result),
+					contentType : 'application/json'
+				})
+			}
+		})
 		
 		// 불량 인서트		
 		let iCnt = grid2.getRow(5).inferCnt

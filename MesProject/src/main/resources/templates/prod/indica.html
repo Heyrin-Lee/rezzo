@@ -94,6 +94,7 @@
    	$("#modalBtn").on("click", function() {
    		modGrid.on('dblclick', ev => {
 				modGrid.check(ev.rowKey);
+				//$("#exampleModal").modal('hide')	
 			})  
    		$.ajax({
    			url : 'planListModal',
@@ -123,6 +124,11 @@
    				method : 'GET',
    				data : {"edctsCd" : edctsCd},
    				success: function (result) {
+   					$.each(result, function(index, item) {
+						item.useCnt = item.useCnt * grid.getData()[0].indicaCnt
+					})
+					
+					console.log(result)
    					grid2.resetData(result); 
    					grid3.resetData(result);
    				}
@@ -300,13 +306,13 @@
 	          align : 'center'
 	        },
 	        {
-	          header: '출고수량',
-	          name: 'holdCnt',
+	          header: '재고수량',
+	          name: 'lotRmnCnt',
 	          align : 'right'
 	        },
 	        {
-	          header: '재고수량',
-	          name: 'lotRmnCnt',
+	          header: '출고수량',
+	          name: 'holdCnt',
 	          align : 'right'
 	        },
 	        {
@@ -323,14 +329,14 @@
   
    const grid3 = new tui.Grid({
 	      el: document.getElementById('grid3'),
-	      data: gridData2,
+	      //data: gridData2,
 	      bodyHeight : 169,
 	      scrollX: false,
-	      scrollY: false,
+	      scrollY: true,
 	      columns: [
 	        {
-	          header: '공정코드',
-	          name: 'prcsCd',
+	          header: '자재명',
+	          name: 'rscNm',
 	          align : 'center'
 	        },
 	        {
