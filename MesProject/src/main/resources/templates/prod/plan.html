@@ -54,7 +54,7 @@
             <div id="pDate">
                 <!--<div class="tui-datepicker-input tui-datetime-input tui-has-focus">-->
 	                <label>생산계획일자</label>
-                    <input type="date" id="tui-date-picker-target" class="form-control" style="width: 150px">
+                    <input type="date" id="tui-date-picker-target" name="tui-date-picker-target" class="form-control" style="width: 150px">
                     <!--<span class="tui-ico-date"></span>-->
                 	<!--<div id="tui-date-picker-container1" style="margin-top: -1px;"></div>-->
                 <!--</div>-->
@@ -117,6 +117,7 @@
         </div>
      
         <script>
+	   
         //초기화
     	$("#clearBtn").on("click", function(){
 	   		grid.clear()
@@ -641,8 +642,7 @@
 		 	 grid.on('uncheck', (ev) => {
 			   grid.removeRowClassName(ev.rowKey, 'highlight2');
 			 });
-			 
-			
+		 	 
         </script>
     </th:block>
 </body>
