@@ -56,8 +56,10 @@ public class InspServiceImpl implements InspService {
             mapper.updRscOrdrRmnCnt(rscInspVO);
 
             // set rsc inf list each
-            for (RscInfVO rscInfVO : rscInspVO.getRscInfList()) {
-                mapper.setRscInfList(rscInspVO, rscInfVO);
+            if (rscInspVO.getRscInfList() != null) {
+                for (RscInfVO rscInfVO : rscInspVO.getRscInfList()) {
+                    mapper.setRscInfList(rscInspVO, rscInfVO);
+                }
             }
         }
     }
