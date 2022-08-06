@@ -137,8 +137,8 @@
        		
    			modGrid.on('dblclick', ev => {
    				modGrid.check(ev.rowKey);
+       			//$("#exampleModal").modal('hide')	
  			})  
-       			
    			//순번 받아오기 (계획일자 indicaDt를 넘겨주고 생산계획 테이블에 그 계획일자와 같은 날짜를 가진 행에서 max값을 리턴) 
         	$.ajax({
         		url: 'getIndex',
