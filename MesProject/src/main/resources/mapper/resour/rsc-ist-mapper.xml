@@ -66,11 +66,11 @@
 
     <select id="getRscIstHist" parameterType="RscIstVO" resultType="RscIstVO">
         select rl.rsc_lot_cd,
+        rl.EXP_DT,
         rl.rsc_cd,
         rl.lot_cnt,
         rl.rsc_ist_cd,
         rl.ordr_cd,
-        rl.exp_dt
         ri.ist_dt,
         vend.vend_nm,
         rsc.rsc_nm
