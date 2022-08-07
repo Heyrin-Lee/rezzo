@@ -44,5 +44,7 @@ public class RscInspVO {
 
     private int passRmnCnt; // 합격잔여수량
 
+    private String from; // from where?
+
     private List<RscInfVO> rscInfList; //불량목록
 }

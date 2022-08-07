@@ -334,25 +334,30 @@
         let inspDt = document.getElementById('inspDt');
         let inspTstr = document.getElementById('inspTstr');
         let delDataBtn = document.getElementById('delDataBtn');
+        let rscInspCd = '';
 
         let saveFlag = 0 // 0 : 저장, 1 : 수정저장
         ///////////////////////////// date picker ////////////////////////////////
-        let today = new Date();
+        let initDate = new Date();
+
+        let today = new Date()
+        today = today.toISOString().split('T')[0];
+
         let rangepicker = tui.DatePicker.createRangePicker({
             startpicker: {
-                date: today,
+                date: initDate,
                 input: '#startpicker-input',
                 container: '#startpicker-container'
             },
             endpicker: {
-                date: today,
+                date: initDate,
                 input: '#endpicker-input',
                 container: '#endpicker-container'
             }
         });
 
         let datepicker = new tui.DatePicker('#wrapper', {
-            date: today,
+            date: initDate,
             input: {
                 element: '#inspDt',
                 format: 'yyyy-MM-dd'
@@ -411,7 +416,6 @@
                 if (rscNm == null || rscNm === '') {
                     toastr.error('자재를 먼저 선택하세요.');
                 } else {
-                    grid.check(this.rowKey);
                     this.el.value = '';
                     return this.el;
                 }
@@ -445,7 +449,6 @@
                 if (preIstCnt === '' || preIstCnt == null) {
                     toastr.error('가입고량을 먼저 입력하세요');
                 } else {
-                    grid.check(this.rowKey);
                     this.el.value = ''
                     return this.el;
                 }
@@ -633,7 +636,6 @@
         });
 
         grid.on('editingStart', (ev) => {
-            grid.check(ev.rowKey);
             if (grid.getValue(ev.rowKey, 'ordrCd') != null
                 && grid.getValue(ev.rowKey, 'ordrCd') !== '') {
                 if (ev.columnName === 'rscCd') {
@@ -951,20 +953,23 @@
                     let rowKey = el.rowKey.toString();
                     el.rscInfList = infData.get(rowKey)
                 })
+                let obj = {
+                    inspDt: inspDt.value,
+                    inspTstr: inspTstr.value,
+                    rscInspCd: rscInspCd
+                }
+                gridVal.unshift(obj);
                 if (saveFlag === 0) {
-                    gridVal[0].inspDt = inspDt.value;
-                    gridVal[0].inspTstr = inspTstr.value;
                     setRscInspList(gridVal);
-                    toastr.success('저장이 완료되었습니다.')
                 } else {
                     updRscInspHist(gridVal);
                     grid.clear();
-                    saveFlag = 0;
-                    toastr.success('수정이 완료되었습니다.')
                 }
             } else {
                 toastr.error('비어있는 항목이 있습니다.');
             }
+            inspDt.value = today;
+            inspTstr.value = '';
         })
 
         function validVal(val) {
@@ -987,7 +992,12 @@
                 method: 'POST',
                 body: JSON.stringify(data)
             }).then(res => {
-                getOrdrList();
+                if (res.ok) {
+                    toastr.success('저장이 완료되었습니다.');
+                    getOrdrList();
+                } else {
+                    toastr.error('요청이 잘 못되었습니다.')
+                }
             }).then(res => {
                 schRscInspHist();
             })
@@ -1000,6 +1010,13 @@
                 method: 'POST',
                 body: JSON.stringify(data)
             }).then(res => {
+                if (res.ok) {
+                    toastr.success('수정이 완료되었습니다.')
+                } else {
+                    toastr.error('요청이 잘 못되었습니다.')
+                }
+            }).then(res => {
+                saveFlag === 0;
                 schRscInspHist();
             })
         }
@@ -1100,6 +1117,13 @@
         let infGridEl = document.getElementById('inf-grid')
         infGridEl.addEventListener('mouseleave', function () {
             infGrid.finishEditing();
+        })
+
+        grid.on('afterChange', function (ev) {
+            let changes = ev.changes
+            changes.forEach(el => {
+                grid.check(el.rowKey)
+            })
         })
 
         ////////////////////////////// add & delelte row ////////////////////////////

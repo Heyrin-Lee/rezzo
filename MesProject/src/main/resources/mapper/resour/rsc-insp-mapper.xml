@@ -49,8 +49,16 @@
     </select>
 
     <insert id="setRscInsp" parameterType="RscInspVO">
-        insert into RSC_INSP (RSC_INSP_CD, INSP_DT, INSP_TSTR)
-        values (#{rscInspCd}, #{inspDt}, #{inspTstr})
+        merge into RSC_INSP
+        using dual
+        on (RSC_INSP_CD = #{rscInspCd})
+        when matched then
+            update
+            set INSP_DT   = #{inspDt},
+                INSP_TSTR = #{inspTstr}
+        when not matched then
+            insert (RSC_INSP_CD, INSP_DT, INSP_TSTR)
+            values (#{rscInspCd}, #{inspDt}, #{inspTstr})
     </insert>
 
     <insert id="setRscInspList" parameterType="RscInspVO">
@@ -115,6 +123,7 @@
           and ro.ORDR_CD = rid.ORDR_CD
           and vend.VEND_CD = ro.VEND_CD
           and rid.RSC_INSP_CD = #{rscInspCd}
+
 
         union
 
@@ -201,6 +210,7 @@
         ]]>
         <if test="vendCd != '' and vendCd != null">and ro.VEND_CD = #{vendCd}</if>
         <if test="rscCd != '' and rscCd != null">and rid.RSC_CD = #{rscCd}</if>
+        <if test="from == 'ist'">and rid.PASS_RMN_CNT != 0</if>
 
         union
 
@@ -216,6 +226,7 @@
           and ri.INSP_DT <= #{endDt}
         ]]>
         <if test="rscCd != '' and rscCd != null">and rid.RSC_CD = #{rscCd}</if>
+        <if test="from == 'ist'">and rid.PASS_RMN_CNT != 0</if>
     </select>
 
     <select id="getInfCdList" resultType="CcdsVO">

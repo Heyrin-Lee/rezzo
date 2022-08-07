@@ -105,6 +105,7 @@
                 <div class="card">
                     <div class="card-body">
                         <form id="getIstListFrm">
+                            <input type="hidden" name="from" value="ist">
                             <table style="vertical-align : middle; text-align: center">
                                 <colgroup>
                                     <col style="width: 120px">
@@ -317,6 +318,31 @@
         });
 
         ///////////////////////////////// !main grid ///////////////////////////////
+        class istCntInput {
+            constructor(props) {
+                const el = document.createElement('input');
+                let {rowKey} = props;
+                this.rowKey = rowKey
+                el.type = 'text';
+                el.value = String(props.value);
+                this.el = el;
+            }
+
+            getElement() {
+                this.el.value = '';
+                return this.el;
+            }
+
+            getValue() {
+                let val = this.el.value.replace(/[^0-9]/g, '')
+                return val;
+            }
+
+            mounted() {
+                this.el.select();
+            }
+        }
+
         const grid = new tui.Grid({
             el: document.getElementById('grid'),
             bodyHeight: 450,
@@ -366,7 +392,7 @@
                 {
                     header: '입고수량',
                     name: 'lotCnt',
-                    editor: 'text',
+                    editor: istCntInput,
                     align: 'right',
                     validation: {
                         dataType: 'number',
@@ -388,10 +414,6 @@
             ]
             , editingEvent: 'click'
         });
-
-        grid.on('editingStart', (ev) => {
-            grid.check(ev.rowKey);
-        })
 
         let gridOption = {
             row: {
@@ -504,37 +526,61 @@
 
         ///////////////////////////// !save main grid data ////////////////////////////////
         saveBtn.addEventListener('click', function () {
-            let data = grid.getCheckedRows();
-            if (saveFlag === 0) {
-                data[0].istDt = istDt.value;
-                let url = 'setRscIstLot'
-                fetch(url, {
-                    headers: {'Content-Type': 'application/json'},
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                }).then(res => {
-                    getRscInspHist();
-                    toastr.success('저장이 완료되었습니다.')
-                })
+            let gridVal = grid.getCheckedRows();
+            let test = validVal(gridVal)
+            if (test === 0 ) {
+                if (saveFlag === 0) {
+                    setRscIstLot(gridVal)
+                } else {
+                    updRscIstHist(gridVal)
+                }
             } else {
-                let url = 'updRscIstHist'
-                fetch(url, {
-                    headers: {'Content-Type': 'application/json'},
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                }).then(res => {
-                    if (res.ok) {
-                        toastr.success('수정이 완료되었습니다.')
-                        grid.clear();
-                        return res.text();
-                    } else {
-                        toastr.error('입고가능수량을 초과했습니다.')
-                        grid.clear();
-                    }
-                    saveFlag === 0;
-                })
+                toastr.error('비어있는 항목이 있습니다.');
             }
         });
+
+        function validVal(val) {
+            let errCnt = 0;
+            val.forEach(el => {
+                if (el.lotCnt == null) {
+                    errCnt++;
+                } else if (el.expDt == null) {
+                    errCnt++;
+                }
+            })
+            return errCnt;
+        }
+
+        function setRscIstLot(data) {
+            data[0].istDt = istDt.value;
+            let url = 'setRscIstLot'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => {
+                getRscIstHistList()
+                getRscInspHist()
+                toastr.success('저장이 완료되었습니다.')
+            })
+        }
+
+        function updRscIstHist(data) {
+            let url = 'updRscIstHist'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(data)
+            }).then(res => {
+                if (res.ok) {
+                    toastr.success('수정이 완료되었습니다.')
+                } else {
+                    toastr.error('입고가능수량을 초과했습니다.')
+                }
+                saveFlag === 0;
+                grid.clear();
+            })
+        }
 
         ////////////////////////////// delelte row ////////////////////////////
         delRow.addEventListener('click', function () {
@@ -573,7 +619,7 @@
         mdfyGrid.on('dblclick', e => {
             let data = mdfyGrid.getRow(e.rowKey);
             getRscIstHistMdfy(data)
-            grid.hideColumn('expDt')
+            // grid.hideColumn('expDt')
             saveFlag = 1;
         })
 
@@ -618,11 +664,18 @@
             mdfyGrid.finishEditing();
         })
 
+        grid.on('afterChange', function (ev) {
+            let changes = ev.changes
+            changes.forEach(el => {
+                grid.check(el.rowKey)
+            })
+        })
+
         ///////////////////////////////////// misc ///////////////////////////
         //셀 클릭시 로우 하이라이팅
         let gridKey = null;
         grid.on('click', ev => {
-            if (gridKey != ev.rowKey) {
+            if (gridKey !== ev.rowKey) {
                 grid.removeRowClassName(gridKey, 'highlight');
             }
             gridKey = ev.rowKey
@@ -631,7 +684,7 @@
 
         let mdfyKey = null;
         mdfyGrid.on('click', ev => {
-            if (mdfyKey != ev.rowKey) {
+            if (mdfyKey !== ev.rowKey) {
                 mdfyGrid.removeRowClassName(mdfyKey, 'highlight');
             }
             mdfyKey = ev.rowKey

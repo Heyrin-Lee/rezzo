@@ -18,7 +18,7 @@ public interface InspMapper {
     // 입고검사등록
     List<VendVO> getRscVendList(VendVO vendVO);
     List<RscOrdrVO> getRscOrdrList(RscOrdrVO rscOrdrVO);
-    void setRscInsp(@Param("rscInspCd") String rscInspCd, @Param("inspDt") Date inspDt, @Param("inspTstr") String inspTstr);
+    void setRscInsp(RscInspVO rscInspVO);
     void setRscInspList(RscInspVO rscInspVOS);
     void updRscOrdrRmnCnt(RscInspVO rscInspVO);
     String genRscInspCd();

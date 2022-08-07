@@ -242,10 +242,10 @@
                     rscModalState = 1;
                 })
                 this.el = el;
-                this.el.value = '';
             }
 
             getElement() {
+                this.el.value = '';
                 return this.el;
             }
 
@@ -282,11 +282,17 @@
             }
 
             getElement() {
-                return this.el;
+                let rscNm = grid.getValue(this.rowKey, 'rscNm')
+                if (rscNm === '' || rscNm == null) {
+                    toastr.error('자재를 먼저 선택하세요');
+                } else {
+                    this.el.value = ''
+                    return this.el;
+                }
             }
 
             getValue() {
-                return this.el.value;
+                this.el.value;
             }
 
             mounted() {
@@ -310,15 +316,16 @@
             }
 
             getValue() {
+                let val = this.el.value.replace(/[^0-9]/g, '')
                 let cnt = grid.getValue(this.rowKey, 'lotRmnCnt')
                 if (saveFlag === 0) {
-                    if (this.el.value > cnt) {
+                    if (val > cnt) {
                         toastr.warning('출고수량은 LOT잔여수량을 초과할 수 없습니다.');
                     } else {
-                        return this.el.value;
+                        return val;
                     }
                 } else {
-                    return this.el.value;
+                    return val;
                 }
             }
 
@@ -401,7 +408,6 @@
         });
 
         grid.on('editingStart', (ev) => {
-            grid.check(ev.rowKey);
             if (saveFlag === 1) {
                 if (grid.getValue(ev.rowKey, 'rscCd') != null
                     || grid.getValue(ev.rowKey, 'rscCd') !== '') {
@@ -501,16 +507,19 @@
 
         function getRscSingle(val, rowKey) {
             let url = 'getRscSingle'
-            let data = {rscCd: val}
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(data)
-            }).then(res => res.json()).then(res => {
-                grid.setRow(rowKey, res)
-            }).catch(err => {
-                toastr.error('해당하는 자재가 없습니다.');
-            })
+            if (val === '' || val == null) {
+            } else {
+                let data = {rscCd: val}
+                fetch(url, {
+                    headers: {'Content-Type': 'application/json'},
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                }).then(res => res.json()).then(res => {
+                    grid.setRow(rowKey, res)
+                }).catch(err => {
+                    toastr.error('해당하는 자재가 없습니다.');
+                })
+            }
         }
 
         ///////////////////////////// lot ///////////////////////////////////
@@ -583,20 +592,38 @@
         ///////////////////////////// save //////////////////////////////////
         let saveBtn = document.getElementById('saveBtn')
         saveBtn.addEventListener('click', function () {
-            let gridData = grid.getCheckedRows();
-            if (saveFlag === 0) {
-                let obj = {};
-                let formData = new FormData(setOustFrm);
-                formData.forEach(function (value, key) {
-                    obj[key] = value;
-                })
-                gridData.unshift(obj)
-                setRscOust(gridData);
+            let gridVal = grid.getCheckedRows();
+            let test = validVal(gridVal)
+            if (test === 0) {
+                if (saveFlag === 0) {
+                    let obj = {};
+                    let formData = new FormData(setOustFrm);
+                    formData.forEach(function (value, key) {
+                        obj[key] = value;
+                    });
+                    gridVal.unshift(obj);
+                    setRscOust(gridVal);
+                } else {
+                    updRscOustHist(gridVal);
+                }
             } else {
-                updRscOustHist(gridData)
+                toastr.error('비어있는 항목이 있습니다.');
             }
-
         })
+
+        function validVal(val) {
+            let errCnt = 0;
+            val.forEach(el => {
+                if (el.rscNm == null || el.rscNm === '') {
+                    errCnt++;
+                } else if (el.rscLotCd == null || el.rscLotCd === '') {
+                    errCnt++;
+                } else if (el.oustCnt == null || el.oustCnt === '') {
+                    errCnt++;
+                }
+            })
+            return errCnt;
+        }
 
         function setRscOust(val) {
             let url = 'setRscOust'
@@ -607,10 +634,29 @@
             }).then(res => {
                 if (res.ok) {
                     toastr.success('저장이 완료되었습니다.')
+                } else {
+                    toastr.error('요청이 잘 못되었습니다.')
+                }
+            }).then(res => {
+                saveFlag === 0;
+                schRscOustHist()
+                grid.clear();
+            })
+        }
+
+        function updRscOustHist(val) {
+            let url = 'updRscOustHist'
+            fetch(url, {
+                headers: {'Content-Type': 'application/json'},
+                method: 'POST',
+                body: JSON.stringify(val)
+            }).then(res => {
+                if (res.ok) {
+                    toastr.success('수정이 완료되었습니다.')
                     grid.clear();
                     return res.text();
                 } else {
-                    toastr.error('서버 응답이 없습니다.')
+                    toastr.error('출고가능수량을 초과했습니다.')
                     grid.clear();
                 }
                 saveFlag === 0;
@@ -670,25 +716,6 @@
             })
         }
 
-        function updRscOustHist(val) {
-            let url = 'updRscOustHist'
-            fetch(url, {
-                headers: {'Content-Type': 'application/json'},
-                method: 'POST',
-                body: JSON.stringify(val)
-            }).then(res => {
-                if (res.ok) {
-                    toastr.success('수정이 완료되었습니다.')
-                    grid.clear();
-                    return res.text();
-                } else {
-                    toastr.error('출고가능수량을 초과했습니다.')
-                    grid.clear();
-                }
-                saveFlag === 0;
-            })
-        }
-
         ///////////////////////////// action on grid ////////////////////////////////
         let gridEle = document.getElementById('grid')
         gridEle.addEventListener('mouseleave', function () {
@@ -710,6 +737,13 @@
             mdfyGrid.finishEditing();
         })
 
+        grid.on('afterChange', function (ev) {
+            let changes = ev.changes
+            changes.forEach(el => {
+                grid.check(el.rowKey)
+            })
+        })
+
         //////////////////////////// referesh btn //////////////////////////////////
         reloadBtn.addEventListener('click', e => {
             location.reload();
@@ -719,7 +753,7 @@
         //셀 클릭시 로우 하이라이팅
         let gridKey = null;
         grid.on('click', ev => {
-            if (gridKey != ev.rowKey) {
+            if (gridKey !== ev.rowKey) {
                 grid.removeRowClassName(gridKey, 'highlight');
             }
             gridKey = ev.rowKey
@@ -728,7 +762,7 @@
 
         let mdfyKey = null;
         mdfyGrid.on('click', ev => {
-            if (mdfyKey != ev.rowKey) {
+            if (mdfyKey !== ev.rowKey) {
                 mdfyGrid.removeRowClassName(mdfyKey, 'highlight');
             }
             mdfyKey = ev.rowKey
