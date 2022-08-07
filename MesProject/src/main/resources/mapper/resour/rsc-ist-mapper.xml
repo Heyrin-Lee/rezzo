@@ -22,15 +22,28 @@
     </select>
 
     <insert id="setRscIstLotEach" parameterType="RscIstVO">
+        declare
+            v_pass_rmn_cnt number(35);
         begin
-            insert into RSC_LOT (RSC_LOT_CD, ORDR_CD, RSC_INSP_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT, RSC_IST_CD)
-            values (#{rscLotCd}, #{ordrCd}, #{rscInspCd}, #{rscCd}, #{lotCnt}, #{lotCnt}, #{rscIstCd});
+            select PASS_RMN_CNT
+            into v_pass_rmn_cnt
+            from RSC_INSP_DTL
+            where RSC_INSP_CD = #{rscInspCd}
+              and ORDR_CD = #{ordrCd}
+              and RSC_CD = #{rscCd};
 
-            update RSC_INSP_DTL
-            set PASS_RMN_CNT = PASS_RMN_CNT - #{lotCnt}
-            where RSC_CD = #{rscCd}
-              and RSC_INSP_CD = #{rscInspCd}
-              and ORDR_CD = #{ordrCd};
+            if #{lotCnt} > v_pass_rmn_cnt then
+                raise_application_error(-90001, '재고부족');
+            else
+                insert into RSC_LOT (RSC_LOT_CD, ORDR_CD, RSC_INSP_CD, RSC_CD, LOT_CNT, LOT_RMN_CNT, RSC_IST_CD, EXP_DT)
+                values (#{rscLotCd}, #{ordrCd}, #{rscInspCd}, #{rscCd}, #{lotCnt}, #{lotCnt}, #{rscIstCd}, #{expDt});
+
+                update RSC_INSP_DTL
+                set PASS_RMN_CNT = PASS_RMN_CNT - #{lotCnt}
+                where RSC_CD = #{rscCd}
+                  and RSC_INSP_CD = #{rscInspCd}
+                  and ORDR_CD = #{ordrCd};
+            end if;
         end;
     </insert>
 
@@ -53,6 +66,7 @@
 
     <select id="getRscIstHist" parameterType="RscIstVO" resultType="RscIstVO">
         select rl.rsc_lot_cd,
+        rl.EXP_DT,
         rl.rsc_cd,
         rl.lot_cnt,
         rl.rsc_ist_cd,
@@ -105,6 +119,7 @@
                rl.ORDR_CD,
                rl.LOT_CNT,
                rl.RSC_LOT_CD,
+               rl.EXP_DT,
                rl.RSC_INSP_CD,
                rl.RSC_IST_CD,
                rid.PASS_RMN_CNT,
@@ -133,6 +148,7 @@
                rl.ORDR_CD,
                rl.LOT_CNT,
                rl.RSC_LOT_CD,
+               rl.EXP_DT,
                rl.RSC_INSP_CD,
                rl.RSC_IST_CD,
                rid.PASS_RMN_CNT,
@@ -171,7 +187,8 @@
             else
                 update RSC_LOT
                 set LOT_CNT     = LOT_CNT + (#{lotCnt} - v_lot_cnt),
-                    LOT_RMN_CNT = LOT_RMN_CNT + (#{lotCnt} - v_lot_cnt)
+                    LOT_RMN_CNT = LOT_RMN_CNT + (#{lotCnt} - v_lot_cnt),
+                    EXP_DT      = #{expDt}
                 where RSC_LOT_CD = #{rscLotCd};
 
                 update RSC_IST

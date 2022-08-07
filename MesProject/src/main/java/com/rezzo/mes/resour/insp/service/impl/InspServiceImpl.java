@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,9 +36,10 @@ public class InspServiceImpl implements InspService {
     public void setRscInspList(List<RscInspVO> rscInspVOS) {
         // rsc_insp insert
         String rscInspCd = mapper.genRscInspCd();
-        Date inspDt = rscInspVOS.get(0).getInspDt();
-        String inspTstr = rscInspVOS.get(0).getInspTstr();
-        mapper.setRscInsp(rscInspCd, inspDt, inspTstr);
+        RscInspVO vo = rscInspVOS.get(0);
+        rscInspVOS.remove(0);
+        vo.setRscInspCd(rscInspCd);
+        mapper.setRscInsp(vo);
 
         // rsc_insp_dtl insert
         for (RscInspVO rscInspVO : rscInspVOS) {
@@ -84,8 +84,12 @@ public class InspServiceImpl implements InspService {
     @Override
     @Transactional
     public void updRscInspHist(List<RscInspVO> rscInspVOS) {
+        // update insp (merge into)
+        mapper.setRscInsp(rscInspVOS.get(0));
+        rscInspVOS.remove(0);
+
         for (RscInspVO rscInspVO : rscInspVOS) {
-            // update insp, insp-dtl
+            // update insp-dtl
             mapper.updRscInspHist(rscInspVO);
 
             // update inf

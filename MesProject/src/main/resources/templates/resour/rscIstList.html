@@ -293,6 +293,13 @@
                     align: 'center',
                     sortingType: 'desc',
                     sortable: true
+                },
+                {
+                    header: '유통기한',
+                    name: 'expDt',
+                    align: 'center',
+                    sortingType: 'asc',
+                    sortable: true
                 }
             ]
         });
@@ -445,7 +452,7 @@
         //셀 클릭시 로우 하이라이팅
         let gridKey = null;
         grid.on('click', ev => {
-            if (gridKey != ev.rowKey) {
+            if (gridKey !== ev.rowKey) {
                 grid.removeRowClassName(gridKey, 'highlight');
             }
             gridKey = ev.rowKey
