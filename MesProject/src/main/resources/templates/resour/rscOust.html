@@ -123,8 +123,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="linelist" style="float: right;">
-                            <button class="btn btn-primary" id="addRow" style="height: 30px"><i class="fas fa-plus"></i> 추가</button>
-                            <button class="btn btn-primary" id="delRow" style="height: 30px"><i class="fas fa-minus"></i> 삭제</button>
+                            <button class="btn btn-primary" id="addRow" style="height: 30px"><i class="fas fa-plus"></i>
+                                추가
+                            </button>
+                            <button class="btn btn-primary" id="delRow" style="height: 30px"><i
+                                    class="fas fa-minus"></i> 삭제
+                            </button>
                         </div>
                         <br><br>
                         <div id="grid"></div>
@@ -312,7 +316,12 @@
             }
 
             getElement() {
-                return this.el;
+                let rscLotCd = grid.getValue(this.rowKey, 'rscLotCd')
+                if (rscLotCd === '' || rscLotCd == null) {
+                    toastr.error('자재LOT를 먼저 선택하세요');
+                } else {
+                    return this.el;
+                }
             }
 
             getValue() {
