@@ -452,7 +452,7 @@
         //셀 클릭시 로우 하이라이팅
         let gridKey = null;
         grid.on('click', ev => {
-            if (gridKey != ev.rowKey) {
+            if (gridKey !== ev.rowKey) {
                 grid.removeRowClassName(gridKey, 'highlight');
             }
             gridKey = ev.rowKey
