@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class IndicaVO {
 	String planCd;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date paprdDt;
 	int prefRank;
 	String nowSt;
