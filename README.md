@@ -40,12 +40,30 @@
 저장버튼을 눌러 새로운 주문서를 저장할 수 있습니다.<br>
 追加ボタンを押すと新しい注文書の追加が出来ます。
 
-<b>3.주문서저장에러</b><br>
-<b>3.注文書エラー</b>
+<b>4.주문서저장에러</b><br>
+<b>4.注文書エラー</b>
 <br>
 ![주문서저장오류](https://user-images.githubusercontent.com/78412311/186868770-dff796c0-90a2-407b-b845-773a9de162c2.png)<br>
 입력이 완료되지 않은 주문서를 저장할 경우에는 Alert창이 나타납니다.<br>
 入力が完了されてない注文書を保存する場合はAlertが表示されます。
+
+<b>5.주문서삭제</b><br>
+<b>5.注文書削除</b>
+<br>
+![주문서삭제](https://user-images.githubusercontent.com/78412311/186869239-531663ba-d8cd-440f-802c-3c44bbf7af7b.png)<br>
+주문서 삭제가 됩니다.<br>
+注文書の削除が出来ます。
+
+<b>6.주문서조회</b><br>
+<b>6.注文書検索</b>
+<br>
+![주문서조회](https://user-images.githubusercontent.com/78412311/186870605-f43799f0-d332-4fc5-8559-6e19af7a9233.PNG)<br>
+조건을 선택하여 주문서를 조회할 수 있습니다.<br>
+条件を選択して注文書の検索が出来ます。<br>
+![주문서조회초기화](https://user-images.githubusercontent.com/78412311/186871217-e685e5a0-6acf-45e2-8c2e-db371014a23f.PNG)<br>
+검색한 주문서가 출력되고 초기화 버튼을 클릭하면 검색 조건이 클리어됩니다.
+検索した注文書が表示されます(Pink)。そして、クリアボタン(Green)を押すと検索条件がクリアになります。
+
 
 ## [🚩노션](https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29)
 + [🚘로드맵](https://www.notion.so/dc92a6176f44441196558c8dd4169bc3?v=6a3daae7828e4ec38c039bfab744c67d)<br>
