@@ -1,19 +1,14 @@
-# REZZO（チーム名）
-> **조원 : 이가영(팀장), 황진주(부팀장), 서현일(팀원), 조수연(팀원), 이혜린(팀원)** <br>
-이탈리아어로 rézzo는 산들바람으로 시원하고 가볍게 부는 산들바람이 결국에는 크고 강력한 바람이 되듯이 성장하는 개발자가 되자는 포부를 담았습니다.<br/>
+# REZZO MES SOLUTION
+> **チームで行ったMES生産管理システムプログラムです。** <br>
 
-# MES_PROJECT（MESの説明）
-> **생산관리시스템(MES) 개발** <br>
->중소 업체에서도 식품제조업 생산관리시스템(MES Manufacturing Execution System의 약자로 실시간 모니터링, 제어, 물류 및 작업 내역 추적관리, 상태 파악, 불량 관리 등에 초점을 맞춘 제조업 현장 시스템)을 도입하는 업체의 수요가 증가함에 따라 MES 솔루션 개발을 기획하였습니다.
-
-## ⚙프로젝트 개발환경（開発環境）
-+ 운영체제 : Windows
-+ 통합개발환경(IDE) : Eclipse
-+ JDK 버전 : JDK 11
-+ 데이터 베이스 : Oracle Database 11g
-+ Framework : Spring
-+ 빌드 툴 : gradle
-+ 관리 툴 : Git, GitHub
+## ⚙開発環境
++ Windows
++ Eclipse
++ JDK 11
++ Oracle Database 11g
++ Spring
++ gradle
++ Git, GitHub
 
 # Overview
 <b>1.주문서관리</b><br>
