@@ -9,6 +9,10 @@
 + Spring
 + gradle
 + Git, GitHub
++ Java
++ HTML/CSS
++ Javascript
++ jQuery
 
 # Overview
 <b>1.注文書管理</b>
