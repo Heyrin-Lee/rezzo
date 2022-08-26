@@ -16,15 +16,15 @@
 + 관리 툴 : Git, GitHub
 
 # Overview
-<b>주문서관리</b><br>
-<b>注文書管理</b>
+<b>1.주문서관리</b><br>
+<b>1.注文書管理</b>
 <br>
 ![주문서첫페이지](https://user-images.githubusercontent.com/78412311/186849448-f7949df1-cba4-48cd-ba8a-287847bb4e6a.png)<br>
 주문일자(현재날짜)를 기준으로 주문서가 나타납니다.
 注文日（現在の日付）を基準で注文書が表示されます。
 
-<b>주문서추가</b><br>
-<b>注文書管理</b>
+<b>2.주문서추가</b><br>
+<b>2.注文書管理</b>
 <br>
 ![주문서추가](https://user-images.githubusercontent.com/78412311/186867408-f843fd65-c543-4ed6-a655-3b6747344152.png)<br>
 추가버튼을 클릭하면 새로운 주문서가 추가됩니다.<br>
@@ -32,6 +32,20 @@
 ![주문서추가모달1](https://user-images.githubusercontent.com/78412311/186867615-242f7cf4-f7e0-4082-8bc2-a25b3e631980.png)<br>
 새롭게 추가된 주문서는 모달을 통해 각 항목을 선택,입력할 수 있습니다.<br>
 新しく追加された注文書はModalで各項目を選択、入力が出来ます。
+
+<b>3.주문서저장</b><br>
+<b>3.注文書保存</b>
+<br>
+![주문서저장](https://user-images.githubusercontent.com/78412311/186868369-0c05cf68-be17-4a73-95cd-e8d5deb32c6f.png)<br>
+저장버튼을 눌러 새로운 주문서를 저장할 수 있습니다.<br>
+追加ボタンを押すと新しい注文書の追加が出来ます。
+
+<b>3.주문서저장에러</b><br>
+<b>3.注文書エラー</b>
+<br>
+![주문서저장오류](https://user-images.githubusercontent.com/78412311/186868770-dff796c0-90a2-407b-b845-773a9de162c2.png)<br>
+입력이 완료되지 않은 주문서를 저장할 경우에는 Alert창이 나타납니다.<br>
+入力が完了されてない注文書を保存する場合はAlertが表示されます。
 
 ## [🚩노션](https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29)
 + [🚘로드맵](https://www.notion.so/dc92a6176f44441196558c8dd4169bc3?v=6a3daae7828e4ec38c039bfab744c67d)<br>
