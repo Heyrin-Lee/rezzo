@@ -15,6 +15,9 @@
 + 빌드 툴 : gradle
 + 관리 툴 : Git, GitHub
 
+##Overview
+![주문서첫페이지](https://user-images.githubusercontent.com/78412311/186849448-f7949df1-cba4-48cd-ba8a-287847bb4e6a.png)
+
 ## [🚩노션](https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29)
 + [🚘로드맵](https://www.notion.so/dc92a6176f44441196558c8dd4169bc3?v=6a3daae7828e4ec38c039bfab744c67d)<br>
 + [💬회의록](https://www.notion.so/250d931996d84066bacca2ade8a9a425?v=b0bea1b9ac7a421fab4b96a62dd1c7e3)
