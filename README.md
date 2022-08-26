@@ -16,7 +16,13 @@
 + 관리 툴 : Git, GitHub
 
 # Overview
-![주문서첫페이지](https://user-images.githubusercontent.com/78412311/186849448-f7949df1-cba4-48cd-ba8a-287847bb4e6a.png)
+<b>주문서관리</b><br>
+<b>注文書管理</b>
+<br>
+![주문서첫페이지](https://user-images.githubusercontent.com/78412311/186849448-f7949df1-cba4-48cd-ba8a-287847bb4e6a.png)<br>
+주문일자(현재날짜)를 기준으로 주문서가 나타납니다.
+注文日（現在の日付）を基準で注文書が表示されます。
+
 
 ## [🚩노션](https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29)
 + [🚘로드맵](https://www.notion.so/dc92a6176f44441196558c8dd4169bc3?v=6a3daae7828e4ec38c039bfab744c67d)<br>
