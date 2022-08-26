@@ -23,6 +23,15 @@
 주문일자(현재날짜)를 기준으로 주문서가 나타납니다.
 注文日（現在の日付）を基準で注文書が表示されます。
 
+<b>주문서추가</b><br>
+<b>注文書管理</b>
+<br>
+![주문서추가](https://user-images.githubusercontent.com/78412311/186867408-f843fd65-c543-4ed6-a655-3b6747344152.png)<br>
+추가버튼을 클릭하면 새로운 주문서가 추가됩니다.<br>
+追加ボタンを押すと新しい注文書が追加出来ます。<br>
+![주문서추가모달1](https://user-images.githubusercontent.com/78412311/186867615-242f7cf4-f7e0-4082-8bc2-a25b3e631980.png)<br>
+새롭게 추가된 주문서는 모달을 통해 각 항목을 선택,입력할 수 있습니다.<br>
+新しく追加された注文書はModalで各項目を選択、入力が出来ます。
 
 ## [🚩노션](https://www.notion.so/Hello-We-are-REZZO-1d52e4b883464472a85e60293f564b29)
 + [🚘로드맵](https://www.notion.so/dc92a6176f44441196558c8dd4169bc3?v=6a3daae7828e4ec38c039bfab744c67d)<br>
